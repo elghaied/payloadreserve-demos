@@ -69,9 +69,12 @@ export interface Config {
   collections: {
     users: User;
     media: Media;
-    'reservation-services': ReservationService;
-    'reservation-resources': ReservationResource;
-    'reservation-schedules': ReservationSchedule;
+    'service-categories': ServiceCategory;
+    testimonials: Testimonial;
+    gallery: Gallery;
+    services: Service;
+    specialists: Specialist;
+    schedules: Schedule;
     reservations: Reservation;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
@@ -86,9 +89,12 @@ export interface Config {
   collectionsSelect: {
     users: UsersSelect<false> | UsersSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
-    'reservation-services': ReservationServicesSelect<false> | ReservationServicesSelect<true>;
-    'reservation-resources': ReservationResourcesSelect<false> | ReservationResourcesSelect<true>;
-    'reservation-schedules': ReservationSchedulesSelect<false> | ReservationSchedulesSelect<true>;
+    'service-categories': ServiceCategoriesSelect<false> | ServiceCategoriesSelect<true>;
+    testimonials: TestimonialsSelect<false> | TestimonialsSelect<true>;
+    gallery: GallerySelect<false> | GallerySelect<true>;
+    services: ServicesSelect<false> | ServicesSelect<true>;
+    specialists: SpecialistsSelect<false> | SpecialistsSelect<true>;
+    schedules: SchedulesSelect<false> | SchedulesSelect<true>;
     reservations: ReservationsSelect<false> | ReservationsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
@@ -98,10 +104,16 @@ export interface Config {
   db: {
     defaultIDType: string;
   };
-  fallbackLocale: null;
-  globals: {};
-  globalsSelect: {};
-  locale: null;
+  fallbackLocale: ('false' | 'none' | 'null') | false | null | ('en' | 'fr') | ('en' | 'fr')[];
+  globals: {
+    homepage: Homepage;
+    'site-settings': SiteSetting;
+  };
+  globalsSelect: {
+    homepage: HomepageSelect<false> | HomepageSelect<true>;
+    'site-settings': SiteSettingsSelect<false> | SiteSettingsSelect<true>;
+  };
+  locale: 'en' | 'fr';
   user: User;
   jobs: {
     tasks: unknown;
@@ -132,6 +144,7 @@ export interface UserAuthOperations {
  */
 export interface User {
   id: string;
+  role: 'admin' | 'customer';
   name?: string | null;
   phone?: string | null;
   notes?: string | null;
@@ -165,8 +178,8 @@ export interface User {
  */
 export interface Reservation {
   id: string;
-  service: string | ReservationService;
-  resource: string | ReservationResource;
+  service: string | Service;
+  resource: string | Specialist;
   customer: string | User;
   startTime: string;
   endTime?: string | null;
@@ -178,9 +191,9 @@ export interface Reservation {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "reservation-services".
+ * via the `definition` "services".
  */
-export interface ReservationService {
+export interface Service {
   id: string;
   name: string;
   description?: string | null;
@@ -194,13 +207,14 @@ export interface ReservationService {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "reservation-resources".
+ * via the `definition` "specialists".
  */
-export interface ReservationResource {
+export interface Specialist {
   id: string;
   name: string;
+  image?: (string | null) | Media;
   description?: string | null;
-  services: (string | ReservationService)[];
+  services: (string | Service)[];
   active?: boolean | null;
   updatedAt: string;
   createdAt: string;
@@ -226,12 +240,52 @@ export interface Media {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "reservation-schedules".
+ * via the `definition` "service-categories".
  */
-export interface ReservationSchedule {
+export interface ServiceCategory {
   id: string;
   name: string;
-  resource: string | ReservationResource;
+  description?: string | null;
+  image?: (string | null) | Media;
+  order?: number | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "testimonials".
+ */
+export interface Testimonial {
+  id: string;
+  quote: string;
+  author: string;
+  rating: number;
+  service?: (string | null) | Service;
+  featured?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "gallery".
+ */
+export interface Gallery {
+  id: string;
+  image: string | Media;
+  caption?: string | null;
+  category?: ('salon' | 'treatments' | 'results' | 'team') | null;
+  featured?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "schedules".
+ */
+export interface Schedule {
+  id: string;
+  name: string;
+  resource: string | Specialist;
   scheduleType?: ('recurring' | 'manual') | null;
   recurringSlots?:
     | {
@@ -293,16 +347,28 @@ export interface PayloadLockedDocument {
         value: string | Media;
       } | null)
     | ({
-        relationTo: 'reservation-services';
-        value: string | ReservationService;
+        relationTo: 'service-categories';
+        value: string | ServiceCategory;
       } | null)
     | ({
-        relationTo: 'reservation-resources';
-        value: string | ReservationResource;
+        relationTo: 'testimonials';
+        value: string | Testimonial;
       } | null)
     | ({
-        relationTo: 'reservation-schedules';
-        value: string | ReservationSchedule;
+        relationTo: 'gallery';
+        value: string | Gallery;
+      } | null)
+    | ({
+        relationTo: 'services';
+        value: string | Service;
+      } | null)
+    | ({
+        relationTo: 'specialists';
+        value: string | Specialist;
+      } | null)
+    | ({
+        relationTo: 'schedules';
+        value: string | Schedule;
       } | null)
     | ({
         relationTo: 'reservations';
@@ -355,6 +421,7 @@ export interface PayloadMigration {
  * via the `definition` "users_select".
  */
 export interface UsersSelect<T extends boolean = true> {
+  role?: T;
   name?: T;
   phone?: T;
   notes?: T;
@@ -396,9 +463,46 @@ export interface MediaSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "reservation-services_select".
+ * via the `definition` "service-categories_select".
  */
-export interface ReservationServicesSelect<T extends boolean = true> {
+export interface ServiceCategoriesSelect<T extends boolean = true> {
+  name?: T;
+  description?: T;
+  image?: T;
+  order?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "testimonials_select".
+ */
+export interface TestimonialsSelect<T extends boolean = true> {
+  quote?: T;
+  author?: T;
+  rating?: T;
+  service?: T;
+  featured?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "gallery_select".
+ */
+export interface GallerySelect<T extends boolean = true> {
+  image?: T;
+  caption?: T;
+  category?: T;
+  featured?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "services_select".
+ */
+export interface ServicesSelect<T extends boolean = true> {
   name?: T;
   description?: T;
   duration?: T;
@@ -411,10 +515,11 @@ export interface ReservationServicesSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "reservation-resources_select".
+ * via the `definition` "specialists_select".
  */
-export interface ReservationResourcesSelect<T extends boolean = true> {
+export interface SpecialistsSelect<T extends boolean = true> {
   name?: T;
+  image?: T;
   description?: T;
   services?: T;
   active?: T;
@@ -423,9 +528,9 @@ export interface ReservationResourcesSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "reservation-schedules_select".
+ * via the `definition` "schedules_select".
  */
-export interface ReservationSchedulesSelect<T extends boolean = true> {
+export interface SchedulesSelect<T extends boolean = true> {
   name?: T;
   resource?: T;
   scheduleType?: T;
@@ -511,6 +616,176 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
   batch?: T;
   updatedAt?: T;
   createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "homepage".
+ */
+export interface Homepage {
+  id: string;
+  hero: {
+    title: string;
+    subtitle?: string | null;
+    backgroundImage?: (string | null) | Media;
+    ctaText?: string | null;
+    ctaLink?: string | null;
+  };
+  about?: {
+    heading?: string | null;
+    body?: {
+      root: {
+        type: string;
+        children: {
+          type: any;
+          version: number;
+          [k: string]: unknown;
+        }[];
+        direction: ('ltr' | 'rtl') | null;
+        format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+        indent: number;
+        version: number;
+      };
+      [k: string]: unknown;
+    } | null;
+    image?: (string | null) | Media;
+  };
+  servicesShowcase?: {
+    heading?: string | null;
+    subtitle?: string | null;
+  };
+  specialistsSection?: {
+    heading?: string | null;
+    subtitle?: string | null;
+  };
+  testimonials?:
+    | {
+        quote: string;
+        author: string;
+        rating?: number | null;
+        id?: string | null;
+      }[]
+    | null;
+  cta?: {
+    heading?: string | null;
+    body?: string | null;
+    buttonText?: string | null;
+    buttonLink?: string | null;
+  };
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "site-settings".
+ */
+export interface SiteSetting {
+  id: string;
+  salonName: string;
+  logo?: (string | null) | Media;
+  address?: string | null;
+  phone?: string | null;
+  email?: string | null;
+  socialLinks?:
+    | {
+        platform: 'instagram' | 'facebook' | 'tiktok' | 'twitter';
+        url: string;
+        id?: string | null;
+      }[]
+    | null;
+  openingHours?:
+    | {
+        day: 'monday' | 'tuesday' | 'wednesday' | 'thursday' | 'friday' | 'saturday' | 'sunday';
+        open?: string | null;
+        close?: string | null;
+        closed?: boolean | null;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "homepage_select".
+ */
+export interface HomepageSelect<T extends boolean = true> {
+  hero?:
+    | T
+    | {
+        title?: T;
+        subtitle?: T;
+        backgroundImage?: T;
+        ctaText?: T;
+        ctaLink?: T;
+      };
+  about?:
+    | T
+    | {
+        heading?: T;
+        body?: T;
+        image?: T;
+      };
+  servicesShowcase?:
+    | T
+    | {
+        heading?: T;
+        subtitle?: T;
+      };
+  specialistsSection?:
+    | T
+    | {
+        heading?: T;
+        subtitle?: T;
+      };
+  testimonials?:
+    | T
+    | {
+        quote?: T;
+        author?: T;
+        rating?: T;
+        id?: T;
+      };
+  cta?:
+    | T
+    | {
+        heading?: T;
+        body?: T;
+        buttonText?: T;
+        buttonLink?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "site-settings_select".
+ */
+export interface SiteSettingsSelect<T extends boolean = true> {
+  salonName?: T;
+  logo?: T;
+  address?: T;
+  phone?: T;
+  email?: T;
+  socialLinks?:
+    | T
+    | {
+        platform?: T;
+        url?: T;
+        id?: T;
+      };
+  openingHours?:
+    | T
+    | {
+        day?: T;
+        open?: T;
+        close?: T;
+        closed?: T;
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
