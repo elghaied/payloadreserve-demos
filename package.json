@@ -1,0 +1,28 @@
+{
+  "name": "payload-reserve-demos",
+  "private": true,
+  "scripts": {
+    "dev:salon": "turbo dev --filter=salon",
+    "build:salon": "turbo build --filter=salon",
+    "build": "turbo build",
+    "lint": "turbo lint",
+    "test": "turbo test",
+    "generate:types": "turbo generate:types",
+    "generate:importmap": "turbo generate:importmap"
+  },
+  "packageManager": "pnpm@10.30.1",
+  "devDependencies": {
+    "turbo": "^2.3.3"
+  },
+  "engines": {
+    "node": "^18.20.2 || >=20.9.0",
+    "pnpm": "^9 || ^10"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "sharp",
+      "esbuild",
+      "unrs-resolver"
+    ]
+  }
+}

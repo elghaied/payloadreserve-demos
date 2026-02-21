@@ -1,0 +1,8 @@
+{
+  "extends": "@payload-reserve-demos/tsconfig/base.json",
+  "compilerOptions": {
+    "moduleResolution": "bundler"
+  },
+  "include": ["src/**/*.ts"],
+  "exclude": ["node_modules"]
+}
