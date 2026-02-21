@@ -8,7 +8,7 @@ import { payloadReserve } from 'payload-reserve'
 import { fileURLToPath } from 'url'
 import sharp from 'sharp'
 
-import { reservationNotificationHook } from './hooks/reservationNotifications'
+import { notifyAfterCreate, notifyAfterConfirm, notifyAfterCancel } from './hooks/reservationNotifications'
 import { Users } from './collections/Users'
 import { Media } from './collections/Media'
 import { ServiceCategories } from './collections/ServiceCategories'
@@ -46,18 +46,20 @@ export default buildConfig({
     defaultLocale: 'en',
     fallback: true,
   },
-  email: nodemailerAdapter({
-    defaultFromAddress: process.env.SMTP_FROM || 'salon@example.com',
-    defaultFromName: process.env.SMTP_FROM_NAME || 'Lumière Salon',
-    transportOptions: {
-      host: process.env.SMTP_HOST || 'localhost',
-      port: Number(process.env.SMTP_PORT || 587),
-      auth: {
-        user: process.env.SMTP_USER,
-        pass: process.env.SMTP_PASS,
-      },
-    },
-  }),
+  email:
+    nodemailerAdapter(),
+    //   {
+    //   defaultFromAddress: process.env.SMTP_FROM || 'salon@example.com',
+    //   defaultFromName: process.env.SMTP_FROM_NAME || 'Lumière Salon',
+    //   transportOptions: {
+    //     host: process.env.SMTP_HOST || 'localhost',
+    //     port: Number(process.env.SMTP_PORT || 587),
+    //     auth: {
+    //       user: process.env.SMTP_USER,
+    //       pass: process.env.SMTP_PASS,
+    //     },
+    //   },
+    // }
   plugins: [
     payloadReserve({
       slugs: {
@@ -66,12 +68,28 @@ export default buildConfig({
         schedules: 'schedules',
         reservations: 'reservations',
       },
-      userCollection: 'users',
       adminGroup: 'Salon',
       defaultBufferTime: 5,
       cancellationNoticePeriod: 24,
-      customerRole: 'customer',
+      hooks: {
+        afterBookingCreate: [notifyAfterCreate],
+        afterBookingConfirm: [notifyAfterConfirm],
+        afterBookingCancel: [notifyAfterCancel],
+      },
       access: {
+        customers: {
+          create: () => true,
+          read: ({ req }) => {
+            if (!req.user) return false
+            if (req.user.collection === 'users') return true
+            return { id: { equals: req.user.id } }
+          },
+          update: ({ req }) => {
+            if (!req.user) return false
+            if (req.user.collection === 'users') return true
+            return { id: { equals: req.user.id } }
+          },
+        },
         services: { read: () => true },
         resources: { read: () => true },
         schedules: { read: () => true },
@@ -79,12 +97,12 @@ export default buildConfig({
           create: () => true,
           read: ({ req }) => {
             if (!req.user) return false
-            if (req.user.role === 'admin') return true
+            if (req.user.collection === 'users') return true
             return { customer: { equals: req.user.id } }
           },
           update: ({ req }) => {
             if (!req.user) return false
-            if (req.user.role === 'admin') return true
+            if (req.user.collection === 'users') return true
             return { customer: { equals: req.user.id } }
           },
         },
@@ -95,15 +113,5 @@ export default buildConfig({
       stripeWebhooksEndpointSecret: process.env.STRIPE_WEBHOOK_SECRET,
       isTestKey: true,
     }),
-    // Add reservation notification hooks after payload-reserve runs
-    (config) => {
-      const reservations = config.collections?.find((c) => c.slug === 'reservations')
-      if (reservations) {
-        if (!reservations.hooks) reservations.hooks = {}
-        if (!reservations.hooks.afterChange) reservations.hooks.afterChange = []
-        reservations.hooks.afterChange.push(reservationNotificationHook)
-      }
-      return config
-    },
   ],
 })

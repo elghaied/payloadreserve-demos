@@ -14,7 +14,8 @@ export default function RegisterPage() {
   const locale = params.locale as string
   const router = useRouter()
 
-  const [name, setName] = useState('')
+  const [firstName, setFirstName] = useState('')
+  const [lastName, setLastName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [phone, setPhone] = useState('')
@@ -27,16 +28,16 @@ export default function RegisterPage() {
     setLoading(true)
 
     try {
-      const res = await fetch('/api/users', {
+      const res = await fetch('/api/customers', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
-        body: JSON.stringify({ name, email, password, phone, role: 'customer' }),
+        body: JSON.stringify({ firstName, lastName, email, password, phone }),
       })
 
       if (res.ok) {
         // Auto-login after registration
-        await fetch('/api/users/login', {
+        await fetch('/api/customers/login', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           credentials: 'include',
@@ -67,15 +68,29 @@ export default function RegisterPage() {
           )}
 
           <div>
-            <label htmlFor="name" className="block text-sm font-medium mb-1.5">
-              {tBooking('name')}
+            <label htmlFor="firstName" className="block text-sm font-medium mb-1.5">
+              {tBooking('firstName')}
             </label>
             <input
-              id="name"
+              id="firstName"
               type="text"
               required
-              value={name}
-              onChange={(e) => setName(e.target.value)}
+              value={firstName}
+              onChange={(e) => setFirstName(e.target.value)}
+              className="w-full border border-border px-4 py-3 text-sm bg-surface focus:outline-none focus:border-primary transition-colors"
+            />
+          </div>
+
+          <div>
+            <label htmlFor="lastName" className="block text-sm font-medium mb-1.5">
+              {tBooking('lastName')}
+            </label>
+            <input
+              id="lastName"
+              type="text"
+              required
+              value={lastName}
+              onChange={(e) => setLastName(e.target.value)}
               className="w-full border border-border px-4 py-3 text-sm bg-surface focus:outline-none focus:border-primary transition-colors"
             />
           </div>

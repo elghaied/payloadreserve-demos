@@ -22,16 +22,9 @@ async function seed() {
     }
   }
 
-  // Delete non-admin users
+  // Delete existing customers
   try {
-    const nonAdmins = await payload.find({
-      collection: 'users',
-      where: { role: { not_equals: 'admin' } },
-      limit: 100,
-    })
-    for (const user of nonAdmins.docs) {
-      await payload.delete({ collection: 'users', id: user.id })
-    }
+    await payload.delete({ collection: 'customers', where: { id: { exists: true } } })
   } catch {
     // ignore
   }
@@ -56,8 +49,6 @@ async function seed() {
       data: {
         email: 'admin@lumiere-salon.com',
         password: 'admin123',
-        role: 'admin',
-        name: 'Admin',
       },
     })
     console.log('  Created: admin@lumiere-salon.com / admin123')
@@ -68,17 +59,17 @@ async function seed() {
   // ---- CUSTOMER USERS ----
   console.log('\n👤 Creating customer users...')
   const customersData = [
-    { email: 'sophie@example.com', name: 'Sophie Martin', phone: '(514) 555-1001' },
-    { email: 'emma@example.com', name: 'Emma Wilson', phone: '(514) 555-1002' },
-    { email: 'lucas@example.com', name: 'Lucas Bernard', phone: '(514) 555-1003' },
+    { email: 'sophie@example.com', firstName: 'Sophie', lastName: 'Martin', phone: '(514) 555-1001' },
+    { email: 'emma@example.com', firstName: 'Emma', lastName: 'Wilson', phone: '(514) 555-1002' },
+    { email: 'lucas@example.com', firstName: 'Lucas', lastName: 'Bernard', phone: '(514) 555-1003' },
   ]
   const customers: string[] = []
   for (const c of customersData) {
-    const user = await payload.create({
-      collection: 'users',
-      data: { ...c, password: 'password123', role: 'customer' },
+    const customer = await payload.create({
+      collection: 'customers',
+      data: { ...c, password: 'password123' },
     })
-    customers.push(user.id)
+    customers.push(customer.id)
     console.log(`  Created: ${c.email}`)
   }
 
@@ -115,7 +106,8 @@ async function seed() {
   const serviceMap: Record<string, string> = {} // name -> id
   const categoryServiceMap: Record<string, string[]> = {} // category -> service ids
   for (const s of servicesData) {
-    const service = await payload.create({
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const service = await (payload.create as any)({
       collection: 'services',
       data: {
         name: s.name,
@@ -145,7 +137,8 @@ async function seed() {
       serviceIds.push(...ids)
     }
 
-    const specialist = await payload.create({
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const specialist = await (payload.create as any)({
       collection: 'specialists',
       data: {
         name: spec.name,

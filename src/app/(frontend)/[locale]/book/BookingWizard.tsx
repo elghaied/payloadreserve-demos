@@ -37,10 +37,13 @@ export function BookingWizard() {
   const [selectedSpecialist, setSelectedSpecialist] = useState<string>('')
   const [selectedDate, setSelectedDate] = useState<string>('')
   const [selectedTime, setSelectedTime] = useState<string>('')
-  const [name, setName] = useState('')
+  const [firstName, setFirstName] = useState('')
+  const [lastName, setLastName] = useState('')
   const [email, setEmail] = useState('')
   const [phone, setPhone] = useState('')
+  const [password, setPassword] = useState('')
   const [notes, setNotes] = useState('')
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
 
   // Load services on mount
   useEffect(() => {
@@ -74,13 +77,15 @@ export function BookingWizard() {
 
   // Check if user is logged in
   useEffect(() => {
-    fetch('/api/users/me', { credentials: 'include' })
+    fetch('/api/customers/me', { credentials: 'include' })
       .then((r) => r.json())
       .then((data) => {
         if (data.user) {
-          setName(data.user.name || '')
+          setFirstName(data.user.firstName || '')
+          setLastName(data.user.lastName || '')
           setEmail(data.user.email || '')
           setPhone(data.user.phone || '')
+          setIsLoggedIn(true)
         }
       })
       .catch(() => {})
@@ -97,9 +102,11 @@ export function BookingWizard() {
         resourceId: selectedSpecialist,
         date: selectedDate,
         time: selectedTime,
-        name,
+        firstName,
+        lastName,
         email,
         phone,
+        password: isLoggedIn ? undefined : password,
         notes,
         locale,
       })
@@ -296,12 +303,22 @@ export function BookingWizard() {
           <h2 className="text-lg font-semibold mb-6">{t('yourDetails')}</h2>
           <div className="space-y-5 max-w-md">
             <div>
-              <label className="block text-sm font-medium mb-1.5">{t('name')}</label>
+              <label className="block text-sm font-medium mb-1.5">{t('firstName')}</label>
               <input
                 type="text"
                 required
-                value={name}
-                onChange={(e) => setName(e.target.value)}
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
+                className="w-full border border-border px-4 py-3 text-sm bg-surface focus:outline-none focus:border-primary transition-colors"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-1.5">{t('lastName')}</label>
+              <input
+                type="text"
+                required
+                value={lastName}
+                onChange={(e) => setLastName(e.target.value)}
                 className="w-full border border-border px-4 py-3 text-sm bg-surface focus:outline-none focus:border-primary transition-colors"
               />
             </div>
@@ -324,6 +341,19 @@ export function BookingWizard() {
                 className="w-full border border-border px-4 py-3 text-sm bg-surface focus:outline-none focus:border-primary transition-colors"
               />
             </div>
+            {!isLoggedIn && (
+              <div>
+                <label className="block text-sm font-medium mb-1.5">{t('password')}</label>
+                <input
+                  type="password"
+                  required
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="w-full border border-border px-4 py-3 text-sm bg-surface focus:outline-none focus:border-primary transition-colors"
+                />
+                <p className="text-xs text-muted mt-1.5">{t('passwordHint')}</p>
+              </div>
+            )}
             <div>
               <label className="block text-sm font-medium mb-1.5">{t('notes')}</label>
               <textarea
@@ -367,10 +397,11 @@ export function BookingWizard() {
             </button>
             <button
               onClick={() => {
-                if (!name || !email) return
+                if (!firstName || !email) return
+                if (!isLoggedIn && !password) return
                 setStep(4)
               }}
-              disabled={!name || !email}
+              disabled={!firstName || !email || (!isLoggedIn && !password)}
               className="bg-primary text-white px-6 py-3 text-sm tracking-wide hover:bg-primary-dark transition-colors disabled:opacity-50"
             >
               {tCommon('next')}

@@ -51,44 +51,42 @@ export async function cancelReservation(id: string, reason: string) {
   const { user } = await payload.auth({ headers })
   if (!user) throw new Error('Not authenticated')
 
-  const reservation = await payload.findByID({
-    collection: 'reservations',
-    id,
-    overrideAccess: false,
-    user,
-  })
-
-  // Check 24h cancellation policy
-  const startTime = new Date(reservation.startTime)
-  const now = new Date()
-  const hoursUntil = (startTime.getTime() - now.getTime()) / (1000 * 60 * 60)
-  if (hoursUntil < 24) {
-    throw new Error('TOO_LATE')
+  try {
+    await payload.update({
+      collection: 'reservations',
+      id,
+      data: {
+        status: 'cancelled',
+        cancellationReason: reason,
+      },
+      overrideAccess: false,
+      user,
+    })
+  } catch (err) {
+    if (err instanceof Error && err.message.toLowerCase().includes('cancellation')) {
+      throw new Error('TOO_LATE')
+    }
+    throw err
   }
-
-  await payload.update({
-    collection: 'reservations',
-    id,
-    data: {
-      status: 'cancelled',
-      cancellationReason: reason,
-    },
-    overrideAccess: false,
-    user,
-  })
 }
 
-export async function updateProfile(data: { name: string; email: string; phone: string }) {
+export async function updateProfile(data: {
+  firstName: string
+  lastName: string
+  email: string
+  phone: string
+}) {
   const payload = await getPayload({ config })
   const headers = await getHeaders()
   const { user } = await payload.auth({ headers })
   if (!user) throw new Error('Not authenticated')
 
   await payload.update({
-    collection: 'users',
+    collection: 'customers',
     id: user.id,
     data: {
-      name: data.name,
+      firstName: data.firstName,
+      lastName: data.lastName,
       email: data.email,
       phone: data.phone,
     },

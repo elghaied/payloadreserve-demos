@@ -17,7 +17,7 @@ export function Header({ locale }: Props) {
   const [menuOpen, setMenuOpen] = useState(false)
 
   useEffect(() => {
-    fetch('/api/users/me', { credentials: 'include' })
+    fetch('/api/customers/me', { credentials: 'include' })
       .then((res) => res.json())
       .then((data) => {
         if (data.user) setUser(data.user)
@@ -26,7 +26,7 @@ export function Header({ locale }: Props) {
   }, [])
 
   const handleLogout = async () => {
-    await fetch('/api/users/logout', { method: 'POST', credentials: 'include' })
+    await fetch('/api/customers/logout', { method: 'POST', credentials: 'include' })
     setUser(null)
     window.location.href = `/${locale}`
   }

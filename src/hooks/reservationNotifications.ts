@@ -1,5 +1,5 @@
-import type { CollectionAfterChangeHook } from 'payload'
-import type { Reservation, Service, Specialist, User } from '@/payload-types'
+import type { PayloadRequest } from 'payload'
+import type { Customer, Reservation, Service, Specialist } from '@/payload-types'
 
 import { confirmationEmail } from '@/email/templates/confirmation'
 import { cancellationEmail } from '@/email/templates/cancellation'
@@ -39,74 +39,43 @@ function getLocale(req: { locale?: string }): 'en' | 'fr' {
   return 'en'
 }
 
-/**
- * afterChange hook for the reservations collection.
- *
- * - On create: sends a "booking received" confirmation email
- * - On status change to 'confirmed': sends a confirmation email
- * - On status change to 'cancelled': sends a cancellation email
- *
- * Respects `context.skipReservationHooks` to allow seed scripts to skip sending.
- */
-export const reservationNotificationHook: CollectionAfterChangeHook = async ({
-  doc,
-  previousDoc,
-  operation,
-  req,
-  context,
-}) => {
-  // Allow seed scripts and other programmatic callers to skip email sending
-  if (context?.skipReservationHooks) {
-    return doc
-  }
+type PluginHookArgs = {
+  doc: Record<string, unknown>
+  req: PayloadRequest
+}
 
-  const reservation = doc as Reservation
-
-  // Determine if we need to send an email and which type
-  let emailType: 'booking_received' | 'confirmed' | 'cancelled' | null = null
-
-  if (operation === 'create') {
-    emailType = 'booking_received'
-  } else if (operation === 'update' && previousDoc) {
-    const prevStatus = (previousDoc as Reservation).status
-    const newStatus = reservation.status
-
-    if (prevStatus !== 'confirmed' && newStatus === 'confirmed') {
-      emailType = 'confirmed'
-    } else if (prevStatus !== 'cancelled' && newStatus === 'cancelled') {
-      emailType = 'cancelled'
-    }
-  }
-
-  if (!emailType) {
-    return doc
-  }
-
+async function sendReservationEmail(
+  emailType: 'booking_received' | 'confirmed' | 'cancelled',
+  { doc, req }: PluginHookArgs,
+): Promise<void> {
+  const reservation = doc as unknown as Reservation
   try {
-    // Populate relationships to get full objects with names
     const populatedReservation = await req.payload.findByID({
       collection: 'reservations',
       id: reservation.id,
       depth: 1,
-      req,
     })
 
     const service = populatedReservation.service as Service
     const specialist = populatedReservation.resource as Specialist
-    const customer = populatedReservation.customer as User
+    const customer = populatedReservation.customer as Customer & { email?: string }
 
     if (!customer?.email) {
       req.payload.logger.warn(
         `Reservation ${reservation.id}: cannot send ${emailType} email - customer has no email`,
       )
-      return doc
+      return
     }
 
     const locale = getLocale(req)
     const { date, time } = formatDateTime(reservation.startTime, locale)
 
+    const customerName = customer.firstName
+      ? `${customer.firstName}${customer.lastName ? ' ' + customer.lastName : ''}`
+      : (customer.email ?? 'Customer')
+
     const emailData = {
-      customerName: customer.name || customer.email,
+      customerName,
       serviceName: service?.name || 'Service',
       specialistName: specialist?.name || 'Specialist',
       date,
@@ -120,7 +89,6 @@ export const reservationNotificationHook: CollectionAfterChangeHook = async ({
     if (emailType === 'cancelled') {
       email = cancellationEmail(emailData)
     } else {
-      // Both 'booking_received' and 'confirmed' use the confirmation template
       email = confirmationEmail(emailData)
     }
 
@@ -134,11 +102,32 @@ export const reservationNotificationHook: CollectionAfterChangeHook = async ({
       `Reservation ${reservation.id}: sent ${emailType} email to ${customer.email}`,
     )
   } catch (error) {
-    // Log the error but do not throw -- email failure should not block the reservation
     req.payload.logger.error(
       `Reservation ${reservation.id}: failed to send ${emailType} email: ${error instanceof Error ? error.message : String(error)}`,
     )
   }
+}
 
-  return doc
+/**
+ * Plugin hook callback: fires after a new booking is created.
+ * Sends a "booking received" confirmation email.
+ */
+export async function notifyAfterCreate(args: PluginHookArgs): Promise<void> {
+  await sendReservationEmail('booking_received', args)
+}
+
+/**
+ * Plugin hook callback: fires after a booking is confirmed.
+ * Sends a confirmation email.
+ */
+export async function notifyAfterConfirm(args: PluginHookArgs): Promise<void> {
+  await sendReservationEmail('confirmed', args)
+}
+
+/**
+ * Plugin hook callback: fires after a booking is cancelled.
+ * Sends a cancellation email.
+ */
+export async function notifyAfterCancel(args: PluginHookArgs): Promise<void> {
+  await sendReservationEmail('cancelled', args)
 }
