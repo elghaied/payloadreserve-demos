@@ -1,0 +1,6 @@
+# App-specific ignores (root .gitignore handles node_modules, .env, etc.)
+/.next/
+/out/
+next-env.d.ts
+*.tsbuildinfo
+/media

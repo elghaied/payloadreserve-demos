@@ -1,4 +1,5 @@
 import type { Payload } from 'payload'
+import { uploadImage as uploadImageFromUrl } from '@payload-reserve-demos/seed-utils'
 
 // Curated Pexels image URLs (free to use)
 const IMAGE_URLS = {
@@ -17,45 +18,12 @@ const IMAGE_URLS = {
   gallery3: 'https://images.pexels.com/photos/3985328/pexels-photo-3985328.jpeg?auto=compress&cs=tinysrgb&w=800',
 }
 
+export type ImageKey = keyof typeof IMAGE_URLS
+
 export async function uploadImage(
   payload: Payload,
-  key: keyof typeof IMAGE_URLS,
+  key: ImageKey,
   alt: string,
 ): Promise<string> {
-  const url = IMAGE_URLS[key]
-  try {
-    const response = await fetch(url)
-    if (!response.ok) throw new Error(`Failed to fetch ${url}`)
-    const buffer = Buffer.from(await response.arrayBuffer())
-    const contentType = response.headers.get('content-type') || 'image/jpeg'
-
-    const media = await payload.create({
-      collection: 'media',
-      data: { alt },
-      file: {
-        data: buffer,
-        name: `${key}.jpg`,
-        mimetype: contentType,
-        size: buffer.length,
-      },
-    })
-    console.log(`  Uploaded: ${alt}`)
-    return media.id
-  } catch (error) {
-    console.warn(`  Warning: Could not download image for ${key}, creating placeholder`)
-    // Create a tiny placeholder
-    const media = await payload.create({
-      collection: 'media',
-      data: { alt },
-      file: {
-        data: Buffer.from('R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7', 'base64'),
-        name: `${key}-placeholder.gif`,
-        mimetype: 'image/gif',
-        size: 43,
-      },
-    })
-    return media.id
-  }
+  return uploadImageFromUrl(payload, IMAGE_URLS[key], alt, `${key}.jpg`)
 }
-
-export type ImageKey = keyof typeof IMAGE_URLS

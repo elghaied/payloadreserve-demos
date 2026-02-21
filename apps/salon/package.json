@@ -1,7 +1,7 @@
 {
-  "name": "reservation-demo",
+  "name": "salon",
   "version": "1.0.0",
-  "description": "A blank template to get started with Payload 3.0",
+  "description": "Lumière Salon — payload-reserve demo: specialists, per-specialist schedules, buffer time, i18n",
   "license": "MIT",
   "type": "module",
   "scripts": {
@@ -19,6 +19,7 @@
     "test:int": "cross-env NODE_OPTIONS=--no-deprecation vitest run --config ./vitest.config.mts"
   },
   "dependencies": {
+    "@payload-reserve-demos/seed-utils": "workspace:*",
     "@payloadcms/db-mongodb": "3.77.0",
     "@payloadcms/email-nodemailer": "3.77.0",
     "@payloadcms/next": "3.77.0",
@@ -38,6 +39,7 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.2.0",
+    "@payload-reserve-demos/tsconfig": "workspace:*",
     "@playwright/test": "1.58.2",
     "@tailwindcss/postcss": "^4.1.18",
     "@testing-library/react": "16.3.0",
@@ -59,12 +61,5 @@
   "engines": {
     "node": "^18.20.2 || >=20.9.0",
     "pnpm": "^9 || ^10"
-  },
-  "pnpm": {
-    "onlyBuiltDependencies": [
-      "sharp",
-      "esbuild",
-      "unrs-resolver"
-    ]
   }
 }
