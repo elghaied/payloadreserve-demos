@@ -40,18 +40,18 @@ async function seed() {
   console.log('\n📧 Creating admin user...')
   const existingAdmin = await payload.find({
     collection: 'users',
-    where: { email: { equals: 'admin@lumiere-salon.com' } },
+    where: { email: { equals: 'admin@yoursalon.com' } },
     limit: 1,
   })
   if (existingAdmin.docs.length === 0) {
     await payload.create({
       collection: 'users',
       data: {
-        email: 'admin@lumiere-salon.com',
+        email: 'admin@yoursalon.com',
         password: 'admin123',
       },
     })
-    console.log('  Created: admin@lumiere-salon.com / admin123')
+    console.log('  Created: admin@yoursalon.com / admin123')
   } else {
     console.log('  Admin already exists')
   }
@@ -345,7 +345,7 @@ async function seed() {
   console.log('  Site settings configured')
 
   console.log('\n✅ Seed complete!\n')
-  console.log('  Admin: admin@lumiere-salon.com / admin123')
+  console.log('  Admin: admin@yoursalon.com / admin123')
   console.log('  Customers: sophie@example.com, emma@example.com, lucas@example.com (password123)')
   console.log('')
 

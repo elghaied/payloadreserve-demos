@@ -67,10 +67,10 @@ export const siteSettingsData = {
   salonName: { en: 'Lumière Salon', fr: 'Salon Lumière' },
   address: '123 Rue de la Beauté, Montreal, QC H2X 1Y6',
   phone: '(514) 555-0123',
-  email: 'info@lumiere-salon.com',
+  email: 'info@yoursalon.com',
   socialLinks: [
-    { platform: 'instagram' as const, url: 'https://instagram.com/lumiere.salon' },
-    { platform: 'facebook' as const, url: 'https://facebook.com/lumieresalon' },
+    { platform: 'instagram' as const, url: '#' },
+    { platform: 'facebook' as const, url: '#' },
   ],
   openingHours: [
     { day: 'monday' as const, open: '9:00', close: '19:00', closed: false },

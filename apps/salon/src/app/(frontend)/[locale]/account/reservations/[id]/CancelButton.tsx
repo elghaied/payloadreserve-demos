@@ -12,8 +12,9 @@ type Props = {
   locale: string
 }
 
-export function CancelButton({ reservationId, locale }: Props) {
+export function CancelButton({ reservationId, locale: _locale }: Props) {
   const t = useTranslations('account')
+  const tCommon = useTranslations('common')
   const router = useRouter()
   const [open, setOpen] = useState(false)
   const [reason, setReason] = useState('')
@@ -51,7 +52,7 @@ export function CancelButton({ reservationId, locale }: Props) {
         <p className="text-sm text-muted mb-4">{t('cancelConfirm')}</p>
 
         {error && (
-          <div className="bg-error/10 text-error text-sm p-3 mb-4">{error}</div>
+          <div role="alert" className="bg-error/10 text-error text-sm p-3 mb-4">{error}</div>
         )}
 
         <div className="mb-4">
@@ -69,7 +70,7 @@ export function CancelButton({ reservationId, locale }: Props) {
             onClick={() => setOpen(false)}
             className="px-4 py-2 text-sm text-muted hover:text-foreground"
           >
-            {locale === 'fr' ? 'Non' : 'No'}
+            {tCommon('cancel')}
           </button>
           <button
             onClick={handleCancel}

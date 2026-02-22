@@ -98,7 +98,7 @@ export default function ContactPage() {
             </div>
             <div>
               <h3 className="text-sm font-semibold uppercase tracking-wider mb-3">{t('emailAddress')}</h3>
-              <p className="text-muted">info@lumiere-salon.com</p>
+              <p className="text-muted">info@yoursalon.com</p>
             </div>
             <div>
               <h3 className="text-sm font-semibold uppercase tracking-wider mb-3">{t('hours')}</h3>

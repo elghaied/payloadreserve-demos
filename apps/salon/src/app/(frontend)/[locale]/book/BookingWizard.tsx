@@ -11,6 +11,7 @@ import {
   getAvailableSlots,
   createReservation,
 } from './actions'
+import { TestCardBanner } from './TestCardBanner'
 
 type Service = { id: string; name: string; description?: string | null; duration: number; price: number }
 type Specialist = { id: string; name: string; description?: string | null; image?: { url?: string | null } | string | null }
@@ -266,7 +267,7 @@ export function BookingWizard() {
               {slots.length === 0 ? (
                 <p className="text-muted text-sm">{t('noSlots')}</p>
               ) : (
-                <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-2">
+                <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 gap-2">
                   {slots.map((time) => (
                     <button
                       key={time}
@@ -413,9 +414,7 @@ export function BookingWizard() {
       {/* Step 5: Payment */}
       {step === 4 && (
         <div className="text-center">
-          <div className="bg-warning/10 border border-warning/30 p-4 mb-8 inline-block">
-            <p className="text-sm">{t('testCardNotice')}</p>
-          </div>
+          <TestCardBanner />
 
           {selectedServiceData && (
             <div className="max-w-sm mx-auto p-6 border border-border mb-8">

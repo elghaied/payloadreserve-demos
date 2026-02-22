@@ -55,7 +55,7 @@ export async function Footer({ locale }: Props) {
               <p>123 Rue de la Beauté</p>
               <p>Montreal, QC H2X 1Y6</p>
               <p>(514) 555-0123</p>
-              <p>info@lumiere-salon.com</p>
+              <p>info@yoursalon.com</p>
             </div>
           </div>
 

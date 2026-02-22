@@ -90,8 +90,10 @@ export function Header({ locale }: Props) {
         {/* Mobile menu button */}
         <button
           onClick={() => setMenuOpen(!menuOpen)}
-          className="lg:hidden p-2"
+          className="lg:hidden p-2 min-h-[44px] min-w-[44px] flex items-center justify-center"
           aria-label="Toggle menu"
+          aria-expanded={menuOpen}
+          aria-controls="mobile-menu"
         >
           <div className="w-5 flex flex-col gap-1">
             <span className={`block h-px bg-foreground transition-transform ${menuOpen ? 'rotate-45 translate-y-[3px]' : ''}`} />
@@ -103,20 +105,20 @@ export function Header({ locale }: Props) {
 
       {/* Mobile menu */}
       {menuOpen && (
-        <div className="lg:hidden border-t border-border bg-surface">
+        <div id="mobile-menu" className="lg:hidden border-t border-border bg-surface">
           <Container className="py-4 flex flex-col gap-3">
-            <Link href={`/${locale}/services`} className="text-sm py-2">{t('services')}</Link>
-            <Link href={`/${locale}/gallery`} className="text-sm py-2">{t('gallery')}</Link>
-            <Link href={`/${locale}/gifts`} className="text-sm py-2">{t('gifts')}</Link>
-            <Link href={`/${locale}/contact`} className="text-sm py-2">{t('contact')}</Link>
+            <Link href={`/${locale}/services`} className="text-sm py-3">{t('services')}</Link>
+            <Link href={`/${locale}/gallery`} className="text-sm py-3">{t('gallery')}</Link>
+            <Link href={`/${locale}/gifts`} className="text-sm py-3">{t('gifts')}</Link>
+            <Link href={`/${locale}/contact`} className="text-sm py-3">{t('contact')}</Link>
             <hr className="border-border" />
             {user ? (
               <>
-                <Link href={`/${locale}/account`} className="text-sm py-2">{t('account')}</Link>
-                <button onClick={handleLogout} className="text-sm py-2 text-left">{t('logout')}</button>
+                <Link href={`/${locale}/account`} className="text-sm py-3">{t('account')}</Link>
+                <button onClick={handleLogout} className="text-sm py-3 text-left">{t('logout')}</button>
               </>
             ) : (
-              <Link href={`/${locale}/login`} className="text-sm py-2">{t('login')}</Link>
+              <Link href={`/${locale}/login`} className="text-sm py-3">{t('login')}</Link>
             )}
             <Link
               href={`/${locale}/book`}
