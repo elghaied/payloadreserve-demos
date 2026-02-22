@@ -5,6 +5,7 @@ import { notFound } from 'next/navigation'
 
 import config from '@/payload.config'
 import { CancelButton } from './CancelButton'
+import { CompletePaymentButton } from './CompletePaymentButton'
 
 type Props = {
   params: Promise<{ locale: string; id: string }>
@@ -129,8 +130,21 @@ export default async function ReservationDetailPage({ params }: Props) {
         )}
       </div>
 
+      {status === 'pending' && (
+        <div className="mt-8 bg-warning/10 border border-warning/30 p-4 text-sm mb-4">
+          <p className="font-medium">{t('completePayment')}</p>
+          <p className="text-muted mt-1">{t('completePaymentDesc')}</p>
+        </div>
+      )}
+
+      {status === 'pending' && (
+        <div className="mt-4">
+          <CompletePaymentButton reservationId={reservation.id} locale={locale} />
+        </div>
+      )}
+
       {canCancel && (
-        <div className="mt-8">
+        <div className="mt-4">
           <CancelButton reservationId={reservation.id} locale={locale} />
         </div>
       )}

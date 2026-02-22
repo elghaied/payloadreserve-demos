@@ -12,7 +12,7 @@ It is the reference implementation for the [`payload-reserve`](https://www.npmjs
 | Framework | Next.js 15 (App Router, React 19) |
 | CMS / API | Payload CMS 3.x |
 | Database | MongoDB (via `@payloadcms/db-mongodb`) |
-| Plugin | `payload-reserve` v1.0.3 |
+| Plugin | `payload-reserve` v1.1.0 |
 | Payments | Stripe Checkout |
 | Email | Nodemailer (SMTP) |
 | i18n | `next-intl` (English + French) |
@@ -159,14 +159,15 @@ apps/salon/src/
 │   ├── (payload)/               # Payload admin panel + REST/GraphQL API routes
 │   └── api/stripe-webhook/      # POST handler for Stripe checkout.session.completed
 ├── collections/                 # Payload collection configs (Users, Media, Gallery, …)
-├── email/templates/             # HTML email templates (confirmation, cancellation, …)
+├── email/templates/             # HTML email templates (confirmation, cancellation, abandonedPayment)
 ├── globals/                     # Payload globals (Homepage, SiteSettings)
 ├── hooks/
-│   └── reservationNotifications.ts  # Plugin callbacks → send emails on create/confirm/cancel
+│   └── reservationNotifications.ts  # Plugin callbacks → send emails on confirm/cancel
 ├── i18n/                        # next-intl routing + request config
 ├── seed/                        # Seed scripts and static data
 ├── tasks/
-│   └── cancelStaleReservations.ts   # Payload job: cancels unpaid pending reservations
+│   ├── cancelStaleReservations.ts   # Payload job: cancels unpaid pending reservations after 30 min
+│   └── notifyAbandonedPayments.ts   # Payload job: emails customers who haven't completed payment
 ├── payload.config.ts            # Main Payload config — plugin, collections, email, jobs
 └── payload-types.ts             # Auto-generated — DO NOT edit manually
 ```
@@ -206,9 +207,16 @@ apps/salon/src/
 
 ## Background Jobs
 
-A Payload job runs every **15 minutes** and cancels any reservation that is still `pending` after **30 minutes**. This cleans up abandoned checkouts (user left before paying).
+Two Payload jobs run on a schedule to handle abandoned checkouts:
 
-Defined in: `src/tasks/cancelStaleReservations.ts`
+| Job | Schedule | What it does |
+|---|---|---|
+| `notifyAbandonedPayments` | Every 5 min | Emails customers whose reservation has been `pending` for 5+ minutes without payment |
+| `cancelStaleReservations` | Every 15 min | Cancels reservations still `pending` after 30 minutes |
+
+The abandoned payment reminder uses a `paymentReminderSent` flag on the reservation (added via `extraReservationFields`) to guarantee exactly one email per reservation, regardless of server restarts or cron timing.
+
+Defined in: `src/tasks/`
 
 ---
 
@@ -218,9 +226,10 @@ Emails are sent via Nodemailer. Hook callbacks in `src/hooks/reservationNotifica
 
 | Event | Email sent |
 |---|---|
-| Booking created | "Booking received" confirmation |
 | Booking confirmed (paid) | "Booking confirmed" |
 | Booking cancelled | "Cancellation" |
+
+The abandoned payment reminder is handled separately by the `notifyAbandonedPayments` job (`src/tasks/notifyAbandonedPayments.ts`).
 
 Leave SMTP env vars blank in development to skip email sending silently.
 

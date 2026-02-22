@@ -20,17 +20,23 @@ export const cancelStaleReservationsTask: TaskConfig<CancelStaleIO> = {
           { createdAt: { less_than: thirtyMinutesAgo.toISOString() } },
         ],
       },
+      depth: 0,
       limit: 100,
     })
 
     for (const reservation of docs) {
+      // No skipReservationHooks — the afterBookingCancel plugin hook fires
+      // and notifyAfterCancel handles the email automatically.
       await req.payload.update({
         collection: 'reservations',
         id: reservation.id,
         data: { status: 'cancelled' },
-        context: { skipReservationHooks: true },
         req,
       })
+
+      req.payload.logger.info(
+        `cancelStaleReservations: cancelled stale reservation ${reservation.id}`,
+      )
     }
 
     return { output: { cancelled: docs.length } }

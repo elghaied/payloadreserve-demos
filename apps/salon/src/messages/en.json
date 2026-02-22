@@ -90,6 +90,9 @@
     "cancelNotice": "Cancellations must be made at least 24 hours in advance",
     "tooLateToCancelTitle": "Cannot Cancel",
     "tooLateToCancel": "This reservation cannot be cancelled as it is less than 24 hours away.",
+    "completePayment": "Complete Payment",
+    "completePaymentDesc": "Your reservation is pending payment. Complete your payment to confirm your slot.",
+    "completePaymentError": "Unable to create payment session. Please try again.",
     "status": {
       "pending": "Pending",
       "confirmed": "Confirmed",

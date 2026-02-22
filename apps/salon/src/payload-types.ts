@@ -125,6 +125,7 @@ export interface Config {
   jobs: {
     tasks: {
       cancelStaleReservations: TaskCancelStaleReservations;
+      notifyAbandonedPayments: TaskNotifyAbandonedPayments;
       inline: {
         input: unknown;
         output: unknown;
@@ -353,6 +354,7 @@ export interface Reservation {
       }[]
     | null;
   idempotencyKey?: string | null;
+  paymentReminderSent?: boolean | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -459,7 +461,7 @@ export interface PayloadJob {
     | {
         executedAt: string;
         completedAt: string;
-        taskSlug: 'inline' | 'cancelStaleReservations';
+        taskSlug: 'inline' | 'cancelStaleReservations' | 'notifyAbandonedPayments';
         taskID: string;
         input?:
           | {
@@ -492,7 +494,7 @@ export interface PayloadJob {
         id?: string | null;
       }[]
     | null;
-  taskSlug?: ('inline' | 'cancelStaleReservations') | null;
+  taskSlug?: ('inline' | 'cancelStaleReservations' | 'notifyAbandonedPayments') | null;
   queue?: string | null;
   waitUntil?: string | null;
   processing?: boolean | null;
@@ -777,6 +779,7 @@ export interface ReservationsSelect<T extends boolean = true> {
         id?: T;
       };
   idempotencyKey?: T;
+  paymentReminderSent?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -1082,6 +1085,14 @@ export interface PayloadJobsStatsSelect<T extends boolean = true> {
  * via the `definition` "TaskCancelStaleReservations".
  */
 export interface TaskCancelStaleReservations {
+  input?: unknown;
+  output?: unknown;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "TaskNotifyAbandonedPayments".
+ */
+export interface TaskNotifyAbandonedPayments {
   input?: unknown;
   output?: unknown;
 }

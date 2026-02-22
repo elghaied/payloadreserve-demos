@@ -9,11 +9,11 @@ import { fileURLToPath } from 'url'
 import sharp from 'sharp'
 
 import {
-  notifyAfterCreate,
   notifyAfterConfirm,
   notifyAfterCancel,
 } from './hooks/reservationNotifications'
 import { cancelStaleReservationsTask } from './tasks/cancelStaleReservations'
+import { notifyAbandonedPaymentsTask } from './tasks/notifyAbandonedPayments'
 import { Users } from './collections/Users'
 import { Media } from './collections/Media'
 import { ServiceCategories } from './collections/ServiceCategories'
@@ -65,10 +65,10 @@ export default buildConfig({
   }),
 
   jobs: {
-    tasks: [cancelStaleReservationsTask],
+    tasks: [cancelStaleReservationsTask, notifyAbandonedPaymentsTask],
     autoRun: [
       {
-        cron: '*/15 * * * *', // process the queue every 15 minutes
+        cron: '*/5 * * * *', // process the queue every 5 minutes
         limit: 100,
         queue: 'default',
       },
@@ -82,11 +82,18 @@ export default buildConfig({
         schedules: 'schedules',
         reservations: 'reservations',
       },
+      extraReservationFields: [
+        {
+          name: 'paymentReminderSent',
+          type: 'checkbox',
+          defaultValue: false,
+          admin: { position: 'sidebar' },
+        },
+      ],
       adminGroup: 'Salon',
       defaultBufferTime: 5,
       cancellationNoticePeriod: 24,
       hooks: {
-        afterBookingCreate: [notifyAfterCreate],
         afterBookingConfirm: [notifyAfterConfirm],
         afterBookingCancel: [notifyAfterCancel],
       },

@@ -54,8 +54,8 @@ importers:
         specifier: 3.77.0
         version: 3.77.0(graphql@16.12.0)(typescript@5.7.3)
       payload-reserve:
-        specifier: ^1.0.3
-        version: 1.0.3(@payloadcms/translations@3.77.0)(@payloadcms/ui@3.77.0(@types/react@19.2.9)(monaco-editor@0.55.1)(next@15.4.11(@babel/core@7.29.0)(@playwright/test@1.58.2)(react-dom@19.2.1(react@19.2.1))(react@19.2.1)(sass@1.77.4))(payload@3.77.0(graphql@16.12.0)(typescript@5.7.3))(react-dom@19.2.1(react@19.2.1))(react@19.2.1)(typescript@5.7.3))(payload@3.77.0(graphql@16.12.0)(typescript@5.7.3))
+        specifier: ^1.1.0
+        version: 1.1.0(@payloadcms/translations@3.77.0)(@payloadcms/ui@3.77.0(@types/react@19.2.9)(monaco-editor@0.55.1)(next@15.4.11(@babel/core@7.29.0)(@playwright/test@1.58.2)(react-dom@19.2.1(react@19.2.1))(react@19.2.1)(sass@1.77.4))(payload@3.77.0(graphql@16.12.0)(typescript@5.7.3))(react-dom@19.2.1(react@19.2.1))(react@19.2.1)(typescript@5.7.3))(payload@3.77.0(graphql@16.12.0)(typescript@5.7.3))
       react:
         specifier: 19.2.1
         version: 19.2.1
@@ -3428,8 +3428,8 @@ packages:
   pathe@2.0.3:
     resolution: {integrity: sha512-WUjGcAqP1gQacoQe+OBJsFA7Ld4DyXuUIjZ5cc75cLHvJ7dtNsTugphxIADwspS+AraAUePCKrSVtPLFj/F88w==}
 
-  payload-reserve@1.0.3:
-    resolution: {integrity: sha512-z9U0+48PDrzi/SsgZMLKlvW845GK3hyX6lmScOdN8m2HQnDE01T6n+w3eVp26ql2EBp+AyiYW0ttaVK1YdSIhw==}
+  payload-reserve@1.1.0:
+    resolution: {integrity: sha512-gYoH5qh4ZvLjY+IKwMOCQkWXFj51kE6Pd3ri3v5xN2egMBqgJ+5rfu0CaWPDyYtReRt0TfmDbrZoHsIQfbCPkA==}
     engines: {node: ^18.20.2 || >=20.9.0, pnpm: ^9 || ^10}
     peerDependencies:
       '@payloadcms/translations': ^3.77.0
@@ -7779,7 +7779,7 @@ snapshots:
 
   pathe@2.0.3: {}
 
-  payload-reserve@1.0.3(@payloadcms/translations@3.77.0)(@payloadcms/ui@3.77.0(@types/react@19.2.9)(monaco-editor@0.55.1)(next@15.4.11(@babel/core@7.29.0)(@playwright/test@1.58.2)(react-dom@19.2.1(react@19.2.1))(react@19.2.1)(sass@1.77.4))(payload@3.77.0(graphql@16.12.0)(typescript@5.7.3))(react-dom@19.2.1(react@19.2.1))(react@19.2.1)(typescript@5.7.3))(payload@3.77.0(graphql@16.12.0)(typescript@5.7.3)):
+  payload-reserve@1.1.0(@payloadcms/translations@3.77.0)(@payloadcms/ui@3.77.0(@types/react@19.2.9)(monaco-editor@0.55.1)(next@15.4.11(@babel/core@7.29.0)(@playwright/test@1.58.2)(react-dom@19.2.1(react@19.2.1))(react@19.2.1)(sass@1.77.4))(payload@3.77.0(graphql@16.12.0)(typescript@5.7.3))(react-dom@19.2.1(react@19.2.1))(react@19.2.1)(typescript@5.7.3))(payload@3.77.0(graphql@16.12.0)(typescript@5.7.3)):
     dependencies:
       '@payloadcms/translations': 3.77.0
       '@payloadcms/ui': 3.77.0(@types/react@19.2.9)(monaco-editor@0.55.1)(next@15.4.11(@babel/core@7.29.0)(@playwright/test@1.58.2)(react-dom@19.2.1(react@19.2.1))(react@19.2.1)(sass@1.77.4))(payload@3.77.0(graphql@16.12.0)(typescript@5.7.3))(react-dom@19.2.1(react@19.2.1))(react@19.2.1)(typescript@5.7.3)

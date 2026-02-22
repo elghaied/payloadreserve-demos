@@ -32,7 +32,7 @@
     "next": "15.4.11",
     "next-intl": "^4.8.2",
     "payload": "3.77.0",
-    "payload-reserve": "^1.0.3",
+    "payload-reserve": "^1.1.0",
     "react": "19.2.1",
     "react-dom": "19.2.1",
     "sharp": "0.34.2",

@@ -90,6 +90,9 @@
     "cancelNotice": "Les annulations doivent être effectuées au moins 24 heures à l'avance",
     "tooLateToCancelTitle": "Annulation impossible",
     "tooLateToCancel": "Cette réservation ne peut pas être annulée car elle est dans moins de 24 heures.",
+    "completePayment": "Finaliser le paiement",
+    "completePaymentDesc": "Votre réservation est en attente de paiement. Finalisez votre paiement pour confirmer votre créneau.",
+    "completePaymentError": "Impossible de créer la session de paiement. Veuillez réessayer.",
     "status": {
       "pending": "En attente",
       "confirmed": "Confirmé",
