@@ -2,14 +2,22 @@ import { getTranslations, setRequestLocale } from 'next-intl/server'
 import Link from 'next/link'
 
 import { Container } from '@/components/Container'
+import { cancelPendingReservation } from '../actions'
 
 type Props = {
   params: Promise<{ locale: string }>
+  searchParams: Promise<{ reservation?: string }>
 }
 
-export default async function BookingCancelPage({ params }: Props) {
+export default async function BookingCancelPage({ params, searchParams }: Props) {
   const { locale } = await params
+  const { reservation: reservationId } = await searchParams
   setRequestLocale(locale)
+
+  // Free the held slot immediately so the time is available again
+  if (reservationId) {
+    await cancelPendingReservation(reservationId)
+  }
 
   const t = await getTranslations({ locale, namespace: 'booking' })
 

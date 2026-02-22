@@ -1,5 +1,6 @@
 'use server'
 
+import Stripe from 'stripe'
 import { getPayload, createLocalReq } from 'payload'
 import { getAvailableSlots as pluginGetAvailableSlots } from 'payload-reserve'
 import config from '@/payload.config'
@@ -124,8 +125,7 @@ export async function createReservation(data: {
   const stripeKey = process.env.STRIPE_SECRET_KEY
   if (stripeKey && service?.price) {
     try {
-      const Stripe = (await import('stripe')).default
-      const stripeClient = new Stripe(stripeKey, { apiVersion: '2022-08-01' })
+      const stripeClient = new Stripe(stripeKey)
 
       const session = await stripeClient.checkout.sessions.create({
         payment_method_types: ['card'],
@@ -140,7 +140,7 @@ export async function createReservation(data: {
           },
         ],
         mode: 'payment',
-        success_url: `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/${data.locale}/book/success?reservation=${reservation.id}`,
+        success_url: `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/${data.locale}/book/success?session_id={CHECKOUT_SESSION_ID}&reservation=${reservation.id}`,
         cancel_url: `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/${data.locale}/book/cancel?reservation=${reservation.id}`,
         metadata: { reservationId: reservation.id },
       })
@@ -172,4 +172,56 @@ export async function getBookingConfirmation(reservationId: string) {
     depth: 2,
   })
   return reservation
+}
+
+export async function confirmReservationViaStripe(
+  reservationId: string,
+  sessionId: string,
+): Promise<boolean> {
+  const stripeKey = process.env.STRIPE_SECRET_KEY
+  if (!stripeKey) return false
+
+  try {
+    const stripeClient = new Stripe(stripeKey)
+    const session = await stripeClient.checkout.sessions.retrieve(sessionId)
+
+    if (session.payment_status !== 'paid') return false
+    // Security: ensure this session was actually created for this reservation
+    if (session.metadata?.reservationId !== reservationId) return false
+
+    const payload = await getPayload({ config })
+    const existing = await payload.findByID({
+      collection: 'reservations',
+      id: reservationId,
+      depth: 0,
+    })
+    if (existing?.status === 'confirmed') return true // idempotent
+
+    await payload.update({
+      collection: 'reservations',
+      id: reservationId,
+      data: { status: 'confirmed' },
+    })
+    return true
+  } catch {
+    return false
+  }
+}
+
+export async function cancelPendingReservation(reservationId: string) {
+  const payload = await getPayload({ config })
+  const reservation = await payload.findByID({
+    collection: 'reservations',
+    id: reservationId,
+    depth: 0,
+  })
+  // Only cancel if still pending — payment never completed
+  if (reservation?.status === 'pending') {
+    await payload.update({
+      collection: 'reservations',
+      id: reservationId,
+      data: { status: 'cancelled' },
+      context: { skipReservationHooks: true }, // bypass 24h cancellation notice
+    })
+  }
 }

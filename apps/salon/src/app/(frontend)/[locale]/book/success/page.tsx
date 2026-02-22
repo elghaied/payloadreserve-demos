@@ -1,17 +1,19 @@
+import Stripe from 'stripe'
 import { getTranslations, setRequestLocale } from 'next-intl/server'
 import Link from 'next/link'
+import { redirect } from 'next/navigation'
 
 import { Container } from '@/components/Container'
-import { getBookingConfirmation } from '../actions'
+import { getBookingConfirmation, confirmReservationViaStripe } from '../actions'
 
 type Props = {
   params: Promise<{ locale: string }>
-  searchParams: Promise<{ reservation?: string }>
+  searchParams: Promise<{ reservation?: string; session_id?: string }>
 }
 
 export default async function BookingSuccessPage({ params, searchParams }: Props) {
   const { locale } = await params
-  const { reservation: reservationId } = await searchParams
+  const { reservation: reservationId, session_id: sessionId } = await searchParams
   setRequestLocale(locale)
 
   const t = await getTranslations({ locale, namespace: 'booking' })
@@ -23,6 +25,32 @@ export default async function BookingSuccessPage({ params, searchParams }: Props
     } catch {
       // ignore
     }
+  }
+
+  // Happy path: webhook already fired
+  if (reservation?.status === 'confirmed') {
+    // fall through to render
+  } else if (reservation?.status === 'pending' && sessionId) {
+    // Race condition: user landed here before the webhook updated the DB.
+    // Verify payment directly with Stripe using the session ID Stripe appended to the URL.
+    const stripeKey = process.env.STRIPE_SECRET_KEY
+    if (stripeKey) {
+      try {
+        const stripeClient = new Stripe(stripeKey)
+        const session = await stripeClient.checkout.sessions.retrieve(sessionId)
+        if (session.payment_status !== 'paid') {
+          redirect(`/${locale}/book`)
+        }
+        // Payment confirmed by Stripe — show success. The webhook will update the DB shortly.
+      } catch {
+        redirect(`/${locale}/book`)
+      }
+    } else {
+      redirect(`/${locale}/book`)
+    }
+  } else {
+    // No reservation, wrong status (cancelled/etc.), or no session_id to verify against
+    redirect(`/${locale}/book`)
   }
 
   return (

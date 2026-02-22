@@ -65,6 +65,9 @@ importers:
       sharp:
         specifier: 0.34.2
         version: 0.34.2
+      stripe:
+        specifier: ^17
+        version: 17.7.0
     devDependencies:
       '@eslint/eslintrc':
         specifier: ^3.2.0
@@ -3842,6 +3845,10 @@ packages:
   stripe@10.17.0:
     resolution: {integrity: sha512-JHV2KoL+nMQRXu3m9ervCZZvi4DDCJfzHUE6CmtJxR9TmizyYfrVuhGvnsZLLnheby9Qrnf4Hq6iOEcejGwnGQ==}
     engines: {node: ^8.1 || >=10.*}
+
+  stripe@17.7.0:
+    resolution: {integrity: sha512-aT2BU9KkizY9SATf14WhhYVv2uOapBWX0OFWF4xvcj1mPaNotlSc2CsxpS4DS46ZueSppmCF5BX1sNYBtwBvfw==}
+    engines: {node: '>=12.*'}
 
   strtok3@8.1.0:
     resolution: {integrity: sha512-ExzDvHYPj6F6QkSNe/JxSlBxTh3OrI6wrAIz53ulxo1c4hBJ1bT9C/JrAthEKHWG9riVH3Xzg7B03Oxty6S2Lw==}
@@ -8345,6 +8352,11 @@ snapshots:
   strip-json-comments@5.0.3: {}
 
   stripe@10.17.0:
+    dependencies:
+      '@types/node': 22.19.9
+      qs: 6.15.0
+
+  stripe@17.7.0:
     dependencies:
       '@types/node': 22.19.9
       qs: 6.15.0

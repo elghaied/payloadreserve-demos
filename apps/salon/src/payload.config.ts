@@ -8,7 +8,12 @@ import { payloadReserve } from 'payload-reserve'
 import { fileURLToPath } from 'url'
 import sharp from 'sharp'
 
-import { notifyAfterCreate, notifyAfterConfirm, notifyAfterCancel } from './hooks/reservationNotifications'
+import {
+  notifyAfterCreate,
+  notifyAfterConfirm,
+  notifyAfterCancel,
+} from './hooks/reservationNotifications'
+import { cancelStaleReservationsTask } from './tasks/cancelStaleReservations'
 import { Users } from './collections/Users'
 import { Media } from './collections/Media'
 import { ServiceCategories } from './collections/ServiceCategories'
@@ -46,20 +51,29 @@ export default buildConfig({
     defaultLocale: 'en',
     fallback: true,
   },
-  email:
-    nodemailerAdapter(),
-    //   {
-    //   defaultFromAddress: process.env.SMTP_FROM || 'salon@example.com',
-    //   defaultFromName: process.env.SMTP_FROM_NAME || 'Lumière Salon',
-    //   transportOptions: {
-    //     host: process.env.SMTP_HOST || 'localhost',
-    //     port: Number(process.env.SMTP_PORT || 587),
-    //     auth: {
-    //       user: process.env.SMTP_USER,
-    //       pass: process.env.SMTP_PASS,
-    //     },
-    //   },
-    // }
+  email: nodemailerAdapter({
+    defaultFromAddress: process.env.SMTP_FROM!,
+    defaultFromName: process.env.SMTP_FROM_NAME!,
+    transportOptions: {
+      host: process.env.SMTP_HOST,
+      port: Number(process.env.SMTP_PORT || 587),
+      auth: {
+        user: process.env.SMTP_USER,
+        pass: process.env.SMTP_PASS,
+      },
+    },
+  }),
+
+  jobs: {
+    tasks: [cancelStaleReservationsTask],
+    autoRun: [
+      {
+        cron: '*/15 * * * *', // process the queue every 15 minutes
+        limit: 100,
+        queue: 'default',
+      },
+    ],
+  },
   plugins: [
     payloadReserve({
       slugs: {

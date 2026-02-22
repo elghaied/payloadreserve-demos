@@ -1,0 +1,93 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    // ─── Salon ────────────────────────────────────────────────────────────────
+    {
+      "label": "salon: next dev",
+      "type": "shell",
+      "command": "pnpm dev:salon",
+      "isBackground": true,
+      "presentation": {
+        "reveal": "always",
+        "panel": "new",
+        "group": "salon"
+      },
+      "problemMatcher": [],
+      "options": {
+        "statusbar": {
+          "hide": true
+        }
+      }
+    },
+    {
+      "label": "salon: stripe listen",
+      "type": "shell",
+      "command": "bash scripts/stripe-listen.sh salon 3000",
+      "isBackground": true,
+      "presentation": {
+        "reveal": "always",
+        "panel": "new",
+        "group": "salon"
+      },
+      "problemMatcher": [],
+      "options": {
+        "statusbar": {
+          "hide": true
+        }
+      }
+    },
+    {
+      "label": "dev:salon",
+      "dependsOn": ["salon: next dev", "salon: stripe listen"],
+      "dependsOrder": "parallel",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "presentation": {
+        "reveal": "never"
+      },
+      "options": {
+        "statusbar": {
+          "label": "$(play) Salon",
+          "color": "#C9A96E",
+          "detail": "Start Next.js dev server + Stripe webhook listener"
+        }
+      }
+    }
+
+    // ─── Hotel (future) ───────────────────────────────────────────────────────
+    // {
+    //   "label": "hotel: next dev",
+    //   "type": "shell",
+    //   "command": "pnpm dev:hotel",
+    //   "isBackground": true,
+    //   "presentation": { "reveal": "always", "panel": "new", "group": "hotel" },
+    //   "problemMatcher": [],
+    //   "options": { "statusbar": { "hide": true } }
+    // },
+    // {
+    //   "label": "hotel: stripe listen",
+    //   "type": "shell",
+    //   "command": "bash scripts/stripe-listen.sh hotel 3001",
+    //   "isBackground": true,
+    //   "presentation": { "reveal": "always", "panel": "new", "group": "hotel" },
+    //   "problemMatcher": [],
+    //   "options": { "statusbar": { "hide": true } }
+    // },
+    // {
+    //   "label": "dev:hotel",
+    //   "dependsOn": ["hotel: next dev", "hotel: stripe listen"],
+    //   "dependsOrder": "parallel",
+    //   "group": "build",
+    //   "presentation": { "reveal": "never" },
+    //   "options": {
+    //     "statusbar": {
+    //       "label": "$(play) Hotel",
+    //       "color": "#6E9AC9",
+    //       "detail": "Start Next.js dev server + Stripe webhook listener"
+    //     }
+    //   }
+    // }
+  ]
+}

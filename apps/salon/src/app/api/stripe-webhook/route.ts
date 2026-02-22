@@ -1,3 +1,4 @@
+import Stripe from 'stripe'
 import { NextRequest, NextResponse } from 'next/server'
 import { getPayload } from 'payload'
 import config from '@/payload.config'
@@ -18,8 +19,7 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    const Stripe = (await import('stripe')).default
-    const stripeClient = new Stripe(stripeKey, { apiVersion: '2022-08-01' })
+    const stripeClient = new Stripe(stripeKey)
 
     const event = stripeClient.webhooks.constructEvent(body, signature, webhookSecret)
 
@@ -29,6 +29,17 @@ export async function POST(req: NextRequest) {
 
       if (reservationId) {
         const payload = await getPayload({ config })
+
+        // Idempotency guard — skip if already confirmed (handles Stripe retries)
+        const existing = await payload.findByID({
+          collection: 'reservations',
+          id: reservationId,
+          depth: 0,
+        })
+        if (existing?.status === 'confirmed') {
+          return NextResponse.json({ received: true })
+        }
+
         await payload.update({
           collection: 'reservations',
           id: reservationId,

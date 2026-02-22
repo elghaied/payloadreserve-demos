@@ -1,67 +1,248 @@
-# Payload Blank Template
+# Lumière Salon — `payload-reserve` Demo
 
-This template comes configured with the bare minimum to get started on anything you need.
+A full-stack booking app built with **Payload CMS 3.x** + **Next.js 15** (App Router).
+It is the reference implementation for the [`payload-reserve`](https://www.npmjs.com/package/payload-reserve) plugin and lives inside the `payload-reserve-demos` monorepo.
 
-## Quick start
+---
 
-This template can be deployed directly from our Cloud hosting and it will setup MongoDB and cloud S3 object storage for media.
+## Tech Stack
 
-## Quick Start - local setup
+| Layer | Technology |
+|---|---|
+| Framework | Next.js 15 (App Router, React 19) |
+| CMS / API | Payload CMS 3.x |
+| Database | MongoDB (via `@payloadcms/db-mongodb`) |
+| Plugin | `payload-reserve` v1.0.3 |
+| Payments | Stripe Checkout |
+| Email | Nodemailer (SMTP) |
+| i18n | `next-intl` (English + French) |
+| Styling | Tailwind CSS v4 |
+| Testing | Vitest (integration) + Playwright (e2e) |
 
-To spin up this template locally, follow these steps:
+---
 
-### Clone
+## Prerequisites
 
-After you click the `Deploy` button above, you'll want to have standalone copy of this repo on your machine. If you've already cloned this repo, skip to [Development](#development).
+- **Node.js** `>=20.9.0`
+- **pnpm** `>=10`
+- **MongoDB** running locally on `mongodb://127.0.0.1`
+- **Stripe CLI** installed → [stripe.com/docs/stripe-cli](https://stripe.com/docs/stripe-cli)
 
-### Development
+---
 
-1. First [clone the repo](#clone) if you have not done so already
-2. `cd my-project && cp .env.example .env` to copy the example environment variables. You'll need to add the `MONGODB_URL` from your Cloud project to your `.env` if you want to use S3 storage and the MongoDB database that was created for you.
+## First-Time Setup
 
-3. `pnpm install && pnpm dev` to install dependencies and start the dev server
-4. open `http://localhost:3000` to open the app in your browser
+```bash
+# 1. Install dependencies (run from monorepo root)
+pnpm install
 
-That's it! Changes made in `./src` will be reflected in your app. Follow the on-screen instructions to login and create your first admin user. Then check out [Production](#production) once you're ready to build and serve your app, and [Deployment](#deployment) when you're ready to go live.
+# 2. Copy the env file and fill in your values
+cp apps/salon/.env.example apps/salon/.env
 
-#### Docker (Optional)
+# 3. Seed the database (services, specialists, schedules, sample data)
+cd apps/salon && pnpm seed
+```
 
-If you prefer to use Docker for local development instead of a local MongoDB instance, the provided docker-compose.yml file can be used.
+### Required environment variables (`apps/salon/.env`)
 
-To do so, follow these steps:
+```env
+# MongoDB
+DATABASE_URL=mongodb://127.0.0.1/payloadreserve-salon-demo
 
-- Modify the `MONGODB_URL` in your `.env` file to `mongodb://127.0.0.1/<dbname>`
-- Modify the `docker-compose.yml` file's `MONGODB_URL` to match the above `<dbname>`
-- Run `docker-compose up` to start the database, optionally pass `-d` to run in the background.
+# Payload
+PAYLOAD_SECRET=any-random-secret-string
 
-## How it works
+# Stripe (test keys from dashboard.stripe.com)
+STRIPE_SECRET_KEY=sk_test_...
+NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_test_...
+STRIPE_WEBHOOK_SECRET=whsec_...   # ← filled automatically by stripe-listen.sh (see below)
 
-The Payload config is tailored specifically to the needs of most websites. It is pre-configured in the following ways:
+# Email (optional — leave blank to skip sending emails)
+SMTP_HOST=
+SMTP_PORT=587
+SMTP_USER=
+SMTP_PASS=
+SMTP_FROM=salon@lumiere-salon.com
+SMTP_FROM_NAME=Lumière Salon
 
-### Collections
+# App URL
+NEXT_PUBLIC_SITE_URL=http://localhost:3000
+```
 
-See the [Collections](https://payloadcms.com/docs/configuration/collections) docs for details on how to extend this functionality.
+---
 
-- #### Users (Authentication)
+## Starting the Dev Environment
 
-  Users are auth-enabled collections that have access to the admin panel.
+### Recommended: VS Code Tasks (two terminals)
 
-  For additional help, see the official [Auth Example](https://github.com/payloadcms/payload/tree/main/examples/auth) or the [Authentication](https://payloadcms.com/docs/authentication/overview#authentication-overview) docs.
+Press **`Ctrl+Shift+B`** (or `Ctrl+Shift+P` → "Tasks: Run Task" → `dev:salon`).
 
-- #### Media
+This opens **two terminal panels in parallel**:
 
-  This is the uploads enabled collection. It features pre-configured sizes, focal point and manual resizing to help you manage your pictures.
+| Terminal | Command | What it does |
+|---|---|---|
+| **salon: next dev** | `pnpm dev:salon` | Starts the Next.js + Payload dev server on port 3000 |
+| **salon: stripe listen** | `bash scripts/stripe-listen.sh salon 3000` | Forwards Stripe webhooks to localhost and auto-updates `.env` |
 
-### Docker
+### Manual (two separate terminals)
 
-Alternatively, you can use [Docker](https://www.docker.com) to spin up this template locally. To do so, follow these steps:
+```bash
+# Terminal 1 — from monorepo root
+pnpm dev:salon
 
-1. Follow [steps 1 and 2 from above](#development), the docker-compose file will automatically use the `.env` file in your project root
-1. Next run `docker-compose up`
-1. Follow [steps 4 and 5 from above](#development) to login and create your first admin user
+# Terminal 2 — from monorepo root
+bash scripts/stripe-listen.sh salon 3000
+```
 
-That's it! The Docker instance will help you get up and running quickly while also standardizing the development environment across your teams.
+> **Important:** both processes must be running at the same time when testing payments.
+> Stopping `stripe listen` means Stripe events never reach the app and reservations stay `pending`.
 
-## Questions
+---
 
-If you have any issues or questions, reach out to us on [Discord](https://discord.com/invite/payload) or start a [GitHub discussion](https://github.com/payloadcms/payload/discussions).
+## How `scripts/stripe-listen.sh` Works
+
+The Stripe CLI generates a **new webhook signing secret every time** `stripe listen` starts.
+Without the correct secret, the webhook handler rejects all incoming events (signature mismatch → 400).
+
+The script solves this automatically:
+
+1. Runs `stripe listen --forward-to localhost:3000/api/stripe-webhook`
+2. Parses the `whsec_xxx` secret the CLI prints on its first line of output
+3. Writes `STRIPE_WEBHOOK_SECRET=whsec_xxx` into `apps/salon/.env`
+4. Next.js dev server detects the `.env` change and restarts within seconds
+
+After that the full payment flow works end-to-end:
+
+```
+User pays → Stripe → CLI tunnel → POST /api/stripe-webhook → status: confirmed
+```
+
+---
+
+## All Commands
+
+### From monorepo root
+
+```bash
+pnpm dev:salon           # Start salon dev server (turbo)
+pnpm build:salon         # Production build
+pnpm build               # Build all apps
+pnpm lint                # Lint all apps
+pnpm generate:types      # Regenerate payload-types.ts (run after schema changes)
+pnpm generate:importmap  # Regenerate admin import map (run after adding admin components)
+```
+
+### From `apps/salon/`
+
+```bash
+pnpm dev          # Start dev server
+pnpm devsafe      # Wipe .next cache then start dev (use when hot-reload breaks)
+pnpm seed         # Seed database with services, specialists, schedules
+pnpm test         # Run all tests (integration + e2e)
+pnpm test:int     # Vitest integration tests only
+pnpm test:e2e     # Playwright e2e tests only
+npx tsc --noEmit  # Type-check without building
+```
+
+---
+
+## Project Structure
+
+```
+apps/salon/src/
+├── app/
+│   ├── (frontend)/[locale]/     # Public-facing pages (book, account, cancel, success)
+│   │   └── book/
+│   │       ├── actions.ts       # Server actions: create reservation, Stripe checkout, slots
+│   │       ├── cancel/          # Cancel page (pending reservations only)
+│   │       └── success/         # Post-payment confirmation page
+│   ├── (payload)/               # Payload admin panel + REST/GraphQL API routes
+│   └── api/stripe-webhook/      # POST handler for Stripe checkout.session.completed
+├── collections/                 # Payload collection configs (Users, Media, Gallery, …)
+├── email/templates/             # HTML email templates (confirmation, cancellation, …)
+├── globals/                     # Payload globals (Homepage, SiteSettings)
+├── hooks/
+│   └── reservationNotifications.ts  # Plugin callbacks → send emails on create/confirm/cancel
+├── i18n/                        # next-intl routing + request config
+├── seed/                        # Seed scripts and static data
+├── tasks/
+│   └── cancelStaleReservations.ts   # Payload job: cancels unpaid pending reservations
+├── payload.config.ts            # Main Payload config — plugin, collections, email, jobs
+└── payload-types.ts             # Auto-generated — DO NOT edit manually
+```
+
+### Path aliases (in `tsconfig.json`)
+
+| Alias | Resolves to |
+|---|---|
+| `@/*` | `./src/*` |
+| `@payload-config` | `./src/payload.config.ts` |
+
+---
+
+## How the Booking Flow Works
+
+```
+1. User selects service + specialist + date/time
+2. createReservation() creates a Reservation with status: "pending"
+3. Stripe Checkout session is created (metadata: { reservationId })
+4. User pays with test card 4242 4242 4242 4242
+5. Stripe fires checkout.session.completed webhook
+6. /api/stripe-webhook updates Reservation to status: "confirmed"
+7. Success page shows confirmation
+```
+
+### `payload-reserve` plugin collections (auto-created)
+
+| Slug | Description |
+|---|---|
+| `services` | Treatments/services with price, duration, category |
+| `specialists` | Staff members linked to services they offer |
+| `schedules` | Weekly availability per specialist |
+| `reservations` | Booking records with status, startTime, customer, service, resource |
+| `customers` | Customers (separate from admin `users`) |
+
+---
+
+## Background Jobs
+
+A Payload job runs every **15 minutes** and cancels any reservation that is still `pending` after **30 minutes**. This cleans up abandoned checkouts (user left before paying).
+
+Defined in: `src/tasks/cancelStaleReservations.ts`
+
+---
+
+## Email Notifications
+
+Emails are sent via Nodemailer. Hook callbacks in `src/hooks/reservationNotifications.ts` fire on:
+
+| Event | Email sent |
+|---|---|
+| Booking created | "Booking received" confirmation |
+| Booking confirmed (paid) | "Booking confirmed" |
+| Booking cancelled | "Cancellation" |
+
+Leave SMTP env vars blank in development to skip email sending silently.
+
+---
+
+## After Schema Changes
+
+Always run these two commands after modifying any collection/global config:
+
+```bash
+# From monorepo root:
+pnpm generate:types       # Updates src/payload-types.ts
+pnpm generate:importmap   # Updates admin import map (only needed for admin UI components)
+```
+
+---
+
+## URLs
+
+| URL | Description |
+|---|---|
+| `http://localhost:3000` | Frontend (defaults to `/en`) |
+| `http://localhost:3000/fr` | French locale |
+| `http://localhost:3000/admin` | Payload admin panel |
+| `http://localhost:3000/api` | Payload REST API |

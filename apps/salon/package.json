@@ -35,7 +35,8 @@
     "payload-reserve": "^1.0.3",
     "react": "19.2.1",
     "react-dom": "19.2.1",
-    "sharp": "0.34.2"
+    "sharp": "0.34.2",
+    "stripe": "^17"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.2.0",
