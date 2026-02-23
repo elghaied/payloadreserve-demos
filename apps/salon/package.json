@@ -15,7 +15,7 @@
     "start": "cross-env NODE_OPTIONS=--no-deprecation next start",
     "test": "pnpm run test:int && pnpm run test:e2e",
     "test:e2e": "cross-env NODE_OPTIONS=\"--no-deprecation --import=tsx/esm\" playwright test --config=playwright.config.ts",
-    "seed": "cross-env NODE_OPTIONS=--no-deprecation tsx src/seed/index.ts",
+    "seed": "cross-env NODE_OPTIONS=--no-deprecation tsx src/seed/cli.ts",
     "test:int": "cross-env NODE_OPTIONS=--no-deprecation vitest run --config ./vitest.config.mts"
   },
   "dependencies": {
@@ -25,6 +25,7 @@
     "@payloadcms/next": "3.77.0",
     "@payloadcms/plugin-stripe": "3.77.0",
     "@payloadcms/richtext-lexical": "3.77.0",
+    "@payloadcms/storage-s3": "^3.77.0",
     "@payloadcms/ui": "3.77.0",
     "cross-env": "^7.0.3",
     "dotenv": "16.4.7",

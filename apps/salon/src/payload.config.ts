@@ -7,11 +7,10 @@ import { buildConfig } from 'payload'
 import { payloadReserve } from 'payload-reserve'
 import { fileURLToPath } from 'url'
 import sharp from 'sharp'
+import { createAdminUser } from '@payload-reserve-demos/seed-utils'
 
-import {
-  notifyAfterConfirm,
-  notifyAfterCancel,
-} from './hooks/reservationNotifications'
+import { seedEndpoint } from './endpoints/seed.js'
+import { notifyAfterConfirm, notifyAfterCancel } from './hooks/reservationNotifications'
 import { cancelStaleReservationsTask } from './tasks/cancelStaleReservations'
 import { notifyAbandonedPaymentsTask } from './tasks/notifyAbandonedPayments'
 import { Users } from './collections/Users'
@@ -21,7 +20,7 @@ import { Testimonials } from './collections/Testimonials'
 import { Gallery } from './collections/Gallery'
 import { Homepage } from './globals/Homepage'
 import { SiteSettings } from './globals/SiteSettings'
-
+import { s3Storage } from '@payloadcms/storage-s3'
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
@@ -31,11 +30,26 @@ export default buildConfig({
     importMap: {
       baseDir: path.resolve(dirname),
     },
+    components: {
+      beforeDashboard: ['@/components/BeforeDashboard/index.js'],
+    },
   },
+  endpoints: [seedEndpoint],
   collections: [Users, Media, ServiceCategories, Testimonials, Gallery],
   globals: [Homepage, SiteSettings],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
+  onInit: async (payload) => {
+    if (!process.env.S3_PREFIX) {
+      throw new Error('S3_PREFIX environment variable is required')
+    }
+
+    const adminEmail = process.env.ADMIN_EMAIL
+    const adminPassword = process.env.ADMIN_PASSWORD
+    if (adminEmail && adminPassword) {
+      await createAdminUser(payload, adminEmail, adminPassword)
+    }
+  },
   typescript: {
     outputFile: path.resolve(dirname, 'payload-types.ts'),
   },
@@ -51,18 +65,28 @@ export default buildConfig({
     defaultLocale: 'en',
     fallback: true,
   },
-  email: nodemailerAdapter({
-    defaultFromAddress: process.env.SMTP_FROM!,
-    defaultFromName: process.env.SMTP_FROM_NAME!,
-    transportOptions: {
-      host: process.env.SMTP_HOST,
-      port: Number(process.env.SMTP_PORT || 587),
-      auth: {
-        user: process.env.SMTP_USER,
-        pass: process.env.SMTP_PASS,
-      },
-    },
-  }),
+  // Only initialise the email transport when SMTP vars are present.
+  // Without this guard, nodemailerAdapter calls transporter.verify() at
+  // startup, which fails during `next build` (Docker builder stage) where
+  // runtime env vars are not available.
+  ...(process.env.SMTP_HOST
+    ? {
+        email: nodemailerAdapter({
+          defaultFromAddress: process.env.SMTP_FROM!,
+          defaultFromName: process.env.SMTP_FROM_NAME!,
+          transportOptions: {
+            host: process.env.SMTP_HOST,
+            port: Number(process.env.SMTP_PORT) || 587,
+            auth: {
+              user: process.env.SMTP_USER!,
+              // Google App Passwords contain spaces — pass as-is, no quotes
+              // in .env (Docker Compose preserves spaces in unquoted values).
+              pass: process.env.SMTP_PASS!,
+            },
+          },
+        }),
+      }
+    : {}),
 
   jobs: {
     tasks: [cancelStaleReservationsTask, notifyAbandonedPaymentsTask],
@@ -133,6 +157,23 @@ export default buildConfig({
       stripeSecretKey: process.env.STRIPE_SECRET_KEY || '',
       stripeWebhooksEndpointSecret: process.env.STRIPE_WEBHOOK_SECRET,
       isTestKey: true,
+    }),
+    s3Storage({
+      collections: {
+        media: {
+          prefix: process.env.S3_PREFIX || 'media',
+        },
+      },
+      bucket: process.env.S3_BUCKET!,
+      config: {
+        credentials: {
+          accessKeyId: process.env.S3_ACCESS_KEY || '',
+          secretAccessKey: process.env.S3_SECRET_KEY || '',
+        },
+        region: process.env.S3_REGION || 'us-east-1',
+        forcePathStyle: process.env.S3_FORCE_PATH_STYLE === 'true',
+        endpoint: process.env.S3_ENDPOINT,
+      },
     }),
   ],
 })

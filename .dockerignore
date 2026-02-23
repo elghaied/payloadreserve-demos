@@ -1,0 +1,28 @@
+# Prevent local build artifacts and VCS data from bloating the build context.
+
+.git
+.gitignore
+
+# Dependencies (reinstalled inside Docker)
+**/node_modules
+
+# Next.js build output
+**/.next
+
+# Local env files
+**/.env
+**/.env.local
+**/.env.*.local
+
+# Turbo cache
+.turbo
+
+# Test artefacts
+**/coverage
+**/__snapshots__
+
+# OS / editor noise
+.DS_Store
+Thumbs.db
+.vscode
+.idea

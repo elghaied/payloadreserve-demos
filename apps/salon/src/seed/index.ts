@@ -1,15 +1,11 @@
-import 'dotenv/config'
-import { getPayload } from 'payload'
-import config from '../payload.config.js'
+import type { Payload } from 'payload'
 import { uploadImage } from './images.js'
 import { servicesData } from './data/services.js'
 import { specialistsData } from './data/specialists.js'
 import { homepageData, siteSettingsData } from './data/homepage.js'
 
-async function seed() {
+export async function runSeed(payload: Payload): Promise<void> {
   console.log('\n🌱 Starting seed...\n')
-
-  const payload = await getPayload({ config })
 
   // Clear existing data
   console.log('Clearing existing data...')
@@ -34,26 +30,6 @@ async function seed() {
     await payload.delete({ collection: 'media', where: { id: { exists: true } } })
   } catch {
     // ignore
-  }
-
-  // ---- ADMIN USER ----
-  console.log('\n📧 Creating admin user...')
-  const existingAdmin = await payload.find({
-    collection: 'users',
-    where: { email: { equals: 'admin@yoursalon.com' } },
-    limit: 1,
-  })
-  if (existingAdmin.docs.length === 0) {
-    await payload.create({
-      collection: 'users',
-      data: {
-        email: 'admin@yoursalon.com',
-        password: 'admin123',
-      },
-    })
-    console.log('  Created: admin@yoursalon.com / admin123')
-  } else {
-    console.log('  Admin already exists')
   }
 
   // ---- CUSTOMER USERS ----
@@ -211,7 +187,7 @@ async function seed() {
       customer: customers[0], // Sophie
       startTime: addDays(now, 7, 11, 0),
       duration: 45,
-      status: 'pending' as const,
+      status: 'confirmed' as const,
     },
     {
       service: serviceMap['Lash Lift & Tint'],
@@ -219,7 +195,7 @@ async function seed() {
       customer: customers[2], // Lucas
       startTime: addDays(now, 10, 15, 0),
       duration: 60,
-      status: 'pending' as const,
+      status: 'confirmed' as const,
     },
     {
       service: serviceMap['Brazilian Wax'],
@@ -345,11 +321,8 @@ async function seed() {
   console.log('  Site settings configured')
 
   console.log('\n✅ Seed complete!\n')
-  console.log('  Admin: admin@yoursalon.com / admin123')
   console.log('  Customers: sophie@example.com, emma@example.com, lucas@example.com (password123)')
   console.log('')
-
-  process.exit(0)
 }
 
 function addDays(date: Date, days: number, hours: number, minutes: number): Date {
@@ -359,7 +332,3 @@ function addDays(date: Date, days: number, hours: number, minutes: number): Date
   return d
 }
 
-seed().catch((err) => {
-  console.error('Seed failed:', err)
-  process.exit(1)
-})
