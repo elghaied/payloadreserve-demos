@@ -96,7 +96,7 @@ export async function POST(req: NextRequest) {
         environmentName: 'production',
         dockerImageName: image.name,
         dockerImageTag: image.tag,
-        ports: '3000/http',
+        ports: '3000',
         fqdn: `https://${subdomain}`,
         envVars: [
           { key: 'DATABASE_URL', value: `mongodb://${process.env.MONGO_ROOT_USERNAME}:${process.env.MONGO_ROOT_PASSWORD}@mongodb/${dbName}?authSource=admin`, is_secret: true },
