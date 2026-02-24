@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { nanoid } from 'nanoid'
+import { customAlphabet } from 'nanoid'
+
+const nanoid = customAlphabet('abcdefghijklmnopqrstuvwxyz0123456789', 8)
 import crypto from 'crypto'
 import bcrypt from 'bcrypt'
 import { CoolifyClient } from '@payload-reserve-demos/coolify-sdk'
