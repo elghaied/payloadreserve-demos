@@ -17,6 +17,13 @@ const DEMO_IMAGES: Record<DemoType, { name: string; tag: string }> = {
   events:     { name: process.env.DOCKER_IMAGE_EVENTS_NAME     ?? '', tag: process.env.DOCKER_IMAGE_EVENTS_TAG     ?? 'latest' },
 }
 
+const DEMO_SMTP_FROM_NAMES: Record<DemoType, string> = {
+  salon:      'Lumière Salon',
+  hotel:      'Grand Hotel',
+  restaurant: 'Le Bistrot',
+  events:     'EventSpace',
+}
+
 // TODO: Change DEMO_PROTOCOL to 'https' in production (set via env var on the Coolify service)
 const demoProtocol = process.env.DEMO_PROTOCOL ?? 'https'
 
@@ -102,7 +109,7 @@ export async function POST(req: NextRequest) {
         ports: '3000',
         fqdn: `${demoProtocol}://${subdomain}`,
         envVars: [
-          // Per-demo vars — shared vars (SMTP, Stripe, S3 credentials) are set at Coolify project level
+          // Per-demo vars
           { key: 'DATABASE_URL', value: `mongodb://${process.env.MONGO_ROOT_USERNAME}:${process.env.MONGO_ROOT_PASSWORD}@${process.env.MONGO_HOST ?? 'mongodb'}/${dbName}?authSource=admin`, is_secret: true },
           { key: 'PAYLOAD_SECRET', value: payloadSecret, is_secret: true },
           { key: 'ADMIN_EMAIL', value: email },
@@ -111,6 +118,22 @@ export async function POST(req: NextRequest) {
           { key: 'NEXT_PUBLIC_SERVER_URL', value: `${demoProtocol}://${subdomain}` },
           { key: 'S3_PREFIX', value: s3Prefix },
           { key: 'S3_BUCKET', value: `${demoType}-demo` },
+          // Per-demo-type vars
+          { key: 'SMTP_FROM_NAME', value: DEMO_SMTP_FROM_NAMES[demoType as DemoType] },
+          // Shared vars — forwarded from landing app env (set via {{ project.* }} in Coolify)
+          { key: 'S3_ACCESS_KEY', value: process.env.S3_ACCESS_KEY ?? '', is_secret: true },
+          { key: 'S3_SECRET_KEY', value: process.env.S3_SECRET_KEY ?? '', is_secret: true },
+          { key: 'S3_ENDPOINT', value: process.env.S3_ENDPOINT ?? '' },
+          { key: 'S3_REGION', value: process.env.S3_REGION ?? 'us-east-1' },
+          { key: 'S3_FORCE_PATH_STYLE', value: process.env.S3_FORCE_PATH_STYLE ?? 'true' },
+          { key: 'SMTP_HOST', value: process.env.SMTP_HOST ?? '' },
+          { key: 'SMTP_PORT', value: process.env.SMTP_PORT ?? '587' },
+          { key: 'SMTP_USER', value: process.env.SMTP_USER ?? '' },
+          { key: 'SMTP_PASS', value: process.env.SMTP_PASS ?? '', is_secret: true },
+          { key: 'SMTP_FROM', value: process.env.SMTP_FROM ?? '' },
+          { key: 'STRIPE_SECRET_KEY', value: process.env.STRIPE_SECRET_KEY ?? '', is_secret: true },
+          { key: 'STRIPE_WEBHOOK_SECRET', value: process.env.STRIPE_WEBHOOK_SECRET ?? '', is_secret: true },
+          { key: 'NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY', value: process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY ?? '' },
         ],
       })
       coolifyServiceId = service.id
