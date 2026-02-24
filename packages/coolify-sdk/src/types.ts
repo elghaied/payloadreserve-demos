@@ -24,4 +24,6 @@ export interface CreateServiceOptions {
   ports: string
   fqdn: string
   envVars?: CoolifyEnvVar[]
+  connectToDockerNetwork?: boolean
+  instantDeploy?: boolean
 }

@@ -44,6 +44,8 @@ export class CoolifyClient {
       ports_exposes: opts.ports,
       name: opts.name,
       domains: opts.fqdn,
+      connect_to_docker_network: opts.connectToDockerNetwork ?? true,
+      instant_deploy: opts.instantDeploy ?? false,
     })
 
     const uuid = data.uuid

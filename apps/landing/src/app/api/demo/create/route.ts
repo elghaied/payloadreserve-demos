@@ -114,7 +114,7 @@ export async function POST(req: NextRequest) {
         fqdn: `${demoProtocol}://${subdomain}`,
         envVars: [
           // Per-demo vars
-          { key: 'DATABASE_URL', value: `mongodb://${process.env.MONGO_ROOT_USERNAME}:${process.env.MONGO_ROOT_PASSWORD}@${process.env.MONGO_HOST ?? 'mongodb'}/${dbName}?authSource=admin`, is_secret: true },
+          { key: 'DATABASE_URL', value: `mongodb://${process.env.MONGO_ROOT_USERNAME}:${process.env.MONGO_ROOT_PASSWORD}@${process.env.MONGO_HOST ?? 'mongodb:27017'}/${dbName}?authSource=admin&directConnection=true`, is_secret: true },
           { key: 'PAYLOAD_SECRET', value: payloadSecret, is_secret: true },
           { key: 'ADMIN_EMAIL', value: email },
           { key: 'ADMIN_PASSWORD', value: adminPassword, is_secret: true },
@@ -217,6 +217,21 @@ async function pollAndSeed(opts: {
   console.log(`[demo/${demoId}] Polling ${demoUrl}/api/health (max ${maxAttempts} attempts, ${intervalMs}ms interval)…`)
   for (let i = 0; i < maxAttempts; i++) {
     await new Promise((r) => setTimeout(r, intervalMs))
+
+    // Every 5 attempts, log the Coolify-side container status
+    if (coolify && i % 5 === 0) {
+      try {
+        const svcStatus = await coolify.getServiceStatus(coolifyServiceId)
+        console.log(`[demo/${demoId}] Coolify container status: ${svcStatus}`)
+        if (svcStatus === 'error') {
+          console.error(`[demo/${demoId}] Coolify reports container error — aborting health poll`)
+          break
+        }
+      } catch (err) {
+        console.warn(`[demo/${demoId}] getServiceStatus failed:`, (err as Error).message)
+      }
+    }
+
     try {
       const res = await fetch(`${demoUrl}/api/health`, { signal: AbortSignal.timeout(8_000) })
       console.log(`[demo/${demoId}] health attempt ${i + 1}/${maxAttempts}: HTTP ${res.status}`)
