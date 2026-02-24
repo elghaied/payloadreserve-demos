@@ -15,6 +15,10 @@ jobs:
     dockerfile: apps/salon/Dockerfile
     output: !RegistryOutput
       tags: onedev.payloadreserve.com/payloadreserve-demos/salon:@build_number@ onedev.payloadreserve.com/payloadreserve-demos/salon:latest
+    registryLogins:
+    - registryUrl: onedev.payloadreserve.com
+      userName: '@job_token@'
+      passwordSecret: ONEDEV_PASSWORD
     moreOptions: --build-arg NEXT_PUBLIC_SERVER_URL=@secret:NEXT_PUBLIC_SERVER_URL@ --build-arg S3_ENDPOINT=@secret:S3_ENDPOINT@
     condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
   triggers:
@@ -38,7 +42,11 @@ jobs:
     buildPath: .
     dockerfile: apps/salon/Dockerfile
     output: !RegistryOutput
-      tags: <registry-host>/<project-path>/salon:@tag@ <registry-host>/<project-path>/salon:latest
+      tags: onedev.payloadreserve.com/payloadreserve-demos/salon:@tag@ onedev.payloadreserve.com/payloadreserve-demos/salon:latest
+    registryLogins:
+    - registryUrl: onedev.payloadreserve.com
+      userName: '@job_token@'
+      passwordSecret: ONEDEV_PASSWORD
     moreOptions: --build-arg NEXT_PUBLIC_SERVER_URL=@secret:NEXT_PUBLIC_SERVER_URL@ --build-arg S3_ENDPOINT=@secret:S3_ENDPOINT@
     condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
   triggers:
