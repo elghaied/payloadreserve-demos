@@ -97,8 +97,10 @@ export async function POST(req: NextRequest) {
   // Create Coolify service
   let coolifyServiceId = 'stub'
   const coolify = getCoolify()
+  console.log(`[demo/${demoId}] Coolify client: ${coolify ? 'ready' : 'MISSING — check COOLIFY_API_URL / COOLIFY_API_KEY'}`)
   if (coolify) {
     const image = DEMO_IMAGES[demoType as DemoType]
+    console.log(`[demo/${demoId}] Creating Coolify service — image: ${image.name}:${image.tag}, fqdn: ${demoProtocol}://${subdomain}`)
     try {
       const service = await coolify.createService({
         name: `demo-${demoId}`,
@@ -139,8 +141,9 @@ export async function POST(req: NextRequest) {
         ],
       })
       coolifyServiceId = service.id
+      console.log(`[demo/${demoId}] Coolify service created — uuid: ${coolifyServiceId}`)
     } catch (err) {
-      console.error('[demo/create] Coolify createService failed:', err)
+      console.error(`[demo/${demoId}] Coolify createService failed:`, err)
       return NextResponse.json({ error: 'Failed to provision demo container' }, { status: 500 })
     }
   }
@@ -199,32 +202,40 @@ async function pollAndSeed(opts: {
   // Start the Coolify service if client is available
   if (coolify) {
     try {
+      console.log(`[demo/${demoId}] Starting Coolify service ${coolifyServiceId}…`)
       await coolify.startService(coolifyServiceId)
+      console.log(`[demo/${demoId}] startService call succeeded`)
     } catch (err) {
       console.error(`[demo/${demoId}] startService failed:`, err)
     }
+  } else {
+    console.warn(`[demo/${demoId}] No Coolify client — skipping startService`)
   }
 
   // Poll /api/health
   let healthy = false
+  console.log(`[demo/${demoId}] Polling ${demoUrl}/api/health (max ${maxAttempts} attempts, ${intervalMs}ms interval)…`)
   for (let i = 0; i < maxAttempts; i++) {
     await new Promise((r) => setTimeout(r, intervalMs))
     try {
       const res = await fetch(`${demoUrl}/api/health`, { signal: AbortSignal.timeout(8_000) })
+      console.log(`[demo/${demoId}] health attempt ${i + 1}/${maxAttempts}: HTTP ${res.status}`)
       if (res.ok) {
         healthy = true
         break
       }
-    } catch {
-      // container not up yet — continue polling
+    } catch (err) {
+      console.log(`[demo/${demoId}] health attempt ${i + 1}/${maxAttempts}: ${(err as Error).message}`)
     }
   }
 
   if (!healthy) {
-    console.error(`[demo/${demoId}] health check timed out`)
+    console.error(`[demo/${demoId}] health check timed out after ${maxAttempts} attempts`)
     await updateDemoStatus(demoId, 'failed')
     return
   }
+
+  console.log(`[demo/${demoId}] Container healthy — triggering seed`)
 
   // Trigger seed
   try {
@@ -233,9 +244,10 @@ async function pollAndSeed(opts: {
       headers: { Authorization: `Bearer ${seedSecret}` },
       signal: AbortSignal.timeout(120_000),
     })
+    const seedBody = await seedRes.text()
+    console.log(`[demo/${demoId}] seed response: HTTP ${seedRes.status} — ${seedBody.slice(0, 200)}`)
     if (!seedRes.ok) {
-      const text = await seedRes.text()
-      throw new Error(`seed returned ${seedRes.status}: ${text}`)
+      throw new Error(`seed returned ${seedRes.status}: ${seedBody}`)
     }
   } catch (err) {
     console.error(`[demo/${demoId}] seed failed:`, err)
@@ -244,9 +256,11 @@ async function pollAndSeed(opts: {
   }
 
   // Mark ready and send credentials
+  console.log(`[demo/${demoId}] Seed complete — marking ready`)
   await updateDemoStatus(demoId, 'ready')
 
   try {
+    console.log(`[demo/${demoId}] Sending credentials email to ${email}`)
     await mailer.sendDemoCredentials(email, {
       demoUrl,
       adminEmail: email,
@@ -254,6 +268,7 @@ async function pollAndSeed(opts: {
       expiresAt,
       demoType,
     })
+    console.log(`[demo/${demoId}] Credentials email sent`)
   } catch (err) {
     console.error(`[demo/${demoId}] email failed:`, err)
     // Non-fatal — demo is still ready

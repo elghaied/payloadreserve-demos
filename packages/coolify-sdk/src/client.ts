@@ -10,7 +10,9 @@ export class CoolifyClient {
   }
 
   private async request<T>(method: string, path: string, body?: unknown): Promise<T> {
-    const res = await fetch(`${this.baseUrl}/v1${path}`, {
+    const url = `${this.baseUrl}/v1${path}`
+    console.log(`[coolify-sdk] ${method} ${url}${body !== undefined ? ' ' + JSON.stringify(body).slice(0, 300) : ''}`)
+    const res = await fetch(url, {
       method,
       headers: {
         Authorization: `Bearer ${this.apiKey}`,
@@ -22,10 +24,12 @@ export class CoolifyClient {
 
     if (!res.ok) {
       const text = await res.text().catch(() => '')
+      console.error(`[coolify-sdk] ${method} ${path} → ${res.status}: ${text}`)
       throw new Error(`Coolify API ${method} ${path} failed with ${res.status}: ${text}`)
     }
 
     const text = await res.text()
+    console.log(`[coolify-sdk] ${method} ${path} → ${res.status} OK${text ? ' ' + text.slice(0, 200) : ''}`)
     return text ? (JSON.parse(text) as T) : (undefined as T)
   }
 
