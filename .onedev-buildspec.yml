@@ -1,24 +1,22 @@
 version: 36
 jobs:
 
-# ── CI: push to main → build image & push to OneDev registry ─────────────────
+# ── CI: push to main → build & push to OneDev built-in registry ──────────────
 - name: Build Salon Image
   steps:
   - !CheckoutStep
     name: Checkout
     cloneCredential: !DefaultCredential {}
-    withLFS: false
+    withLfs: false
+    condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
   - !BuildImageStep
-    name: Build & push to OneDev registry
+    name: Build & push to registry
+    buildPath: .
     dockerfile: apps/salon/Dockerfile
-    buildContext: .
-    tags:
-    - salon:@build_number@
-    - salon:latest
-    push: true
-    buildArgs:
-      NEXT_PUBLIC_SERVER_URL: '@secret:NEXT_PUBLIC_SERVER_URL@'
-      S3_ENDPOINT: '@secret:S3_ENDPOINT@'
+    output: !RegistryOutput
+      tags: onedev.payloadreserve.com/payloadreserve-demos/salon:@build_number@ onedev.payloadreserve.com/payloadreserve-demos/salon:latest
+    moreOptions: --build-arg NEXT_PUBLIC_SERVER_URL=@secret:NEXT_PUBLIC_SERVER_URL@ --build-arg S3_ENDPOINT=@secret:S3_ENDPOINT@
+    condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
   triggers:
   - !BranchUpdateTrigger
     branches: main
@@ -33,18 +31,16 @@ jobs:
   - !CheckoutStep
     name: Checkout
     cloneCredential: !DefaultCredential {}
-    withLFS: false
+    withLfs: false
+    condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
   - !BuildImageStep
     name: Build & push versioned image
+    buildPath: .
     dockerfile: apps/salon/Dockerfile
-    buildContext: .
-    tags:
-    - salon:@tag@
-    - salon:latest
-    push: true
-    buildArgs:
-      NEXT_PUBLIC_SERVER_URL: '@secret:NEXT_PUBLIC_SERVER_URL@'
-      S3_ENDPOINT: '@secret:S3_ENDPOINT@'
+    output: !RegistryOutput
+      tags: <registry-host>/<project-path>/salon:@tag@ <registry-host>/<project-path>/salon:latest
+    moreOptions: --build-arg NEXT_PUBLIC_SERVER_URL=@secret:NEXT_PUBLIC_SERVER_URL@ --build-arg S3_ENDPOINT=@secret:S3_ENDPOINT@
+    condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
   triggers:
   - !TagCreateTrigger {}
   retryCondition: never
