@@ -31,16 +31,28 @@ export async function Footer({ locale }: Props) {
               {t('quickLinks')}
             </h4>
             <nav className="flex flex-col gap-2">
-              <Link href={`/${locale}/services`} className="text-sm hover:text-background transition-colors">
+              <Link
+                href={`/${locale}/services`}
+                className="text-sm hover:text-background transition-colors"
+              >
                 {tNav('services')}
               </Link>
-              <Link href={`/${locale}/book`} className="text-sm hover:text-background transition-colors">
+              <Link
+                href={`/${locale}/book`}
+                className="text-sm hover:text-background transition-colors"
+              >
                 {tNav('book')}
               </Link>
-              <Link href={`/${locale}/gallery`} className="text-sm hover:text-background transition-colors">
+              <Link
+                href={`/${locale}/gallery`}
+                className="text-sm hover:text-background transition-colors"
+              >
                 {tNav('gallery')}
               </Link>
-              <Link href={`/${locale}/contact`} className="text-sm hover:text-background transition-colors">
+              <Link
+                href={`/${locale}/contact`}
+                className="text-sm hover:text-background transition-colors"
+              >
                 {tNav('contact')}
               </Link>
             </nav>
@@ -82,7 +94,13 @@ export async function Footer({ locale }: Props) {
         </div>
 
         <div className="border-t border-background/10 mt-12 pt-8 text-center text-sm text-background/40">
-          &copy; {new Date().getFullYear()} Lumière Salon. {t('rights')}
+          &copy; {new Date().getFullYear()} Lumière Salon. By Gshell{' '}
+          <img
+            src="/images/gshell-logo.png"
+            alt="Gshell Logo"
+            className="inline-block w-4 h-4 ml-1"
+          />{' '}
+          {t('rights')}
         </div>
       </Container>
     </footer>
