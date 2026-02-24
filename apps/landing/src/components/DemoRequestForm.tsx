@@ -8,12 +8,15 @@ import type { DemoType } from '@payload-reserve-demos/types'
 
 type Stage = 'form' | 'polling' | 'error'
 
-const demoTypes: { value: DemoType; label: string; description: string }[] = [
-  { value: 'salon', label: 'Lumière Salon', description: 'Specialists, services, buffer times' },
-  { value: 'hotel', label: 'Grand Hotel', description: 'Rooms, check-in/out, capacity' },
-  { value: 'restaurant', label: 'Maison Restaurant', description: 'Tables, party size, time slots' },
-  { value: 'events', label: 'Event Venue', description: 'Events, ticketing, multi-resource' },
+const demoTypes: { value: DemoType; label: string; description: string; emoji: string }[] = [
+  { value: 'salon', label: 'Lumière Salon', description: 'Specialists, services, buffer times', emoji: '✂️' },
+  { value: 'hotel', label: 'Grand Hotel', description: 'Rooms, check-in/out, capacity', emoji: '🏨' },
+  { value: 'restaurant', label: 'Maison Restaurant', description: 'Tables, party size, time slots', emoji: '🍽️' },
+  { value: 'events', label: 'Event Venue', description: 'Events, ticketing, multi-resource', emoji: '🎪' },
 ]
+
+const activeClass = 'border-violet-500 bg-violet-50 text-violet-900 ring-2 ring-violet-200 shadow-sm'
+const inactiveClass = 'border-gray-200 bg-white text-gray-700 hover:border-violet-300 hover:bg-violet-50/40'
 
 export function DemoRequestForm() {
   const [stage, setStage] = useState<Stage>('form')
@@ -68,10 +71,10 @@ export function DemoRequestForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
+    <form onSubmit={handleSubmit} className="space-y-5">
       {/* Name */}
       <div>
-        <label htmlFor="name" className="block text-xs font-medium text-zinc-400 mb-1.5">
+        <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1.5">
           Name
         </label>
         <input
@@ -80,14 +83,14 @@ export function DemoRequestForm() {
           type="text"
           required
           placeholder="Jane Smith"
-          className="w-full bg-zinc-900 border border-zinc-700/70 rounded-lg px-3.5 py-2.5 text-sm text-white placeholder:text-zinc-600 focus:outline-none focus:border-amber-500/60 focus:ring-1 focus:ring-amber-500/30 transition-colors"
+          className="w-full bg-white border border-gray-300 rounded-xl px-4 py-2.5 text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:border-violet-500 focus:ring-2 focus:ring-violet-200 transition-all"
         />
       </div>
 
       {/* Email */}
       <div>
-        <label htmlFor="email" className="block text-xs font-medium text-zinc-400 mb-1.5">
-          Email — credentials will be sent here
+        <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1.5">
+          Email <span className="text-gray-400 font-normal">— credentials will be sent here</span>
         </label>
         <input
           id="email"
@@ -95,13 +98,13 @@ export function DemoRequestForm() {
           type="email"
           required
           placeholder="you@example.com"
-          className="w-full bg-zinc-900 border border-zinc-700/70 rounded-lg px-3.5 py-2.5 text-sm text-white placeholder:text-zinc-600 focus:outline-none focus:border-amber-500/60 focus:ring-1 focus:ring-amber-500/30 transition-colors"
+          className="w-full bg-white border border-gray-300 rounded-xl px-4 py-2.5 text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:border-violet-500 focus:ring-2 focus:ring-violet-200 transition-all"
         />
       </div>
 
       {/* Demo type */}
       <div>
-        <p className="text-xs font-medium text-zinc-400 mb-2">Demo type</p>
+        <p className="text-sm font-medium text-gray-700 mb-2">Demo type</p>
         <div className="grid grid-cols-2 gap-2">
           {demoTypes.map((t) => {
             const active = t.value === selectedType
@@ -110,14 +113,23 @@ export function DemoRequestForm() {
                 key={t.value}
                 type="button"
                 onClick={() => setSelectedType(t.value)}
-                className={`flex flex-col items-start gap-0.5 rounded-lg border px-3.5 py-3 text-left transition-colors ${
-                  active
-                    ? 'border-amber-500/50 bg-amber-500/[0.07] text-white'
-                    : 'border-zinc-700/60 bg-zinc-900/50 text-zinc-400 hover:border-zinc-600 hover:text-zinc-200'
-                }`}
+                className={`relative flex flex-col items-start gap-1 rounded-xl border px-3.5 py-3 text-left transition-all duration-150 ${active ? activeClass : inactiveClass}`}
               >
-                <span className="text-xs font-medium">{t.label}</span>
-                <span className="text-[10px] text-zinc-500">{t.description}</span>
+                {/* Radio dot indicator */}
+                <span
+                  className={`absolute top-3 right-3 w-4 h-4 rounded-full border-2 flex items-center justify-center transition-all ${
+                    active ? 'border-violet-600 bg-violet-600' : 'border-gray-300 bg-white'
+                  }`}
+                >
+                  {active && (
+                    <svg width="8" height="8" viewBox="0 0 8 8" fill="none">
+                      <path d="M1.5 4l1.8 1.8L6.5 2.5" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  )}
+                </span>
+                <span className="text-lg leading-none">{t.emoji}</span>
+                <span className="text-xs font-semibold pr-5">{t.label}</span>
+                <span className={`text-[10px] leading-tight ${active ? 'text-violet-600' : 'text-gray-400'}`}>{t.description}</span>
               </button>
             )
           })}
@@ -131,7 +143,7 @@ export function DemoRequestForm() {
             siteKey={siteKey}
             onSuccess={(token) => setTurnstileToken(token)}
             onError={() => setTurnstileToken(null)}
-            options={{ theme: 'dark', size: 'normal' }}
+            options={{ theme: 'light', size: 'normal' }}
           />
         </div>
       )}
@@ -140,12 +152,12 @@ export function DemoRequestForm() {
       <button
         type="submit"
         disabled={loading || (!!siteKey && !turnstileToken)}
-        className="w-full bg-amber-500 hover:bg-amber-400 disabled:bg-zinc-700 disabled:text-zinc-500 disabled:cursor-not-allowed text-black font-semibold text-sm px-5 py-3 rounded-lg transition-colors"
+        className="w-full bg-violet-700 hover:bg-violet-600 active:scale-[0.99] disabled:bg-gray-200 disabled:text-gray-400 disabled:cursor-not-allowed text-white font-semibold text-sm px-5 py-3 rounded-xl transition-all shadow-sm shadow-violet-500/20"
       >
-        {loading ? 'Requesting…' : 'Request Demo'}
+        {loading ? 'Requesting…' : 'Request Demo →'}
       </button>
 
-      <p className="text-[11px] text-zinc-600 text-center leading-relaxed">
+      <p className="text-[11px] text-gray-400 text-center leading-relaxed">
         By submitting, you agree to receive a single transactional email with demo credentials.
         <br />
         Demos are auto-deleted after expiry. No account required.

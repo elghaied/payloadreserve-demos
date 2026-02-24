@@ -53,6 +53,9 @@ importers:
       next:
         specifier: ^15.4.11
         version: 15.4.11(@babel/core@7.24.5)(@playwright/test@1.58.2)(react-dom@19.2.1(react@19.2.1))(react@19.2.1)(sass@1.77.4)
+      next-themes:
+        specifier: ^0.4
+        version: 0.4.6(react-dom@19.2.1(react@19.2.1))(react@19.2.1)
       nodemailer:
         specifier: ^6
         version: 6.10.1

@@ -1,11 +1,19 @@
 @import "tailwindcss";
 @import "fumadocs-ui/style.css";
 
+/* ─── Class-based dark mode (used by next-themes / fumadocs RootProvider) ── */
+@variant dark (&:is(.dark, .dark *));
+
 @theme {
   --font-display: 'DM Serif Display', Georgia, serif;
   --font-body: 'Outfit', system-ui, sans-serif;
   --font-mono: 'DM Mono', 'Fira Code', monospace;
-  --color-brand: oklch(0.78 0.15 78);
+
+  /* Brand colours */
+  --color-brand-violet: #5B21B6;
+  --color-brand-indigo: #4338CA;
+  --color-brand-amber: #F59E0B;
+  --color-brand-emerald: #059669;
 }
 
 /* ─── Base ─────────────────────────────────────────────────────────────── */
@@ -17,10 +25,13 @@ html {
 }
 
 body {
-  background-color: #09090b;
-  color: #fafafa;
-  background-image: radial-gradient(circle, rgb(255 255 255 / 0.04) 1px, transparent 1px);
-  background-size: 28px 28px;
+  background-color: #FAFAF8;
+  color: #1C1917;
+}
+
+.dark body {
+  background-color: #1C1917;
+  color: #FAFAF8;
 }
 
 /* ─── Entrance animations ───────────────────────────────────────────────── */
@@ -36,15 +47,9 @@ body {
   }
 }
 
-@keyframes code-appear {
-  from {
-    opacity: 0;
-    transform: translateX(-5px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-8px); }
 }
 
 @keyframes cursor-blink {
@@ -61,52 +66,55 @@ body {
 .hero-up-2 { animation-delay: 0.18s; }
 .hero-up-3 { animation-delay: 0.30s; }
 .hero-up-4 { animation-delay: 0.44s; }
+.hero-up-5 { animation-delay: 0.56s; }
 
-/* Code card line stagger */
-.code-line {
-  opacity: 0;
-  animation: code-appear 0.28s ease both;
+.float-anim {
+  animation: float 4s ease-in-out infinite;
 }
-.code-line:nth-child(1)  { animation-delay: 0.40s; }
-.code-line:nth-child(2)  { animation-delay: 0.50s; }
-.code-line:nth-child(3)  { animation-delay: 0.62s; }
-.code-line:nth-child(4)  { animation-delay: 0.72s; }
-.code-line:nth-child(5)  { animation-delay: 0.82s; }
-.code-line:nth-child(6)  { animation-delay: 0.92s; }
-.code-line:nth-child(7)  { animation-delay: 1.02s; }
-.code-line:nth-child(8)  { animation-delay: 1.12s; }
-.code-line:nth-child(9)  { animation-delay: 1.22s; }
-.code-line:nth-child(10) { animation-delay: 1.32s; }
-.code-line:nth-child(11) { animation-delay: 1.42s; }
-.code-line:nth-child(12) { animation-delay: 1.52s; }
-.code-line:nth-child(13) { animation-delay: 1.62s; }
-.code-line:nth-child(14) { animation-delay: 1.72s; }
 
-/* Blinking cursor in code card */
+/* Blinking cursor */
 .cursor-blink {
   display: inline-block;
   width: 2px;
   height: 0.9em;
-  background: #f59e0b;
+  background: #F59E0B;
   vertical-align: middle;
   margin-left: 2px;
   animation: cursor-blink 1s step-end infinite;
 }
 
-/* ─── Fumadocs dark theme variables ─────────────────────────────────────── */
+/* ─── Fumadocs light theme variables ─────────────────────────────────────── */
 
 :root {
-  --color-fd-background: 9 9 11;
-  --color-fd-foreground: 250 250 250;
-  --color-fd-muted: 39 39 42;
-  --color-fd-muted-foreground: 161 161 170;
-  --color-fd-border: 39 39 42;
-  --color-fd-primary: 245 158 11;
-  --color-fd-primary-foreground: 9 9 11;
-  --color-fd-card: 17 17 19;
-  --color-fd-card-foreground: 250 250 250;
-  --color-fd-accent: 39 39 42;
-  --color-fd-accent-foreground: 250 250 250;
-  --color-fd-ring: 245 158 11;
-  --color-fd-sidebar: 9 9 11;
+  --color-fd-background: 250 250 248;
+  --color-fd-foreground: 15 11 9;
+  --color-fd-muted: 245 245 244;
+  --color-fd-muted-foreground: 70 62 55;
+  --color-fd-border: 229 231 235;
+  --color-fd-primary: 91 33 182;
+  --color-fd-primary-foreground: 255 255 255;
+  --color-fd-card: 255 255 255;
+  --color-fd-card-foreground: 28 25 23;
+  --color-fd-accent: 243 240 255;
+  --color-fd-accent-foreground: 91 33 182;
+  --color-fd-ring: 91 33 182;
+  --color-fd-sidebar: 250 250 248;
+}
+
+/* ─── Fumadocs dark theme variables ──────────────────────────────────────── */
+
+.dark {
+  --color-fd-background: 28 25 23;
+  --color-fd-foreground: 250 250 248;
+  --color-fd-muted: 41 37 36;
+  --color-fd-muted-foreground: 168 162 158;
+  --color-fd-border: 68 64 60;
+  --color-fd-primary: 167 139 250;
+  --color-fd-primary-foreground: 28 25 23;
+  --color-fd-card: 41 37 36;
+  --color-fd-card-foreground: 250 250 248;
+  --color-fd-accent: 44 33 72;
+  --color-fd-accent-foreground: 167 139 250;
+  --color-fd-ring: 167 139 250;
+  --color-fd-sidebar: 28 25 23;
 }

@@ -8,8 +8,8 @@ export default function Layout({ children }: { children: ReactNode }) {
       tree={source.pageTree}
       nav={{
         title: (
-          <span className="font-mono text-sm font-medium">
-            payload<span className="text-amber-400">-reserve</span>
+          <span className="font-mono text-sm font-semibold text-[#1C1917]">
+            payload<span className="text-violet-700">-reserve</span>
           </span>
         ),
       }}
