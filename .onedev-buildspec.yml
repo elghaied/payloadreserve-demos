@@ -1,0 +1,53 @@
+version: 36
+jobs:
+
+# ── CI: push to main → build image & push to OneDev registry ─────────────────
+- name: Build Salon Image
+  steps:
+  - !CheckoutStep
+    name: Checkout
+    cloneCredential: !DefaultCredential {}
+    withLFS: false
+  - !BuildImageStep
+    name: Build & push to OneDev registry
+    dockerfile: apps/salon/Dockerfile
+    buildContext: .
+    tags:
+    - salon:@build_number@
+    - salon:latest
+    push: true
+    buildArgs:
+      NEXT_PUBLIC_SERVER_URL: '@secret:NEXT_PUBLIC_SERVER_URL@'
+      S3_ENDPOINT: '@secret:S3_ENDPOINT@'
+  triggers:
+  - !BranchUpdateTrigger
+    branches: main
+  retryCondition: never
+  maxRetries: 3
+  retryDelay: 30
+  timeout: 3600
+
+# ── Release: git tag → versioned image in OneDev registry ────────────────────
+- name: Release Salon Image
+  steps:
+  - !CheckoutStep
+    name: Checkout
+    cloneCredential: !DefaultCredential {}
+    withLFS: false
+  - !BuildImageStep
+    name: Build & push versioned image
+    dockerfile: apps/salon/Dockerfile
+    buildContext: .
+    tags:
+    - salon:@tag@
+    - salon:latest
+    push: true
+    buildArgs:
+      NEXT_PUBLIC_SERVER_URL: '@secret:NEXT_PUBLIC_SERVER_URL@'
+      S3_ENDPOINT: '@secret:S3_ENDPOINT@'
+  triggers:
+  - !TagCreateTrigger {}
+  retryCondition: never
+  maxRetries: 3
+  retryDelay: 30
+  timeout: 3600
