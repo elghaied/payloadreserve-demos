@@ -17,6 +17,9 @@ const DEMO_IMAGES: Record<DemoType, { name: string; tag: string }> = {
   events:     { name: process.env.DOCKER_IMAGE_EVENTS_NAME     ?? '', tag: process.env.DOCKER_IMAGE_EVENTS_TAG     ?? 'latest' },
 }
 
+// TODO: Change DEMO_PROTOCOL to 'https' in production (set via env var on the Coolify service)
+const demoProtocol = process.env.DEMO_PROTOCOL ?? 'https'
+
 function getCoolify() {
   const url = process.env.COOLIFY_API_URL
   const key = process.env.COOLIFY_API_KEY
@@ -97,15 +100,17 @@ export async function POST(req: NextRequest) {
         dockerImageName: image.name,
         dockerImageTag: image.tag,
         ports: '3000',
-        fqdn: `https://${subdomain}`,
+        fqdn: `${demoProtocol}://${subdomain}`,
         envVars: [
-          { key: 'DATABASE_URL', value: `mongodb://${process.env.MONGO_ROOT_USERNAME}:${process.env.MONGO_ROOT_PASSWORD}@mongodb/${dbName}?authSource=admin`, is_secret: true },
+          // Per-demo vars — shared vars (SMTP, Stripe, S3 credentials) are set at Coolify project level
+          { key: 'DATABASE_URL', value: `mongodb://${process.env.MONGO_ROOT_USERNAME}:${process.env.MONGO_ROOT_PASSWORD}@${process.env.MONGO_HOST ?? 'mongodb'}/${dbName}?authSource=admin`, is_secret: true },
           { key: 'PAYLOAD_SECRET', value: payloadSecret, is_secret: true },
           { key: 'ADMIN_EMAIL', value: email },
           { key: 'ADMIN_PASSWORD', value: adminPassword, is_secret: true },
           { key: 'SEED_SECRET', value: demoSeedSecret, is_secret: true },
+          { key: 'NEXT_PUBLIC_SERVER_URL', value: `${demoProtocol}://${subdomain}` },
           { key: 'S3_PREFIX', value: s3Prefix },
-          { key: 'NEXT_PUBLIC_SERVER_URL', value: `https://${subdomain}` },
+          { key: 'S3_BUCKET', value: `${demoType}-demo` },
         ],
       })
       coolifyServiceId = service.id
@@ -161,7 +166,7 @@ async function pollAndSeed(opts: {
 }) {
   const { demoId, subdomain, email, adminPassword, demoType, expiresAt, coolify, coolifyServiceId, demoSeedSecret } =
     opts
-  const demoUrl = `https://${subdomain}`
+  const demoUrl = `${demoProtocol}://${subdomain}`
   const seedSecret = demoSeedSecret
   const maxAttempts = 60
   const intervalMs = 10_000
