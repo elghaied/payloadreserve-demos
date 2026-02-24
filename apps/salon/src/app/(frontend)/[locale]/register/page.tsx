@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { useParams, useRouter } from 'next/navigation'
+import { useParams } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import { useState } from 'react'
 
@@ -12,8 +12,6 @@ export default function RegisterPage() {
   const tBooking = useTranslations('booking')
   const params = useParams()
   const locale = params.locale as string
-  const router = useRouter()
-
   const [firstName, setFirstName] = useState('')
   const [lastName, setLastName] = useState('')
   const [email, setEmail] = useState('')
@@ -43,8 +41,8 @@ export default function RegisterPage() {
           credentials: 'include',
           body: JSON.stringify({ email, password }),
         })
-        router.push(`/${locale}/account`)
-        router.refresh()
+        // Full reload so the Header (persistent layout component) remounts and re-fetches auth state.
+        window.location.href = `/${locale}/account`
       } else {
         setError(t('registerError'))
       }

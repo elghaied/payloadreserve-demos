@@ -1,0 +1,43 @@
+---
+title: Getting Started
+description: Install payload-reserve and add reservation functionality to your Payload CMS 3.x project.
+---
+
+## Installation
+
+```bash
+npm install payload-reserve
+```
+
+## Quick Setup
+
+Add the plugin to your `payload.config.ts`:
+
+```typescript
+import { buildConfig } from 'payload'
+import { reservePlugin } from 'payload-reserve'
+
+export default buildConfig({
+  plugins: [
+    reservePlugin({
+      resources: ['specialists'],
+    }),
+  ],
+  // ... rest of config
+})
+```
+
+## What Gets Added
+
+After installing, the plugin automatically adds:
+
+- **Reservations** collection — stores all bookings with status, timestamps, and linked resource
+- **Schedules** collection — defines available time windows per resource
+- **Public REST API** — `/api/reserve/availability`, `/api/reserve/create`, etc.
+
+## Next Steps
+
+- Configure [resources and services](/docs/resources)
+- Set up [email notifications](/docs/notifications)
+- Add [Stripe payments](/docs/stripe)
+- Explore [status workflows](/docs/status-machine)

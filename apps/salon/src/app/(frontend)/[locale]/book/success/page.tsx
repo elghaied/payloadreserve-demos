@@ -1,4 +1,3 @@
-import Stripe from 'stripe'
 import { getTranslations, setRequestLocale } from 'next-intl/server'
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
@@ -31,22 +30,17 @@ export default async function BookingSuccessPage({ params, searchParams }: Props
   if (reservation?.status === 'confirmed') {
     // fall through to render
   } else if (reservation?.status === 'pending' && sessionId) {
-    // Race condition: user landed here before the webhook updated the DB.
-    // Verify payment directly with Stripe using the session ID Stripe appended to the URL.
-    const stripeKey = process.env.STRIPE_SECRET_KEY
-    if (stripeKey) {
-      try {
-        const stripeClient = new Stripe(stripeKey)
-        const session = await stripeClient.checkout.sessions.retrieve(sessionId)
-        if (session.payment_status !== 'paid') {
-          redirect(`/${locale}/book`)
-        }
-        // Payment confirmed by Stripe — show success. The webhook will update the DB shortly.
-      } catch {
-        redirect(`/${locale}/book`)
-      }
-    } else {
+    // Race condition: user landed here before the webhook updated the DB (or webhook was delayed).
+    // Verify payment with Stripe and update the DB directly as a fallback.
+    const confirmed = await confirmReservationViaStripe(reservationId!, sessionId)
+    if (!confirmed) {
       redirect(`/${locale}/book`)
+    }
+    // Re-fetch to get the updated confirmed status for display
+    try {
+      reservation = await getBookingConfirmation(reservationId!)
+    } catch {
+      // ignore re-fetch errors — we already confirmed via Stripe
     }
   } else {
     // No reservation, wrong status (cancelled/etc.), or no session_id to verify against

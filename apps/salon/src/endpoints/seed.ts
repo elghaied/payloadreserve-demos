@@ -7,7 +7,11 @@ export const seedEndpoint: Omit<Endpoint, 'root'> = {
   handler: async (req) => {
     const isAdmin = req.user?.collection === 'users'
     const secret = req.headers.get('x-seed-secret')
-    const validSecret = process.env.SEED_SECRET && secret === process.env.SEED_SECRET
+    const authHeader = req.headers.get('authorization') ?? ''
+    const bearerToken = authHeader.startsWith('Bearer ') ? authHeader.slice(7) : null
+    const validSecret =
+      process.env.SEED_SECRET &&
+      (secret === process.env.SEED_SECRET || bearerToken === process.env.SEED_SECRET)
 
     if (!isAdmin && !validSecret) {
       return Response.json({ error: 'Unauthorized' }, { status: 401 })

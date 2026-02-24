@@ -1,0 +1,219 @@
+import { NextRequest, NextResponse } from 'next/server'
+import { nanoid } from 'nanoid'
+import crypto from 'crypto'
+import bcrypt from 'bcrypt'
+import { CoolifyClient } from '@payload-reserve-demos/coolify-sdk'
+import type { Demo, DemoType } from '@payload-reserve-demos/types'
+import { verifyTurnstile } from '@/lib/turnstile'
+import { createDemo, countActiveDemos, findRecentDemosByIpOrEmail, updateDemoStatus } from '@/lib/demos'
+import { mailer } from '@/lib/mailer'
+
+const DEMO_TYPES: DemoType[] = ['salon', 'hotel', 'restaurant', 'events']
+
+function getCoolify() {
+  const url = process.env.COOLIFY_API_URL
+  const key = process.env.COOLIFY_API_KEY
+  if (!url || !key) return null
+  return new CoolifyClient(url, key)
+}
+
+export async function POST(req: NextRequest) {
+  let body: { name?: string; email?: string; demoType?: string; turnstileToken?: string }
+  try {
+    body = await req.json()
+  } catch {
+    return NextResponse.json({ error: 'Invalid JSON' }, { status: 400 })
+  }
+
+  const { name, email, demoType, turnstileToken } = body
+
+  // Validate input
+  if (!name || !email || !demoType) {
+    return NextResponse.json({ error: 'name, email, and demoType are required' }, { status: 400 })
+  }
+  if (!DEMO_TYPES.includes(demoType as DemoType)) {
+    return NextResponse.json({ error: 'Invalid demoType' }, { status: 400 })
+  }
+
+  // Verify Turnstile
+  const token = turnstileToken ?? ''
+  const turnstileOk = await verifyTurnstile(token)
+  if (!turnstileOk) {
+    return NextResponse.json({ error: 'Turnstile verification failed' }, { status: 400 })
+  }
+
+  // Rate limit: max 1 demo per IP or email per 24h
+  const requestIp = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ?? 'unknown'
+  const recent = await findRecentDemosByIpOrEmail(requestIp, email)
+  if (recent > 0) {
+    return NextResponse.json(
+      { error: 'You already have a demo running. Please wait 24 hours before requesting another.' },
+      { status: 429 },
+    )
+  }
+
+  // Capacity check
+  const maxActive = Number(process.env.MAX_ACTIVE_DEMOS ?? 20)
+  const activeCount = await countActiveDemos()
+  if (activeCount >= maxActive) {
+    return NextResponse.json(
+      { error: 'All demo slots are currently in use. Please try again later.' },
+      { status: 503 },
+    )
+  }
+
+  // Generate IDs and credentials — all per-demo, none stored in plaintext
+  const demoId = nanoid(8)
+  const adminPassword = crypto.randomBytes(12).toString('base64url')
+  const adminPasswordHash = await bcrypt.hash(adminPassword, 10)
+  const payloadSecret = crypto.randomBytes(32).toString('hex')
+  const demoSeedSecret = crypto.randomBytes(24).toString('hex') // injected into container + used by pollAndSeed
+  const baseDomain = process.env.DEMO_BASE_DOMAIN ?? 'payloadreserve.com'
+  const subdomain = `demo-${demoId}.${baseDomain}`
+  const dbName = `payloadreserve-demo-${demoId}`
+  const s3Prefix = `${demoType}/demo-${demoId}`
+  const ttlHours = Number(process.env.DEMO_TTL_HOURS ?? 24)
+  const expiresAt = new Date(Date.now() + ttlHours * 60 * 60 * 1000)
+
+  // Create Coolify service (stub until credentials are provided)
+  let coolifyServiceId = 'stub'
+  const coolify = getCoolify()
+  if (coolify) {
+    try {
+      const service = await coolify.createService({
+        name: `demo-${demoId}`,
+        type: 'application',
+        projectUuid: process.env.COOLIFY_PROJECT_UUID ?? '',
+        serverUuid: process.env.COOLIFY_SERVER_UUID ?? '',
+        environmentName: 'production',
+        envVars: [
+          { key: 'DATABASE_URL', value: `mongodb://mongodb/${dbName}`, is_secret: true },
+          { key: 'PAYLOAD_SECRET', value: payloadSecret, is_secret: true },
+          { key: 'ADMIN_EMAIL', value: email },
+          { key: 'ADMIN_PASSWORD', value: adminPassword, is_secret: true },
+          { key: 'SEED_SECRET', value: demoSeedSecret, is_secret: true },
+          { key: 'S3_PREFIX', value: s3Prefix },
+          { key: 'NEXT_PUBLIC_SERVER_URL', value: `https://${subdomain}` },
+        ],
+      })
+      coolifyServiceId = service.id
+    } catch (err) {
+      console.error('[demo/create] Coolify createService failed:', err)
+      return NextResponse.json({ error: 'Failed to provision demo container' }, { status: 500 })
+    }
+  }
+
+  // Persist demo record
+  const demo: Demo = {
+    demoId,
+    type: demoType as DemoType,
+    subdomain,
+    dbName,
+    s3Prefix,
+    adminEmail: email,
+    adminPasswordHash,
+    coolifyServiceId,
+    status: 'provisioning',
+    createdAt: new Date(),
+    expiresAt,
+    requestIp,
+  }
+  await createDemo(demo)
+
+  // Fire-and-forget: poll for health, seed, then notify
+  void pollAndSeed({
+    demoId,
+    subdomain,
+    email,
+    adminPassword,
+    demoType: demoType as DemoType,
+    expiresAt,
+    coolifyServiceId,
+    coolify,
+    demoSeedSecret,
+  })
+
+  return NextResponse.json({ demoId }, { status: 202 })
+}
+
+async function pollAndSeed(opts: {
+  demoId: string
+  subdomain: string
+  email: string
+  adminPassword: string
+  demoType: DemoType
+  expiresAt: Date
+  coolifyServiceId: string
+  coolify: CoolifyClient | null
+  demoSeedSecret: string
+}) {
+  const { demoId, subdomain, email, adminPassword, demoType, expiresAt, coolify, coolifyServiceId, demoSeedSecret } =
+    opts
+  const demoUrl = `https://${subdomain}`
+  const seedSecret = demoSeedSecret
+  const maxAttempts = 60
+  const intervalMs = 10_000
+
+  // Start the Coolify service if client is available
+  if (coolify) {
+    try {
+      await coolify.startService(coolifyServiceId)
+    } catch (err) {
+      console.error(`[demo/${demoId}] startService failed:`, err)
+    }
+  }
+
+  // Poll /api/health
+  let healthy = false
+  for (let i = 0; i < maxAttempts; i++) {
+    await new Promise((r) => setTimeout(r, intervalMs))
+    try {
+      const res = await fetch(`${demoUrl}/api/health`, { signal: AbortSignal.timeout(8_000) })
+      if (res.ok) {
+        healthy = true
+        break
+      }
+    } catch {
+      // container not up yet — continue polling
+    }
+  }
+
+  if (!healthy) {
+    console.error(`[demo/${demoId}] health check timed out`)
+    await updateDemoStatus(demoId, 'failed')
+    return
+  }
+
+  // Trigger seed
+  try {
+    const seedRes = await fetch(`${demoUrl}/api/seed`, {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${seedSecret}` },
+      signal: AbortSignal.timeout(120_000),
+    })
+    if (!seedRes.ok) {
+      const text = await seedRes.text()
+      throw new Error(`seed returned ${seedRes.status}: ${text}`)
+    }
+  } catch (err) {
+    console.error(`[demo/${demoId}] seed failed:`, err)
+    await updateDemoStatus(demoId, 'failed')
+    return
+  }
+
+  // Mark ready and send credentials
+  await updateDemoStatus(demoId, 'ready')
+
+  try {
+    await mailer.sendDemoCredentials(email, {
+      demoUrl,
+      adminEmail: email,
+      adminPassword,
+      expiresAt,
+      demoType,
+    })
+  } catch (err) {
+    console.error(`[demo/${demoId}] email failed:`, err)
+    // Non-fatal — demo is still ready
+  }
+}

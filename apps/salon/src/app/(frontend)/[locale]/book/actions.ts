@@ -82,7 +82,12 @@ export async function createReservation(data: {
 
   const startTime = new Date(`${data.date}T${data.time}:00.000Z`)
 
-  let customerId = user?.id
+  // Only treat the session user as a customer if they authenticated via the customers collection.
+  // Admin users (users collection) are NOT customers — using their ID as customerId would store
+  // an invalid cross-collection reference and break relationship population in hooks.
+  let customerId = (user as { collection?: string } | null)?.collection === 'customers'
+    ? user!.id
+    : undefined
 
   if (!customerId) {
     const existing = await payload.find({

@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { useParams, useRouter } from 'next/navigation'
+import { useParams } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import { useState } from 'react'
 
@@ -11,8 +11,6 @@ export default function LoginPage() {
   const t = useTranslations('auth')
   const params = useParams()
   const locale = params.locale as string
-  const router = useRouter()
-
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
@@ -32,8 +30,8 @@ export default function LoginPage() {
       })
 
       if (res.ok) {
-        router.push(`/${locale}/account`)
-        router.refresh()
+        // Full reload so the Header (persistent layout component) remounts and re-fetches auth state.
+        window.location.href = `/${locale}/account`
       } else {
         setError(t('loginError'))
       }

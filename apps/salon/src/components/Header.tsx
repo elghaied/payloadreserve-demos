@@ -17,7 +17,7 @@ export function Header({ locale }: Props) {
   const [menuOpen, setMenuOpen] = useState(false)
 
   useEffect(() => {
-    fetch('/api/customers/me', { credentials: 'include' })
+    fetch('/api/customer-session', { credentials: 'include' })
       .then((res) => res.json())
       .then((data) => {
         if (data.user) setUser(data.user)

@@ -4,6 +4,8 @@ import { useTranslations } from 'next-intl'
 import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
+import Image from 'next/image'
+
 import { Container } from '@/components/Container'
 import {
   getServices,
@@ -16,7 +18,7 @@ import { TestCardBanner } from './TestCardBanner'
 type Service = { id: string; name: string; description?: string | null; duration: number; price: number }
 type Specialist = { id: string; name: string; description?: string | null; image?: { url?: string | null } | string | null }
 
-const steps = ['service', 'specialist', 'dateTime', 'details', 'payment'] as const
+const _steps = ['service', 'specialist', 'dateTime', 'details', 'payment'] as const
 
 export function BookingWizard() {
   const t = useTranslations('booking')
@@ -78,7 +80,7 @@ export function BookingWizard() {
 
   // Check if user is logged in
   useEffect(() => {
-    fetch('/api/customers/me', { credentials: 'include' })
+    fetch('/api/customer-session', { credentials: 'include' })
       .then((r) => r.json())
       .then((data) => {
         if (data.user) {
@@ -214,7 +216,7 @@ export function BookingWizard() {
               >
                 <div className="w-16 h-16 rounded-full bg-border/50 mx-auto mb-3 flex items-center justify-center overflow-hidden">
                   {specialist.image && typeof specialist.image === 'object' && specialist.image.url ? (
-                    <img src={specialist.image.url} alt={specialist.name} className="w-full h-full object-cover" />
+                    <Image src={specialist.image.url} alt={specialist.name} width={64} height={64} className="w-full h-full object-cover" />
                   ) : (
                     <span className="text-xl text-muted">{specialist.name.charAt(0)}</span>
                   )}

@@ -20,7 +20,7 @@ export default function ProfilePage() {
   const [saved, setSaved] = useState(false)
 
   useEffect(() => {
-    fetch('/api/customers/me', { credentials: 'include' })
+    fetch('/api/customer-session', { credentials: 'include' })
       .then((r) => r.json())
       .then((data) => {
         if (data.user) {
