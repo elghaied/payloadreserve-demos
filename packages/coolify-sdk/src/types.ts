@@ -15,10 +15,13 @@ export interface CoolifyEnvVar {
 
 export interface CreateServiceOptions {
   name: string
-  type: string
   projectUuid: string
   serverUuid: string
+  destinationUuid: string
   environmentName: string
+  dockerImageName: string
+  dockerImageTag: string
+  ports: string
+  fqdn: string
   envVars?: CoolifyEnvVar[]
-  dockerImage?: string
 }

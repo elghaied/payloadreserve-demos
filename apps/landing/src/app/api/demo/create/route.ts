@@ -10,6 +10,13 @@ import { mailer } from '@/lib/mailer'
 
 const DEMO_TYPES: DemoType[] = ['salon', 'hotel', 'restaurant', 'events']
 
+const DEMO_IMAGES: Record<DemoType, { name: string; tag: string }> = {
+  salon:      { name: process.env.DOCKER_IMAGE_SALON_NAME      ?? '', tag: process.env.DOCKER_IMAGE_SALON_TAG      ?? 'latest' },
+  hotel:      { name: process.env.DOCKER_IMAGE_HOTEL_NAME      ?? '', tag: process.env.DOCKER_IMAGE_HOTEL_TAG      ?? 'latest' },
+  restaurant: { name: process.env.DOCKER_IMAGE_RESTAURANT_NAME ?? '', tag: process.env.DOCKER_IMAGE_RESTAURANT_TAG ?? 'latest' },
+  events:     { name: process.env.DOCKER_IMAGE_EVENTS_NAME     ?? '', tag: process.env.DOCKER_IMAGE_EVENTS_TAG     ?? 'latest' },
+}
+
 function getCoolify() {
   const url = process.env.COOLIFY_API_URL
   const key = process.env.COOLIFY_API_KEY
@@ -75,19 +82,24 @@ export async function POST(req: NextRequest) {
   const ttlHours = Number(process.env.DEMO_TTL_HOURS ?? 24)
   const expiresAt = new Date(Date.now() + ttlHours * 60 * 60 * 1000)
 
-  // Create Coolify service (stub until credentials are provided)
+  // Create Coolify service
   let coolifyServiceId = 'stub'
   const coolify = getCoolify()
   if (coolify) {
+    const image = DEMO_IMAGES[demoType as DemoType]
     try {
       const service = await coolify.createService({
         name: `demo-${demoId}`,
-        type: 'application',
         projectUuid: process.env.COOLIFY_PROJECT_UUID ?? '',
         serverUuid: process.env.COOLIFY_SERVER_UUID ?? '',
+        destinationUuid: process.env.COOLIFY_DESTINATION_UUID ?? '',
         environmentName: 'production',
+        dockerImageName: image.name,
+        dockerImageTag: image.tag,
+        ports: '3000/http',
+        fqdn: `https://${subdomain}`,
         envVars: [
-          { key: 'DATABASE_URL', value: `mongodb://mongodb/${dbName}`, is_secret: true },
+          { key: 'DATABASE_URL', value: `mongodb://${process.env.MONGO_ROOT_USERNAME}:${process.env.MONGO_ROOT_PASSWORD}@mongodb/${dbName}?authSource=admin`, is_secret: true },
           { key: 'PAYLOAD_SECRET', value: payloadSecret, is_secret: true },
           { key: 'ADMIN_EMAIL', value: email },
           { key: 'ADMIN_PASSWORD', value: adminPassword, is_secret: true },
