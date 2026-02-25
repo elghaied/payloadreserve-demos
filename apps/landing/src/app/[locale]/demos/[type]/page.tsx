@@ -329,9 +329,9 @@ export default async function DemoDetailPage({ params }: { params: Promise<{ typ
             </div>
             <p className="mt-4 text-sm text-zinc-500">
               See the{' '}
-              <Link href="/docs" className="text-amber-400 hover:text-amber-300 transition-colors underline">
+              <a href="/docs" className="text-amber-400 hover:text-amber-300 transition-colors underline">
                 full documentation
-              </Link>{' '}
+              </a>{' '}
               for all available options.
             </p>
           </div>

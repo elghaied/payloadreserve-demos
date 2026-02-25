@@ -17,26 +17,23 @@ export function LocaleSwitcher() {
   }
 
   return (
-    <div className="flex items-center gap-0.5 rounded-full border border-gray-200 dark:border-stone-700 bg-gray-50 dark:bg-stone-800 p-0.5 text-xs font-semibold">
+    <div className="flex items-center gap-1.5 text-xs font-medium">
       <button
         onClick={() => switchLocale('en')}
         disabled={isPending}
-        className={`px-2.5 py-1 rounded-full transition-colors ${
-          locale === 'en'
-            ? 'bg-white dark:bg-stone-700 text-[#1C1917] dark:text-stone-100 shadow-sm'
-            : 'text-[#78716C] dark:text-stone-400 hover:text-[#1C1917] dark:hover:text-stone-200'
-        }`}
+        className={locale === 'en'
+          ? 'text-[#1C1917] dark:text-stone-100 font-semibold underline underline-offset-2'
+          : 'text-[#78716C] dark:text-stone-400 hover:text-[#1C1917] dark:hover:text-stone-200 transition-colors'}
       >
         EN
       </button>
+      <span className="text-gray-300 dark:text-stone-600 select-none">·</span>
       <button
         onClick={() => switchLocale('fr')}
         disabled={isPending}
-        className={`px-2.5 py-1 rounded-full transition-colors ${
-          locale === 'fr'
-            ? 'bg-white dark:bg-stone-700 text-[#1C1917] dark:text-stone-100 shadow-sm'
-            : 'text-[#78716C] dark:text-stone-400 hover:text-[#1C1917] dark:hover:text-stone-200'
-        }`}
+        className={locale === 'fr'
+          ? 'text-[#1C1917] dark:text-stone-100 font-semibold underline underline-offset-2'
+          : 'text-[#78716C] dark:text-stone-400 hover:text-[#1C1917] dark:hover:text-stone-200 transition-colors'}
       >
         FR
       </button>

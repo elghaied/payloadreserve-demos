@@ -17,9 +17,9 @@ export function Nav() {
 
         {/* Nav links */}
         <nav className="flex items-center gap-6">
-          <Link href="/docs" className="text-sm text-[#78716C] hover:text-[#1C1917] dark:text-stone-400 dark:hover:text-stone-100 transition-colors font-medium">
+          <a href="/docs" className="text-sm text-[#78716C] hover:text-[#1C1917] dark:text-stone-400 dark:hover:text-stone-100 transition-colors font-medium">
             {t('docs')}
-          </Link>
+          </a>
           <Link href="/#demos" className="text-sm text-[#78716C] hover:text-[#1C1917] dark:text-stone-400 dark:hover:text-stone-100 transition-colors font-medium">
             {t('demos')}
           </Link>

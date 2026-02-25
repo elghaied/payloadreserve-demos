@@ -1,5 +1,4 @@
 import { useTranslations } from 'next-intl'
-import { Link } from '@/i18n/navigation'
 
 export function CTABanner() {
   const t = useTranslations('cta')
@@ -25,15 +24,15 @@ export function CTABanner() {
 
         {/* CTAs */}
         <div className="flex flex-wrap items-center justify-center gap-4">
-          <Link
+          <a
             href="/docs"
-            className="inline-flex items-center gap-2 bg-white hover:bg-violet-50 active:scale-95 text-violet-700 font-bold text-base px-8 py-4 rounded-full transition-all shadow-xl shadow-black/20"
+            className="inline-flex items-center gap-2 bg-white hover:bg-violet-50 active:scale-95 text-violet-700 dark:text-violet-800 font-bold text-base px-8 py-4 rounded-full transition-all shadow-xl shadow-black/20"
           >
             {t('ctaDocs')}
             <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
               <path d="M5 12h14M12 5l7 7-7 7" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
-          </Link>
+          </a>
           <a
             href={urls('github')}
             target="_blank"

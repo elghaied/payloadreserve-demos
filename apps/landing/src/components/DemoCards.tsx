@@ -5,7 +5,7 @@ import Image from 'next/image'
 type DemoKey = 'salon' | 'hotel' | 'restaurant' | 'events'
 
 const demoMeta: Record<DemoKey, { emoji: string; active: boolean; pexelsId: string }> = {
-  salon:      { emoji: '✂️', active: true,  pexelsId: '3065180' },
+  salon:      { emoji: '✂️', active: true,  pexelsId: '1319460' },
   hotel:      { emoji: '🏨', active: false, pexelsId: '271624'  },
   restaurant: { emoji: '🍽️', active: false, pexelsId: '262978'  },
   events:     { emoji: '🎪', active: false, pexelsId: '1540406' },

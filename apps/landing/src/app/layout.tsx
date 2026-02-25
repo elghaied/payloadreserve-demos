@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import type { ReactNode } from 'react'
-import { RootProvider } from 'fumadocs-ui/provider'
+import { ThemeProvider } from 'next-themes'
 import { headers } from 'next/headers'
 import './globals.css'
 
@@ -25,7 +25,9 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
         />
       </head>
       <body className="antialiased">
-        <RootProvider>{children}</RootProvider>
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   )

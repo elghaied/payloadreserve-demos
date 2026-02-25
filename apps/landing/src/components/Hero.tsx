@@ -1,5 +1,4 @@
 import { useTranslations } from 'next-intl'
-import { Link } from '@/i18n/navigation'
 import { Nav } from './Nav'
 
 export function Hero() {
@@ -50,12 +49,12 @@ export function Hero() {
                     <path d="M5 12h14M12 5l7 7-7 7" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
                 </a>
-                <Link
+                <a
                   href="/docs"
                   className="inline-flex items-center gap-2 bg-white dark:bg-stone-800 text-[#1C1917] dark:text-stone-100 border border-gray-200 dark:border-stone-700 hover:border-violet-400 dark:hover:border-violet-600 hover:text-violet-700 dark:hover:text-violet-400 font-semibold text-sm px-7 py-3.5 rounded-full transition-all duration-150 shadow-sm"
                 >
                   {t('ctaDocs')}
-                </Link>
+                </a>
               </div>
 
               {/* Industry tags */}

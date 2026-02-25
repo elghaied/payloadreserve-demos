@@ -135,12 +135,12 @@
     "headline": "Run it on your machine",
     "subtitle": "Clone the demo apps monorepo and run any template locally with a single command.",
     "steps": [
-      { "title": "Clone the repo", "code": "git clone https://github.com/elghaied/payload-reserve" },
+      { "title": "Clone the demos repo", "code": "git clone https://github.com/elghaied/payload-reserve-demos" },
       { "title": "Install dependencies", "code": "pnpm install" },
       { "title": "Start the salon demo", "code": "pnpm dev:salon" }
     ],
     "cta": "View on GitHub",
-    "note": "Requires Node ≥18, pnpm, and a MongoDB instance."
+    "note": "Requires Node ≥18, pnpm, and MongoDB. Demo monorepo coming soon — star the repo to get notified."
   },
   "howItWorks": {
     "label": "How It Works",
@@ -169,6 +169,12 @@
     "subtitle": "Try a live demo or dive into the documentation to see how fast you can get up and running.",
     "ctaDocs": "Read the Docs",
     "ctaGithub": "View on GitHub"
+  },
+  "adminUI": {
+    "label": "Admin Interface",
+    "headline": "Complete booking management, built into Payload",
+    "subtitle": "payload-reserve adds a full reservation management interface directly to your Payload CMS admin panel — calendar view, reservations list, status management, and more.",
+    "screenshotAlt": "payload-reserve admin panel screenshot"
   },
   "footer": {
     "description": "Open source reservation and booking plugin for Payload CMS 3.x projects.",
