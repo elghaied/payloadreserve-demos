@@ -1,4 +1,5 @@
 import { useTranslations } from 'next-intl'
+import Image from 'next/image'
 import { Link } from '@/i18n/navigation'
 import { ThemeToggle } from './ThemeToggle'
 import { LocaleSwitcher } from './LocaleSwitcher'
@@ -15,10 +16,12 @@ export function Nav() {
           href="/"
           className="font-mono text-sm font-semibold text-[#1C1917] dark:text-stone-100 tracking-tight select-none"
         >
-          <img
+          <Image
             src="/reserve-logo.svg"
             alt="Payload reserve Logo"
-            className="h-6 w-6 mr-2 inline-block"
+            width={24}
+            height={24}
+            className="mr-2 inline-block"
           />{' '}
           payload<span className="text-violet-700 dark:text-violet-400">-reserve</span>
         </Link>

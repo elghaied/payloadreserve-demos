@@ -1,3 +1,5 @@
+import Link from 'next/link'
+
 export function ErrorScreen({
   message,
   onRetry,
@@ -44,12 +46,12 @@ export function ErrorScreen({
             Try again
           </button>
         )}
-        <a
+        <Link
           href="/"
           className="text-xs text-zinc-500 hover:text-zinc-300 transition-colors"
         >
           ← Back to home
-        </a>
+        </Link>
       </div>
     </div>
   )
