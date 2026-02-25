@@ -1,0 +1,198 @@
+{
+  "urls": {
+    "salon": "https://salon.payloadreserve.com",
+    "github": "https://github.com/elghaied/payload-reserve",
+    "payloadcms": "https://payloadcms.com",
+    "nextjs": "https://nextjs.org"
+  },
+  "meta": {
+    "title": "payload-reserve | Plugin de Réservation pour Payload CMS",
+    "description": "Plugin de réservation open-source pour Payload CMS 3.x — ajoutez des réservations, rendez-vous et planifications à votre application Payload en quelques minutes."
+  },
+  "nav": {
+    "docs": "Docs",
+    "demos": "Démos",
+    "github": "GitHub",
+    "requestDemo": "Demander une démo"
+  },
+  "hero": {
+    "badge": "Plugin Payload CMS · Licence MIT",
+    "headlineLine1": "Réservations",
+    "headlineLine2": "pour chaque activité",
+    "subheading": "Réservation, planification et disponibilité clés-en-main pour Payload 3.x — salons, hôtels, restaurants, événements et plus encore.",
+    "ctaSeeDemos": "Voir les démos",
+    "ctaDocs": "Lire la documentation",
+    "tagSalon": "✂️ Salon & Spa",
+    "tagHotel": "🏨 Hôtel",
+    "tagRestaurant": "🍽️ Restaurant",
+    "tagEvents": "🎪 Événements"
+  },
+  "useCases": {
+    "label": "Quelques cas d'usage parmi d'autres",
+    "footnote": "Le plugin s'adapte à toute activité nécessitant des réservations basées sur le temps ou les ressources.",
+    "items": [
+      { "emoji": "✂️", "label": "Salon & Spa", "description": "Réservation par styliste avec services" },
+      { "emoji": "🏨", "label": "Hôtel", "description": "Réservations de chambre multi-nuits" },
+      { "emoji": "🍽️", "label": "Restaurant", "description": "Réservation de table avec taille du groupe" },
+      { "emoji": "🎪", "label": "Événements", "description": "Réservation d'événements à capacité limitée" }
+    ]
+  },
+  "features": {
+    "label": "Fonctionnalités",
+    "headlineLine1": "Tout ce dont vous avez besoin,",
+    "headlineLine2": "rien de superflu",
+    "subheading": "payload-reserve gère la logique complexe de planification pour que vous puissiez vous concentrer sur votre produit.",
+    "items": [
+      {
+        "title": "Configurable pour tout cas d'usage",
+        "description": "Services, ressources et plannings s'adaptent aux salons, hôtels, restaurants, salles de spectacle, et toute activité prenant des réservations."
+      },
+      {
+        "title": "Vue calendrier admin",
+        "description": "Un calendrier mois/semaine/jour remplace la vue liste par défaut de Payload — disponibilité en un coup d'œil pour toute l'équipe."
+      },
+      {
+        "title": "Prévention des doubles réservations",
+        "description": "Détection de conflits côté serveur avec des temps tampon configurables entre les réservations."
+      },
+      {
+        "title": "Trois types de réservations",
+        "description": "Durée fixe (rendez-vous), heure de fin flexible, ou réservations à la journée — défini par ressource."
+      },
+      {
+        "title": "Machine à états configurable",
+        "description": "Définissez vos propres statuts, transitions et états terminaux — ex. en attente → confirmé → terminé → annulé."
+      },
+      {
+        "title": "Gestion des capacités",
+        "description": "quantity > 1 permet des réservations simultanées ; modes de capacité par réservation ou par client."
+      },
+      {
+        "title": "Réservations multi-ressources",
+        "description": "Une seule réservation peut couvrir plusieurs ressources simultanément via le tableau items."
+      },
+      {
+        "title": "API de hooks",
+        "description": "Sept hooks de cycle de vie (beforeCreate, afterConfirm, afterCancel, etc.) pour connecter e-mail, Stripe ou tout système externe."
+      },
+      {
+        "title": "API REST publique",
+        "description": "Cinq endpoints pré-construits : vérification de disponibilité, liste des créneaux, création, annulation et recherche client."
+      }
+    ]
+  },
+  "demos": {
+    "label": "Démos en direct",
+    "headline": "Voyez-le en action",
+    "subheading": "Des démos entièrement fonctionnelles pour chaque secteur — explorez le panneau admin et le flux de réservation.",
+    "exploreDemo": "Explorer la démo",
+    "comingSoon": "Bientôt disponible",
+    "salon": {
+      "name": "Lumière Salon",
+      "tagline": "Planification de rendez-vous pour professionnels de la beauté",
+      "description": "Réservation par styliste avec menus de services, temps tampon entre rendez-vous et collecte optionnelle d'acompte Stripe.",
+      "features": ["Planning par styliste", "Menus de services", "Temps tampon", "Acomptes Stripe"],
+      "url": "https://salon.payloadreserve.com"
+    },
+    "hotel": {
+      "name": "Grand Hôtel",
+      "tagline": "Réservations de chambres avec séjours multi-nuits",
+      "description": "Sélecteurs de dates d'arrivée/départ, choix du type de chambre, gestion des capacités et communication avec les clients dans le panneau Payload.",
+      "features": ["Séjours multi-nuits", "Types de chambres", "Limites de capacité", "Gestion des clients"],
+      "url": ""
+    },
+    "restaurant": {
+      "name": "Maison Restaurant",
+      "tagline": "Réservation de table avec gestion de la taille du groupe",
+      "description": "Réservations à créneaux horaires avec tailles de groupes configurables, demandes spéciales et attribution automatique de table.",
+      "features": ["Réservation par créneau", "Taille du groupe", "Demandes spéciales", "Attribution auto"],
+      "url": ""
+    },
+    "events": {
+      "name": "Salle des événements",
+      "tagline": "Planification d'événements avec gestion des capacités",
+      "description": "Réservations d'événements à la journée, limites de capacité, réservations multi-ressources et billetterie — tout depuis un seul plugin.",
+      "features": ["Limites de capacité", "Multi-ressources", "Types d'événements", "Billetterie"],
+      "url": ""
+    }
+  },
+  "privateDemo": {
+    "label": "Démo privée",
+    "headline": "Découvrez le panneau admin complet",
+    "subtitle": "Demandez une instance de démo privée — vous recevrez un e-mail avec les identifiants de connexion au panneau admin Payload où vous pourrez ajouter des services, gérer des réservations, configurer des plannings et voir exactement comment fonctionne un site alimenté par des réservations. Aucune compétence technique requise.",
+    "perks": [
+      "Accès complet au panneau admin",
+      "Ajouter et gérer des services",
+      "Voir et mettre à jour les réservations",
+      "Configurer les plannings et le personnel",
+      "Expire en 24h — sans engagement"
+    ],
+    "cta": "Demander une démo privée",
+    "audience": "Idéal pour les non-développeurs qui explorent le système"
+  },
+  "developerSection": {
+    "label": "Pour les développeurs",
+    "headline": "Lancez-le sur votre machine",
+    "subtitle": "Clonez le monorepo de démos et lancez n'importe quel template localement avec une seule commande.",
+    "steps": [
+      { "title": "Cloner le dépôt", "code": "git clone https://github.com/elghaied/payload-reserve" },
+      { "title": "Installer les dépendances", "code": "pnpm install" },
+      { "title": "Démarrer la démo salon", "code": "pnpm dev:salon" }
+    ],
+    "cta": "Voir sur GitHub",
+    "note": "Nécessite Node ≥18, pnpm et une instance MongoDB."
+  },
+  "howItWorks": {
+    "label": "Comment ça marche",
+    "headline": "Opérationnel en quelques minutes",
+    "steps": [
+      {
+        "title": "Installer le plugin",
+        "description": "Ajoutez payload-reserve à votre projet Payload 3.x en quelques secondes.",
+        "code": "npm install payload-reserve"
+      },
+      {
+        "title": "Configurer vos ressources",
+        "description": "Définissez des ressources réservables — stylistes, chambres, tables ou salles — avec disponibilités et règles personnalisées.",
+        "code": "reservePlugin({ resources: [...] })"
+      },
+      {
+        "title": "Mettre en ligne",
+        "description": "Les réservations apparaissent instantanément dans votre admin Payload. Utilisez l'API REST pour alimenter n'importe quel frontend.",
+        "code": "POST /api/reservations"
+      }
+    ]
+  },
+  "cta": {
+    "label": "Open Source · Licence MIT",
+    "headline": "Prêt à ajouter des réservations à votre projet Payload ?",
+    "subtitle": "Essayez une démo en direct ou plongez dans la documentation pour voir à quelle vitesse vous pouvez démarrer.",
+    "ctaDocs": "Lire la documentation",
+    "ctaGithub": "Voir sur GitHub"
+  },
+  "footer": {
+    "description": "Plugin de réservation open source pour les projets Payload CMS 3.x.",
+    "copyright": "© 2026 payload-reserve. Licence MIT.",
+    "madeBy": "Fait par",
+    "builtWith": "Construit avec",
+    "and": "et",
+    "product": {
+      "heading": "Produit",
+      "documentation": "Documentation",
+      "liveDemo": "Démo en direct",
+      "features": "Fonctionnalités"
+    },
+    "demosSection": {
+      "heading": "Démos",
+      "salon": "Salon",
+      "hotel": "Hôtel",
+      "restaurant": "Restaurant",
+      "events": "Événements"
+    },
+    "links": {
+      "heading": "Liens",
+      "github": "GitHub ↗",
+      "payloadCms": "Payload CMS ↗"
+    }
+  }
+}

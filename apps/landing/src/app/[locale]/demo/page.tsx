@@ -1,6 +1,6 @@
 import { DemoRequestForm } from '@/components/DemoRequestForm'
 import { Nav } from '@/components/Nav'
-import Link from 'next/link'
+import { Link } from '@/i18n/navigation'
 
 export const metadata = {
   title: 'Try a Live Demo — payload-reserve',

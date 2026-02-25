@@ -1,4 +1,4 @@
-import Link from 'next/link'
+import { Link } from '@/i18n/navigation'
 import { notFound } from 'next/navigation'
 import { Nav } from '@/components/Nav'
 import { Footer } from '@/components/Footer'
@@ -22,7 +22,7 @@ const demoConfigs: Record<DemoType, DemoPageConfig> = {
     emoji: '✂️',
     description:
       'A complete salon booking system built with payload-reserve. Clients book specific stylists, choose from service menus, and pay a deposit — all without leaving your site.',
-    liveUrl: 'https://salon.payload-reserve.com',
+    liveUrl: 'https://salon.payloadreserve.com',
     features: [
       {
         title: 'Per-specialist scheduling',
@@ -38,7 +38,7 @@ const demoConfigs: Record<DemoType, DemoPageConfig> = {
       },
       {
         title: 'Email confirmations',
-        description: 'Confirmation and cancellation emails sent automatically via the plugin\'s lifecycle hooks.',
+        description: "Confirmation and cancellation emails sent automatically via the plugin's lifecycle hooks.",
       },
       {
         title: 'Stripe payment gate',

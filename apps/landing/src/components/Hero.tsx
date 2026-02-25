@@ -1,7 +1,10 @@
-import Link from 'next/link'
+import { useTranslations } from 'next-intl'
+import { Link } from '@/i18n/navigation'
 import { Nav } from './Nav'
 
 export function Hero() {
+  const t = useTranslations('hero')
+
   return (
     <>
       <Nav />
@@ -16,51 +19,51 @@ export function Hero() {
               <div className="hero-up hero-up-1">
                 <span className="inline-flex items-center gap-2 text-xs font-semibold text-violet-700 dark:text-violet-400 bg-violet-100 dark:bg-violet-900/30 border border-violet-200 dark:border-violet-800 rounded-full px-3.5 py-1.5">
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                  Payload CMS Plugin · MIT License
+                  {t('badge')}
                 </span>
               </div>
 
               {/* Headline */}
               <div className="hero-up hero-up-2">
                 <h1 className="font-display text-[clamp(3rem,5.5vw,5rem)] leading-[1.04] tracking-[-0.025em] text-[#1C1917] dark:text-stone-50">
-                  Reservations
+                  {t('headlineLine1')}
                   <br />
-                  <span className="text-violet-700 dark:text-violet-400">for any business</span>
+                  <span className="text-violet-700 dark:text-violet-400">{t('headlineLine2')}</span>
                 </h1>
               </div>
 
               {/* Subheading */}
               <div className="hero-up hero-up-3">
                 <p className="text-[1.1rem] text-[#78716C] dark:text-stone-400 leading-relaxed max-w-[390px]">
-                  Drop-in booking, scheduling, and availability for Payload 3.x — salons, hotels, restaurants, events, and more.
+                  {t('subheading')}
                 </p>
               </div>
 
               {/* CTAs */}
               <div className="hero-up hero-up-4 flex flex-wrap gap-3 items-center">
-                <Link
-                  href="/demo"
-                  className="inline-flex items-center gap-2 bg-amber-500 hover:bg-amber-400 active:scale-95 text-black font-bold text-sm px-7 py-3.5 rounded-full transition-all duration-150 shadow-lg shadow-amber-400/30"
+                <a
+                  href="#demos"
+                  className="inline-flex items-center gap-2 bg-violet-700 hover:bg-violet-600 active:scale-95 text-white font-bold text-sm px-7 py-3.5 rounded-full transition-all duration-150 shadow-lg shadow-violet-400/20"
                 >
-                  Try a Live Demo
+                  {t('ctaSeeDemos')}
                   <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
                     <path d="M5 12h14M12 5l7 7-7 7" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
-                </Link>
+                </a>
                 <Link
                   href="/docs"
                   className="inline-flex items-center gap-2 bg-white dark:bg-stone-800 text-[#1C1917] dark:text-stone-100 border border-gray-200 dark:border-stone-700 hover:border-violet-400 dark:hover:border-violet-600 hover:text-violet-700 dark:hover:text-violet-400 font-semibold text-sm px-7 py-3.5 rounded-full transition-all duration-150 shadow-sm"
                 >
-                  Read the Docs
+                  {t('ctaDocs')}
                 </Link>
               </div>
 
               {/* Industry tags */}
               <div className="hero-up hero-up-5 flex flex-wrap gap-2 pt-1">
-                <span className="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-full bg-white dark:bg-stone-800 border border-gray-200 dark:border-stone-700 text-[#78716C] dark:text-stone-400">✂️ Salon &amp; Spa</span>
-                <span className="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-full bg-white dark:bg-stone-800 border border-gray-200 dark:border-stone-700 text-[#78716C] dark:text-stone-400">🏨 Hotel</span>
-                <span className="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-full bg-white dark:bg-stone-800 border border-gray-200 dark:border-stone-700 text-[#78716C] dark:text-stone-400">🍽️ Restaurant</span>
-                <span className="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-full bg-white dark:bg-stone-800 border border-gray-200 dark:border-stone-700 text-[#78716C] dark:text-stone-400">🎪 Events</span>
+                <span className="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-full bg-white dark:bg-stone-800 border border-gray-200 dark:border-stone-700 text-[#78716C] dark:text-stone-400">{t('tagSalon')}</span>
+                <span className="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-full bg-white dark:bg-stone-800 border border-gray-200 dark:border-stone-700 text-[#78716C] dark:text-stone-400">{t('tagHotel')}</span>
+                <span className="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-full bg-white dark:bg-stone-800 border border-gray-200 dark:border-stone-700 text-[#78716C] dark:text-stone-400">{t('tagRestaurant')}</span>
+                <span className="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-full bg-white dark:bg-stone-800 border border-gray-200 dark:border-stone-700 text-[#78716C] dark:text-stone-400">{t('tagEvents')}</span>
               </div>
             </div>
 

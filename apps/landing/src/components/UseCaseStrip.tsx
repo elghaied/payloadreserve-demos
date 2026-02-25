@@ -1,35 +1,17 @@
-const useCases = [
-  {
-    emoji: '✂️',
-    label: 'Salon & Spa',
-    description: 'Per-stylist booking with services',
-  },
-  {
-    emoji: '🏨',
-    label: 'Hotel',
-    description: 'Multi-night room reservations',
-  },
-  {
-    emoji: '🍽️',
-    label: 'Restaurant',
-    description: 'Table booking with party size',
-  },
-  {
-    emoji: '🎪',
-    label: 'Events',
-    description: 'Capacity-limited event booking',
-  },
-]
+import { useTranslations } from 'next-intl'
 
 export function UseCaseStrip() {
+  const t = useTranslations('useCases')
+  const items = t.raw('items') as { emoji: string; label: string; description: string }[]
+
   return (
     <section className="py-16 px-6 lg:px-8 bg-white dark:bg-stone-900 border-b border-gray-100 dark:border-stone-800">
       <div className="max-w-6xl mx-auto">
         <p className="text-center text-xs font-bold uppercase tracking-[0.2em] text-[#78716C] dark:text-stone-400 mb-10">
-          A few of many use cases
+          {t('label')}
         </p>
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-          {useCases.map((uc) => (
+          {items.map((uc) => (
             <div
               key={uc.label}
               className="flex flex-col items-center text-center gap-3 py-6 px-4 rounded-2xl bg-white dark:bg-stone-800 border border-gray-200 dark:border-stone-700"
@@ -43,7 +25,7 @@ export function UseCaseStrip() {
           ))}
         </div>
         <p className="text-center text-xs text-[#78716C] dark:text-stone-500 mt-6">
-          The plugin adapts to any business that needs time-based or resource-based booking.
+          {t('footnote')}
         </p>
       </div>
     </section>
