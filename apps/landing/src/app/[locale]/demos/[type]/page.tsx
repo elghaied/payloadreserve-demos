@@ -2,6 +2,7 @@ import { Link } from '@/i18n/navigation'
 import { notFound } from 'next/navigation'
 import { Nav } from '@/components/Nav'
 import { Footer } from '@/components/Footer'
+import Image from 'next/image'
 
 type DemoType = 'salon' | 'hotel' | 'restaurant' | 'events'
 
@@ -13,6 +14,7 @@ interface DemoPageConfig {
   liveUrl: string | null
   features: { title: string; description: string }[]
   pluginSnippet: string
+  screenshots?: { src: string; alt: string }[]
 }
 
 const demoConfigs: Record<DemoType, DemoPageConfig> = {
@@ -106,6 +108,7 @@ const demoConfigs: Record<DemoType, DemoPageConfig> = {
         },
       },
     }),`,
+    screenshots: [{ src: '/imgs/salon-screenshot.png', alt: 'Salon demo screenshot' }],
   },
 
   hotel: {
@@ -362,24 +365,40 @@ export default async function DemoDetailPage({ params }: { params: Promise<{ typ
             <h2 className="font-display text-[clamp(1.8rem,3.5vw,2.5rem)] text-[#1C1917] dark:text-stone-50 leading-[1.1] mb-8">
               Screenshots
             </h2>
-            <div className="rounded-2xl border border-gray-200 dark:border-stone-700 bg-gradient-to-br from-gray-100 dark:from-stone-800 to-gray-50 dark:to-stone-700 aspect-video flex flex-col items-center justify-center gap-3 shadow-sm">
-              <span className="text-4xl opacity-30">{config.emoji}</span>
-              <p className="text-sm font-medium text-gray-400 dark:text-stone-500">
-                Screenshots coming soon
-              </p>
-              {isLive && (
-                <p className="text-xs text-gray-400 dark:text-stone-500">
-                  Visit the{' '}
-                  <a
-                    href={config.liveUrl!}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="underline text-violet-700 dark:text-violet-400"
-                  >
-                    live demo
-                  </a>{' '}
-                  to see it in action
-                </p>
+            <div className="relative rounded-2xl border border-gray-200 dark:border-stone-700 bg-gradient-to-br from-gray-100 dark:from-stone-800 to-gray-50 dark:to-stone-700 aspect-video flex flex-col items-center justify-center gap-3 shadow-sm">
+              {config.screenshots ? (
+                config.screenshots.map((shot) => (
+                  <Image
+                    key={shot.src}
+                    src={shot.src}
+                    alt={shot.alt}
+                    fill
+                    className="object-cover object-top"
+                    sizes="(max-width: 1024px) 100vw, 960px"
+                  />
+                ))
+              ) : (
+                <>
+                  <span className="text-4xl opacity-30">{config.emoji}</span>
+
+                  <p className="text-sm font-medium text-gray-400 dark:text-stone-500">
+                    Screenshots coming soon
+                  </p>
+                  {isLive && (
+                    <p className="text-xs text-gray-400 dark:text-stone-500">
+                      Visit the{' '}
+                      <a
+                        href={config.liveUrl!}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="underline text-violet-700 dark:text-violet-400"
+                      >
+                        live demo
+                      </a>{' '}
+                      to see it in action
+                    </p>
+                  )}
+                </>
               )}
             </div>
           </div>
@@ -411,7 +430,7 @@ export default async function DemoDetailPage({ params }: { params: Promise<{ typ
             <p className="mt-4 text-sm text-zinc-500">
               See the{' '}
               <a
-                href="/docs"
+                href="https://docs.payloadreserve.com"
                 className="text-amber-400 hover:text-amber-300 transition-colors underline"
               >
                 full documentation

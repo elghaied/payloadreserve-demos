@@ -15,9 +15,7 @@ export function Footer() {
             <Link href="/" className="font-mono text-sm font-semibold">
               payload<span className="text-amber-400">-reserve</span>
             </Link>
-            <p className="text-[#78716C] text-sm mt-3 leading-relaxed">
-              {t('description')}
-            </p>
+            <p className="text-[#78716C] text-sm mt-3 leading-relaxed">{t('description')}</p>
             <div className="flex items-center gap-2 mt-4">
               <span className="inline-flex items-center gap-1.5 text-[10px] font-mono text-[#78716C] border border-white/10 rounded-full px-3 py-1">
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
@@ -32,12 +30,17 @@ export function Footer() {
           {/* Links */}
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-x-16 gap-y-8 text-sm">
             <div>
-              <p className="text-[#78716C] font-semibold text-xs uppercase tracking-widest mb-4">{t('product.heading')}</p>
+              <p className="text-[#78716C] font-semibold text-xs uppercase tracking-widest mb-4">
+                {t('product.heading')}
+              </p>
               <ul className="space-y-2.5">
                 <li>
-                  <Link href="/docs" className="text-white/60 hover:text-white transition-colors">
+                  <a
+                    href="https://docs.payloadreserve.com"
+                    className="text-white/60 hover:text-white transition-colors"
+                  >
                     {t('product.documentation')}
-                  </Link>
+                  </a>
                 </li>
                 <li>
                   <Link href="/demo" className="text-white/60 hover:text-white transition-colors">
@@ -45,7 +48,10 @@ export function Footer() {
                   </Link>
                 </li>
                 <li>
-                  <Link href="/#features" className="text-white/60 hover:text-white transition-colors">
+                  <Link
+                    href="/#features"
+                    className="text-white/60 hover:text-white transition-colors"
+                  >
                     {t('product.features')}
                   </Link>
                 </li>
@@ -53,25 +59,39 @@ export function Footer() {
             </div>
 
             <div>
-              <p className="text-[#78716C] font-semibold text-xs uppercase tracking-widest mb-4">{t('demosSection.heading')}</p>
+              <p className="text-[#78716C] font-semibold text-xs uppercase tracking-widest mb-4">
+                {t('demosSection.heading')}
+              </p>
               <ul className="space-y-2.5">
                 <li>
-                  <Link href="/demos/salon" className="text-white/60 hover:text-white transition-colors">
+                  <Link
+                    href="/demos/salon"
+                    className="text-white/60 hover:text-white transition-colors"
+                  >
                     {t('demosSection.salon')}
                   </Link>
                 </li>
                 <li>
-                  <Link href="/demos/hotel" className="text-white/60 hover:text-white transition-colors">
+                  <Link
+                    href="/demos/hotel"
+                    className="text-white/60 hover:text-white transition-colors"
+                  >
                     {t('demosSection.hotel')}
                   </Link>
                 </li>
                 <li>
-                  <Link href="/demos/restaurant" className="text-white/60 hover:text-white transition-colors">
+                  <Link
+                    href="/demos/restaurant"
+                    className="text-white/60 hover:text-white transition-colors"
+                  >
                     {t('demosSection.restaurant')}
                   </Link>
                 </li>
                 <li>
-                  <Link href="/demos/events" className="text-white/60 hover:text-white transition-colors">
+                  <Link
+                    href="/demos/events"
+                    className="text-white/60 hover:text-white transition-colors"
+                  >
                     {t('demosSection.events')}
                   </Link>
                 </li>
@@ -79,7 +99,9 @@ export function Footer() {
             </div>
 
             <div>
-              <p className="text-[#78716C] font-semibold text-xs uppercase tracking-widest mb-4">{t('links.heading')}</p>
+              <p className="text-[#78716C] font-semibold text-xs uppercase tracking-widest mb-4">
+                {t('links.heading')}
+              </p>
               <ul className="space-y-2.5">
                 <li>
                   <a
