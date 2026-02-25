@@ -1,8 +1,54 @@
+'use client'
+
 import { useTranslations } from 'next-intl'
 import Image from 'next/image'
+import { useEffect, useState } from 'react'
 
 export function AdminUISection() {
   const t = useTranslations('adminUI')
+
+  const slides = [
+    {
+      src: '/imgs/screenshot-reservations-month.png',
+      description: 'Calendar View — Month calendar',
+    },
+    {
+      src: '/imgs/screenshot-reservations-week.png',
+      description: 'Calendar View — week calendar',
+    },
+    {
+      src: '/imgs/screenshot-reservations-day.png',
+      description: 'Calendar View — day calendar',
+    },
+    {
+      src: '/imgs/screenshot-pending.png',
+      description: 'Dashboard — Pending reservations wait for confirmation or cancellation',
+    },
+    {
+      src: '/imgs/screenshot-add-reservation.png',
+      description: 'Add Reservation — Create new reservations',
+    },
+    {
+      src: '/imgs/screenshot-module.png',
+      description: "Dashboard Module - View today's reservations at a glance",
+    },
+  ]
+
+  const [currentIndex, setCurrentIndex] = useState(0)
+  const [fade, setFade] = useState(true)
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setFade(false)
+
+      setTimeout(() => {
+        setCurrentIndex((prev) => (prev + 1) % slides.length)
+        setFade(true)
+      }, 300) // fade out duration
+    }, 4000)
+
+    return () => clearInterval(interval)
+  }, [slides.length])
 
   return (
     <section className="py-24 lg:py-32 px-6 lg:px-8 bg-[#F7F7F5] dark:bg-stone-950">
@@ -20,32 +66,41 @@ export function AdminUISection() {
           </p>
         </div>
 
-        {/* Browser chrome mockup */}
-        <div className="rounded-2xl border border-gray-200 dark:border-stone-700 overflow-hidden shadow-2xl shadow-violet-100/40 dark:shadow-black/40">
-          {/* Window chrome bar */}
+        {/* Browser frame */}
+        <div className="rounded-2xl border border-gray-200 dark:border-stone-700 overflow-hidden shadow-2xl shadow-violet-100/40 dark:shadow-black/40 bg-white dark:bg-stone-900">
+          {/* Top bar */}
           <div className="flex items-center gap-1.5 px-4 py-3 bg-gray-100 dark:bg-stone-800 border-b border-gray-200 dark:border-stone-700">
             <span className="w-3 h-3 rounded-full bg-[#ff5f57]" />
             <span className="w-3 h-3 rounded-full bg-[#febc2e]" />
             <span className="w-3 h-3 rounded-full bg-[#28c840]" />
             <div className="ml-4 flex-1 max-w-xs mx-auto bg-white dark:bg-stone-700 rounded-md px-3 py-1 text-[11px] text-gray-400 dark:text-stone-400 font-mono border border-gray-200 dark:border-stone-600 text-center">
-              admin.yoursite.com/admin
+              yoursite.com/admin/
             </div>
           </div>
 
           {/* Screenshot area */}
-          <div className="relative aspect-[16/9] w-full bg-gray-100 dark:bg-stone-800">
-            <Image
-              src={`https://images.pexels.com/photos/1181271/pexels-photo-1181271.jpeg?auto=compress&cs=tinysrgb&w=1200`}
-              alt={t('screenshotAlt')}
-              fill
-              className="object-cover object-top"
-              sizes="(max-width: 1024px) 100vw, 960px"
-            />
-            {/* Overlay with placeholder text until real screenshot is available */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent flex items-end p-6">
-              <span className="inline-flex items-center gap-2 text-xs font-semibold text-white/80 bg-black/40 backdrop-blur-sm px-3 py-1.5 rounded-full border border-white/20">
+          <div className="relative aspect-[16/9] w-full bg-gray-100 dark:bg-stone-800 overflow-hidden">
+            <div
+              className={`absolute inset-0 transition-opacity duration-500 ${
+                fade ? 'opacity-100' : 'opacity-0'
+              }`}
+            >
+              <Image
+                key={slides[currentIndex].src}
+                src={slides[currentIndex].src}
+                alt={t('screenshotAlt')}
+                fill
+                className="object-cover object-top"
+                sizes="(max-width: 1024px) 100vw, 960px"
+                priority
+              />
+            </div>
+
+            {/* Overlay badge */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent flex items-end p-6 pointer-events-none">
+              <span className="inline-flex items-center gap-2 text-xs font-semibold text-white/90 bg-black/40 backdrop-blur-sm px-3 py-1.5 rounded-full border border-white/20">
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                Screenshot placeholder — swap in real admin panel image
+                {slides[currentIndex].description}
               </span>
             </div>
           </div>

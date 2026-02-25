@@ -11,16 +11,30 @@ export function Nav() {
     <header className="fixed top-0 inset-x-0 z-50 border-b border-gray-200/80 dark:border-stone-700/80 bg-white/90 dark:bg-stone-900/90 backdrop-blur-md shadow-sm">
       <div className="max-w-6xl mx-auto px-6 lg:px-8 h-16 flex items-center justify-between">
         {/* Logo */}
-        <Link href="/" className="font-mono text-sm font-semibold text-[#1C1917] dark:text-stone-100 tracking-tight select-none">
+        <Link
+          href="/"
+          className="font-mono text-sm font-semibold text-[#1C1917] dark:text-stone-100 tracking-tight select-none"
+        >
+          <img
+            src="/reserve-logo.svg"
+            alt="Payload reserve Logo"
+            className="h-6 w-6 mr-2 inline-block"
+          />{' '}
           payload<span className="text-violet-700 dark:text-violet-400">-reserve</span>
         </Link>
 
         {/* Nav links */}
         <nav className="flex items-center gap-6">
-          <a href="/docs" className="text-sm text-[#78716C] hover:text-[#1C1917] dark:text-stone-400 dark:hover:text-stone-100 transition-colors font-medium">
+          <a
+            href="/docs"
+            className="text-sm text-[#78716C] hover:text-[#1C1917] dark:text-stone-400 dark:hover:text-stone-100 transition-colors font-medium"
+          >
             {t('docs')}
           </a>
-          <Link href="/#demos" className="text-sm text-[#78716C] hover:text-[#1C1917] dark:text-stone-400 dark:hover:text-stone-100 transition-colors font-medium">
+          <Link
+            href="/#demos"
+            className="text-sm text-[#78716C] hover:text-[#1C1917] dark:text-stone-400 dark:hover:text-stone-100 transition-colors font-medium"
+          >
             {t('demos')}
           </Link>
           <a

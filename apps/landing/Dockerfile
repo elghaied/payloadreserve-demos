@@ -46,7 +46,7 @@ ENV NODE_ENV=production
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser  --system --uid 1001 nextjs
 
-# COPY --from=builder /app/apps/landing/public ./apps/landing/public
+COPY --from=builder /app/apps/landing/public ./apps/landing/public
 
 RUN mkdir -p apps/landing/.next && chown nextjs:nodejs apps/landing/.next
 

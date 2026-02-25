@@ -1,5 +1,4 @@
 @import "tailwindcss";
-@import "fumadocs-ui/style.css";
 
 /* ─── Class-based dark mode (used by next-themes / fumadocs RootProvider) ── */
 @variant dark (&:is(.dark, .dark *));

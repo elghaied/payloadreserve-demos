@@ -1,0 +1,16 @@
+// @ts-nocheck -- skip type checking
+import * as docs_11 from "../src/content/docs/status-machine.md?collection=docs&hash=1772011639955"
+import * as docs_10 from "../src/content/docs/rest-api.md?collection=docs&hash=1772011639955"
+import * as docs_9 from "../src/content/docs/index.mdx?collection=docs&hash=1772011639955"
+import * as docs_8 from "../src/content/docs/hooks-api.md?collection=docs&hash=1772011639955"
+import * as docs_7 from "../src/content/docs/getting-started.md?collection=docs&hash=1772011639955"
+import * as docs_6 from "../src/content/docs/examples.md?collection=docs&hash=1772011639955"
+import * as docs_5 from "../src/content/docs/development.md?collection=docs&hash=1772011639955"
+import * as docs_4 from "../src/content/docs/configuration.md?collection=docs&hash=1772011639955"
+import * as docs_3 from "../src/content/docs/collections.md?collection=docs&hash=1772011639955"
+import * as docs_2 from "../src/content/docs/booking-features.md?collection=docs&hash=1772011639955"
+import * as docs_1 from "../src/content/docs/advanced.md?collection=docs&hash=1772011639955"
+import * as docs_0 from "../src/content/docs/admin-ui.md?collection=docs&hash=1772011639955"
+import { _runtime } from "fumadocs-mdx"
+import * as _source from "../source.config"
+export const docs = _runtime.docs<typeof _source.docs>([{ info: {"path":"admin-ui.md","absolutePath":"/home/sam/projects/reservation-demo/apps/docs/src/content/docs/admin-ui.md"}, data: docs_0 }, { info: {"path":"advanced.md","absolutePath":"/home/sam/projects/reservation-demo/apps/docs/src/content/docs/advanced.md"}, data: docs_1 }, { info: {"path":"booking-features.md","absolutePath":"/home/sam/projects/reservation-demo/apps/docs/src/content/docs/booking-features.md"}, data: docs_2 }, { info: {"path":"collections.md","absolutePath":"/home/sam/projects/reservation-demo/apps/docs/src/content/docs/collections.md"}, data: docs_3 }, { info: {"path":"configuration.md","absolutePath":"/home/sam/projects/reservation-demo/apps/docs/src/content/docs/configuration.md"}, data: docs_4 }, { info: {"path":"development.md","absolutePath":"/home/sam/projects/reservation-demo/apps/docs/src/content/docs/development.md"}, data: docs_5 }, { info: {"path":"examples.md","absolutePath":"/home/sam/projects/reservation-demo/apps/docs/src/content/docs/examples.md"}, data: docs_6 }, { info: {"path":"getting-started.md","absolutePath":"/home/sam/projects/reservation-demo/apps/docs/src/content/docs/getting-started.md"}, data: docs_7 }, { info: {"path":"hooks-api.md","absolutePath":"/home/sam/projects/reservation-demo/apps/docs/src/content/docs/hooks-api.md"}, data: docs_8 }, { info: {"path":"index.mdx","absolutePath":"/home/sam/projects/reservation-demo/apps/docs/src/content/docs/index.mdx"}, data: docs_9 }, { info: {"path":"rest-api.md","absolutePath":"/home/sam/projects/reservation-demo/apps/docs/src/content/docs/rest-api.md"}, data: docs_10 }, { info: {"path":"status-machine.md","absolutePath":"/home/sam/projects/reservation-demo/apps/docs/src/content/docs/status-machine.md"}, data: docs_11 }], [])

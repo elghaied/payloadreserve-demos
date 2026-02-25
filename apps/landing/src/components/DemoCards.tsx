@@ -5,10 +5,10 @@ import Image from 'next/image'
 type DemoKey = 'salon' | 'hotel' | 'restaurant' | 'events'
 
 const demoMeta: Record<DemoKey, { emoji: string; active: boolean; pexelsId: string }> = {
-  salon:      { emoji: '✂️', active: true,  pexelsId: '1319460' },
-  hotel:      { emoji: '🏨', active: false, pexelsId: '271624'  },
-  restaurant: { emoji: '🍽️', active: false, pexelsId: '262978'  },
-  events:     { emoji: '🎪', active: false, pexelsId: '1540406' },
+  salon: { emoji: '✂️', active: true, pexelsId: 'salon' },
+  hotel: { emoji: '🏨', active: false, pexelsId: 'hotel' },
+  restaurant: { emoji: '🍽️', active: false, pexelsId: 'resto' },
+  events: { emoji: '🎪', active: false, pexelsId: 'events' },
 }
 
 const demoKeys: DemoKey[] = ['salon', 'hotel', 'restaurant', 'events']
@@ -21,7 +21,9 @@ export function DemoCards() {
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="text-center max-w-2xl mx-auto mb-14">
-          <p className="text-xs font-bold text-violet-700 dark:text-violet-400 uppercase tracking-[0.2em] mb-4">{t('label')}</p>
+          <p className="text-xs font-bold text-violet-700 dark:text-violet-400 uppercase tracking-[0.2em] mb-4">
+            {t('label')}
+          </p>
           <h2 className="font-display text-[clamp(2rem,4vw,3.2rem)] text-[#1C1917] dark:text-stone-50 leading-[1.1] mb-5">
             {t('headline')}
           </h2>
@@ -44,7 +46,7 @@ export function DemoCards() {
                 {/* Pexels header image */}
                 <div className="relative h-40 w-full overflow-hidden bg-gray-100 dark:bg-stone-700">
                   <Image
-                    src={`https://images.pexels.com/photos/${meta.pexelsId}/pexels-photo-${meta.pexelsId}.jpeg?auto=compress&cs=tinysrgb&w=800`}
+                    src={`/imgs/${meta.pexelsId}.webp`}
                     alt={t(`${key}.name`)}
                     fill
                     className="object-cover"
@@ -65,21 +67,42 @@ export function DemoCards() {
                   <div className="flex items-start gap-4 mb-5">
                     <span className="text-4xl leading-none">{meta.emoji}</span>
                     <div>
-                      <h3 className="font-bold text-xl text-[#1C1917] dark:text-stone-100 leading-tight">{t(`${key}.name`)}</h3>
-                      <p className="text-sm font-medium mt-0.5 text-[#78716C] dark:text-stone-400">{t(`${key}.tagline`)}</p>
+                      <h3 className="font-bold text-xl text-[#1C1917] dark:text-stone-100 leading-tight">
+                        {t(`${key}.name`)}
+                      </h3>
+                      <p className="text-sm font-medium mt-0.5 text-[#78716C] dark:text-stone-400">
+                        {t(`${key}.tagline`)}
+                      </p>
                     </div>
                   </div>
 
                   {/* Description */}
-                  <p className="text-sm text-[#78716C] dark:text-stone-400 leading-relaxed mb-5">{t(`${key}.description`)}</p>
+                  <p className="text-sm text-[#78716C] dark:text-stone-400 leading-relaxed mb-5">
+                    {t(`${key}.description`)}
+                  </p>
 
                   {/* Feature list */}
                   <ul className="grid grid-cols-2 gap-y-2 gap-x-3 mb-7">
                     {features.map((f) => (
-                      <li key={f} className="flex items-center gap-2 text-xs text-[#78716C] dark:text-stone-400">
-                        <svg width="13" height="13" viewBox="0 0 13 13" fill="none" className="shrink-0 text-violet-600 dark:text-violet-400">
+                      <li
+                        key={f}
+                        className="flex items-center gap-2 text-xs text-[#78716C] dark:text-stone-400"
+                      >
+                        <svg
+                          width="13"
+                          height="13"
+                          viewBox="0 0 13 13"
+                          fill="none"
+                          className="shrink-0 text-violet-600 dark:text-violet-400"
+                        >
                           <circle cx="6.5" cy="6.5" r="6" fill="currentColor" fillOpacity="0.15" />
-                          <path d="M4 6.5l1.8 1.8L9 4" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round" />
+                          <path
+                            d="M4 6.5l1.8 1.8L9 4"
+                            stroke="currentColor"
+                            strokeWidth="1.3"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          />
                         </svg>
                         {f}
                       </li>
@@ -93,8 +116,19 @@ export function DemoCards() {
                       className="inline-flex items-center gap-2 font-semibold text-sm px-5 py-2.5 rounded-xl transition-all bg-violet-700 hover:bg-violet-600 text-white shadow-sm shadow-violet-400/20"
                     >
                       {t('exploreDemo')}
-                      <svg width="13" height="13" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
-                        <path d="M5 12h14M12 5l7 7-7 7" strokeLinecap="round" strokeLinejoin="round" />
+                      <svg
+                        width="13"
+                        height="13"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2.5"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          d="M5 12h14M12 5l7 7-7 7"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
                       </svg>
                     </Link>
                   ) : (
