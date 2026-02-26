@@ -4,7 +4,8 @@ import path from 'path'
 import { buildConfig } from 'payload'
 import { fileURLToPath } from 'url'
 import sharp from 'sharp'
-
+import { s3Storage } from '@payloadcms/storage-s3'
+import { nodemailerAdapter } from '@payloadcms/email-nodemailer'
 import { Users } from './collections/Users'
 import { Media } from './collections/Media'
 
@@ -12,21 +13,61 @@ const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
 export default buildConfig({
-    admin: {
-        user: Users.slug,
-        importMap: {
-            baseDir: path.resolve(dirname),
+  admin: {
+    user: Users.slug,
+    importMap: {
+      baseDir: path.resolve(dirname),
+    },
+  },
+  collections: [Users, Media],
+  editor: lexicalEditor(),
+  secret: process.env.PAYLOAD_SECRET || '',
+  typescript: {
+    outputFile: path.resolve(dirname, 'payload-types.ts'),
+  },
+  db: mongooseAdapter({
+    url: process.env.DATABASE_URL || '',
+  }),
+  sharp,
+  // Only initialise the email transport when SMTP vars are present.
+  // Without this guard, nodemailerAdapter calls transporter.verify() at
+  // startup, which fails during `next build` (Docker builder stage) where
+  // runtime env vars are not available.
+  ...(process.env.SMTP_HOST
+    ? {
+        email: nodemailerAdapter({
+          defaultFromAddress: process.env.SMTP_FROM!,
+          defaultFromName: process.env.SMTP_FROM_NAME!,
+          transportOptions: {
+            host: process.env.SMTP_HOST,
+            port: Number(process.env.SMTP_PORT) || 587,
+            auth: {
+              user: process.env.SMTP_USER!,
+              // Google App Passwords contain spaces — pass as-is, no quotes
+              // in .env (Docker Compose preserves spaces in unquoted values).
+              pass: process.env.SMTP_PASS!,
+            },
+          },
+        }),
+      }
+    : {}),
+  plugins: [
+    s3Storage({
+      collections: {
+        media: {
+          prefix: process.env.S3_PREFIX || 'media',
         },
-    },
-    collections: [Users, Media],
-    editor: lexicalEditor(),
-    secret: process.env.PAYLOAD_SECRET || '',
-    typescript: {
-        outputFile: path.resolve(dirname, 'payload-types.ts'),
-    },
-    db: mongooseAdapter({
-        url: process.env.DATABASE_URL || '',
+      },
+      bucket: process.env.S3_BUCKET!,
+      config: {
+        credentials: {
+          accessKeyId: process.env.S3_ACCESS_KEY || '',
+          secretAccessKey: process.env.S3_SECRET_KEY || '',
+        },
+        region: process.env.S3_REGION || 'us-east-1',
+        forcePathStyle: process.env.S3_FORCE_PATH_STYLE === 'true',
+        endpoint: process.env.S3_ENDPOINT,
+      },
     }),
-    sharp,
-    plugins: [],
+  ],
 })
