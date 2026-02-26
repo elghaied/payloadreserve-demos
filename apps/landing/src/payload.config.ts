@@ -8,6 +8,12 @@ import { s3Storage } from '@payloadcms/storage-s3'
 import { nodemailerAdapter } from '@payloadcms/email-nodemailer'
 import { Users } from './collections/Users'
 import { Media } from './collections/Media'
+import { Demos } from './collections/Demos'
+import { SiteSettings } from './globals/SiteSettings'
+import { Navigation } from './globals/Navigation'
+import { HomePage } from './globals/HomePage'
+import { Footer } from './globals/Footer'
+import { seoPlugin } from '@payloadcms/plugin-seo'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -19,7 +25,8 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Users, Media],
+  collections: [Users, Media, Demos],
+  globals: [SiteSettings, Navigation, HomePage, Footer],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {
@@ -68,6 +75,13 @@ export default buildConfig({
         forcePathStyle: process.env.S3_FORCE_PATH_STYLE === 'true',
         endpoint: process.env.S3_ENDPOINT,
       },
+    }),
+    seoPlugin({
+      collections: ['demos'],
+      globals: ['home-page'],
+      uploadsCollection: 'media',
+      generateTitle: ({ doc }) => `Website.com — ${doc.title}`,
+      generateDescription: ({ doc }) => doc.excerpt,
     }),
   ],
 })
