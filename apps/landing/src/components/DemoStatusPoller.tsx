@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import type { DemoStatus } from '@payload-reserve-demos/types'
+import { useTranslations } from 'next-intl'
 import { CredentialsSuccess } from './CredentialsSuccess'
 
 interface StatusResponse {
@@ -10,26 +11,26 @@ interface StatusResponse {
   expiresAt?: string
 }
 
-const statusMessages: Record<DemoStatus, string> = {
-  provisioning: 'Spinning up your container…',
-  ready: 'Your demo is ready!',
-  failed: 'Something went wrong during provisioning.',
-  expired: 'This demo has expired.',
-}
-
 export function DemoStatusPoller({ demoId }: { demoId: string }) {
+  const t = useTranslations('demoStatus')
+
+  const statusMessages: Record<DemoStatus, string> = {
+    provisioning: t('states.provisioning'),
+    ready: t('states.ready'),
+    failed: t('states.failed'),
+    expired: t('states.expired'),
+  }
+
   const [status, setStatus] = useState<DemoStatus>('provisioning')
   const [demoUrl, setDemoUrl] = useState<string | undefined>()
   const [expiresAt, setExpiresAt] = useState<Date | undefined>()
   const [dots, setDots] = useState('.')
 
-  // Animated dots for spinner feel
   useEffect(() => {
     const id = setInterval(() => setDots((d) => (d.length >= 3 ? '.' : d + '.')), 600)
     return () => clearInterval(id)
   }, [])
 
-  // Poll for status
   useEffect(() => {
     if (status === 'ready' || status === 'failed' || status === 'expired') return
 
@@ -56,8 +57,8 @@ export function DemoStatusPoller({ demoId }: { demoId: string }) {
   if (status === 'failed') {
     return (
       <div className="text-center py-10">
-        <p className="text-red-400 font-medium mb-2">Provisioning failed</p>
-        <p className="text-zinc-500 text-sm">Please try requesting a new demo.</p>
+        <p className="text-red-400 font-medium mb-2">{t('failedTitle')}</p>
+        <p className="text-zinc-500 text-sm">{t('failedSubtitle')}</p>
       </div>
     )
   }
@@ -76,21 +77,23 @@ export function DemoStatusPoller({ demoId }: { demoId: string }) {
           {statusMessages[status]}
           {status === 'provisioning' && <span className="text-amber-400">{dots}</span>}
         </p>
-        <p className="text-zinc-500 text-xs">This usually takes 1–3 minutes.</p>
+        <p className="text-zinc-500 text-xs">{t('eta')}</p>
       </div>
 
       {/* Progress steps */}
       <div className="flex items-center justify-center gap-3 text-xs font-mono text-zinc-600">
-        <span className="text-emerald-500">✓ Container created</span>
+        <span className="text-emerald-500">✓ {t('progress.containerCreated')}</span>
         <span className="text-zinc-700">·</span>
         <span className={status === 'provisioning' ? 'text-amber-400 animate-pulse' : 'text-emerald-500'}>
-          Waiting for health…
+          {t('progress.waitingHealth')}
         </span>
         <span className="text-zinc-700">·</span>
-        <span className="text-zinc-600">Seeding data</span>
+        <span className="text-zinc-600">{t('progress.seedingData')}</span>
       </div>
 
-      <p className="text-[11px] text-zinc-600">Demo ID: {demoId}</p>
+      <p className="text-[11px] text-zinc-600">
+        {t('demoIdLabel')}: {demoId}
+      </p>
     </div>
   )
 }

@@ -2,6 +2,7 @@
 
 import React from 'react'
 import { cn } from '@/utilities/cn'
+import { useTranslations } from 'next-intl'
 
 interface GShellBrandProps {
   className?: string
@@ -48,9 +49,11 @@ export function GShellBrand({
   logoOnly = false,
   size = 'md',
   showPrefix = false,
-  prefixText = 'Made by',
+  prefixText,
   animated = true,
 }: GShellBrandProps) {
+  const t = useTranslations('brand')
+  const defaultPrefix = t('defaultPrefix')
   const config = sizeConfig[size]
 
   return (
@@ -69,11 +72,11 @@ export function GShellBrand({
         'rounded-sm',
         className,
       )}
-      aria-label="Visit GShell website"
+      aria-label={t('visitWebsite')}
     >
       {showPrefix && (
         <span className="opacity-70 transition-opacity duration-300 group-hover:opacity-100">
-          {prefixText}
+          {prefixText ?? defaultPrefix}
         </span>
       )}
 

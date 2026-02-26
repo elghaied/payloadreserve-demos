@@ -3,7 +3,9 @@
     "salon": "https://salon.payloadreserve.com",
     "github": "https://github.com/elghaied/payload-reserve",
     "payloadcms": "https://payloadcms.com",
-    "nextjs": "https://nextjs.org"
+    "nextjs": "https://nextjs.org",
+    "docs": "https://docs.payloadreserve.com",
+    "gshell": "https://gshell.fr"
   },
   "meta": {
     "title": "payload-reserve | Booking & Reservation Plugin for Payload CMS",
@@ -13,7 +15,8 @@
     "docs": "Docs",
     "demos": "Demos",
     "github": "GitHub",
-    "requestDemo": "Request Demo"
+    "requestDemo": "Request Demo",
+    "brandLogoAlt": "Payload reserve Logo"
   },
   "hero": {
     "badge": "Payload CMS Plugin · MIT License",
@@ -25,16 +28,91 @@
     "tagSalon": "✂️ Salon & Spa",
     "tagHotel": "🏨 Hotel",
     "tagRestaurant": "🍽️ Restaurant",
-    "tagEvents": "🎪 Events"
+    "tagEvents": "🎪 Events",
+    "mockups": {
+      "salon": {
+        "name": "Lumière Salon",
+        "subtitle": "Today, Jan 24",
+        "availableSlotsLabel": "Available slots",
+        "slots": [
+          "10:00 AM",
+          "11:30 AM ✓",
+          "2:00 PM"
+        ],
+        "cta": "Book 11:30 AM →"
+      },
+      "hotel": {
+        "name": "Grand Hotel",
+        "subtitle": "2 nights · 1 room",
+        "checkInLabel": "Check-in",
+        "checkInDate": "Jan 14",
+        "checkOutLabel": "Check-out",
+        "checkOutDate": "Jan 16",
+        "roomType": "Deluxe King",
+        "pricePerNight": "$299/night",
+        "cta": "Reserve Room →"
+      },
+      "restaurant": {
+        "name": "Maison Restaurant",
+        "subtitle": "Party of 4",
+        "slots": [
+          "7:00",
+          "7:30",
+          "8:00 ✓",
+          "8:30",
+          "9:00",
+          "9:30"
+        ],
+        "cta": "Reserve 8:00 PM →"
+      },
+      "events": {
+        "name": "The Grand Hall",
+        "subtitle": "Event Venue",
+        "dates": [
+          {
+            "date": "Feb 3",
+            "status": "Available",
+            "tone": "available"
+          },
+          {
+            "date": "Feb 10",
+            "status": "Booked",
+            "tone": "booked"
+          },
+          {
+            "date": "Feb 17",
+            "status": "Selected",
+            "tone": "selected"
+          }
+        ],
+        "cta": "Book Feb 17 →"
+      }
+    }
   },
   "useCases": {
     "label": "A few of many use cases",
     "footnote": "The plugin adapts to any business that needs time-based or resource-based booking.",
     "items": [
-      { "emoji": "✂️", "label": "Salon & Spa", "description": "Per-stylist booking with services" },
-      { "emoji": "🏨", "label": "Hotel", "description": "Multi-night room reservations" },
-      { "emoji": "🍽️", "label": "Restaurant", "description": "Table booking with party size" },
-      { "emoji": "🎪", "label": "Events", "description": "Capacity-limited event booking" }
+      {
+        "emoji": "✂️",
+        "label": "Salon & Spa",
+        "description": "Per-stylist booking with services"
+      },
+      {
+        "emoji": "🏨",
+        "label": "Hotel",
+        "description": "Multi-night room reservations"
+      },
+      {
+        "emoji": "🍽️",
+        "label": "Restaurant",
+        "description": "Table booking with party size"
+      },
+      {
+        "emoji": "🎪",
+        "label": "Events",
+        "description": "Capacity-limited event booking"
+      }
     ]
   },
   "features": {
@@ -91,28 +169,48 @@
       "name": "Lumière Salon",
       "tagline": "Appointment scheduling for beauty professionals",
       "description": "Per-stylist booking with service menus, buffer times between appointments, and optional Stripe deposit collection.",
-      "features": ["Per-stylist scheduling", "Service menus", "Buffer times", "Stripe deposits"],
+      "features": [
+        "Per-stylist scheduling",
+        "Service menus",
+        "Buffer times",
+        "Stripe deposits"
+      ],
       "url": "https://salon.payloadreserve.com"
     },
     "hotel": {
       "name": "Grand Hotel",
       "tagline": "Room reservations with multi-night stays",
       "description": "Check-in/out date pickers, room type selection, capacity management, and guest communication all in Payload admin.",
-      "features": ["Multi-night stays", "Room types", "Capacity limits", "Guest management"],
+      "features": [
+        "Multi-night stays",
+        "Room types",
+        "Capacity limits",
+        "Guest management"
+      ],
       "url": ""
     },
     "restaurant": {
       "name": "Maison Restaurant",
       "tagline": "Table booking with party size management",
       "description": "Time-slotted dining reservations with configurable party sizes, special requests, and automatic table assignment.",
-      "features": ["Time slot booking", "Party size", "Special requests", "Auto assignment"],
+      "features": [
+        "Time slot booking",
+        "Party size",
+        "Special requests",
+        "Auto assignment"
+      ],
       "url": ""
     },
     "events": {
       "name": "Event Venue",
       "tagline": "Event scheduling with capacity management",
       "description": "Full-day event bookings, capacity limits, multi-resource reservations, and ticketing — all from one plugin.",
-      "features": ["Capacity limits", "Multi-resource", "Event types", "Ticketing"],
+      "features": [
+        "Capacity limits",
+        "Multi-resource",
+        "Event types",
+        "Ticketing"
+      ],
       "url": ""
     }
   },
@@ -128,16 +226,26 @@
       "Expires in 24h — no commitment"
     ],
     "cta": "Request Private Demo",
-    "audience": "Perfect for non-developers exploring the system"
+    "audience": "Perfect for non-developers exploring the system",
+    "imageAlt": "Team reviewing the admin panel"
   },
   "developerSection": {
     "label": "For Developers",
     "headline": "Run it on your machine",
     "subtitle": "Clone the demo apps monorepo and run any template locally with a single command.",
     "steps": [
-      { "title": "Clone the demos repo", "code": "git clone https://github.com/elghaied/payload-reserve-demos" },
-      { "title": "Install dependencies", "code": "pnpm install" },
-      { "title": "Start the salon demo", "code": "pnpm dev:salon" }
+      {
+        "title": "Clone the demos repo",
+        "code": "git clone https://github.com/elghaied/payload-reserve-demos"
+      },
+      {
+        "title": "Install dependencies",
+        "code": "pnpm install"
+      },
+      {
+        "title": "Start the salon demo",
+        "code": "pnpm dev:salon"
+      }
     ],
     "cta": "View on GitHub",
     "note": "Requires Node ≥18, pnpm, and MongoDB. Demo monorepo coming soon — star the repo to get notified."
@@ -174,7 +282,16 @@
     "label": "Admin Interface",
     "headline": "Complete booking management, built into Payload",
     "subtitle": "payload-reserve adds a full reservation management interface directly to your Payload CMS admin panel — calendar view, reservations list, status management, and more.",
-    "screenshotAlt": "payload-reserve admin panel screenshot"
+    "screenshotAlt": "payload-reserve admin panel screenshot",
+    "browserUrl": "yoursite.com/admin/",
+    "slides": [
+      "Calendar View - Month calendar",
+      "Calendar View - Week calendar",
+      "Calendar View - Day calendar",
+      "Dashboard - Pending reservations wait for confirmation or cancellation",
+      "Add Reservation - Create new reservations",
+      "Dashboard Module - View today's reservations at a glance"
+    ]
   },
   "footer": {
     "description": "Open source reservation and booking plugin for Payload CMS 3.x projects.",
@@ -199,6 +316,251 @@
       "heading": "Links",
       "github": "GitHub ↗",
       "payloadCms": "Payload CMS ↗"
+    }
+  },
+  "themeToggle": {
+    "toLight": "Switch to light mode",
+    "toDark": "Switch to dark mode"
+  },
+  "brand": {
+    "visitWebsite": "Visit GShell website",
+    "defaultPrefix": "Made by"
+  },
+  "demoRequestPage": {
+    "meta": {
+      "title": "Try a Live Demo - payload-reserve",
+      "description": "Spin up a pre-seeded demo and explore the full booking flow in under a minute."
+    },
+    "backToHome": "Back to home",
+    "headline": "Request a demo",
+    "description": "Fill in your email and we'll spin up a pre-seeded environment. You'll receive credentials within a couple of minutes. Demos auto-expire after {hours} hours.",
+    "reassurance": [
+      "No account needed",
+      "Auto-expires",
+      "Pre-seeded data"
+    ]
+  },
+  "demoRequestForm": {
+    "nameLabel": "Name",
+    "namePlaceholder": "Jane Smith",
+    "emailLabel": "Email",
+    "emailHint": "credentials will be sent here",
+    "emailPlaceholder": "you@example.com",
+    "demoTypeLabel": "Demo type",
+    "submitIdle": "Request Demo →",
+    "submitLoading": "Requesting…",
+    "disclaimerLine1": "By submitting, you agree to receive a single transactional email with demo credentials.",
+    "disclaimerLine2": "Demos are auto-deleted after expiry. No account required.",
+    "demoTypes": [
+      {
+        "value": "salon",
+        "label": "Lumière Salon",
+        "description": "Specialists, services, buffer times",
+        "emoji": "✂️"
+      },
+      {
+        "value": "hotel",
+        "label": "Grand Hotel",
+        "description": "Rooms, check-in/out, capacity",
+        "emoji": "🏨"
+      },
+      {
+        "value": "restaurant",
+        "label": "Maison Restaurant",
+        "description": "Tables, party size, time slots",
+        "emoji": "🍽️"
+      },
+      {
+        "value": "events",
+        "label": "Event Venue",
+        "description": "Events, ticketing, multi-resource",
+        "emoji": "🎪"
+      }
+    ],
+    "errors": {
+      "createFailed": "Failed to create demo. Please try again.",
+      "network": "Network error. Please check your connection and try again.",
+      "default": "Something went wrong."
+    }
+  },
+  "demoStatus": {
+    "states": {
+      "provisioning": "Spinning up your container…",
+      "ready": "Your demo is ready!",
+      "failed": "Something went wrong during provisioning.",
+      "expired": "This demo has expired."
+    },
+    "eta": "This usually takes 1-3 minutes.",
+    "progress": {
+      "containerCreated": "Container created",
+      "waitingHealth": "Waiting for health…",
+      "seedingData": "Seeding data"
+    },
+    "demoIdLabel": "Demo ID",
+    "failedTitle": "Provisioning failed",
+    "failedSubtitle": "Please try requesting a new demo.",
+    "success": {
+      "title": "Your demo is ready",
+      "subtitle": "Credentials have been sent to your email.",
+      "urlLabel": "Demo URL",
+      "expires": "Expires {date}",
+      "openAdmin": "Open Admin Panel",
+      "viewBooking": "View Booking Page",
+      "footnote": "The demo is pre-seeded with realistic data. All data is permanently deleted on expiry."
+    },
+    "error": {
+      "rateLimitTitle": "Demo limit reached",
+      "capacityTitle": "At capacity",
+      "defaultTitle": "Request failed",
+      "tryAgain": "Try again",
+      "backHome": "Back to home"
+    }
+  },
+  "demoDetails": {
+    "metaTitle": "{name} Demo - payload-reserve",
+    "backToDemos": "All Demos",
+    "visitLiveDemo": "Visit Live Demo ↗",
+    "demoComingSoon": "Demo Coming Soon",
+    "requestPrivateDemo": "Request Private Demo",
+    "featuresLabel": "Features",
+    "workflowsTitle": "Built for {industry} workflows",
+    "screenshotsHeading": "Screenshots",
+    "screenshotsComingSoon": "Screenshots coming soon",
+    "screenshotsLivePrompt": "Visit the <liveDemo>live demo</liveDemo> to see it in action",
+    "screenshotsLiveDemoLabel": "live demo",
+    "configurationLabel": "Configuration",
+    "pluginConfigTitle": "Plugin config for {name}",
+    "payloadConfigFile": "payload.config.ts",
+    "docsNote": "See the <docs>full documentation</docs> for all available options.",
+    "docsLabel": "full documentation",
+    "ctaTitle": "Ready to explore {name}?",
+    "ctaSubtitle": "Try the live demo or request your own private environment.",
+    "types": {
+      "salon": {
+        "name": "Lumière Salon",
+        "tagline": "Appointment scheduling built for beauty professionals",
+        "emoji": "✂️",
+        "workflowIndustry": "salon",
+        "description": "A complete salon booking system built with payload-reserve. Clients book specific stylists, choose from service menus, and pay a deposit - all without leaving your site.",
+        "liveUrl": "https://salon.payloadreserve.com",
+        "features": [
+          {
+            "title": "Per-specialist scheduling",
+            "description": "Clients select a stylist then see their individual calendar and open slots."
+          },
+          {
+            "title": "Service menus with durations",
+            "description": "Define services (cut, colour, treatment) with exact durations; slot length adjusts automatically."
+          },
+          {
+            "title": "Buffer times",
+            "description": "Automatic 5-minute gap between appointments; no manual blocking needed."
+          },
+          {
+            "title": "Email confirmations",
+            "description": "Confirmation and cancellation emails sent automatically via the plugin's lifecycle hooks."
+          },
+          {
+            "title": "Stripe payment gate",
+            "description": "Charge a deposit or card-on-file before confirming - reduces no-shows."
+          },
+          {
+            "title": "Cancellation policy",
+            "description": "24-hour minimum notice enforced server-side; late cancellations flagged for staff."
+          }
+        ],
+        "pluginSnippet": "    payloadReserve({\n      slugs: {\n        services: 'services',\n        resources: 'specialists',\n        schedules: 'schedules',\n        reservations: 'reservations',\n      },\n      extraReservationFields: [\n        {\n          name: 'paymentReminderSent',\n          type: 'checkbox',\n          defaultValue: false,\n          admin: { position: 'sidebar' },\n        },\n      ],\n      adminGroup: 'Salon',\n      defaultBufferTime: 5,\n      cancellationNoticePeriod: 24,\n      hooks: {\n        afterBookingConfirm: [notifyAfterConfirm],\n        afterBookingCancel: [notifyAfterCancel],\n      },\n      access: {\n        customers: {\n          create: () => true,\n          read: ({ req }) => {\n            if (!req.user) return false\n            if (req.user.collection === 'users') return true\n            return { id: { equals: req.user.id } }\n          },\n          update: ({ req }) => {\n            if (!req.user) return false\n            if (req.user.collection === 'users') return true\n            return { id: { equals: req.user.id } }\n          },\n        },\n        services: { read: () => true },\n        resources: { read: () => true },\n        schedules: { read: () => true },\n        reservations: {\n          create: () => true,\n          read: ({ req }) => {\n            if (!req.user) return false\n            if (req.user.collection === 'users') return true\n            return { customer: { equals: req.user.id } }\n          },\n          update: ({ req }) => {\n            if (!req.user) return false\n            if (req.user.collection === 'users') return true\n            return { customer: { equals: req.user.id } }\n          },\n        },\n      },\n    }),",
+        "screenshots": [
+          {
+            "src": "/imgs/salon-screenshot.png",
+            "alt": "Salon demo screenshot"
+          }
+        ]
+      },
+      "hotel": {
+        "name": "Grand Hotel",
+        "tagline": "Room reservations with multi-night stay management",
+        "emoji": "🏨",
+        "workflowIndustry": "hotel",
+        "description": "A hotel reservation system powered by payload-reserve. Guests select check-in and check-out dates, choose room types, and receive booking confirmations - all managed from Payload admin.",
+        "liveUrl": null,
+        "features": [
+          {
+            "title": "Multi-night stays",
+            "description": "Date-range booking with check-in and check-out. Conflict detection prevents double-booking."
+          },
+          {
+            "title": "Room types",
+            "description": "Define room categories (Standard, Deluxe, Suite) each with their own availability and pricing."
+          },
+          {
+            "title": "Capacity management",
+            "description": "Set per-room capacity and automatically prevent overbooking across your property."
+          },
+          {
+            "title": "Guest management",
+            "description": "Capture guest details, special requests, and preferences in Payload collections."
+          }
+        ],
+        "pluginSnippet": "payloadReserve({\n  slugs: {\n    services: 'room-types',\n    resources: 'rooms',\n    schedules: 'schedules',\n    reservations: 'reservations',\n  },\n  defaultBufferTime: 0,\n  cancellationNoticePeriod: 48,\n  adminGroup: 'Hotel',\n})",
+        "screenshots": []
+      },
+      "restaurant": {
+        "name": "Maison Restaurant",
+        "tagline": "Table booking with party size and time slot management",
+        "emoji": "🍽️",
+        "workflowIndustry": "restaurant",
+        "description": "A restaurant reservation system built on payload-reserve. Guests pick a time slot, specify party size, and add special requests - automatically assigned to available tables.",
+        "liveUrl": null,
+        "features": [
+          {
+            "title": "Time slot booking",
+            "description": "Define service windows (lunch, dinner) and slot intervals. Guests pick from available times."
+          },
+          {
+            "title": "Party size",
+            "description": "Guests specify their party size and the system matches them to an appropriately sized table."
+          },
+          {
+            "title": "Special requests",
+            "description": "Guests add dietary requirements, occasion notes, or seating preferences at booking."
+          },
+          {
+            "title": "Auto table assignment",
+            "description": "Tables are assigned automatically based on party size, availability, and capacity."
+          }
+        ],
+        "pluginSnippet": "payloadReserve({\n  slugs: {\n    services: 'dining-options',\n    resources: 'tables',\n    schedules: 'schedules',\n    reservations: 'reservations',\n  },\n  defaultBufferTime: 15,\n  cancellationNoticePeriod: 2,\n  adminGroup: 'Restaurant',\n})",
+        "screenshots": []
+      },
+      "events": {
+        "name": "Event Venue",
+        "tagline": "Event scheduling with capacity and multi-resource booking",
+        "emoji": "🎪",
+        "workflowIndustry": "event",
+        "description": "A venue booking system powered by payload-reserve. Event organizers reserve spaces, select configurations, and manage capacity - with conflict detection across all spaces.",
+        "liveUrl": null,
+        "features": [
+          {
+            "title": "Capacity limits",
+            "description": "Each space has a maximum capacity. The system prevents overbooking automatically."
+          },
+          {
+            "title": "Multi-resource booking",
+            "description": "Book multiple spaces or resources in a single reservation - great for complex events."
+          },
+          {
+            "title": "Event types",
+            "description": "Configure different event categories (conference, wedding, concert) with distinct rules."
+          },
+          {
+            "title": "Ticketing integration",
+            "description": "Hook into Stripe or your ticketing system to gate capacity with ticket sales."
+          }
+        ],
+        "pluginSnippet": "payloadReserve({\n  slugs: {\n    services: 'event-types',\n    resources: 'spaces',\n    schedules: 'schedules',\n    reservations: 'reservations',\n  },\n  defaultBufferTime: 30,\n  cancellationNoticePeriod: 72,\n  adminGroup: 'Events',\n})",
+        "screenshots": []
+      }
     }
   }
 }

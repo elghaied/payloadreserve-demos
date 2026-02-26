@@ -25,7 +25,7 @@ export function CTABanner() {
         {/* CTAs */}
         <div className="flex flex-wrap items-center justify-center gap-4">
           <a
-            href="https://docs.payloadreserve.com"
+            href={urls('docs')}
             className="inline-flex items-center gap-2 bg-white hover:bg-violet-50 active:scale-95 text-violet-700 dark:text-violet-800 font-bold text-base px-8 py-4 rounded-full transition-all shadow-xl shadow-black/20"
           >
             {t('ctaDocs')}

@@ -1,3 +1,5 @@
+import { useLocale, useTranslations } from 'next-intl'
+
 export function CredentialsSuccess({
   demoUrl,
   expiresAt,
@@ -5,8 +7,11 @@ export function CredentialsSuccess({
   demoUrl: string
   expiresAt?: Date
 }) {
+  const t = useTranslations('demoStatus')
+  const locale = useLocale()
+
   const expiresFormatted = expiresAt
-    ? expiresAt.toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short' })
+    ? new Intl.DateTimeFormat(locale, { dateStyle: 'medium', timeStyle: 'short' }).format(expiresAt)
     : null
 
   return (
@@ -27,16 +32,18 @@ export function CredentialsSuccess({
           </svg>
         </div>
         <div>
-          <p className="text-white font-semibold text-sm">Your demo is ready</p>
-          <p className="text-zinc-500 text-xs">Credentials have been sent to your email.</p>
+          <p className="text-white font-semibold text-sm">{t('success.title')}</p>
+          <p className="text-zinc-500 text-xs">{t('success.subtitle')}</p>
         </div>
       </div>
 
       {/* Demo URL card */}
       <div className="bg-zinc-900/80 border border-zinc-800 rounded-xl p-5 space-y-3">
         <div className="flex items-center justify-between">
-          <span className="text-xs text-zinc-500 font-mono">Demo URL</span>
-          <span className="text-[10px] text-zinc-600 font-mono">{expiresFormatted && `Expires ${expiresFormatted}`}</span>
+          <span className="text-xs text-zinc-500 font-mono">{t('success.urlLabel')}</span>
+          <span className="text-[10px] text-zinc-600 font-mono">
+            {expiresFormatted ? t('success.expires', { date: expiresFormatted }) : ''}
+          </span>
         </div>
         <a
           href={demoUrl}
@@ -56,9 +63,13 @@ export function CredentialsSuccess({
           rel="noopener noreferrer"
           className="w-full inline-flex items-center justify-center gap-2 bg-amber-500 hover:bg-amber-400 text-black font-semibold text-sm px-5 py-3 rounded-lg transition-colors"
         >
-          Open Admin Panel
+          {t('success.openAdmin')}
           <svg width="13" height="13" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
-            <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3" strokeLinecap="round" strokeLinejoin="round" />
+            <path
+              d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
           </svg>
         </a>
         <a
@@ -67,13 +78,11 @@ export function CredentialsSuccess({
           rel="noopener noreferrer"
           className="w-full inline-flex items-center justify-center gap-2 text-zinc-300 hover:text-white border border-zinc-700/70 hover:border-zinc-500 font-medium text-sm px-5 py-2.5 rounded-lg transition-colors"
         >
-          View Booking Page
+          {t('success.viewBooking')}
         </a>
       </div>
 
-      <p className="text-[11px] text-zinc-600 text-center">
-        The demo is pre-seeded with realistic data. All data is permanently deleted on expiry.
-      </p>
+      <p className="text-[11px] text-zinc-600 text-center">{t('success.footnote')}</p>
     </div>
   )
 }

@@ -7,31 +7,15 @@ import { useEffect, useState } from 'react'
 export function AdminUISection() {
   const t = useTranslations('adminUI')
 
+  const descriptions = t.raw('slides') as string[]
+
   const slides = [
-    {
-      src: '/imgs/screenshot-reservations-month.png',
-      description: 'Calendar View — Month calendar',
-    },
-    {
-      src: '/imgs/screenshot-reservations-week.png',
-      description: 'Calendar View — week calendar',
-    },
-    {
-      src: '/imgs/screenshot-reservations-day.png',
-      description: 'Calendar View — day calendar',
-    },
-    {
-      src: '/imgs/screenshot-pending.png',
-      description: 'Dashboard — Pending reservations wait for confirmation or cancellation',
-    },
-    {
-      src: '/imgs/screenshot-add-reservation.png',
-      description: 'Add Reservation — Create new reservations',
-    },
-    {
-      src: '/imgs/screenshot-module.png',
-      description: "Dashboard Module - View today's reservations at a glance",
-    },
+    { src: '/imgs/screenshot-reservations-month.png', description: descriptions[0] ?? '' },
+    { src: '/imgs/screenshot-reservations-week.png', description: descriptions[1] ?? '' },
+    { src: '/imgs/screenshot-reservations-day.png', description: descriptions[2] ?? '' },
+    { src: '/imgs/screenshot-pending.png', description: descriptions[3] ?? '' },
+    { src: '/imgs/screenshot-add-reservation.png', description: descriptions[4] ?? '' },
+    { src: '/imgs/screenshot-module.png', description: descriptions[5] ?? '' },
   ]
 
   const [currentIndex, setCurrentIndex] = useState(0)
@@ -74,7 +58,7 @@ export function AdminUISection() {
             <span className="w-3 h-3 rounded-full bg-[#febc2e]" />
             <span className="w-3 h-3 rounded-full bg-[#28c840]" />
             <div className="ml-4 flex-1 max-w-xs mx-auto bg-white dark:bg-stone-700 rounded-md px-3 py-1 text-[11px] text-gray-400 dark:text-stone-400 font-mono border border-gray-200 dark:border-stone-600 text-center">
-              yoursite.com/admin/
+              {t('browserUrl')}
             </div>
           </div>
 
