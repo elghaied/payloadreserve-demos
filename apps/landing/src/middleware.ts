@@ -20,5 +20,5 @@ export default function middleware(request: NextRequest) {
 
 export const config = {
   // Match all routes except: /docs, /api, /_next, /_vercel, static files
-  matcher: ['/((?!docs|api|_next|_vercel|favicon|.*\\..*).*)'],
+  matcher: ['/((?!docs|api|admin|_next|_vercel|favicon|.*\\..*).*)'],
 }
