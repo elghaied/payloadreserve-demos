@@ -177,7 +177,6 @@ export interface Media {
  */
 export interface Demo {
   id: string;
-  name: string;
   slug: 'salon' | 'hotel' | 'restaurant' | 'events';
   emoji: string;
   /**
@@ -186,9 +185,10 @@ export interface Demo {
   active?: boolean | null;
   displayOrder?: number | null;
   /**
-   * Full URL to the live demo (leave blank if not yet deployed)
+   * Full URL to the live demo
    */
   liveUrl?: string | null;
+  name: string;
   tagline: string;
   description: string;
   /**
@@ -205,7 +205,7 @@ export interface Demo {
       }[]
     | null;
   /**
-   * Used in "Built for {industry} workflows" heading, e.g. "salon"
+   * Used in "Built for {industry} workflows" heading
    */
   workflowIndustry?: string | null;
   detailDescription?: string | null;
@@ -362,12 +362,12 @@ export interface MediaSelect<T extends boolean = true> {
  * via the `definition` "demos_select".
  */
 export interface DemosSelect<T extends boolean = true> {
-  name?: T;
   slug?: T;
   emoji?: T;
   active?: T;
   displayOrder?: T;
   liveUrl?: T;
+  name?: T;
   tagline?: T;
   description?: T;
   cardImage?: T;
@@ -490,7 +490,7 @@ export interface HomePage {
   heroCtaDemos?: string | null;
   heroCtaDocs?: string | null;
   /**
-   * Pill tags below the CTA buttons, e.g. "✂️ Salon & Spa"
+   * Pill tags below the CTA buttons
    */
   heroIndustryTags?:
     | {

@@ -17,6 +17,7 @@
     "@marsidev/react-turnstile": "^1",
     "@payload-reserve-demos/coolify-sdk": "workspace:*",
     "@payload-reserve-demos/email-templates": "workspace:*",
+    "@payload-reserve-demos/seed-utils": "workspace:*",
     "@payload-reserve-demos/types": "workspace:*",
     "@payloadcms/db-mongodb": "3.77.0",
     "@payloadcms/email-nodemailer": "3.77.0",
