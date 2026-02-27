@@ -1,6 +1,42 @@
 // ─── SiteSettings ─────────────────────────────────────────────────────────────
 
 export const siteSettingsData = {
+  demoDetailUi: {
+    en: {
+      backToDemos: 'All Demos',
+      visitLiveDemo: 'Visit Live Demo ↗',
+      demoComingSoon: 'Demo Coming Soon',
+      requestPrivateDemo: 'Request Private Demo',
+      featuresLabel: 'Features',
+      screenshotsHeading: 'Screenshots',
+      screenshotsComingSoon: 'Screenshots coming soon',
+      screenshotsLivePromptBefore: 'Visit the',
+      screenshotsLiveDemoLabel: 'live demo',
+      screenshotsLivePromptAfter: 'to see it in action',
+      configurationLabel: 'Configuration',
+      payloadConfigFile: 'payload.config.ts',
+      docsNoteBefore: 'See the',
+      docsLinkLabel: 'full documentation',
+      docsNoteAfter: 'for all available options.',
+    },
+    fr: {
+      backToDemos: 'Toutes les démos',
+      visitLiveDemo: 'Voir la démo en direct ↗',
+      demoComingSoon: 'Démo bientôt disponible',
+      requestPrivateDemo: 'Demander une démo privée',
+      featuresLabel: 'Fonctionnalités',
+      screenshotsHeading: "Captures d'écran",
+      screenshotsComingSoon: "Captures d'écran bientôt disponibles",
+      screenshotsLivePromptBefore: 'Visitez la',
+      screenshotsLiveDemoLabel: 'démo en direct',
+      screenshotsLivePromptAfter: 'pour la voir en action',
+      configurationLabel: 'Configuration',
+      payloadConfigFile: 'payload.config.ts',
+      docsNoteBefore: 'Consultez la',
+      docsLinkLabel: 'documentation complète',
+      docsNoteAfter: 'pour toutes les options disponibles.',
+    },
+  },
   externalUrls: {
     github: 'https://github.com/elghaied/payload-reserve',
     docs: 'https://docs.payloadreserve.com',
@@ -176,6 +212,13 @@ export const homePageData = {
           'Five pre-built endpoints: availability check, slot listing, booking creation, cancellation, and customer search.',
       },
     ],
+    // Demos Section
+    demosLabel: 'Live Demos',
+    demosHeadline: 'See it in action',
+    demosSubheading:
+      'Fully working demos for every industry — explore the admin panel and booking flow.',
+    demosComingSoon: 'Coming Soon',
+    demosExploreLabel: 'Explore Demo',
     // Admin UI
     adminUiLabel: 'Admin Interface',
     adminUiHeadline: 'Complete booking management, built into Payload',
@@ -326,6 +369,13 @@ export const homePageData = {
           'Cinq endpoints pré-construits : vérification de disponibilité, liste des créneaux, création, annulation et recherche client.',
       },
     ],
+    // Demos Section
+    demosLabel: 'Démos en direct',
+    demosHeadline: 'Voyez-le en action',
+    demosSubheading:
+      "Démos entièrement fonctionnelles pour chaque secteur — explorez le panneau admin et le parcours de réservation.",
+    demosComingSoon: 'Bientôt disponible',
+    demosExploreLabel: 'Explorer la démo',
     // Admin UI
     adminUiLabel: "Interface d'administration",
     adminUiHeadline: 'Gestion complète des réservations, intégrée à Payload',

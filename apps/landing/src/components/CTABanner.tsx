@@ -1,9 +1,11 @@
-import { useTranslations } from 'next-intl'
+import type { HomePage, SiteSetting } from '@/payload-types'
 
-export function CTABanner() {
-  const t = useTranslations('cta')
-  const urls = useTranslations('urls')
+type Props = {
+  homepage: HomePage
+  urls: SiteSetting['externalUrls']
+}
 
+export function CTABanner({ homepage, urls }: Props) {
   return (
     <section className="py-24 px-6 lg:px-8 bg-violet-700 relative overflow-hidden">
       {/* Decorative blobs */}
@@ -13,22 +15,22 @@ export function CTABanner() {
 
       <div className="relative max-w-3xl mx-auto text-center">
         <p className="text-xs font-bold text-white/70 uppercase tracking-[0.2em] mb-5">
-          {t('label')}
+          {homepage.ctaLabel}
         </p>
         <h2 className="font-display text-[clamp(2rem,4.5vw,3.5rem)] text-white leading-[1.08] mb-6">
-          {t('headline')}
+          {homepage.ctaHeadline}
         </h2>
         <p className="text-violet-200 text-lg leading-relaxed mb-10 max-w-xl mx-auto">
-          {t('subtitle')}
+          {homepage.ctaSubtitle}
         </p>
 
         {/* CTAs */}
         <div className="flex flex-wrap items-center justify-center gap-4">
           <a
-            href={urls('docs')}
+            href={urls?.docs ?? '#'}
             className="inline-flex items-center gap-2 bg-white hover:bg-violet-50 active:scale-95 text-violet-700 dark:text-violet-800 font-bold text-base px-8 py-4 rounded-full transition-all shadow-xl shadow-black/20"
           >
-            {t('ctaDocs')}
+            {homepage.ctaButtonDocs}
             <svg
               width="16"
               height="16"
@@ -41,12 +43,12 @@ export function CTABanner() {
             </svg>
           </a>
           <a
-            href={urls('github')}
+            href={urls?.github ?? '#'}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white font-bold text-base px-8 py-4 rounded-full transition-all border border-white/25"
           >
-            {t('ctaGithub')}
+            {homepage.ctaButtonGithub}
           </a>
         </div>
       </div>

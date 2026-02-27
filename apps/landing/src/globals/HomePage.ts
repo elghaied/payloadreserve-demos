@@ -13,22 +13,30 @@ export const HomePage: GlobalConfig = {
         {
           label: 'Hero',
           fields: [
-            { name: 'heroBadge', label: 'Badge', type: 'text', localized: true },
-            { name: 'heroHeadline1', label: 'Headline Line 1', type: 'text', localized: true },
-            { name: 'heroHeadline2', label: 'Headline Line 2', type: 'text', localized: true },
-            { name: 'heroSubheading', label: 'Subheading', type: 'textarea', localized: true },
-            { name: 'heroCtaDemos', label: 'CTA — See Demos', type: 'text', localized: true },
-            { name: 'heroCtaDocs', label: 'CTA — Docs', type: 'text', localized: true },
             {
-              // Array-level localized: each locale has its own tag list
-              name: 'heroIndustryTags',
-              label: 'Industry Tags',
-              type: 'array',
-              localized: true,
-              admin: { description: 'Pill tags below the CTA buttons' },
+              name: 'heroSection',
+              label: 'Hero Section',
+              type: 'group',
               fields: [
-                { name: 'emoji', type: 'text', required: true },
-                { name: 'label', type: 'text', required: true },
+                { name: 'heroBadge', label: 'Badge', type: 'text', localized: true },
+                { name: 'heroHeadline1', label: 'Headline Line 1', type: 'text', localized: true },
+                { name: 'heroHeadline2', label: 'Headline Line 2', type: 'text', localized: true },
+                { name: 'heroSubheading', label: 'Subheading', type: 'textarea', localized: true },
+                { name: 'heroCtaDemos', label: 'CTA — See Demos', type: 'text', localized: true },
+                { name: 'heroCtaDocs', label: 'CTA — Docs', type: 'text', localized: true },
+
+                {
+                  // Array-level localized: each locale has its own tag list
+                  name: 'heroIndustryTags',
+                  label: 'Industry Tags',
+                  type: 'array',
+                  localized: true,
+                  admin: { description: 'Pill tags below the CTA buttons' },
+                  fields: [
+                    { name: 'emoji', type: 'text', required: true },
+                    { name: 'label', type: 'text', required: true },
+                  ],
+                },
               ],
             },
           ],
@@ -75,6 +83,35 @@ export const HomePage: GlobalConfig = {
           ],
         },
 
+        // ── Demos Section ─────────────────────────────────────────────────────
+        {
+          label: 'Demos',
+          fields: [
+            { name: 'demosLabel', label: 'Section Label', type: 'text', localized: true },
+            { name: 'demosHeadline', label: 'Headline', type: 'text', localized: true },
+            { name: 'demosSubheading', label: 'Subheading', type: 'textarea', localized: true },
+            {
+              name: 'demosComingSoon',
+              label: '"Coming Soon" label',
+              type: 'text',
+              localized: true,
+            },
+            {
+              name: 'demosExploreLabel',
+              label: '"Explore Demo" label',
+              type: 'text',
+              localized: true,
+            },
+            {
+              name: 'demos',
+              label: 'Demos',
+              type: 'relationship',
+              relationTo: 'demos',
+              hasMany: true,
+            },
+          ],
+        },
+
         // ── Admin UI ──────────────────────────────────────────────────────────
         {
           label: 'Admin UI',
@@ -111,10 +148,9 @@ export const HomePage: GlobalConfig = {
               label: 'Perks',
               type: 'array',
               localized: true,
-              fields: [
-                { name: 'text', type: 'text', required: true },
-              ],
+              fields: [{ name: 'text', type: 'text', required: true }],
             },
+            { name: 'privateDemoImage', label: 'Image', type: 'upload', relationTo: 'media' },
           ],
         },
 

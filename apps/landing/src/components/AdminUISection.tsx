@@ -1,22 +1,33 @@
 'use client'
 
-import { useTranslations } from 'next-intl'
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
+import type { HomePage, Media } from '@/payload-types'
 
-export function AdminUISection() {
-  const t = useTranslations('adminUI')
+// Static screenshot paths — used when Payload slides don't have uploaded images
+const staticScreenshots = [
+  '/imgs/screenshot-reservations-month.png',
+  '/imgs/screenshot-reservations-week.png',
+  '/imgs/screenshot-reservations-day.png',
+  '/imgs/screenshot-pending.png',
+  '/imgs/screenshot-add-reservation.png',
+  '/imgs/screenshot-module.png',
+]
 
-  const descriptions = t.raw('slides') as string[]
+type Props = {
+  homepage: HomePage
+}
 
-  const slides = [
-    { src: '/imgs/screenshot-reservations-month.png', description: descriptions[0] ?? '' },
-    { src: '/imgs/screenshot-reservations-week.png', description: descriptions[1] ?? '' },
-    { src: '/imgs/screenshot-reservations-day.png', description: descriptions[2] ?? '' },
-    { src: '/imgs/screenshot-pending.png', description: descriptions[3] ?? '' },
-    { src: '/imgs/screenshot-add-reservation.png', description: descriptions[4] ?? '' },
-    { src: '/imgs/screenshot-module.png', description: descriptions[5] ?? '' },
-  ]
+export function AdminUISection({ homepage }: Props) {
+  const payloadSlides = homepage.adminUiSlides ?? []
+
+  const slides = staticScreenshots.map((staticSrc, i) => {
+    const payloadSlide = payloadSlides[i]
+    const img = payloadSlide?.image
+    const src =
+      img && typeof img === 'object' && (img as Media).url ? (img as Media).url! : staticSrc
+    return { src, description: payloadSlide?.caption ?? '' }
+  })
 
   const [currentIndex, setCurrentIndex] = useState(0)
   const [fade, setFade] = useState(true)
@@ -28,7 +39,7 @@ export function AdminUISection() {
       setTimeout(() => {
         setCurrentIndex((prev) => (prev + 1) % slides.length)
         setFade(true)
-      }, 300) // fade out duration
+      }, 300)
     }, 4000)
 
     return () => clearInterval(interval)
@@ -40,13 +51,13 @@ export function AdminUISection() {
         {/* Header */}
         <div className="text-center max-w-2xl mx-auto mb-14">
           <p className="text-xs font-bold text-violet-700 dark:text-violet-400 uppercase tracking-[0.2em] mb-4">
-            {t('label')}
+            {homepage.adminUiLabel}
           </p>
           <h2 className="font-display text-[clamp(2rem,4vw,3.2rem)] text-[#1C1917] dark:text-stone-50 leading-[1.1] mb-5">
-            {t('headline')}
+            {homepage.adminUiHeadline}
           </h2>
           <p className="text-[#78716C] dark:text-stone-400 text-lg leading-relaxed">
-            {t('subtitle')}
+            {homepage.adminUiSubtitle}
           </p>
         </div>
 
@@ -58,7 +69,7 @@ export function AdminUISection() {
             <span className="w-3 h-3 rounded-full bg-[#febc2e]" />
             <span className="w-3 h-3 rounded-full bg-[#28c840]" />
             <div className="ml-4 flex-1 max-w-xs mx-auto bg-white dark:bg-stone-700 rounded-md px-3 py-1 text-[11px] text-gray-400 dark:text-stone-400 font-mono border border-gray-200 dark:border-stone-600 text-center">
-              {t('browserUrl')}
+              {homepage.adminUiBrowserUrl}
             </div>
           </div>
 
@@ -72,7 +83,7 @@ export function AdminUISection() {
               <Image
                 key={slides[currentIndex].src}
                 src={slides[currentIndex].src}
-                alt={t('screenshotAlt')}
+                alt="payload-reserve admin panel screenshot"
                 fill
                 className="object-cover object-top"
                 sizes="(max-width: 1024px) 100vw, 960px"

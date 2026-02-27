@@ -20,7 +20,11 @@ export interface DemoLocale {
   workflowIndustry: string
   detailDescription: string
   detailFeatures: { title: string; description: string }[]
+  featuresHeading: string
+  pluginConfigHeading: string
   pluginSnippet: string
+  detailCtaTitle: string
+  detailCtaSubtitle: string
   screenshots: { alt: string }[]
 }
 
@@ -76,6 +80,8 @@ export const demosData: DemoData[] = [
             '24-hour minimum notice enforced server-side; late cancellations flagged for staff.',
         },
       ],
+      featuresHeading: 'Built for salon workflows',
+      pluginConfigHeading: 'Plugin config for Lumière Salon',
       pluginSnippet: `payloadReserve({
   slugs: {
     services: 'services',
@@ -99,6 +105,8 @@ export const demosData: DemoData[] = [
     afterBookingCancel: [notifyAfterCancel],
   },
 })`,
+      detailCtaTitle: 'Ready to explore Lumière Salon?',
+      detailCtaSubtitle: 'Try the live demo or request your own private environment.',
       screenshots: [{ alt: 'Salon demo screenshot' }],
     },
     fr: {
@@ -145,6 +153,8 @@ export const demosData: DemoData[] = [
             'Préavis minimum de 24h appliqué côté serveur ; annulations tardives signalées au staff.',
         },
       ],
+      featuresHeading: 'Conçu pour les workflows salon',
+      pluginConfigHeading: 'Config du plugin pour Lumière Salon',
       pluginSnippet: `payloadReserve({
   slugs: {
     services: 'services',
@@ -156,6 +166,8 @@ export const demosData: DemoData[] = [
   defaultBufferTime: 5,
   cancellationNoticePeriod: 24,
 })`,
+      detailCtaTitle: 'Prêt à explorer Lumière Salon ?',
+      detailCtaSubtitle: 'Essayez la démo en direct ou demandez votre propre environnement privé.',
       screenshots: [{ alt: "Capture d'écran de la démo salon" }],
     },
   },
@@ -203,6 +215,8 @@ export const demosData: DemoData[] = [
             'Capture guest details, special requests, and preferences in Payload collections.',
         },
       ],
+      featuresHeading: 'Built for hotel workflows',
+      pluginConfigHeading: 'Plugin config for Grand Hotel',
       pluginSnippet: `payloadReserve({
   slugs: {
     services: 'room-types',
@@ -214,6 +228,8 @@ export const demosData: DemoData[] = [
   cancellationNoticePeriod: 48,
   adminGroup: 'Hotel',
 })`,
+      detailCtaTitle: 'Ready to explore Grand Hotel?',
+      detailCtaSubtitle: 'Try the live demo or request your own private environment.',
       screenshots: [],
     },
     fr: {
@@ -251,6 +267,8 @@ export const demosData: DemoData[] = [
             'Enregistrez les détails clients, demandes spéciales et préférences dans Payload.',
         },
       ],
+      featuresHeading: 'Conçu pour les workflows hôteliers',
+      pluginConfigHeading: 'Config du plugin pour Grand Hôtel',
       pluginSnippet: `payloadReserve({
   slugs: {
     services: 'room-types',
@@ -262,6 +280,8 @@ export const demosData: DemoData[] = [
   cancellationNoticePeriod: 48,
   adminGroup: 'Hotel',
 })`,
+      detailCtaTitle: 'Prêt à explorer Grand Hôtel ?',
+      detailCtaSubtitle: 'Essayez la démo en direct ou demandez votre propre environnement privé.',
       screenshots: [],
     },
   },
@@ -309,6 +329,8 @@ export const demosData: DemoData[] = [
             'Tables are assigned automatically based on party size, availability, and capacity.',
         },
       ],
+      featuresHeading: 'Built for restaurant workflows',
+      pluginConfigHeading: 'Plugin config for Maison Restaurant',
       pluginSnippet: `payloadReserve({
   slugs: {
     services: 'dining-options',
@@ -320,6 +342,8 @@ export const demosData: DemoData[] = [
   cancellationNoticePeriod: 2,
   adminGroup: 'Restaurant',
 })`,
+      detailCtaTitle: 'Ready to explore Maison Restaurant?',
+      detailCtaSubtitle: 'Try the live demo or request your own private environment.',
       screenshots: [],
     },
     fr: {
@@ -358,6 +382,8 @@ export const demosData: DemoData[] = [
             'Les tables sont attribuées automatiquement selon la taille du groupe, la disponibilité et la capacité.',
         },
       ],
+      featuresHeading: 'Conçu pour les workflows restaurant',
+      pluginConfigHeading: 'Config du plugin pour Maison Restaurant',
       pluginSnippet: `payloadReserve({
   slugs: {
     services: 'dining-options',
@@ -369,6 +395,8 @@ export const demosData: DemoData[] = [
   cancellationNoticePeriod: 2,
   adminGroup: 'Restaurant',
 })`,
+      detailCtaTitle: 'Prêt à explorer Maison Restaurant ?',
+      detailCtaSubtitle: 'Essayez la démo en direct ou demandez votre propre environnement privé.',
       screenshots: [],
     },
   },
@@ -416,6 +444,8 @@ export const demosData: DemoData[] = [
             'Hook into Stripe or your ticketing system to gate capacity with ticket sales.',
         },
       ],
+      featuresHeading: 'Built for event workflows',
+      pluginConfigHeading: 'Plugin config for Event Venue',
       pluginSnippet: `payloadReserve({
   slugs: {
     services: 'event-types',
@@ -427,6 +457,8 @@ export const demosData: DemoData[] = [
   cancellationNoticePeriod: 72,
   adminGroup: 'Events',
 })`,
+      detailCtaTitle: 'Ready to explore Event Venue?',
+      detailCtaSubtitle: 'Try the live demo or request your own private environment.',
       screenshots: [],
     },
     fr: {
@@ -465,6 +497,8 @@ export const demosData: DemoData[] = [
             'Connectez Stripe ou votre système de billetterie pour contrôler la capacité via les ventes.',
         },
       ],
+      featuresHeading: "Conçu pour les workflows événementiels",
+      pluginConfigHeading: 'Config du plugin pour Salle événementielle',
       pluginSnippet: `payloadReserve({
   slugs: {
     services: 'event-types',
@@ -476,6 +510,8 @@ export const demosData: DemoData[] = [
   cancellationNoticePeriod: 72,
   adminGroup: 'Events',
 })`,
+      detailCtaTitle: 'Prêt à explorer Salle événementielle ?',
+      detailCtaSubtitle: 'Essayez la démo en direct ou demandez votre propre environnement privé.',
       screenshots: [],
     },
   },

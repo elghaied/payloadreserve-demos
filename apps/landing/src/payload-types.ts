@@ -177,7 +177,11 @@ export interface Media {
  */
 export interface Demo {
   id: string;
-  slug: 'salon' | 'hotel' | 'restaurant' | 'events';
+  /**
+   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   */
+  generateSlug?: boolean | null;
+  slug: string;
   emoji: string;
   /**
    * Show as live (not "Coming Soon")
@@ -205,9 +209,25 @@ export interface Demo {
       }[]
     | null;
   /**
-   * Used in "Built for {industry} workflows" heading
+   * Industry identifier, e.g. "salon", "hotel"
    */
   workflowIndustry?: string | null;
+  /**
+   * Heading above the features grid, e.g. "Built for salon workflows"
+   */
+  featuresHeading?: string | null;
+  /**
+   * Heading for the plugin config section, e.g. "Plugin config for Lumière Salon"
+   */
+  pluginConfigHeading?: string | null;
+  /**
+   * CTA strip heading, e.g. "Ready to explore Lumière Salon?"
+   */
+  detailCtaTitle?: string | null;
+  /**
+   * CTA strip subtitle
+   */
+  detailCtaSubtitle?: string | null;
   detailDescription?: string | null;
   detailFeatures?:
     | {
@@ -362,6 +382,7 @@ export interface MediaSelect<T extends boolean = true> {
  * via the `definition` "demos_select".
  */
 export interface DemosSelect<T extends boolean = true> {
+  generateSlug?: T;
   slug?: T;
   emoji?: T;
   active?: T;
@@ -378,6 +399,10 @@ export interface DemosSelect<T extends boolean = true> {
         id?: T;
       };
   workflowIndustry?: T;
+  featuresHeading?: T;
+  pluginConfigHeading?: T;
+  detailCtaTitle?: T;
+  detailCtaSubtitle?: T;
   detailDescription?: T;
   detailFeatures?:
     | T
@@ -454,6 +479,26 @@ export interface SiteSetting {
     title?: string | null;
     description?: string | null;
   };
+  /**
+   * Labels and chrome for /demos/[type] pages
+   */
+  demoDetailUi?: {
+    backToDemos?: string | null;
+    visitLiveDemo?: string | null;
+    demoComingSoon?: string | null;
+    requestPrivateDemo?: string | null;
+    featuresLabel?: string | null;
+    screenshotsHeading?: string | null;
+    screenshotsComingSoon?: string | null;
+    screenshotsLivePromptBefore?: string | null;
+    screenshotsLiveDemoLabel?: string | null;
+    screenshotsLivePromptAfter?: string | null;
+    configurationLabel?: string | null;
+    payloadConfigFile?: string | null;
+    docsNoteBefore?: string | null;
+    docsLinkLabel?: string | null;
+    docsNoteAfter?: string | null;
+  };
   externalUrls?: {
     github?: string | null;
     docs?: string | null;
@@ -483,22 +528,24 @@ export interface Navigation {
  */
 export interface HomePage {
   id: string;
-  heroBadge?: string | null;
-  heroHeadline1?: string | null;
-  heroHeadline2?: string | null;
-  heroSubheading?: string | null;
-  heroCtaDemos?: string | null;
-  heroCtaDocs?: string | null;
-  /**
-   * Pill tags below the CTA buttons
-   */
-  heroIndustryTags?:
-    | {
-        emoji: string;
-        label: string;
-        id?: string | null;
-      }[]
-    | null;
+  heroSection?: {
+    heroBadge?: string | null;
+    heroHeadline1?: string | null;
+    heroHeadline2?: string | null;
+    heroSubheading?: string | null;
+    heroCtaDemos?: string | null;
+    heroCtaDocs?: string | null;
+    /**
+     * Pill tags below the CTA buttons
+     */
+    heroIndustryTags?:
+      | {
+          emoji: string;
+          label: string;
+          id?: string | null;
+        }[]
+      | null;
+  };
   useCasesLabel?: string | null;
   useCasesFootnote?: string | null;
   useCasesItems?:
@@ -520,6 +567,12 @@ export interface HomePage {
         id?: string | null;
       }[]
     | null;
+  demosLabel?: string | null;
+  demosHeadline?: string | null;
+  demosSubheading?: string | null;
+  demosComingSoon?: string | null;
+  demosExploreLabel?: string | null;
+  demos?: (string | Demo)[] | null;
   adminUiLabel?: string | null;
   adminUiHeadline?: string | null;
   adminUiSubtitle?: string | null;
@@ -545,6 +598,7 @@ export interface HomePage {
         id?: string | null;
       }[]
     | null;
+  privateDemoImage?: (string | null) | Media;
   devLabel?: string | null;
   devHeadline?: string | null;
   devSubtitle?: string | null;
@@ -626,6 +680,25 @@ export interface SiteSettingsSelect<T extends boolean = true> {
         title?: T;
         description?: T;
       };
+  demoDetailUi?:
+    | T
+    | {
+        backToDemos?: T;
+        visitLiveDemo?: T;
+        demoComingSoon?: T;
+        requestPrivateDemo?: T;
+        featuresLabel?: T;
+        screenshotsHeading?: T;
+        screenshotsComingSoon?: T;
+        screenshotsLivePromptBefore?: T;
+        screenshotsLiveDemoLabel?: T;
+        screenshotsLivePromptAfter?: T;
+        configurationLabel?: T;
+        payloadConfigFile?: T;
+        docsNoteBefore?: T;
+        docsLinkLabel?: T;
+        docsNoteAfter?: T;
+      };
   externalUrls?:
     | T
     | {
@@ -657,18 +730,22 @@ export interface NavigationSelect<T extends boolean = true> {
  * via the `definition` "home-page_select".
  */
 export interface HomePageSelect<T extends boolean = true> {
-  heroBadge?: T;
-  heroHeadline1?: T;
-  heroHeadline2?: T;
-  heroSubheading?: T;
-  heroCtaDemos?: T;
-  heroCtaDocs?: T;
-  heroIndustryTags?:
+  heroSection?:
     | T
     | {
-        emoji?: T;
-        label?: T;
-        id?: T;
+        heroBadge?: T;
+        heroHeadline1?: T;
+        heroHeadline2?: T;
+        heroSubheading?: T;
+        heroCtaDemos?: T;
+        heroCtaDocs?: T;
+        heroIndustryTags?:
+          | T
+          | {
+              emoji?: T;
+              label?: T;
+              id?: T;
+            };
       };
   useCasesLabel?: T;
   useCasesFootnote?: T;
@@ -691,6 +768,12 @@ export interface HomePageSelect<T extends boolean = true> {
         description?: T;
         id?: T;
       };
+  demosLabel?: T;
+  demosHeadline?: T;
+  demosSubheading?: T;
+  demosComingSoon?: T;
+  demosExploreLabel?: T;
+  demos?: T;
   adminUiLabel?: T;
   adminUiHeadline?: T;
   adminUiSubtitle?: T;
@@ -713,6 +796,7 @@ export interface HomePageSelect<T extends boolean = true> {
         text?: T;
         id?: T;
       };
+  privateDemoImage?: T;
   devLabel?: T;
   devHeadline?: T;
   devSubtitle?: T;

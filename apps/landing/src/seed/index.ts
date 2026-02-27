@@ -89,12 +89,16 @@ async function seedSiteSettings(payload: Payload) {
     data: {
       defaultMeta: siteSettingsData.meta.en,
       externalUrls: siteSettingsData.externalUrls,
+      demoDetailUi: siteSettingsData.demoDetailUi.en,
     },
   })
   await payload.updateGlobal({
     slug: 'site-settings',
     locale: 'fr',
-    data: { defaultMeta: siteSettingsData.meta.fr },
+    data: {
+      defaultMeta: siteSettingsData.meta.fr,
+      demoDetailUi: siteSettingsData.demoDetailUi.fr,
+    },
   })
 
   payload.logger.info('  ✓ SiteSettings (en + fr)')
@@ -211,6 +215,10 @@ async function seedDemos(payload: Payload, media: SeedMedia) {
         detailDescription: demo.en.detailDescription,
         cardFeatures: demo.en.cardFeatures,
         detailFeatures: demo.en.detailFeatures,
+        featuresHeading: demo.en.featuresHeading,
+        pluginConfigHeading: demo.en.pluginConfigHeading,
+        detailCtaTitle: demo.en.detailCtaTitle,
+        detailCtaSubtitle: demo.en.detailCtaSubtitle,
         screenshots: enScreenshots,
       },
     })
@@ -228,6 +236,10 @@ async function seedDemos(payload: Payload, media: SeedMedia) {
         detailDescription: demo.fr.detailDescription,
         cardFeatures: demo.fr.cardFeatures,
         detailFeatures: demo.fr.detailFeatures,
+        featuresHeading: demo.fr.featuresHeading,
+        pluginConfigHeading: demo.fr.pluginConfigHeading,
+        detailCtaTitle: demo.fr.detailCtaTitle,
+        detailCtaSubtitle: demo.fr.detailCtaSubtitle,
         screenshots: frScreenshots,
       },
     })

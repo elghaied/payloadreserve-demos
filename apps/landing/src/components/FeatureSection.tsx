@@ -1,4 +1,4 @@
-import { useTranslations } from 'next-intl'
+import type { HomePage } from '@/payload-types'
 
 const featureIcons = [
   // Configurable for Any Use Case
@@ -51,23 +51,28 @@ const featureIcons = [
   </svg>,
 ]
 
-export function FeatureSection() {
-  const t = useTranslations('features')
-  const items = t.raw('items') as { title: string; description: string }[]
+type Props = {
+  homepage: HomePage
+}
+
+export function FeatureSection({ homepage }: Props) {
+  const items = homepage.featuresItems ?? []
 
   return (
     <section id="features" className="py-24 lg:py-32 px-6 lg:px-8 bg-[#F7F7F5] dark:bg-stone-950">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="text-center max-w-2xl mx-auto mb-16">
-          <p className="text-xs font-bold text-violet-700 dark:text-violet-400 uppercase tracking-[0.2em] mb-4">{t('label')}</p>
+          <p className="text-xs font-bold text-violet-700 dark:text-violet-400 uppercase tracking-[0.2em] mb-4">
+            {homepage.featuresLabel}
+          </p>
           <h2 className="font-display text-[clamp(2rem,4vw,3.2rem)] leading-[1.1] text-[#1C1917] dark:text-stone-50 mb-5">
-            {t('headlineLine1')}
+            {homepage.featuresHeadline1}
             <br />
-            <span className="text-violet-700 dark:text-violet-400">{t('headlineLine2')}</span>
+            <span className="text-violet-700 dark:text-violet-400">{homepage.featuresHeadline2}</span>
           </h2>
           <p className="text-[#78716C] dark:text-stone-400 text-lg leading-relaxed">
-            {t('subheading')}
+            {homepage.featuresSubheading}
           </p>
         </div>
 
@@ -75,7 +80,7 @@ export function FeatureSection() {
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {items.map((item, i) => (
             <div
-              key={item.title}
+              key={item.id ?? i}
               className="bg-white dark:bg-stone-800 rounded-2xl border border-gray-200 dark:border-stone-700 shadow-sm p-7 hover:shadow-lg hover:shadow-black/5 dark:hover:shadow-black/30 hover:-translate-y-0.5 transition-all duration-200"
             >
               {/* Icon */}

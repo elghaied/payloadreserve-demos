@@ -1,4 +1,4 @@
-import type { CollectionConfig } from 'payload'
+import { slugField, type CollectionConfig } from 'payload'
 
 export const Demos: CollectionConfig = {
   slug: 'demos',
@@ -9,18 +9,7 @@ export const Demos: CollectionConfig = {
   },
   fields: [
     // ── Non-localized ─────────────────────────────────────────────────────────
-    {
-      name: 'slug',
-      type: 'select',
-      required: true,
-      unique: true,
-      options: [
-        { label: 'Salon', value: 'salon' },
-        { label: 'Hotel', value: 'hotel' },
-        { label: 'Restaurant', value: 'restaurant' },
-        { label: 'Events', value: 'events' },
-      ],
-    },
+    slugField({ fieldToUse: 'name' }),
     {
       name: 'emoji',
       type: 'text',
@@ -89,9 +78,7 @@ export const Demos: CollectionConfig = {
               type: 'array',
               localized: true,
               admin: { description: 'Short feature pills shown on the card (4 recommended)' },
-              fields: [
-                { name: 'text', type: 'text', required: true },
-              ],
+              fields: [{ name: 'text', type: 'text', required: true }],
             },
           ],
         },
@@ -103,7 +90,31 @@ export const Demos: CollectionConfig = {
               name: 'workflowIndustry',
               type: 'text',
               localized: true,
-              admin: { description: 'Used in "Built for {industry} workflows" heading' },
+              admin: { description: 'Industry identifier, e.g. "salon", "hotel"' },
+            },
+            {
+              name: 'featuresHeading',
+              type: 'text',
+              localized: true,
+              admin: { description: 'Heading above the features grid, e.g. "Built for salon workflows"' },
+            },
+            {
+              name: 'pluginConfigHeading',
+              type: 'text',
+              localized: true,
+              admin: { description: 'Heading for the plugin config section, e.g. "Plugin config for Lumière Salon"' },
+            },
+            {
+              name: 'detailCtaTitle',
+              type: 'text',
+              localized: true,
+              admin: { description: 'CTA strip heading, e.g. "Ready to explore Lumière Salon?"' },
+            },
+            {
+              name: 'detailCtaSubtitle',
+              type: 'text',
+              localized: true,
+              admin: { description: 'CTA strip subtitle' },
             },
             {
               name: 'detailDescription',
@@ -126,7 +137,10 @@ export const Demos: CollectionConfig = {
               name: 'pluginSnippet',
               type: 'code',
               // Not localized — TypeScript is language-agnostic
-              admin: { language: 'typescript', description: 'Plugin config snippet shown on the detail page' },
+              admin: {
+                language: 'typescript',
+                description: 'Plugin config snippet shown on the detail page',
+              },
             },
             {
               // localized: true on the array → alt text differs per locale
