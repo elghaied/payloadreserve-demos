@@ -227,6 +227,14 @@ export interface Demo {
         id?: string | null;
       }[]
     | null;
+  meta?: {
+    title?: string | null;
+    description?: string | null;
+    /**
+     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     */
+    image?: (string | null) | Media;
+  };
   updatedAt: string;
   createdAt: string;
 }
@@ -385,6 +393,13 @@ export interface DemosSelect<T extends boolean = true> {
         image?: T;
         alt?: T;
         id?: T;
+      };
+  meta?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        image?: T;
       };
   updatedAt?: T;
   createdAt?: T;
@@ -557,6 +572,14 @@ export interface HomePage {
   ctaSubtitle?: string | null;
   ctaButtonDocs?: string | null;
   ctaButtonGithub?: string | null;
+  meta?: {
+    title?: string | null;
+    description?: string | null;
+    /**
+     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     */
+    image?: (string | null) | Media;
+  };
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -717,6 +740,13 @@ export interface HomePageSelect<T extends boolean = true> {
   ctaSubtitle?: T;
   ctaButtonDocs?: T;
   ctaButtonGithub?: T;
+  meta?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        image?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;
