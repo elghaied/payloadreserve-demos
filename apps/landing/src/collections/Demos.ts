@@ -12,6 +12,7 @@ export const Demos: CollectionConfig = {
       name: 'name',
       type: 'text',
       required: true,
+      localized: true,
     },
     {
       name: 'slug',
@@ -63,11 +64,13 @@ export const Demos: CollectionConfig = {
               name: 'tagline',
               type: 'text',
               required: true,
+              localized: true,
             },
             {
               name: 'description',
               type: 'textarea',
               required: true,
+              localized: true,
             },
             {
               name: 'cardImage',
@@ -81,7 +84,7 @@ export const Demos: CollectionConfig = {
               type: 'array',
               admin: { description: 'Short feature pills shown on the card (4 recommended)' },
               fields: [
-                { name: 'text', type: 'text', required: true },
+                { name: 'text', type: 'text', required: true, localized: true },
               ],
             },
           ],
@@ -93,25 +96,28 @@ export const Demos: CollectionConfig = {
             {
               name: 'workflowIndustry',
               type: 'text',
+              localized: true,
               admin: { description: 'Used in "Built for {industry} workflows" heading, e.g. "salon"' },
             },
             {
               name: 'detailDescription',
               label: 'Description',
               type: 'textarea',
+              localized: true,
             },
             {
               name: 'detailFeatures',
               label: 'Features',
               type: 'array',
               fields: [
-                { name: 'title', type: 'text', required: true },
-                { name: 'description', type: 'textarea', required: true },
+                { name: 'title', type: 'text', required: true, localized: true },
+                { name: 'description', type: 'textarea', required: true, localized: true },
               ],
             },
             {
               name: 'pluginSnippet',
               type: 'code',
+              // code is language-agnostic (TypeScript); same in both locales
               admin: { language: 'typescript', description: 'Plugin config snippet shown on the detail page' },
             },
             {
@@ -119,7 +125,7 @@ export const Demos: CollectionConfig = {
               type: 'array',
               fields: [
                 { name: 'image', type: 'upload', relationTo: 'media' },
-                { name: 'alt', type: 'text', required: true },
+                { name: 'alt', type: 'text', required: true, localized: true },
               ],
             },
           ],

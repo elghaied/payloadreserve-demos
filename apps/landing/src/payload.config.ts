@@ -25,6 +25,11 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
+  localization: {
+    locales: ['en', 'fr'],
+    defaultLocale: 'en',
+    fallback: true,
+  },
   collections: [Users, Media, Demos],
   globals: [SiteSettings, Navigation, HomePage, Footer],
   editor: lexicalEditor(),

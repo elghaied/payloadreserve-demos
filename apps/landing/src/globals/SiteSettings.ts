@@ -11,14 +11,15 @@ export const SiteSettings: GlobalConfig = {
       type: 'group',
       label: 'Default Meta',
       fields: [
-        { name: 'title', type: 'text' },
-        { name: 'description', type: 'textarea' },
+        { name: 'title', type: 'text', localized: true },
+        { name: 'description', type: 'textarea', localized: true },
       ],
     },
     {
       name: 'externalUrls',
       type: 'group',
       label: 'External URLs',
+      // URLs are locale-independent
       fields: [
         { name: 'github', type: 'text', defaultValue: 'https://github.com/elghaied/payload-reserve' },
         { name: 'docs', type: 'text', defaultValue: 'https://docs.payloadreserve.com' },
