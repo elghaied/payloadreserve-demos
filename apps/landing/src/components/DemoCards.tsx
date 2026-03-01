@@ -15,11 +15,15 @@ function getCardImageSrc(demo: Demo): string {
 }
 
 type Props = {
-  homepage: HomePage
+  demosSection: HomePage['demosSection']
 }
 
-export function DemoCards({ homepage }: Props) {
-  const demos = (homepage.demos ?? []).filter(isDemo)
+export function DemoCards({ demosSection }: Props) {
+  if (!demosSection) {
+    return null
+  }
+
+  const demos = (demosSection.demos ?? []).filter(isDemo)
 
   return (
     <section id="demos" className="py-24 lg:py-32 px-6 lg:px-8 bg-[#FAFAF8] dark:bg-stone-900">
@@ -27,13 +31,13 @@ export function DemoCards({ homepage }: Props) {
         {/* Header */}
         <div className="text-center max-w-2xl mx-auto mb-14">
           <p className="text-xs font-bold text-violet-700 dark:text-violet-400 uppercase tracking-[0.2em] mb-4">
-            {homepage.demosLabel}
+            {demosSection.demosLabel}
           </p>
           <h2 className="font-display text-[clamp(2rem,4vw,3.2rem)] text-[#1C1917] dark:text-stone-50 leading-[1.1] mb-5">
-            {homepage.demosHeadline}
+            {demosSection.demosHeadline}
           </h2>
           <p className="text-[#78716C] dark:text-stone-400 text-lg leading-relaxed">
-            {homepage.demosSubheading}
+            {demosSection.demosSubheading}
           </p>
         </div>
 
@@ -63,7 +67,7 @@ export function DemoCards({ homepage }: Props) {
                   {/* Coming soon badge */}
                   {!demo.active && (
                     <span className="absolute top-5 right-5 text-[10px] font-bold bg-white dark:bg-stone-700 border border-gray-200 dark:border-stone-600 text-gray-500 dark:text-stone-400 px-2.5 py-1 rounded-full">
-                      {homepage.demosComingSoon ?? 'Coming Soon'}
+                      {demosSection.demosComingSoon ?? 'Coming Soon'}
                     </span>
                   )}
 
@@ -119,7 +123,7 @@ export function DemoCards({ homepage }: Props) {
                       href={`/demos/${demo.slug}`}
                       className="inline-flex items-center gap-2 font-semibold text-sm px-5 py-2.5 rounded-xl transition-all bg-violet-700 hover:bg-violet-600 text-white shadow-sm shadow-violet-400/20"
                     >
-                      {homepage.demosExploreLabel ?? 'Explore Demo'}
+                      {demosSection.demosExploreLabel ?? 'Explore Demo'}
                       <svg
                         width="13"
                         height="13"
@@ -137,7 +141,7 @@ export function DemoCards({ homepage }: Props) {
                     </Link>
                   ) : (
                     <span className="inline-flex items-center gap-2 font-semibold text-sm px-5 py-2.5 rounded-xl bg-gray-100 dark:bg-stone-700 text-gray-400 dark:text-stone-500 cursor-default">
-                      {homepage.demosComingSoon ?? 'Coming Soon'}
+                      {demosSection.demosComingSoon ?? 'Coming Soon'}
                     </span>
                   )}
                 </div>

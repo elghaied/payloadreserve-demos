@@ -1,11 +1,15 @@
 import type { HomePage } from '@/payload-types'
 
 type Props = {
-  homepage: HomePage
+  howItWorksSection: HomePage['howItWorksSection']
 }
 
-export function HowItWorks({ homepage }: Props) {
-  const steps = homepage.howSteps ?? []
+export function HowItWorks({ howItWorksSection }: Props) {
+  if (!howItWorksSection) {
+    return null
+  }
+
+  const steps = howItWorksSection.howSteps ?? []
 
   return (
     <section className="py-24 lg:py-32 px-6 lg:px-8 bg-white dark:bg-stone-900">
@@ -13,10 +17,10 @@ export function HowItWorks({ homepage }: Props) {
         {/* Header */}
         <div className="text-center max-w-xl mx-auto mb-16">
           <p className="text-xs font-bold text-violet-700 dark:text-violet-400 uppercase tracking-[0.2em] mb-4">
-            {homepage.howLabel}
+            {howItWorksSection.howLabel}
           </p>
           <h2 className="font-display text-[clamp(2rem,4vw,3rem)] text-[#1C1917] dark:text-stone-50 leading-[1.1]">
-            {homepage.howHeadline}
+            {howItWorksSection.howHeadline}
           </h2>
         </div>
 

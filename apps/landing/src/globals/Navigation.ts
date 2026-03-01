@@ -1,9 +1,13 @@
 import type { GlobalConfig } from 'payload'
+import { revalidateGlobal } from '@/utilities/revalidateCache'
 
 export const Navigation: GlobalConfig = {
   slug: 'navigation',
   admin: {
     group: 'Content',
+  },
+  hooks: {
+    afterChange: [() => revalidateGlobal('navigation')],
   },
   fields: [
     { name: 'docsLabel', type: 'text', defaultValue: 'Docs', localized: true },

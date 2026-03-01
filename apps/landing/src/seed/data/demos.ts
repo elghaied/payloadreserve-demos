@@ -7,6 +7,7 @@ export interface DemoData {
   active: boolean
   displayOrder: number
   liveUrl: string
+  pluginSnippet: string
   // Localized
   en: DemoLocale
   fr: DemoLocale
@@ -22,7 +23,6 @@ export interface DemoLocale {
   detailFeatures: { title: string; description: string }[]
   featuresHeading: string
   pluginConfigHeading: string
-  pluginSnippet: string
   detailCtaTitle: string
   detailCtaSubtitle: string
   screenshots: { alt: string }[]
@@ -36,6 +36,29 @@ export const demosData: DemoData[] = [
     active: true,
     displayOrder: 0,
     liveUrl: 'https://salon.payloadreserve.com',
+    pluginSnippet: `payloadReserve({
+  slugs: {
+    services: 'services',
+    resources: 'specialists',
+    schedules: 'schedules',
+    reservations: 'reservations',
+  },
+  extraReservationFields: [
+    {
+      name: 'paymentReminderSent',
+      type: 'checkbox',
+      defaultValue: false,
+      admin: { position: 'sidebar' },
+    },
+  ],
+  adminGroup: 'Salon',
+  defaultBufferTime: 5,
+  cancellationNoticePeriod: 24,
+  hooks: {
+    afterBookingConfirm: [notifyAfterConfirm],
+    afterBookingCancel: [notifyAfterCancel],
+  },
+})`,
     en: {
       name: 'Lumière Salon',
       tagline: 'Appointment scheduling for beauty professionals',
@@ -82,29 +105,6 @@ export const demosData: DemoData[] = [
       ],
       featuresHeading: 'Built for salon workflows',
       pluginConfigHeading: 'Plugin config for Lumière Salon',
-      pluginSnippet: `payloadReserve({
-  slugs: {
-    services: 'services',
-    resources: 'specialists',
-    schedules: 'schedules',
-    reservations: 'reservations',
-  },
-  extraReservationFields: [
-    {
-      name: 'paymentReminderSent',
-      type: 'checkbox',
-      defaultValue: false,
-      admin: { position: 'sidebar' },
-    },
-  ],
-  adminGroup: 'Salon',
-  defaultBufferTime: 5,
-  cancellationNoticePeriod: 24,
-  hooks: {
-    afterBookingConfirm: [notifyAfterConfirm],
-    afterBookingCancel: [notifyAfterCancel],
-  },
-})`,
       detailCtaTitle: 'Ready to explore Lumière Salon?',
       detailCtaSubtitle: 'Try the live demo or request your own private environment.',
       screenshots: [{ alt: 'Salon demo screenshot' }],
@@ -155,17 +155,6 @@ export const demosData: DemoData[] = [
       ],
       featuresHeading: 'Conçu pour les workflows salon',
       pluginConfigHeading: 'Config du plugin pour Lumière Salon',
-      pluginSnippet: `payloadReserve({
-  slugs: {
-    services: 'services',
-    resources: 'specialists',
-    schedules: 'schedules',
-    reservations: 'reservations',
-  },
-  adminGroup: 'Salon',
-  defaultBufferTime: 5,
-  cancellationNoticePeriod: 24,
-})`,
       detailCtaTitle: 'Prêt à explorer Lumière Salon ?',
       detailCtaSubtitle: 'Essayez la démo en direct ou demandez votre propre environnement privé.',
       screenshots: [{ alt: "Capture d'écran de la démo salon" }],
@@ -179,6 +168,17 @@ export const demosData: DemoData[] = [
     active: false,
     displayOrder: 1,
     liveUrl: '',
+    pluginSnippet: `payloadReserve({
+  slugs: {
+    services: 'room-types',
+    resources: 'rooms',
+    schedules: 'schedules',
+    reservations: 'reservations',
+  },
+  defaultBufferTime: 0,
+  cancellationNoticePeriod: 48,
+  adminGroup: 'Hotel',
+})`,
     en: {
       name: 'Grand Hotel',
       tagline: 'Room reservations with multi-night stays',
@@ -217,17 +217,6 @@ export const demosData: DemoData[] = [
       ],
       featuresHeading: 'Built for hotel workflows',
       pluginConfigHeading: 'Plugin config for Grand Hotel',
-      pluginSnippet: `payloadReserve({
-  slugs: {
-    services: 'room-types',
-    resources: 'rooms',
-    schedules: 'schedules',
-    reservations: 'reservations',
-  },
-  defaultBufferTime: 0,
-  cancellationNoticePeriod: 48,
-  adminGroup: 'Hotel',
-})`,
       detailCtaTitle: 'Ready to explore Grand Hotel?',
       detailCtaSubtitle: 'Try the live demo or request your own private environment.',
       screenshots: [],
@@ -269,17 +258,6 @@ export const demosData: DemoData[] = [
       ],
       featuresHeading: 'Conçu pour les workflows hôteliers',
       pluginConfigHeading: 'Config du plugin pour Grand Hôtel',
-      pluginSnippet: `payloadReserve({
-  slugs: {
-    services: 'room-types',
-    resources: 'rooms',
-    schedules: 'schedules',
-    reservations: 'reservations',
-  },
-  defaultBufferTime: 0,
-  cancellationNoticePeriod: 48,
-  adminGroup: 'Hotel',
-})`,
       detailCtaTitle: 'Prêt à explorer Grand Hôtel ?',
       detailCtaSubtitle: 'Essayez la démo en direct ou demandez votre propre environnement privé.',
       screenshots: [],
@@ -293,6 +271,17 @@ export const demosData: DemoData[] = [
     active: false,
     displayOrder: 2,
     liveUrl: '',
+    pluginSnippet: `payloadReserve({
+  slugs: {
+    services: 'dining-options',
+    resources: 'tables',
+    schedules: 'schedules',
+    reservations: 'reservations',
+  },
+  defaultBufferTime: 15,
+  cancellationNoticePeriod: 2,
+  adminGroup: 'Restaurant',
+})`,
     en: {
       name: 'Maison Restaurant',
       tagline: 'Table booking with party size management',
@@ -331,17 +320,6 @@ export const demosData: DemoData[] = [
       ],
       featuresHeading: 'Built for restaurant workflows',
       pluginConfigHeading: 'Plugin config for Maison Restaurant',
-      pluginSnippet: `payloadReserve({
-  slugs: {
-    services: 'dining-options',
-    resources: 'tables',
-    schedules: 'schedules',
-    reservations: 'reservations',
-  },
-  defaultBufferTime: 15,
-  cancellationNoticePeriod: 2,
-  adminGroup: 'Restaurant',
-})`,
       detailCtaTitle: 'Ready to explore Maison Restaurant?',
       detailCtaSubtitle: 'Try the live demo or request your own private environment.',
       screenshots: [],
@@ -384,17 +362,6 @@ export const demosData: DemoData[] = [
       ],
       featuresHeading: 'Conçu pour les workflows restaurant',
       pluginConfigHeading: 'Config du plugin pour Maison Restaurant',
-      pluginSnippet: `payloadReserve({
-  slugs: {
-    services: 'dining-options',
-    resources: 'tables',
-    schedules: 'schedules',
-    reservations: 'reservations',
-  },
-  defaultBufferTime: 15,
-  cancellationNoticePeriod: 2,
-  adminGroup: 'Restaurant',
-})`,
       detailCtaTitle: 'Prêt à explorer Maison Restaurant ?',
       detailCtaSubtitle: 'Essayez la démo en direct ou demandez votre propre environnement privé.',
       screenshots: [],
@@ -408,6 +375,17 @@ export const demosData: DemoData[] = [
     active: false,
     displayOrder: 3,
     liveUrl: '',
+    pluginSnippet: `payloadReserve({
+  slugs: {
+    services: 'event-types',
+    resources: 'spaces',
+    schedules: 'schedules',
+    reservations: 'reservations',
+  },
+  defaultBufferTime: 30,
+  cancellationNoticePeriod: 72,
+  adminGroup: 'Events',
+})`,
     en: {
       name: 'Event Venue',
       tagline: 'Event scheduling with capacity management',
@@ -446,17 +424,6 @@ export const demosData: DemoData[] = [
       ],
       featuresHeading: 'Built for event workflows',
       pluginConfigHeading: 'Plugin config for Event Venue',
-      pluginSnippet: `payloadReserve({
-  slugs: {
-    services: 'event-types',
-    resources: 'spaces',
-    schedules: 'schedules',
-    reservations: 'reservations',
-  },
-  defaultBufferTime: 30,
-  cancellationNoticePeriod: 72,
-  adminGroup: 'Events',
-})`,
       detailCtaTitle: 'Ready to explore Event Venue?',
       detailCtaSubtitle: 'Try the live demo or request your own private environment.',
       screenshots: [],
@@ -499,17 +466,6 @@ export const demosData: DemoData[] = [
       ],
       featuresHeading: "Conçu pour les workflows événementiels",
       pluginConfigHeading: 'Config du plugin pour Salle événementielle',
-      pluginSnippet: `payloadReserve({
-  slugs: {
-    services: 'event-types',
-    resources: 'spaces',
-    schedules: 'schedules',
-    reservations: 'reservations',
-  },
-  defaultBufferTime: 30,
-  cancellationNoticePeriod: 72,
-  adminGroup: 'Events',
-})`,
       detailCtaTitle: 'Prêt à explorer Salle événementielle ?',
       detailCtaSubtitle: 'Essayez la démo en direct ou demandez votre propre environnement privé.',
       screenshots: [],

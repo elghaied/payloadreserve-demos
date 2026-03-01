@@ -1,5 +1,8 @@
 import type { HomePage } from '@/payload-types'
 
+// Icons are matched to features by array index. If features are reordered in
+// Payload admin, these icons will mismatch. Keep this array in sync with the
+// seed data order, or store an icon key per feature in the collection.
 const featureIcons = [
   // Configurable for Any Use Case
   <svg key="0" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
@@ -52,11 +55,15 @@ const featureIcons = [
 ]
 
 type Props = {
-  homepage: HomePage
+  featuresSection: HomePage['featuresSection']
 }
 
-export function FeatureSection({ homepage }: Props) {
-  const items = homepage.featuresItems ?? []
+export function FeatureSection({ featuresSection }: Props) {
+  if (!featuresSection) {
+    return null
+  }
+
+  const items = featuresSection.featuresItems ?? []
 
   return (
     <section id="features" className="py-24 lg:py-32 px-6 lg:px-8 bg-[#F7F7F5] dark:bg-stone-950">
@@ -64,15 +71,17 @@ export function FeatureSection({ homepage }: Props) {
         {/* Header */}
         <div className="text-center max-w-2xl mx-auto mb-16">
           <p className="text-xs font-bold text-violet-700 dark:text-violet-400 uppercase tracking-[0.2em] mb-4">
-            {homepage.featuresLabel}
+            {featuresSection.featuresLabel}
           </p>
           <h2 className="font-display text-[clamp(2rem,4vw,3.2rem)] leading-[1.1] text-[#1C1917] dark:text-stone-50 mb-5">
-            {homepage.featuresHeadline1}
+            {featuresSection.featuresHeadline1}
             <br />
-            <span className="text-violet-700 dark:text-violet-400">{homepage.featuresHeadline2}</span>
+            <span className="text-violet-700 dark:text-violet-400">
+              {featuresSection.featuresHeadline2}
+            </span>
           </h2>
           <p className="text-[#78716C] dark:text-stone-400 text-lg leading-relaxed">
-            {homepage.featuresSubheading}
+            {featuresSection.featuresSubheading}
           </p>
         </div>
 

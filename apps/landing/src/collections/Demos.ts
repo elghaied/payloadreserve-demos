@@ -1,4 +1,5 @@
 import { slugField, type CollectionConfig } from 'payload'
+import { revalidateCollection } from '@/utilities/revalidateCache'
 
 export const Demos: CollectionConfig = {
   slug: 'demos',
@@ -6,6 +7,14 @@ export const Demos: CollectionConfig = {
     useAsTitle: 'name',
     defaultColumns: ['name', 'slug', 'active', 'displayOrder'],
     group: 'Content',
+  },
+  hooks: {
+    afterChange: [
+      ({ doc }) => revalidateCollection('demos', doc.slug),
+    ],
+    afterDelete: [
+      ({ doc }) => revalidateCollection('demos', doc.slug),
+    ],
   },
   fields: [
     // ── Non-localized ─────────────────────────────────────────────────────────

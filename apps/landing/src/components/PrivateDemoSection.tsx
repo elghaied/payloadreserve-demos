@@ -1,13 +1,17 @@
 import Image from 'next/image'
 import { Link } from '@/i18n/navigation'
-import type { HomePage, Media } from '@/payload-types'
+import type { HomePage } from '@/payload-types'
 
 type Props = {
-  homepage: HomePage
+  privateDemoSection: HomePage['privateDemoSection']
 }
 
-export function PrivateDemoSection({ homepage }: Props) {
-  const perks = homepage.privateDemoPerks ?? []
+export function PrivateDemoSection({ privateDemoSection }: Props) {
+  if (!privateDemoSection) {
+    return null
+  }
+
+  const perks = privateDemoSection.privateDemoPerks ?? []
 
   return (
     <section className="py-24 lg:py-32 px-6 lg:px-8 bg-[#F7F7F5] dark:bg-stone-950">
@@ -17,13 +21,13 @@ export function PrivateDemoSection({ homepage }: Props) {
           <div className="space-y-8">
             <div>
               <p className="text-xs font-bold text-violet-700 dark:text-violet-400 uppercase tracking-[0.2em] mb-4">
-                {homepage.privateDemoLabel}
+                {privateDemoSection.privateDemoLabel}
               </p>
               <h2 className="font-display text-[clamp(2rem,4vw,3.2rem)] text-[#1C1917] dark:text-stone-50 leading-[1.1] mb-5">
-                {homepage.privateDemoHeadline}
+                {privateDemoSection.privateDemoHeadline}
               </h2>
               <p className="text-[#78716C] dark:text-stone-400 text-lg leading-relaxed">
-                {homepage.privateDemoSubtitle}
+                {privateDemoSection.privateDemoSubtitle}
               </p>
             </div>
 
@@ -62,7 +66,7 @@ export function PrivateDemoSection({ homepage }: Props) {
                 href="/demo"
                 className="inline-flex items-center gap-2 bg-violet-700 hover:bg-violet-600 active:scale-95 text-white font-bold text-sm px-7 py-3.5 rounded-full transition-all duration-150 shadow-lg shadow-violet-400/20"
               >
-                {homepage.privatedemoCta}
+                {privateDemoSection.privateDemoCta}
                 <svg
                   width="14"
                   height="14"
@@ -75,7 +79,7 @@ export function PrivateDemoSection({ homepage }: Props) {
                 </svg>
               </Link>
               <p className="text-xs text-[#78716C] dark:text-stone-500">
-                {homepage.privateDemoAudience}
+                {privateDemoSection.privateDemoAudience}
               </p>
             </div>
           </div>
@@ -86,9 +90,11 @@ export function PrivateDemoSection({ homepage }: Props) {
             <div className="relative rounded-2xl overflow-hidden shadow-2xl shadow-black/10 dark:shadow-black/40">
               <Image
                 src={
-                  typeof homepage.privateDemoImage === 'object' &&
-                  typeof homepage.privateDemoImage!.url === 'string'
-                    ? homepage.privateDemoImage!.url
+                  privateDemoSection.privateDemoImage &&
+                  typeof privateDemoSection.privateDemoImage === 'object' &&
+                  'url' in privateDemoSection.privateDemoImage &&
+                  typeof privateDemoSection.privateDemoImage.url === 'string'
+                    ? privateDemoSection.privateDemoImage.url
                     : '/imgs/image-not-found.png'
                 }
                 alt="Team reviewing the admin panel"

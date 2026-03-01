@@ -1,9 +1,13 @@
 import type { GlobalConfig } from 'payload'
+import { revalidateGlobal } from '@/utilities/revalidateCache'
 
 export const SiteSettings: GlobalConfig = {
   slug: 'site-settings',
   admin: {
     group: 'Content',
+  },
+  hooks: {
+    afterChange: [() => revalidateGlobal('site-settings')],
   },
   fields: [
     {

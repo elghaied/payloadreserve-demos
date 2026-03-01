@@ -20,7 +20,7 @@ export default async function HomePage({ params }: Props) {
   const loc = locale as TypedLocale
 
   const [homepage, siteSettings] = await Promise.all([
-    getCachedGlobal('home-page', 0, loc)(),
+    getCachedGlobal('home-page', 1, loc)(),
     getCachedGlobal('site-settings', 0, loc)(),
   ])
 
@@ -29,14 +29,14 @@ export default async function HomePage({ params }: Props) {
   return (
     <main>
       <Hero heroSection={homepage.heroSection} urls={urls} />
-      <UseCaseStrip homepage={homepage} />
-      <FeatureSection homepage={homepage} />
-      <DemoCards homepage={homepage} />
-      <AdminUISection homepage={homepage} />
-      <PrivateDemoSection homepage={homepage} />
-      <DeveloperSection homepage={homepage} githubUrl={urls?.github ?? '#'} />
-      <HowItWorks homepage={homepage} />
-      <CTABanner homepage={homepage} urls={urls} />
+      <UseCaseStrip useCasesSection={homepage.useCasesSection} />
+      <FeatureSection featuresSection={homepage.featuresSection} />
+      <DemoCards demosSection={homepage.demosSection} />
+      <AdminUISection adminUiSection={homepage.adminUiSection} />
+      <PrivateDemoSection privateDemoSection={homepage.privateDemoSection} />
+      <DeveloperSection developerSection={homepage.developerSection} githubUrl={urls?.github ?? '#'} />
+      <HowItWorks howItWorksSection={homepage.howItWorksSection} />
+      <CTABanner ctaBannerSection={homepage.ctaBannerSection} urls={urls} />
     </main>
   )
 }

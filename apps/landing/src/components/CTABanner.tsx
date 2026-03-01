@@ -1,11 +1,15 @@
 import type { HomePage, SiteSetting } from '@/payload-types'
 
 type Props = {
-  homepage: HomePage
+  ctaBannerSection: HomePage['ctaBannerSection']
   urls: SiteSetting['externalUrls']
 }
 
-export function CTABanner({ homepage, urls }: Props) {
+export function CTABanner({ ctaBannerSection, urls }: Props) {
+  if (!ctaBannerSection) {
+    return null
+  }
+
   return (
     <section className="py-24 px-6 lg:px-8 bg-violet-700 relative overflow-hidden">
       {/* Decorative blobs */}
@@ -15,13 +19,13 @@ export function CTABanner({ homepage, urls }: Props) {
 
       <div className="relative max-w-3xl mx-auto text-center">
         <p className="text-xs font-bold text-white/70 uppercase tracking-[0.2em] mb-5">
-          {homepage.ctaLabel}
+          {ctaBannerSection.ctaLabel}
         </p>
         <h2 className="font-display text-[clamp(2rem,4.5vw,3.5rem)] text-white leading-[1.08] mb-6">
-          {homepage.ctaHeadline}
+          {ctaBannerSection.ctaHeadline}
         </h2>
         <p className="text-violet-200 text-lg leading-relaxed mb-10 max-w-xl mx-auto">
-          {homepage.ctaSubtitle}
+          {ctaBannerSection.ctaSubtitle}
         </p>
 
         {/* CTAs */}
@@ -30,7 +34,7 @@ export function CTABanner({ homepage, urls }: Props) {
             href={urls?.docs ?? '#'}
             className="inline-flex items-center gap-2 bg-white hover:bg-violet-50 active:scale-95 text-violet-700 dark:text-violet-800 font-bold text-base px-8 py-4 rounded-full transition-all shadow-xl shadow-black/20"
           >
-            {homepage.ctaButtonDocs}
+            {ctaBannerSection.ctaButtonDocs}
             <svg
               width="16"
               height="16"
@@ -48,7 +52,7 @@ export function CTABanner({ homepage, urls }: Props) {
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white font-bold text-base px-8 py-4 rounded-full transition-all border border-white/25"
           >
-            {homepage.ctaButtonGithub}
+            {ctaBannerSection.ctaButtonGithub}
           </a>
         </div>
       </div>

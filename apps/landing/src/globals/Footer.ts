@@ -1,9 +1,13 @@
 import type { GlobalConfig } from 'payload'
+import { revalidateGlobal } from '@/utilities/revalidateCache'
 
 export const Footer: GlobalConfig = {
   slug: 'footer',
   admin: {
     group: 'Content',
+  },
+  hooks: {
+    afterChange: [() => revalidateGlobal('footer')],
   },
   fields: [
     { name: 'description', type: 'textarea', localized: true },

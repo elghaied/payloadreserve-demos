@@ -1,9 +1,13 @@
 import type { GlobalConfig } from 'payload'
+import { revalidateGlobal } from '@/utilities/revalidateCache'
 
 export const HomePage: GlobalConfig = {
   slug: 'home-page',
   admin: {
     group: 'Content',
+  },
+  hooks: {
+    afterChange: [() => revalidateGlobal('home-page')],
   },
   fields: [
     {
@@ -46,17 +50,24 @@ export const HomePage: GlobalConfig = {
         {
           label: 'Use Cases',
           fields: [
-            { name: 'useCasesLabel', label: 'Section Label', type: 'text', localized: true },
-            { name: 'useCasesFootnote', label: 'Footnote', type: 'text', localized: true },
             {
-              name: 'useCasesItems',
-              label: 'Items',
-              type: 'array',
-              localized: true,
+              name: 'useCasesSection',
+              label: 'Use Cases Section',
+              type: 'group',
               fields: [
-                { name: 'emoji', type: 'text', required: true },
-                { name: 'label', type: 'text', required: true },
-                { name: 'description', type: 'text', required: true },
+                { name: 'useCasesLabel', label: 'Section Label', type: 'text', localized: true },
+                { name: 'useCasesFootnote', label: 'Footnote', type: 'text', localized: true },
+                {
+                  name: 'useCasesItems',
+                  label: 'Items',
+                  type: 'array',
+                  localized: true,
+                  fields: [
+                    { name: 'emoji', type: 'text', required: true },
+                    { name: 'label', type: 'text', required: true },
+                    { name: 'description', type: 'text', required: true },
+                  ],
+                },
               ],
             },
           ],
@@ -66,18 +77,25 @@ export const HomePage: GlobalConfig = {
         {
           label: 'Features',
           fields: [
-            { name: 'featuresLabel', label: 'Section Label', type: 'text', localized: true },
-            { name: 'featuresHeadline1', label: 'Headline Line 1', type: 'text', localized: true },
-            { name: 'featuresHeadline2', label: 'Headline Line 2', type: 'text', localized: true },
-            { name: 'featuresSubheading', label: 'Subheading', type: 'textarea', localized: true },
             {
-              name: 'featuresItems',
-              label: 'Feature Items',
-              type: 'array',
-              localized: true,
+              name: 'featuresSection',
+              label: 'Features Section',
+              type: 'group',
               fields: [
-                { name: 'title', type: 'text', required: true },
-                { name: 'description', type: 'textarea', required: true },
+                { name: 'featuresLabel', label: 'Section Label', type: 'text', localized: true },
+                { name: 'featuresHeadline1', label: 'Headline Line 1', type: 'text', localized: true },
+                { name: 'featuresHeadline2', label: 'Headline Line 2', type: 'text', localized: true },
+                { name: 'featuresSubheading', label: 'Subheading', type: 'textarea', localized: true },
+                {
+                  name: 'featuresItems',
+                  label: 'Feature Items',
+                  type: 'array',
+                  localized: true,
+                  fields: [
+                    { name: 'title', type: 'text', required: true },
+                    { name: 'description', type: 'textarea', required: true },
+                  ],
+                },
               ],
             },
           ],
@@ -87,27 +105,34 @@ export const HomePage: GlobalConfig = {
         {
           label: 'Demos',
           fields: [
-            { name: 'demosLabel', label: 'Section Label', type: 'text', localized: true },
-            { name: 'demosHeadline', label: 'Headline', type: 'text', localized: true },
-            { name: 'demosSubheading', label: 'Subheading', type: 'textarea', localized: true },
             {
-              name: 'demosComingSoon',
-              label: '"Coming Soon" label',
-              type: 'text',
-              localized: true,
-            },
-            {
-              name: 'demosExploreLabel',
-              label: '"Explore Demo" label',
-              type: 'text',
-              localized: true,
-            },
-            {
-              name: 'demos',
-              label: 'Demos',
-              type: 'relationship',
-              relationTo: 'demos',
-              hasMany: true,
+              name: 'demosSection',
+              label: 'Demos Section',
+              type: 'group',
+              fields: [
+                { name: 'demosLabel', label: 'Section Label', type: 'text', localized: true },
+                { name: 'demosHeadline', label: 'Headline', type: 'text', localized: true },
+                { name: 'demosSubheading', label: 'Subheading', type: 'textarea', localized: true },
+                {
+                  name: 'demosComingSoon',
+                  label: '"Coming Soon" label',
+                  type: 'text',
+                  localized: true,
+                },
+                {
+                  name: 'demosExploreLabel',
+                  label: '"Explore Demo" label',
+                  type: 'text',
+                  localized: true,
+                },
+                {
+                  name: 'demos',
+                  label: 'Demos',
+                  type: 'relationship',
+                  relationTo: 'demos',
+                  hasMany: true,
+                },
+              ],
             },
           ],
         },
@@ -116,19 +141,26 @@ export const HomePage: GlobalConfig = {
         {
           label: 'Admin UI',
           fields: [
-            { name: 'adminUiLabel', label: 'Section Label', type: 'text', localized: true },
-            { name: 'adminUiHeadline', label: 'Headline', type: 'text', localized: true },
-            { name: 'adminUiSubtitle', label: 'Subtitle', type: 'textarea', localized: true },
-            { name: 'adminUiBrowserUrl', label: 'Browser URL Bar', type: 'text', localized: true },
             {
-              name: 'adminUiSlides',
-              label: 'Slides',
-              type: 'array',
-              localized: true,
-              admin: { description: 'Captions shown for each screenshot slide' },
+              name: 'adminUiSection',
+              label: 'Admin UI Section',
+              type: 'group',
               fields: [
-                { name: 'caption', type: 'text', required: true },
-                { name: 'image', type: 'upload', relationTo: 'media' },
+                { name: 'adminUiLabel', label: 'Section Label', type: 'text', localized: true },
+                { name: 'adminUiHeadline', label: 'Headline', type: 'text', localized: true },
+                { name: 'adminUiSubtitle', label: 'Subtitle', type: 'textarea', localized: true },
+                { name: 'adminUiBrowserUrl', label: 'Browser URL Bar', type: 'text', localized: true },
+                {
+                  name: 'adminUiSlides',
+                  label: 'Slides',
+                  type: 'array',
+                  localized: true,
+                  admin: { description: 'Captions shown for each screenshot slide' },
+                  fields: [
+                    { name: 'caption', type: 'text', required: true },
+                    { name: 'image', type: 'upload', relationTo: 'media' },
+                  ],
+                },
               ],
             },
           ],
@@ -138,19 +170,26 @@ export const HomePage: GlobalConfig = {
         {
           label: 'Private Demo',
           fields: [
-            { name: 'privateDemoLabel', label: 'Section Label', type: 'text', localized: true },
-            { name: 'privateDemoHeadline', label: 'Headline', type: 'text', localized: true },
-            { name: 'privateDemoSubtitle', label: 'Subtitle', type: 'textarea', localized: true },
-            { name: 'privatedemoCta', label: 'CTA Button', type: 'text', localized: true },
-            { name: 'privateDemoAudience', label: 'Audience note', type: 'text', localized: true },
             {
-              name: 'privateDemoPerks',
-              label: 'Perks',
-              type: 'array',
-              localized: true,
-              fields: [{ name: 'text', type: 'text', required: true }],
+              name: 'privateDemoSection',
+              label: 'Private Demo Section',
+              type: 'group',
+              fields: [
+                { name: 'privateDemoLabel', label: 'Section Label', type: 'text', localized: true },
+                { name: 'privateDemoHeadline', label: 'Headline', type: 'text', localized: true },
+                { name: 'privateDemoSubtitle', label: 'Subtitle', type: 'textarea', localized: true },
+                { name: 'privateDemoCta', label: 'CTA Button', type: 'text', localized: true },
+                { name: 'privateDemoAudience', label: 'Audience note', type: 'text', localized: true },
+                {
+                  name: 'privateDemoPerks',
+                  label: 'Perks',
+                  type: 'array',
+                  localized: true,
+                  fields: [{ name: 'text', type: 'text', required: true }],
+                },
+                { name: 'privateDemoImage', label: 'Image', type: 'upload', relationTo: 'media' },
+              ],
             },
-            { name: 'privateDemoImage', label: 'Image', type: 'upload', relationTo: 'media' },
           ],
         },
 
@@ -158,20 +197,27 @@ export const HomePage: GlobalConfig = {
         {
           label: 'Developer',
           fields: [
-            { name: 'devLabel', label: 'Section Label', type: 'text', localized: true },
-            { name: 'devHeadline', label: 'Headline', type: 'text', localized: true },
-            { name: 'devSubtitle', label: 'Subtitle', type: 'textarea', localized: true },
-            { name: 'devCta', label: 'CTA Button', type: 'text', localized: true },
-            { name: 'devNote', label: 'Note', type: 'textarea', localized: true },
             {
-              name: 'devSteps',
-              label: 'Steps',
-              type: 'array',
-              localized: true,
+              name: 'developerSection',
+              label: 'Developer Section',
+              type: 'group',
               fields: [
-                { name: 'title', type: 'text', required: true },
-                // code is a shell command — same across locales but stored per locale
-                { name: 'code', type: 'code', admin: { language: 'bash' } },
+                { name: 'devLabel', label: 'Section Label', type: 'text', localized: true },
+                { name: 'devHeadline', label: 'Headline', type: 'text', localized: true },
+                { name: 'devSubtitle', label: 'Subtitle', type: 'textarea', localized: true },
+                { name: 'devCta', label: 'CTA Button', type: 'text', localized: true },
+                { name: 'devNote', label: 'Note', type: 'textarea', localized: true },
+                {
+                  name: 'devSteps',
+                  label: 'Steps',
+                  type: 'array',
+                  localized: true,
+                  fields: [
+                    { name: 'title', type: 'text', required: true },
+                    // code is a shell command — same across locales but stored per locale
+                    { name: 'code', type: 'code', admin: { language: 'bash' } },
+                  ],
+                },
               ],
             },
           ],
@@ -181,17 +227,24 @@ export const HomePage: GlobalConfig = {
         {
           label: 'How It Works',
           fields: [
-            { name: 'howLabel', label: 'Section Label', type: 'text', localized: true },
-            { name: 'howHeadline', label: 'Headline', type: 'text', localized: true },
             {
-              name: 'howSteps',
-              label: 'Steps',
-              type: 'array',
-              localized: true,
+              name: 'howItWorksSection',
+              label: 'How It Works Section',
+              type: 'group',
               fields: [
-                { name: 'title', type: 'text', required: true },
-                { name: 'description', type: 'textarea', required: true },
-                { name: 'code', type: 'code', admin: { language: 'bash' } },
+                { name: 'howLabel', label: 'Section Label', type: 'text', localized: true },
+                { name: 'howHeadline', label: 'Headline', type: 'text', localized: true },
+                {
+                  name: 'howSteps',
+                  label: 'Steps',
+                  type: 'array',
+                  localized: true,
+                  fields: [
+                    { name: 'title', type: 'text', required: true },
+                    { name: 'description', type: 'textarea', required: true },
+                    { name: 'code', type: 'code', admin: { language: 'bash' } },
+                  ],
+                },
               ],
             },
           ],
@@ -201,11 +254,18 @@ export const HomePage: GlobalConfig = {
         {
           label: 'CTA Banner',
           fields: [
-            { name: 'ctaLabel', label: 'Section Label', type: 'text', localized: true },
-            { name: 'ctaHeadline', label: 'Headline', type: 'text', localized: true },
-            { name: 'ctaSubtitle', label: 'Subtitle', type: 'textarea', localized: true },
-            { name: 'ctaButtonDocs', label: 'CTA — Docs', type: 'text', localized: true },
-            { name: 'ctaButtonGithub', label: 'CTA — GitHub', type: 'text', localized: true },
+            {
+              name: 'ctaBannerSection',
+              label: 'CTA Banner Section',
+              type: 'group',
+              fields: [
+                { name: 'ctaLabel', label: 'Section Label', type: 'text', localized: true },
+                { name: 'ctaHeadline', label: 'Headline', type: 'text', localized: true },
+                { name: 'ctaSubtitle', label: 'Subtitle', type: 'textarea', localized: true },
+                { name: 'ctaButtonDocs', label: 'CTA — Docs', type: 'text', localized: true },
+                { name: 'ctaButtonGithub', label: 'CTA — GitHub', type: 'text', localized: true },
+              ],
+            },
           ],
         },
       ],

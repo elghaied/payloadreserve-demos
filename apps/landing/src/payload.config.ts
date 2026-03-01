@@ -88,8 +88,12 @@ export default buildConfig({
       collections: ['demos'],
       globals: ['home-page'],
       uploadsCollection: 'media',
-      generateTitle: ({ doc }) => `Website.com — ${doc.title}`,
-      generateDescription: ({ doc }) => doc.excerpt,
+      generateTitle: ({ doc }) =>
+        `payload-reserve — ${(doc as Record<string, unknown>).name ?? ''}`,
+      generateDescription: ({ doc }) => {
+        const d = doc as Record<string, unknown>
+        return (d.description ?? d.detailDescription ?? '') as string
+      },
     }),
   ],
 })

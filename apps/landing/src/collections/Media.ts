@@ -14,5 +14,25 @@ export const Media: CollectionConfig = {
   ],
   upload: {
     disableLocalStorage: true,
+    imageSizes: [
+      {
+        name: 'thumbnail',
+        width: 400,
+        height: 300,
+        position: 'centre',
+      },
+      {
+        name: 'card',
+        width: 640,
+        height: 320,
+        position: 'centre',
+      },
+      {
+        name: 'hero',
+        width: 1280,
+        height: 720,
+        position: 'centre',
+      },
+    ],
   },
 }

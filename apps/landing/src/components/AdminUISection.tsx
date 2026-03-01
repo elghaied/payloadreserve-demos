@@ -15,11 +15,15 @@ const staticScreenshots = [
 ]
 
 type Props = {
-  homepage: HomePage
+  adminUiSection: HomePage['adminUiSection']
 }
 
-export function AdminUISection({ homepage }: Props) {
-  const payloadSlides = homepage.adminUiSlides ?? []
+export function AdminUISection({ adminUiSection }: Props) {
+  if (!adminUiSection) {
+    return null
+  }
+
+  const payloadSlides = adminUiSection.adminUiSlides ?? []
 
   const slides = staticScreenshots.map((staticSrc, i) => {
     const payloadSlide = payloadSlides[i]
@@ -51,13 +55,13 @@ export function AdminUISection({ homepage }: Props) {
         {/* Header */}
         <div className="text-center max-w-2xl mx-auto mb-14">
           <p className="text-xs font-bold text-violet-700 dark:text-violet-400 uppercase tracking-[0.2em] mb-4">
-            {homepage.adminUiLabel}
+            {adminUiSection.adminUiLabel}
           </p>
           <h2 className="font-display text-[clamp(2rem,4vw,3.2rem)] text-[#1C1917] dark:text-stone-50 leading-[1.1] mb-5">
-            {homepage.adminUiHeadline}
+            {adminUiSection.adminUiHeadline}
           </h2>
           <p className="text-[#78716C] dark:text-stone-400 text-lg leading-relaxed">
-            {homepage.adminUiSubtitle}
+            {adminUiSection.adminUiSubtitle}
           </p>
         </div>
 
@@ -69,7 +73,7 @@ export function AdminUISection({ homepage }: Props) {
             <span className="w-3 h-3 rounded-full bg-[#febc2e]" />
             <span className="w-3 h-3 rounded-full bg-[#28c840]" />
             <div className="ml-4 flex-1 max-w-xs mx-auto bg-white dark:bg-stone-700 rounded-md px-3 py-1 text-[11px] text-gray-400 dark:text-stone-400 font-mono border border-gray-200 dark:border-stone-600 text-center">
-              {homepage.adminUiBrowserUrl}
+              {adminUiSection.adminUiBrowserUrl}
             </div>
           </div>
 

@@ -4,11 +4,30 @@ import { getMessages } from 'next-intl/server'
 import { routing } from '@/i18n/routing'
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
-import { getPayload, TypedLocale } from 'payload'
-import config from '@payload-config'
-import type { Config } from '@/payload-types'
+import { TypedLocale } from 'payload'
+import { DM_Serif_Display, Outfit, DM_Mono } from 'next/font/google'
 import { Nav } from '@/components/Nav'
 import { Footer } from '@/components/Footer'
+import { getCachedGlobal } from '@/utilities/getGlobals'
+
+const outfit = Outfit({
+  subsets: ['latin'],
+  variable: '--font-outfit',
+})
+
+const dmSerifDisplay = DM_Serif_Display({
+  weight: '400',
+  style: ['normal', 'italic'],
+  subsets: ['latin'],
+  variable: '--font-dm-serif',
+})
+
+const dmMono = DM_Mono({
+  weight: ['400', '500'],
+  style: ['normal', 'italic'],
+  subsets: ['latin'],
+  variable: '--font-dm-mono',
+})
 
 type Props = {
   children: ReactNode
@@ -17,9 +36,8 @@ type Props = {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params
-  const loc = locale as Config['locale']
-  const payload = await getPayload({ config })
-  const siteSettings = await payload.findGlobal({ slug: 'site-settings', locale: loc })
+  const loc = locale as TypedLocale
+  const siteSettings = await getCachedGlobal('site-settings', 0, loc)()
   return {
     title: siteSettings.defaultMeta?.title ?? 'payload-reserve',
     description: siteSettings.defaultMeta?.description ?? '',
@@ -36,20 +54,29 @@ export default async function LocaleLayout({ children, params }: Props) {
   if (!routing.locales.includes(locale as 'en' | 'fr')) {
     notFound()
   }
-  const payload = await getPayload({ config })
-  const [navigation, footerData] = await Promise.all([
-    payload.findGlobal({ slug: 'navigation', locale: locale as TypedLocale }),
-    payload.findGlobal({ slug: 'footer', locale: locale as TypedLocale }),
+
+  const loc = locale as TypedLocale
+  const [navigation, footerData, siteSettings, messages] = await Promise.all([
+    getCachedGlobal('navigation', 0, loc)(),
+    getCachedGlobal('footer', 0, loc)(),
+    getCachedGlobal('site-settings', 0, loc)(),
+    getMessages(),
   ])
-  const siteSettings = await payload.findGlobal({ slug: 'site-settings' })
   const urls = siteSettings.externalUrls
-  const messages = await getMessages()
 
   return (
-    <NextIntlClientProvider messages={messages} locale={locale}>
-      <Nav navigation={navigation} urls={urls} />
-      {children}
-      <Footer footerData={footerData} urls={urls} />
-    </NextIntlClientProvider>
+    <html
+      lang={locale}
+      suppressHydrationWarning
+      className={`${outfit.variable} ${dmSerifDisplay.variable} ${dmMono.variable}`}
+    >
+      <body className="antialiased">
+        <NextIntlClientProvider messages={messages} locale={locale}>
+          <Nav navigation={navigation} urls={urls} />
+          {children}
+          <Footer footerData={footerData} urls={urls} />
+        </NextIntlClientProvider>
+      </body>
+    </html>
   )
 }

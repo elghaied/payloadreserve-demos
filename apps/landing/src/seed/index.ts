@@ -163,7 +163,14 @@ async function seedHomePage(payload: Payload, media: SeedMedia) {
     locale: 'en',
     data: {
       ...homePageData.en,
-      adminUiSlides: withSlides(homePageData.en.adminUiSlides),
+      adminUiSection: {
+        ...homePageData.en.adminUiSection,
+        adminUiSlides: withSlides(homePageData.en.adminUiSection.adminUiSlides),
+      },
+      privateDemoSection: {
+        ...homePageData.en.privateDemoSection,
+        privateDemoImage: media.privateDemo,
+      },
     },
   })
   await payload.updateGlobal({
@@ -171,7 +178,14 @@ async function seedHomePage(payload: Payload, media: SeedMedia) {
     locale: 'fr',
     data: {
       ...homePageData.fr,
-      adminUiSlides: withSlides(homePageData.fr.adminUiSlides),
+      adminUiSection: {
+        ...homePageData.fr.adminUiSection,
+        adminUiSlides: withSlides(homePageData.fr.adminUiSection.adminUiSlides),
+      },
+      privateDemoSection: {
+        ...homePageData.fr.privateDemoSection,
+        privateDemoImage: media.privateDemo,
+      },
     },
   })
 
@@ -206,7 +220,7 @@ async function seedDemos(payload: Payload, media: SeedMedia) {
         displayOrder: demo.displayOrder,
         liveUrl: demo.liveUrl,
         cardImage: media.cards[demo.slug],
-        pluginSnippet: demo.en.pluginSnippet,
+        pluginSnippet: demo.pluginSnippet,
         // EN localized
         name: demo.en.name,
         tagline: demo.en.tagline,

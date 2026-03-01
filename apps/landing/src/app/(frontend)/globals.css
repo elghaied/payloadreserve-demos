@@ -4,9 +4,9 @@
 @variant dark (&:is(.dark, .dark *));
 
 @theme {
-  --font-display: 'DM Serif Display', Georgia, serif;
-  --font-body: 'Outfit', system-ui, sans-serif;
-  --font-mono: 'DM Mono', 'Fira Code', monospace;
+  --font-display: var(--font-dm-serif), Georgia, serif;
+  --font-body: var(--font-outfit), system-ui, sans-serif;
+  --font-mono: var(--font-dm-mono), 'Fira Code', monospace;
 
   /* Brand colours */
   --color-brand-violet: #5B21B6;

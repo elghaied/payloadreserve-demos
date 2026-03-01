@@ -170,6 +170,32 @@ export interface Media {
   height?: number | null;
   focalX?: number | null;
   focalY?: number | null;
+  sizes?: {
+    thumbnail?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+    card?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+    hero?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+  };
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -376,6 +402,40 @@ export interface MediaSelect<T extends boolean = true> {
   height?: T;
   focalX?: T;
   focalY?: T;
+  sizes?:
+    | T
+    | {
+        thumbnail?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+        card?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+        hero?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+      };
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -546,86 +606,102 @@ export interface HomePage {
         }[]
       | null;
   };
-  useCasesLabel?: string | null;
-  useCasesFootnote?: string | null;
-  useCasesItems?:
-    | {
-        emoji: string;
-        label: string;
-        description: string;
-        id?: string | null;
-      }[]
-    | null;
-  featuresLabel?: string | null;
-  featuresHeadline1?: string | null;
-  featuresHeadline2?: string | null;
-  featuresSubheading?: string | null;
-  featuresItems?:
-    | {
-        title: string;
-        description: string;
-        id?: string | null;
-      }[]
-    | null;
-  demosLabel?: string | null;
-  demosHeadline?: string | null;
-  demosSubheading?: string | null;
-  demosComingSoon?: string | null;
-  demosExploreLabel?: string | null;
-  demos?: (string | Demo)[] | null;
-  adminUiLabel?: string | null;
-  adminUiHeadline?: string | null;
-  adminUiSubtitle?: string | null;
-  adminUiBrowserUrl?: string | null;
-  /**
-   * Captions shown for each screenshot slide
-   */
-  adminUiSlides?:
-    | {
-        caption: string;
-        image?: (string | null) | Media;
-        id?: string | null;
-      }[]
-    | null;
-  privateDemoLabel?: string | null;
-  privateDemoHeadline?: string | null;
-  privateDemoSubtitle?: string | null;
-  privatedemoCta?: string | null;
-  privateDemoAudience?: string | null;
-  privateDemoPerks?:
-    | {
-        text: string;
-        id?: string | null;
-      }[]
-    | null;
-  privateDemoImage?: (string | null) | Media;
-  devLabel?: string | null;
-  devHeadline?: string | null;
-  devSubtitle?: string | null;
-  devCta?: string | null;
-  devNote?: string | null;
-  devSteps?:
-    | {
-        title: string;
-        code?: string | null;
-        id?: string | null;
-      }[]
-    | null;
-  howLabel?: string | null;
-  howHeadline?: string | null;
-  howSteps?:
-    | {
-        title: string;
-        description: string;
-        code?: string | null;
-        id?: string | null;
-      }[]
-    | null;
-  ctaLabel?: string | null;
-  ctaHeadline?: string | null;
-  ctaSubtitle?: string | null;
-  ctaButtonDocs?: string | null;
-  ctaButtonGithub?: string | null;
+  useCasesSection?: {
+    useCasesLabel?: string | null;
+    useCasesFootnote?: string | null;
+    useCasesItems?:
+      | {
+          emoji: string;
+          label: string;
+          description: string;
+          id?: string | null;
+        }[]
+      | null;
+  };
+  featuresSection?: {
+    featuresLabel?: string | null;
+    featuresHeadline1?: string | null;
+    featuresHeadline2?: string | null;
+    featuresSubheading?: string | null;
+    featuresItems?:
+      | {
+          title: string;
+          description: string;
+          id?: string | null;
+        }[]
+      | null;
+  };
+  demosSection?: {
+    demosLabel?: string | null;
+    demosHeadline?: string | null;
+    demosSubheading?: string | null;
+    demosComingSoon?: string | null;
+    demosExploreLabel?: string | null;
+    demos?: (string | Demo)[] | null;
+  };
+  adminUiSection?: {
+    adminUiLabel?: string | null;
+    adminUiHeadline?: string | null;
+    adminUiSubtitle?: string | null;
+    adminUiBrowserUrl?: string | null;
+    /**
+     * Captions shown for each screenshot slide
+     */
+    adminUiSlides?:
+      | {
+          caption: string;
+          image?: (string | null) | Media;
+          id?: string | null;
+        }[]
+      | null;
+  };
+  privateDemoSection?: {
+    privateDemoLabel?: string | null;
+    privateDemoHeadline?: string | null;
+    privateDemoSubtitle?: string | null;
+    privateDemoCta?: string | null;
+    privateDemoAudience?: string | null;
+    privateDemoPerks?:
+      | {
+          text: string;
+          id?: string | null;
+        }[]
+      | null;
+    privateDemoImage?: (string | null) | Media;
+  };
+  developerSection?: {
+    devLabel?: string | null;
+    devHeadline?: string | null;
+    devSubtitle?: string | null;
+    devCta?: string | null;
+    devNote?: string | null;
+    devSteps?:
+      | {
+          title: string;
+          code?: string | null;
+          id?: string | null;
+        }[]
+      | null;
+  };
+  howItWorksSection?: {
+    howLabel?: string | null;
+    howHeadline?: string | null;
+    howSteps?:
+      | {
+          title: string;
+          description: string;
+          code?: string | null;
+          id?: string | null;
+        }[]
+      | null;
+  };
+  ctaBannerSection?: {
+    ctaLabel?: string | null;
+    ctaHeadline?: string | null;
+    ctaSubtitle?: string | null;
+    ctaButtonDocs?: string | null;
+    ctaButtonGithub?: string | null;
+  };
   meta?: {
     title?: string | null;
     description?: string | null;
@@ -747,83 +823,115 @@ export interface HomePageSelect<T extends boolean = true> {
               id?: T;
             };
       };
-  useCasesLabel?: T;
-  useCasesFootnote?: T;
-  useCasesItems?:
+  useCasesSection?:
     | T
     | {
-        emoji?: T;
-        label?: T;
-        description?: T;
-        id?: T;
+        useCasesLabel?: T;
+        useCasesFootnote?: T;
+        useCasesItems?:
+          | T
+          | {
+              emoji?: T;
+              label?: T;
+              description?: T;
+              id?: T;
+            };
       };
-  featuresLabel?: T;
-  featuresHeadline1?: T;
-  featuresHeadline2?: T;
-  featuresSubheading?: T;
-  featuresItems?:
+  featuresSection?:
     | T
     | {
-        title?: T;
-        description?: T;
-        id?: T;
+        featuresLabel?: T;
+        featuresHeadline1?: T;
+        featuresHeadline2?: T;
+        featuresSubheading?: T;
+        featuresItems?:
+          | T
+          | {
+              title?: T;
+              description?: T;
+              id?: T;
+            };
       };
-  demosLabel?: T;
-  demosHeadline?: T;
-  demosSubheading?: T;
-  demosComingSoon?: T;
-  demosExploreLabel?: T;
-  demos?: T;
-  adminUiLabel?: T;
-  adminUiHeadline?: T;
-  adminUiSubtitle?: T;
-  adminUiBrowserUrl?: T;
-  adminUiSlides?:
+  demosSection?:
     | T
     | {
-        caption?: T;
-        image?: T;
-        id?: T;
+        demosLabel?: T;
+        demosHeadline?: T;
+        demosSubheading?: T;
+        demosComingSoon?: T;
+        demosExploreLabel?: T;
+        demos?: T;
       };
-  privateDemoLabel?: T;
-  privateDemoHeadline?: T;
-  privateDemoSubtitle?: T;
-  privatedemoCta?: T;
-  privateDemoAudience?: T;
-  privateDemoPerks?:
+  adminUiSection?:
     | T
     | {
-        text?: T;
-        id?: T;
+        adminUiLabel?: T;
+        adminUiHeadline?: T;
+        adminUiSubtitle?: T;
+        adminUiBrowserUrl?: T;
+        adminUiSlides?:
+          | T
+          | {
+              caption?: T;
+              image?: T;
+              id?: T;
+            };
       };
-  privateDemoImage?: T;
-  devLabel?: T;
-  devHeadline?: T;
-  devSubtitle?: T;
-  devCta?: T;
-  devNote?: T;
-  devSteps?:
+  privateDemoSection?:
     | T
     | {
-        title?: T;
-        code?: T;
-        id?: T;
+        privateDemoLabel?: T;
+        privateDemoHeadline?: T;
+        privateDemoSubtitle?: T;
+        privateDemoCta?: T;
+        privateDemoAudience?: T;
+        privateDemoPerks?:
+          | T
+          | {
+              text?: T;
+              id?: T;
+            };
+        privateDemoImage?: T;
       };
-  howLabel?: T;
-  howHeadline?: T;
-  howSteps?:
+  developerSection?:
     | T
     | {
-        title?: T;
-        description?: T;
-        code?: T;
-        id?: T;
+        devLabel?: T;
+        devHeadline?: T;
+        devSubtitle?: T;
+        devCta?: T;
+        devNote?: T;
+        devSteps?:
+          | T
+          | {
+              title?: T;
+              code?: T;
+              id?: T;
+            };
       };
-  ctaLabel?: T;
-  ctaHeadline?: T;
-  ctaSubtitle?: T;
-  ctaButtonDocs?: T;
-  ctaButtonGithub?: T;
+  howItWorksSection?:
+    | T
+    | {
+        howLabel?: T;
+        howHeadline?: T;
+        howSteps?:
+          | T
+          | {
+              title?: T;
+              description?: T;
+              code?: T;
+              id?: T;
+            };
+      };
+  ctaBannerSection?:
+    | T
+    | {
+        ctaLabel?: T;
+        ctaHeadline?: T;
+        ctaSubtitle?: T;
+        ctaButtonDocs?: T;
+        ctaButtonGithub?: T;
+      };
   meta?:
     | T
     | {
