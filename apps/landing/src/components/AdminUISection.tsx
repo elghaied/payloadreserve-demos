@@ -19,11 +19,10 @@ type Props = {
 }
 
 export function AdminUISection({ adminUiSection }: Props) {
-  if (!adminUiSection) {
-    return null
-  }
+  const [currentIndex, setCurrentIndex] = useState(0)
+  const [fade, setFade] = useState(true)
 
-  const payloadSlides = adminUiSection.adminUiSlides ?? []
+  const payloadSlides = adminUiSection?.adminUiSlides ?? []
 
   const slides = staticScreenshots.map((staticSrc, i) => {
     const payloadSlide = payloadSlides[i]
@@ -33,10 +32,8 @@ export function AdminUISection({ adminUiSection }: Props) {
     return { src, description: payloadSlide?.caption ?? '' }
   })
 
-  const [currentIndex, setCurrentIndex] = useState(0)
-  const [fade, setFade] = useState(true)
-
   useEffect(() => {
+    if (!adminUiSection) return
     const interval = setInterval(() => {
       setFade(false)
 
@@ -47,7 +44,11 @@ export function AdminUISection({ adminUiSection }: Props) {
     }, 4000)
 
     return () => clearInterval(interval)
-  }, [slides.length])
+  }, [adminUiSection, slides.length])
+
+  if (!adminUiSection) {
+    return null
+  }
 
   return (
     <section className="py-24 lg:py-32 px-6 lg:px-8 bg-[#F7F7F5] dark:bg-stone-950">

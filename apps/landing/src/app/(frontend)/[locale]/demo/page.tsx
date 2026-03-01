@@ -1,11 +1,7 @@
 import type { Metadata } from 'next'
 import { getTranslations } from 'next-intl/server'
 import { DemoRequestForm } from '@/components/DemoRequestForm'
-import { Nav } from '@/components/Nav'
 import { Link } from '@/i18n/navigation'
-import { getPayload } from 'payload'
-import config from '@payload-config'
-import type { Config } from '@/payload-types'
 
 type Props = {
   params: Promise<{ locale: string }>

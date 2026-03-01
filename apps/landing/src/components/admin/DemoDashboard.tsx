@@ -3,6 +3,7 @@ import { DefaultTemplate } from '@payloadcms/next/templates'
 import { Gutter } from '@payloadcms/ui'
 import { getPayload } from 'payload'
 import config from '@payload-config'
+import Link from 'next/link'
 import { ManualCleanupButton } from './ManualCleanupButton'
 
 export default async function DemoDashboard({
@@ -66,7 +67,7 @@ export default async function DemoDashboard({
         {/* Actions */}
         <div style={{ marginBottom: '32px', display: 'flex', gap: '12px', alignItems: 'center' }}>
           <ManualCleanupButton />
-          <a
+          <Link
             href="/admin/collections/demo-instances"
             style={{
               padding: '8px 16px',
@@ -80,8 +81,8 @@ export default async function DemoDashboard({
             }}
           >
             View All Instances
-          </a>
-          <a
+          </Link>
+          <Link
             href="/admin/collections/demo-requests"
             style={{
               padding: '8px 16px',
@@ -95,7 +96,7 @@ export default async function DemoDashboard({
             }}
           >
             View All Requests
-          </a>
+          </Link>
         </div>
 
         {/* Recent instances table */}
