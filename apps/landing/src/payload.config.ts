@@ -9,6 +9,8 @@ import { nodemailerAdapter } from '@payloadcms/email-nodemailer'
 import { Users } from './collections/Users'
 import { Media } from './collections/Media'
 import { Demos } from './collections/Demos'
+import { DemoInstances } from './collections/DemoInstances'
+import { DemoRequests } from './collections/DemoRequests'
 import { SiteSettings } from './globals/SiteSettings'
 import { Navigation } from './globals/Navigation'
 import { HomePage } from './globals/HomePage'
@@ -25,6 +27,13 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
     components: {
+      views: {
+        demoDashboard: {
+          Component: '@/components/admin/DemoDashboard',
+          path: '/demo-dashboard',
+        },
+      },
+      afterNavLinks: ['@/components/admin/DemoDashboardNavLink'],
       beforeDashboard: ['@/components/admin/SeedButton'],
     },
   },
@@ -33,7 +42,7 @@ export default buildConfig({
     defaultLocale: 'en',
     fallback: true,
   },
-  collections: [Users, Media, Demos],
+  collections: [Users, Media, Demos, DemoInstances, DemoRequests],
   globals: [SiteSettings, Navigation, HomePage, Footer],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',

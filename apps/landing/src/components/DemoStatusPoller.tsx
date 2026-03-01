@@ -11,7 +11,7 @@ interface StatusResponse {
   expiresAt?: string
 }
 
-export function DemoStatusPoller({ demoId }: { demoId: string }) {
+export function DemoStatusPoller({ demoId, statusToken }: { demoId: string; statusToken: string }) {
   const t = useTranslations('demoStatus')
 
   const statusMessages: Record<DemoStatus, string> = {
@@ -36,7 +36,7 @@ export function DemoStatusPoller({ demoId }: { demoId: string }) {
 
     const id = setInterval(async () => {
       try {
-        const res = await fetch(`/api/demo/status/${demoId}`)
+        const res = await fetch(`/api/demo/status/${demoId}?token=${encodeURIComponent(statusToken)}`)
         if (!res.ok) return
         const data = (await res.json()) as StatusResponse
         setStatus(data.status)
@@ -48,7 +48,7 @@ export function DemoStatusPoller({ demoId }: { demoId: string }) {
     }, 5_000)
 
     return () => clearInterval(id)
-  }, [demoId, status])
+  }, [demoId, statusToken, status])
 
   if (status === 'ready' && demoUrl) {
     return <CredentialsSuccess demoUrl={demoUrl} expiresAt={expiresAt} />

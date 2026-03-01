@@ -27,6 +27,7 @@ export function DemoRequestForm() {
 
   const [stage, setStage] = useState<Stage>('form')
   const [demoId, setDemoId] = useState<string | null>(null)
+  const [statusToken, setStatusToken] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
   const [turnstileToken, setTurnstileToken] = useState<string | null>(null)
@@ -50,15 +51,16 @@ export function DemoRequestForm() {
         body: JSON.stringify({ name, email, demoType: selectedType, turnstileToken }),
       })
 
-      const data = (await res.json()) as { demoId?: string; error?: string }
+      const data = (await res.json()) as { demoId?: string; statusToken?: string; error?: string }
 
-      if (!res.ok || !data.demoId) {
+      if (!res.ok || !data.demoId || !data.statusToken) {
         setError(data.error ?? t('errors.createFailed'))
         setStage('error')
         return
       }
 
       setDemoId(data.demoId)
+      setStatusToken(data.statusToken)
       setStage('polling')
     } catch {
       setError(t('errors.network'))
@@ -68,8 +70,8 @@ export function DemoRequestForm() {
     }
   }
 
-  if (stage === 'polling' && demoId) {
-    return <DemoStatusPoller demoId={demoId} />
+  if (stage === 'polling' && demoId && statusToken) {
+    return <DemoStatusPoller demoId={demoId} statusToken={statusToken} />
   }
 
   if (stage === 'error') {

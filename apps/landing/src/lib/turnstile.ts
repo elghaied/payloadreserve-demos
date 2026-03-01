@@ -1,7 +1,8 @@
 export async function verifyTurnstile(token: string): Promise<boolean> {
   const secret = process.env.TURNSTILE_SECRET_KEY
   if (!secret) {
-    // Allow in development when key is not set
+    // Intentional dev bypass: skip Turnstile when no secret key is configured in development.
+    // In production TURNSTILE_SECRET_KEY must always be set — without it, verification fails closed.
     if (process.env.NODE_ENV === 'development') return true
     return false
   }

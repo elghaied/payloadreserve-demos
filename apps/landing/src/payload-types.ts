@@ -70,6 +70,8 @@ export interface Config {
     users: User;
     media: Media;
     demos: Demo;
+    'demo-instances': DemoInstance;
+    'demo-requests': DemoRequest;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -80,6 +82,8 @@ export interface Config {
     users: UsersSelect<false> | UsersSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     demos: DemosSelect<false> | DemosSelect<true>;
+    'demo-instances': DemoInstancesSelect<false> | DemoInstancesSelect<true>;
+    'demo-requests': DemoRequestsSelect<false> | DemoRequestsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -286,6 +290,43 @@ export interface Demo {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "demo-instances".
+ */
+export interface DemoInstance {
+  id: string;
+  demoId: string;
+  type: 'salon' | 'hotel' | 'restaurant' | 'events';
+  subdomain: string;
+  dbName: string;
+  s3Prefix: string;
+  adminEmail: string;
+  adminPasswordHash: string;
+  statusTokenHash?: string | null;
+  coolifyServiceId: string;
+  status: 'provisioning' | 'ready' | 'expired' | 'failed';
+  expiresAt: string;
+  requestIp?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "demo-requests".
+ */
+export interface DemoRequest {
+  id: string;
+  name: string;
+  email: string;
+  demoType: 'salon' | 'hotel' | 'restaurant' | 'events';
+  requestIp?: string | null;
+  status: 'submitted' | 'provisioning' | 'completed' | 'failed' | 'rejected';
+  demoInstance?: (string | null) | DemoInstance;
+  rejectionReason?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
 export interface PayloadKv {
@@ -319,6 +360,14 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'demos';
         value: string | Demo;
+      } | null)
+    | ({
+        relationTo: 'demo-instances';
+        value: string | DemoInstance;
+      } | null)
+    | ({
+        relationTo: 'demo-requests';
+        value: string | DemoRequest;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -486,6 +535,41 @@ export interface DemosSelect<T extends boolean = true> {
         description?: T;
         image?: T;
       };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "demo-instances_select".
+ */
+export interface DemoInstancesSelect<T extends boolean = true> {
+  demoId?: T;
+  type?: T;
+  subdomain?: T;
+  dbName?: T;
+  s3Prefix?: T;
+  adminEmail?: T;
+  adminPasswordHash?: T;
+  statusTokenHash?: T;
+  coolifyServiceId?: T;
+  status?: T;
+  expiresAt?: T;
+  requestIp?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "demo-requests_select".
+ */
+export interface DemoRequestsSelect<T extends boolean = true> {
+  name?: T;
+  email?: T;
+  demoType?: T;
+  requestIp?: T;
+  status?: T;
+  demoInstance?: T;
+  rejectionReason?: T;
   updatedAt?: T;
   createdAt?: T;
 }
