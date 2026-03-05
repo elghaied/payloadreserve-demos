@@ -21,6 +21,7 @@ export function LocaleSwitcher() {
       <button
         onClick={() => switchLocale('en')}
         disabled={isPending}
+        aria-label="Switch to English"
         className={locale === 'en'
           ? 'text-[#1C1917] dark:text-stone-100 font-semibold underline underline-offset-2'
           : 'text-[#78716C] dark:text-stone-400 hover:text-[#1C1917] dark:hover:text-stone-200 transition-colors'}
@@ -31,6 +32,7 @@ export function LocaleSwitcher() {
       <button
         onClick={() => switchLocale('fr')}
         disabled={isPending}
+        aria-label="Passer au français"
         className={locale === 'fr'
           ? 'text-[#1C1917] dark:text-stone-100 font-semibold underline underline-offset-2'
           : 'text-[#78716C] dark:text-stone-400 hover:text-[#1C1917] dark:hover:text-stone-200 transition-colors'}

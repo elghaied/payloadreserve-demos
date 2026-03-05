@@ -110,7 +110,7 @@ function MockupGrid() {
   ]
 
   return (
-    <div className="relative">
+    <div className="relative" aria-hidden="true">
       {/* Glow behind the grid */}
       <div className="absolute inset-0 -z-10 flex items-center justify-center pointer-events-none">
         <div className="w-3/4 h-3/4 rounded-full bg-violet-100/60 dark:bg-violet-900/20 blur-3xl" />
@@ -146,9 +146,9 @@ function MockupGrid() {
               </div>
             ))}
           </div>
-          <button className="mt-3 w-full bg-violet-600 text-white text-[11px] font-bold py-2 rounded-xl shadow-sm shadow-violet-400/20">
+          <div role="presentation" className="mt-3 w-full bg-violet-600 text-white text-[11px] font-bold py-2 rounded-xl shadow-sm shadow-violet-400/20 text-center">
             Book 11:30 AM →
-          </button>
+          </div>
         </div>
 
         {/* Hotel */}
@@ -183,9 +183,9 @@ function MockupGrid() {
             <span className="text-[#78716C] dark:text-stone-400">Deluxe King</span>
             <span className="font-bold text-blue-700 dark:text-blue-400">$299/night</span>
           </div>
-          <button className="w-full bg-blue-600 text-white text-[11px] font-bold py-2 rounded-xl">
+          <div role="presentation" className="w-full bg-blue-600 text-white text-[11px] font-bold py-2 rounded-xl text-center">
             Reserve Room →
-          </button>
+          </div>
         </div>
 
         {/* Restaurant */}
@@ -216,9 +216,9 @@ function MockupGrid() {
               </div>
             ))}
           </div>
-          <button className="w-full bg-amber-500 text-black text-[11px] font-bold py-2 rounded-xl">
+          <div role="presentation" className="w-full bg-amber-500 text-black text-[11px] font-bold py-2 rounded-xl text-center">
             Reserve 8:00 PM →
-          </button>
+          </div>
         </div>
 
         {/* Events */}
@@ -266,9 +266,9 @@ function MockupGrid() {
               </div>
             ))}
           </div>
-          <button className="w-full bg-emerald-600 text-white text-[11px] font-bold py-2 rounded-xl">
+          <div role="presentation" className="w-full bg-emerald-600 text-white text-[11px] font-bold py-2 rounded-xl text-center">
             Book Feb 17 →
-          </button>
+          </div>
         </div>
       </div>
     </div>
