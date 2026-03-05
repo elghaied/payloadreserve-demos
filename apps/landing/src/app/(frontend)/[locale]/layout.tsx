@@ -45,7 +45,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export function generateStaticParams() {
-  return routing.locales.map((locale) => ({ locale }))
+  // Return empty — all pages rendered at runtime (no DB available at build time)
+  return []
 }
 
 export default async function LocaleLayout({ children, params }: Props) {

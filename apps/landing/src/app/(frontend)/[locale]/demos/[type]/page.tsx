@@ -13,12 +13,7 @@ type Props = {
 }
 
 export async function generateStaticParams() {
-  const payload = await getPayload({ config })
-  const { docs } = await payload.find({ collection: 'demos', limit: 100, depth: 0 })
-  return docs.flatMap((demo) => [
-    { locale: 'en', type: demo.slug },
-    { locale: 'fr', type: demo.slug },
-  ])
+  return []
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
