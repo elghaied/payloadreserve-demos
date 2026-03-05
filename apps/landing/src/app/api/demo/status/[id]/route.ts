@@ -2,8 +2,7 @@ import crypto from 'crypto'
 import { NextRequest, NextResponse } from 'next/server'
 import { getPayload } from 'payload'
 import config from '@payload-config'
-
-const demoProtocol = process.env.DEMO_PROTOCOL ?? 'https'
+import { getInfraSettings } from '@/lib/infra-settings'
 
 export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
@@ -35,6 +34,8 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
     return NextResponse.json({ error: 'Not found' }, { status: 404 })
   }
 
+  const settings = await getInfraSettings(payload)
+  const demoProtocol = settings.demoProtocol || process.env.DEMO_PROTOCOL || 'https'
   const demoUrl = demo.status === 'ready' ? `${demoProtocol}://${demo.subdomain}` : undefined
 
   return NextResponse.json({

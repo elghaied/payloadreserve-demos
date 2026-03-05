@@ -2,8 +2,7 @@
 import React, { useState, useCallback } from 'react'
 import { useField, FieldLabel } from '@payloadcms/ui'
 import type { TextFieldClientComponent } from 'payload'
-
-const SECRET_MASK = '••••••••'
+import { SECRET_MASK } from '@/globals/InfrastructureSettings'
 
 export const SecretField: TextFieldClientComponent = ({ path, field }) => {
   const { value, setValue } = useField<string>({ path })

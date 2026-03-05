@@ -42,25 +42,3 @@ export function createMailer(settings: InfrastructureSetting): Mailer {
   }
 }
 
-export const mailer: Mailer = {
-  async sendDemoCredentials(to, data) {
-    if (!process.env.SMTP_HOST) return
-    const transport = nodemailer.createTransport({
-      host: process.env.SMTP_HOST!,
-      port: Number(process.env.SMTP_PORT ?? 587),
-      secure: false,
-      auth: {
-        user: process.env.SMTP_USER!,
-        pass: process.env.SMTP_PASS!,
-      },
-    })
-    const element = DemoCredentials(data)
-    const html = await render(element)
-    await transport.sendMail({
-      from: `"${process.env.SMTP_FROM_NAME ?? 'payload-reserve'}" <${process.env.SMTP_FROM!}>`,
-      to,
-      subject: `Your ${data.demoType} demo is ready`,
-      html,
-    })
-  },
-}

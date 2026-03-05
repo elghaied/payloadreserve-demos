@@ -46,7 +46,7 @@ const SAFE_DB_NAME_RE = /^payloadreserve-demo-[a-z0-9]+$/
 export function buildMongoUrl(settings: InfrastructureSetting): string {
   const user = encodeURIComponent(settings.mongoRootUsername || process.env.MONGO_ROOT_USERNAME || '')
   const pass = encodeURIComponent(settings.mongoRootPassword || process.env.MONGO_ROOT_PASSWORD || '')
-  const host = settings.mongoHost || process.env.MONGO_HOST || 'localhost:27017'
+  const host = settings.mongoHost || process.env.MONGO_HOST || 'localhost'
   return `mongodb://${user}:${pass}@${host}:27017/?authSource=admin&directConnection=true`
 }
 

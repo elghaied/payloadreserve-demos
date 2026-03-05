@@ -1,6 +1,6 @@
 import type { GlobalConfig, Field } from 'payload'
 
-const SECRET_MASK = '••••••••'
+export const SECRET_MASK = '••••••••'
 
 export const SECRET_FIELDS = [
   'coolifyApiKey',

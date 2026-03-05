@@ -24,7 +24,13 @@ const DEMO_SMTP_FROM_NAMES: Record<DemoType, string> = {
 }
 
 function getDemoImage(settings: InfrastructureSetting, type: DemoType): { name: string; tag: string } {
-  const imageGroup = settings[`${type}Image` as keyof InfrastructureSetting] as { name?: string; tag?: string } | undefined
+  const imageMap = {
+    salon: settings.salonImage,
+    hotel: settings.hotelImage,
+    restaurant: settings.restaurantImage,
+    events: settings.eventsImage,
+  }
+  const imageGroup = imageMap[type]
   const envName = process.env[`DOCKER_IMAGE_${type.toUpperCase()}_NAME`] ?? ''
   const envTag = process.env[`DOCKER_IMAGE_${type.toUpperCase()}_TAG`] ?? 'latest'
   return {
@@ -188,7 +194,7 @@ export async function POST(req: NextRequest) {
     const image = getDemoImage(settings, demoType as DemoType)
     const mongoUser = encodeURIComponent(settings.mongoRootUsername || process.env.MONGO_ROOT_USERNAME || '')
     const mongoPass = encodeURIComponent(settings.mongoRootPassword || process.env.MONGO_ROOT_PASSWORD || '')
-    const mongoHost = settings.mongoHost || process.env.MONGO_HOST || 'mongodb:27017'
+    const mongoHost = settings.mongoHost || process.env.MONGO_HOST || 'mongodb'
     console.log(`[demo/${demoId}] Creating Coolify service — image: ${image.name}:${image.tag}, fqdn: ${demoProtocol}://${subdomain}`)
     try {
       const service = await coolify.createService({
