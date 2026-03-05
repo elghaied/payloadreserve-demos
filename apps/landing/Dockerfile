@@ -54,6 +54,9 @@ RUN mkdir -p apps/landing/.next && chown nextjs:nodejs apps/landing/.next
 COPY --from=builder --chown=nextjs:nodejs /app/apps/landing/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/apps/landing/.next/static     ./apps/landing/.next/static
 
+# Seed images (not included in standalone output, needed by /api/seed)
+COPY --from=builder --chown=nextjs:nodejs /app/apps/landing/src/seed/*.webp  ./apps/landing/src/seed/
+
 USER nextjs
 
 EXPOSE 3001
