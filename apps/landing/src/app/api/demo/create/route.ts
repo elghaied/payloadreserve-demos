@@ -297,7 +297,7 @@ async function pollAndSeed(opts: {
         await coolify.startService(coolifyServiceId)
         console.log(`[demo/${demoId}] startService call succeeded`)
       } catch (err) {
-        console.error(`[demo/${demoId}] startService failed:`, err)
+        console.error(`[demo/${demoId}] startService failed: ${(err as Error)?.message ?? 'Unknown error'}`)
       }
     } else {
       console.warn(`[demo/${demoId}] No Coolify client — skipping startService`)
@@ -364,7 +364,7 @@ async function pollAndSeed(opts: {
         throw new Error(`seed returned ${seedRes.status}: ${seedBody}`)
       }
     } catch (err) {
-      console.error(`[demo/${demoId}] seed failed:`, err)
+      console.error(`[demo/${demoId}] seed failed: ${(err as Error)?.message ?? 'Unknown error'}`)
       await payload.update({
         collection: 'demo-instances',
         where: { demoId: { equals: demoId } },
@@ -404,7 +404,7 @@ async function pollAndSeed(opts: {
       })
       console.log(`[demo/${demoId}] Credentials email sent`)
     } catch (err) {
-      console.error(`[demo/${demoId}] email failed:`, err)
+      console.error(`[demo/${demoId}] email failed: ${(err as Error)?.message ?? 'Unknown error'}`)
       // Non-fatal — demo is still ready
     }
   } catch (err) {
