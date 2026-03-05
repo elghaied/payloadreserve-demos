@@ -33,7 +33,7 @@ export function DeveloperSection({ developerSection, githubUrl }: Props) {
           {steps.map((step, i) => (
             <div
               key={step.id ?? i}
-              className="bg-[#111110] rounded-2xl border border-white/10 p-6"
+              className="bg-[#111110] rounded-2xl border border-white/10 p-6 min-w-0 overflow-hidden"
             >
               {/* Step number */}
               <div className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold bg-violet-700 text-white mb-4">
