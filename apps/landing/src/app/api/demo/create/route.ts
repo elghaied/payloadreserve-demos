@@ -283,126 +283,141 @@ async function pollAndSeed(opts: {
     demoId, subdomain, demoProtocol, email, adminPassword, demoType, expiresAt,
     coolify, coolifyServiceId, demoSeedSecret, payload, demoRequestId, settings,
   } = opts
-  const demoUrl = `${demoProtocol}://${subdomain}`
-  const seedSecret = demoSeedSecret
-  const maxAttempts = 60
-  const intervalMs = 10_000
 
-  // Start the Coolify service if client is available
-  if (coolify) {
-    try {
-      console.log(`[demo/${demoId}] Starting Coolify service ${coolifyServiceId}…`)
-      await coolify.startService(coolifyServiceId)
-      console.log(`[demo/${demoId}] startService call succeeded`)
-    } catch (err) {
-      console.error(`[demo/${demoId}] startService failed:`, err)
-    }
-  } else {
-    console.warn(`[demo/${demoId}] No Coolify client — skipping startService`)
-  }
+  try {
+    const demoUrl = `${demoProtocol}://${subdomain}`
+    const seedSecret = demoSeedSecret
+    const maxAttempts = 60
+    const intervalMs = 10_000
 
-  // Poll /api/health
-  let healthy = false
-  console.log(`[demo/${demoId}] Polling ${demoUrl}/api/health (max ${maxAttempts} attempts, ${intervalMs}ms interval)…`)
-  for (let i = 0; i < maxAttempts; i++) {
-    await new Promise((r) => setTimeout(r, intervalMs))
-
-    if (coolify && i % 5 === 0) {
+    // Start the Coolify service if client is available
+    if (coolify) {
       try {
-        const svcStatus = await coolify.getServiceStatus(coolifyServiceId)
-        console.log(`[demo/${demoId}] Coolify container status: ${svcStatus}`)
-        if (svcStatus === 'error') {
-          console.error(`[demo/${demoId}] Coolify reports container error — aborting health poll`)
+        console.log(`[demo/${demoId}] Starting Coolify service ${coolifyServiceId}…`)
+        await coolify.startService(coolifyServiceId)
+        console.log(`[demo/${demoId}] startService call succeeded`)
+      } catch (err) {
+        console.error(`[demo/${demoId}] startService failed:`, err)
+      }
+    } else {
+      console.warn(`[demo/${demoId}] No Coolify client — skipping startService`)
+    }
+
+    // Poll /api/health
+    let healthy = false
+    console.log(`[demo/${demoId}] Polling ${demoUrl}/api/health (max ${maxAttempts} attempts, ${intervalMs}ms interval)…`)
+    for (let i = 0; i < maxAttempts; i++) {
+      await new Promise((r) => setTimeout(r, intervalMs))
+
+      if (coolify && i % 5 === 0) {
+        try {
+          const svcStatus = await coolify.getServiceStatus(coolifyServiceId)
+          console.log(`[demo/${demoId}] Coolify container status: ${svcStatus}`)
+          if (svcStatus === 'error') {
+            console.error(`[demo/${demoId}] Coolify reports container error — aborting health poll`)
+            break
+          }
+        } catch (err) {
+          console.warn(`[demo/${demoId}] getServiceStatus failed:`, (err as Error).message)
+        }
+      }
+
+      try {
+        const res = await fetch(`${demoUrl}/api/health`, { signal: AbortSignal.timeout(8_000) })
+        console.log(`[demo/${demoId}] health attempt ${i + 1}/${maxAttempts}: HTTP ${res.status}`)
+        if (res.ok) {
+          healthy = true
           break
         }
       } catch (err) {
-        console.warn(`[demo/${demoId}] getServiceStatus failed:`, (err as Error).message)
+        console.log(`[demo/${demoId}] health attempt ${i + 1}/${maxAttempts}: ${(err as Error).message}`)
       }
     }
 
+    if (!healthy) {
+      console.error(`[demo/${demoId}] health check timed out after ${maxAttempts} attempts`)
+      await payload.update({
+        collection: 'demo-instances',
+        where: { demoId: { equals: demoId } },
+        data: { status: 'failed' },
+      })
+      await payload.update({
+        collection: 'demo-requests',
+        id: demoRequestId,
+        data: { status: 'failed' },
+      })
+      return
+    }
+
+    console.log(`[demo/${demoId}] Container healthy — triggering seed`)
+
+    // Trigger seed
     try {
-      const res = await fetch(`${demoUrl}/api/health`, { signal: AbortSignal.timeout(8_000) })
-      console.log(`[demo/${demoId}] health attempt ${i + 1}/${maxAttempts}: HTTP ${res.status}`)
-      if (res.ok) {
-        healthy = true
-        break
+      const seedRes = await fetch(`${demoUrl}/api/seed`, {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${seedSecret}` },
+        signal: AbortSignal.timeout(120_000),
+      })
+      const seedBody = await seedRes.text()
+      console.log(`[demo/${demoId}] seed response: HTTP ${seedRes.status} — ${seedBody.slice(0, 200)}`)
+      if (!seedRes.ok) {
+        throw new Error(`seed returned ${seedRes.status}: ${seedBody}`)
       }
     } catch (err) {
-      console.log(`[demo/${demoId}] health attempt ${i + 1}/${maxAttempts}: ${(err as Error).message}`)
+      console.error(`[demo/${demoId}] seed failed:`, err)
+      await payload.update({
+        collection: 'demo-instances',
+        where: { demoId: { equals: demoId } },
+        data: { status: 'failed' },
+      })
+      await payload.update({
+        collection: 'demo-requests',
+        id: demoRequestId,
+        data: { status: 'failed' },
+      })
+      return
     }
-  }
 
-  if (!healthy) {
-    console.error(`[demo/${demoId}] health check timed out after ${maxAttempts} attempts`)
+    // Mark ready
+    console.log(`[demo/${demoId}] Seed complete — marking ready`)
     await payload.update({
       collection: 'demo-instances',
       where: { demoId: { equals: demoId } },
-      data: { status: 'failed' },
+      data: { status: 'ready' },
     })
     await payload.update({
       collection: 'demo-requests',
       id: demoRequestId,
-      data: { status: 'failed' },
+      data: { status: 'completed' },
     })
-    return
-  }
 
-  console.log(`[demo/${demoId}] Container healthy — triggering seed`)
-
-  // Trigger seed
-  try {
-    const seedRes = await fetch(`${demoUrl}/api/seed`, {
-      method: 'POST',
-      headers: { Authorization: `Bearer ${seedSecret}` },
-      signal: AbortSignal.timeout(120_000),
-    })
-    const seedBody = await seedRes.text()
-    console.log(`[demo/${demoId}] seed response: HTTP ${seedRes.status} — ${seedBody.slice(0, 200)}`)
-    if (!seedRes.ok) {
-      throw new Error(`seed returned ${seedRes.status}: ${seedBody}`)
+    // Send credentials email
+    try {
+      console.log(`[demo/${demoId}] Sending credentials email to ${email}`)
+      const mail = createMailer(settings)
+      await mail.sendDemoCredentials(email, {
+        demoUrl,
+        adminEmail: email,
+        adminPassword,
+        expiresAt,
+        demoType,
+      })
+      console.log(`[demo/${demoId}] Credentials email sent`)
+    } catch (err) {
+      console.error(`[demo/${demoId}] email failed:`, err)
+      // Non-fatal — demo is still ready
     }
   } catch (err) {
-    console.error(`[demo/${demoId}] seed failed:`, err)
+    console.error(`[demo/${demoId}] pollAndSeed unhandled error: ${(err as Error)?.message ?? err}`)
     await payload.update({
       collection: 'demo-instances',
       where: { demoId: { equals: demoId } },
       data: { status: 'failed' },
-    })
+    }).catch(() => {})
     await payload.update({
       collection: 'demo-requests',
       id: demoRequestId,
       data: { status: 'failed' },
-    })
-    return
-  }
-
-  // Mark ready
-  console.log(`[demo/${demoId}] Seed complete — marking ready`)
-  await payload.update({
-    collection: 'demo-instances',
-    where: { demoId: { equals: demoId } },
-    data: { status: 'ready' },
-  })
-  await payload.update({
-    collection: 'demo-requests',
-    id: demoRequestId,
-    data: { status: 'completed' },
-  })
-
-  // Send credentials email
-  try {
-    console.log(`[demo/${demoId}] Sending credentials email to ${email}`)
-    const mail = createMailer(settings)
-    await mail.sendDemoCredentials(email, {
-      demoUrl,
-      adminEmail: email,
-      adminPassword,
-      expiresAt,
-      demoType,
-    })
-    console.log(`[demo/${demoId}] Credentials email sent`)
-  } catch (err) {
-    console.error(`[demo/${demoId}] email failed:`, err)
-    // Non-fatal — demo is still ready
+    }).catch(() => {})
   }
 }
