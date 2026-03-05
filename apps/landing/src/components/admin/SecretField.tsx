@@ -16,6 +16,7 @@ export const SecretField: TextFieldClientComponent = ({ path, field }) => {
   const [inputValue, setInputValue] = useState('')
   const [revealedValue, setRevealedValue] = useState<string | null>(null)
   const [revealing, setRevealing] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   const hasValue = value === SECRET_MASK || (!!value && value !== '')
 
@@ -39,6 +40,7 @@ export const SecretField: TextFieldClientComponent = ({ path, field }) => {
       return
     }
     setRevealing(true)
+    setError(null)
     try {
       const res = await fetch('/api/admin/reveal-secret', {
         method: 'POST',
@@ -47,14 +49,13 @@ export const SecretField: TextFieldClientComponent = ({ path, field }) => {
         body: JSON.stringify({ fieldName: path }),
       })
       if (!res.ok) {
-        const err = await res.json()
-        console.error('Reveal failed:', err.error)
+        setError('Failed to reveal secret')
         return
       }
       const { value: secret } = await res.json()
       setRevealedValue(secret ?? '(empty)')
-    } catch (e) {
-      console.error('Reveal failed:', e)
+    } catch {
+      setError('Failed to reveal secret')
     } finally {
       setRevealing(false)
     }
@@ -63,7 +64,7 @@ export const SecretField: TextFieldClientComponent = ({ path, field }) => {
   const handleGenerate = useCallback(() => {
     const secret = generateSecret()
     setValue(secret)
-    setRevealedValue(null)
+    setRevealedValue(secret)
     setEditing(false)
     setInputValue('')
   }, [setValue])
@@ -83,6 +84,7 @@ export const SecretField: TextFieldClientComponent = ({ path, field }) => {
               {revealedValue !== null ? revealedValue : hasValue ? SECRET_MASK : '(not set)'}
             </code>
           </div>
+          {error && <span style={{ color: 'var(--theme-error-500)', fontSize: '0.8rem' }}>{error}</span>}
           <div style={{ display: 'flex', gap: '0.5rem', marginTop: '0.5rem' }}>
             {hasValue && (
               <button
