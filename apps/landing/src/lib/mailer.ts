@@ -9,10 +9,12 @@ export interface Mailer {
 }
 
 function createTransport(settings: InfrastructureSetting) {
+  const port = settings.smtpPort || Number(process.env.SMTP_PORT ?? 587)
   return nodemailer.createTransport({
     host: settings.smtpHost || process.env.SMTP_HOST!,
-    port: settings.smtpPort || Number(process.env.SMTP_PORT ?? 587),
-    secure: false,
+    port,
+    secure: port === 465,
+    requireTLS: port !== 465,
     auth: {
       user: settings.smtpUser || process.env.SMTP_USER!,
       pass: settings.smtpPass || process.env.SMTP_PASS!,
