@@ -20,6 +20,7 @@ export class CoolifyClient {
         Accept: 'application/json',
       },
       body: body !== undefined ? JSON.stringify(body) : undefined,
+      signal: AbortSignal.timeout(30_000),
     })
 
     if (!res.ok) {
