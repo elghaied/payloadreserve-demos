@@ -4,22 +4,17 @@ import { customAlphabet } from 'nanoid'
 const nanoid = customAlphabet('abcdefghijklmnopqrstuvwxyz0123456789', 16)
 import crypto from 'crypto'
 import bcrypt from 'bcrypt'
-import { CoolifyClient } from '@payload-reserve-demos/coolify-sdk'
+import type { CoolifyClient } from '@payload-reserve-demos/coolify-sdk'
 import type { DemoType } from '@payload-reserve-demos/types'
+import type { InfrastructureSetting } from '@/payload-types'
 import { getPayload } from 'payload'
 import config from '@payload-config'
 import { verifyTurnstile } from '@/lib/turnstile'
 import { getCoolify } from '@/lib/cleanup-utils'
-import { mailer } from '@/lib/mailer'
+import { createMailer } from '@/lib/mailer'
+import { getInfraSettings } from '@/lib/infra-settings'
 
 const DEMO_TYPES: DemoType[] = ['salon', 'hotel', 'restaurant', 'events']
-
-const DEMO_IMAGES: Record<DemoType, { name: string; tag: string }> = {
-  salon:      { name: process.env.DOCKER_IMAGE_SALON_NAME      ?? '', tag: process.env.DOCKER_IMAGE_SALON_TAG      ?? 'latest' },
-  hotel:      { name: process.env.DOCKER_IMAGE_HOTEL_NAME      ?? '', tag: process.env.DOCKER_IMAGE_HOTEL_TAG      ?? 'latest' },
-  restaurant: { name: process.env.DOCKER_IMAGE_RESTAURANT_NAME ?? '', tag: process.env.DOCKER_IMAGE_RESTAURANT_TAG ?? 'latest' },
-  events:     { name: process.env.DOCKER_IMAGE_EVENTS_NAME     ?? '', tag: process.env.DOCKER_IMAGE_EVENTS_TAG     ?? 'latest' },
-}
 
 const DEMO_SMTP_FROM_NAMES: Record<DemoType, string> = {
   salon:      'Lumière Salon',
@@ -28,8 +23,15 @@ const DEMO_SMTP_FROM_NAMES: Record<DemoType, string> = {
   events:     'EventSpace',
 }
 
-// TODO: Change DEMO_PROTOCOL to 'https' in production (set via env var on the Coolify service)
-const demoProtocol = process.env.DEMO_PROTOCOL ?? 'https'
+function getDemoImage(settings: InfrastructureSetting, type: DemoType): { name: string; tag: string } {
+  const imageGroup = settings[`${type}Image` as keyof InfrastructureSetting] as { name?: string; tag?: string } | undefined
+  const envName = process.env[`DOCKER_IMAGE_${type.toUpperCase()}_NAME`] ?? ''
+  const envTag = process.env[`DOCKER_IMAGE_${type.toUpperCase()}_TAG`] ?? 'latest'
+  return {
+    name: imageGroup?.name || envName,
+    tag: imageGroup?.tag || envTag,
+  }
+}
 
 export async function POST(req: NextRequest) {
   let body: { name?: string; email?: string; demoType?: string; turnstileToken?: string }
@@ -58,14 +60,16 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Invalid demoType' }, { status: 400 })
   }
 
+  const payload = await getPayload({ config })
+  const settings = await getInfraSettings(payload)
+
   // Verify Turnstile
   const token = turnstileToken ?? ''
-  const turnstileOk = await verifyTurnstile(token)
+  const turnstileOk = await verifyTurnstile(token, settings)
   if (!turnstileOk) {
     return NextResponse.json({ error: 'Turnstile verification failed' }, { status: 400 })
   }
 
-  const payload = await getPayload({ config })
   const requestIp = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ?? 'unknown'
 
   // Create demo request record
@@ -109,7 +113,7 @@ export async function POST(req: NextRequest) {
   }
 
   // Capacity check
-  const maxActive = Number(process.env.MAX_ACTIVE_DEMOS ?? 20)
+  const maxActive = settings.maxActiveDemos || Number(process.env.MAX_ACTIVE_DEMOS ?? 20)
   const activeCount = await payload.count({
     collection: 'demo-instances',
     where: {
@@ -139,15 +143,15 @@ export async function POST(req: NextRequest) {
   const demoSeedSecret = crypto.randomBytes(24).toString('hex')
   const statusToken = crypto.randomBytes(24).toString('base64url')
   const statusTokenHash = crypto.createHash('sha256').update(statusToken).digest('hex')
-  const baseDomain = process.env.DEMO_BASE_DOMAIN ?? 'payloadreserve.com'
+  const demoProtocol = settings.demoProtocol || process.env.DEMO_PROTOCOL || 'https'
+  const baseDomain = settings.demoBaseDomain || process.env.DEMO_BASE_DOMAIN || 'payloadreserve.com'
   const subdomain = `demo-${demoId}.${baseDomain}`
   const dbName = `payloadreserve-demo-${demoId}`
   const s3Prefix = `${demoType}/demo-${demoId}`
-  const ttlHours = Number(process.env.DEMO_TTL_HOURS ?? 24)
+  const ttlHours = settings.demoTtlHours || Number(process.env.DEMO_TTL_HOURS ?? 24)
   const expiresAt = new Date(Date.now() + ttlHours * 60 * 60 * 1000)
 
-  // Persist demo instance record immediately — the unique demoId index acts as a lock
-  // to prevent race conditions between the rate-limit check and Coolify provisioning.
+  // Persist demo instance record
   const instance = await payload.create({
     collection: 'demo-instances',
     data: {
@@ -178,26 +182,27 @@ export async function POST(req: NextRequest) {
 
   // Create Coolify service
   let coolifyServiceId = 'pending'
-  const coolify = getCoolify()
+  const coolify = getCoolify(settings)
   console.log(`[demo/${demoId}] Coolify client: ${coolify ? 'ready' : 'MISSING — check COOLIFY_API_URL / COOLIFY_API_KEY'}`)
   if (coolify) {
-    const image = DEMO_IMAGES[demoType as DemoType]
-    const mongoUser = encodeURIComponent(process.env.MONGO_ROOT_USERNAME ?? '')
-    const mongoPass = encodeURIComponent(process.env.MONGO_ROOT_PASSWORD ?? '')
+    const image = getDemoImage(settings, demoType as DemoType)
+    const mongoUser = encodeURIComponent(settings.mongoRootUsername || process.env.MONGO_ROOT_USERNAME || '')
+    const mongoPass = encodeURIComponent(settings.mongoRootPassword || process.env.MONGO_ROOT_PASSWORD || '')
+    const mongoHost = settings.mongoHost || process.env.MONGO_HOST || 'mongodb:27017'
     console.log(`[demo/${demoId}] Creating Coolify service — image: ${image.name}:${image.tag}, fqdn: ${demoProtocol}://${subdomain}`)
     try {
       const service = await coolify.createService({
         name: `demo-${demoId}`,
-        projectUuid: process.env.COOLIFY_PROJECT_UUID ?? '',
-        serverUuid: process.env.COOLIFY_SERVER_UUID ?? '',
-        destinationUuid: process.env.COOLIFY_DESTINATION_UUID ?? '',
+        projectUuid: settings.coolifyProjectUuid || process.env.COOLIFY_PROJECT_UUID || '',
+        serverUuid: settings.coolifyServerUuid || process.env.COOLIFY_SERVER_UUID || '',
+        destinationUuid: settings.coolifyDestinationUuid || process.env.COOLIFY_DESTINATION_UUID || '',
         environmentName: 'production',
         dockerImageName: image.name,
         dockerImageTag: image.tag,
         ports: '3000',
         fqdn: `${demoProtocol}://${subdomain}`,
         envVars: [
-          { key: 'DATABASE_URL', value: `mongodb://${mongoUser}:${mongoPass}@${process.env.MONGO_HOST ?? 'mongodb:27017'}/${dbName}?authSource=admin&directConnection=true`, is_secret: true },
+          { key: 'DATABASE_URL', value: `mongodb://${mongoUser}:${mongoPass}@${mongoHost}:27017/${dbName}?authSource=admin&directConnection=true`, is_secret: true },
           { key: 'PAYLOAD_SECRET', value: payloadSecret, is_secret: true },
           { key: 'ADMIN_EMAIL', value: email },
           { key: 'ADMIN_PASSWORD', value: adminPassword, is_secret: true },
@@ -206,26 +211,24 @@ export async function POST(req: NextRequest) {
           { key: 'S3_PREFIX', value: s3Prefix },
           { key: 'S3_BUCKET', value: `${demoType}-demo` },
           { key: 'SMTP_FROM_NAME', value: DEMO_SMTP_FROM_NAMES[demoType as DemoType] },
-          { key: 'S3_ACCESS_KEY', value: process.env.S3_ACCESS_KEY ?? '', is_secret: true },
-          { key: 'S3_SECRET_KEY', value: process.env.S3_SECRET_KEY ?? '', is_secret: true },
-          { key: 'S3_ENDPOINT', value: process.env.S3_ENDPOINT ?? '' },
-          { key: 'S3_REGION', value: process.env.S3_REGION ?? 'us-east-1' },
-          { key: 'S3_FORCE_PATH_STYLE', value: process.env.S3_FORCE_PATH_STYLE ?? 'true' },
-          { key: 'SMTP_HOST', value: process.env.SMTP_HOST ?? '' },
-          { key: 'SMTP_PORT', value: process.env.SMTP_PORT ?? '587' },
-          { key: 'SMTP_USER', value: process.env.SMTP_USER ?? '' },
-          { key: 'SMTP_PASS', value: process.env.SMTP_PASS ?? '', is_secret: true },
-          { key: 'SMTP_FROM', value: process.env.SMTP_FROM ?? '' },
-          // TODO: Use per-demo-type restricted Stripe keys (requires Stripe dashboard configuration)
-          { key: 'STRIPE_SECRET_KEY', value: process.env.STRIPE_SECRET_KEY ?? '', is_secret: true },
-          { key: 'STRIPE_WEBHOOK_SECRET', value: process.env.STRIPE_WEBHOOK_SECRET ?? '', is_secret: true },
-          { key: 'NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY', value: process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY ?? '' },
+          { key: 'S3_ACCESS_KEY', value: settings.s3AccessKey || process.env.S3_ACCESS_KEY || '', is_secret: true },
+          { key: 'S3_SECRET_KEY', value: settings.s3SecretKey || process.env.S3_SECRET_KEY || '', is_secret: true },
+          { key: 'S3_ENDPOINT', value: settings.s3Endpoint || process.env.S3_ENDPOINT || '' },
+          { key: 'S3_REGION', value: settings.s3Region || process.env.S3_REGION || 'us-east-1' },
+          { key: 'S3_FORCE_PATH_STYLE', value: String(settings.s3ForcePathStyle ?? (process.env.S3_FORCE_PATH_STYLE ?? 'true')) },
+          { key: 'SMTP_HOST', value: settings.smtpHost || process.env.SMTP_HOST || '' },
+          { key: 'SMTP_PORT', value: String(settings.smtpPort || process.env.SMTP_PORT || '587') },
+          { key: 'SMTP_USER', value: settings.smtpUser || process.env.SMTP_USER || '' },
+          { key: 'SMTP_PASS', value: settings.smtpPass || process.env.SMTP_PASS || '', is_secret: true },
+          { key: 'SMTP_FROM', value: settings.smtpFrom || process.env.SMTP_FROM || '' },
+          { key: 'STRIPE_SECRET_KEY', value: settings.stripeSecretKey || process.env.STRIPE_SECRET_KEY || '', is_secret: true },
+          { key: 'STRIPE_WEBHOOK_SECRET', value: settings.stripeWebhookSecret || process.env.STRIPE_WEBHOOK_SECRET || '', is_secret: true },
+          { key: 'NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY', value: settings.stripePublishableKey || process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || '' },
         ],
       })
       coolifyServiceId = service.id
       console.log(`[demo/${demoId}] Coolify service created — uuid: ${coolifyServiceId}`)
 
-      // Update the instance with the real Coolify service ID
       await payload.update({
         collection: 'demo-instances',
         id: instance.id,
@@ -251,6 +254,7 @@ export async function POST(req: NextRequest) {
   void pollAndSeed({
     demoId,
     subdomain,
+    demoProtocol,
     email,
     adminPassword,
     demoType: demoType as DemoType,
@@ -260,6 +264,7 @@ export async function POST(req: NextRequest) {
     demoSeedSecret,
     payload,
     demoRequestId: demoRequest.id,
+    settings,
   })
 
   return NextResponse.json({ demoId, statusToken }, { status: 202 })
@@ -268,6 +273,7 @@ export async function POST(req: NextRequest) {
 async function pollAndSeed(opts: {
   demoId: string
   subdomain: string
+  demoProtocol: string
   email: string
   adminPassword: string
   demoType: DemoType
@@ -277,10 +283,11 @@ async function pollAndSeed(opts: {
   demoSeedSecret: string
   payload: Awaited<ReturnType<typeof getPayload>>
   demoRequestId: string | number
+  settings: InfrastructureSetting
 }) {
   const {
-    demoId, subdomain, email, adminPassword, demoType, expiresAt,
-    coolify, coolifyServiceId, demoSeedSecret, payload, demoRequestId,
+    demoId, subdomain, demoProtocol, email, adminPassword, demoType, expiresAt,
+    coolify, coolifyServiceId, demoSeedSecret, payload, demoRequestId, settings,
   } = opts
   const demoUrl = `${demoProtocol}://${subdomain}`
   const seedSecret = demoSeedSecret
@@ -391,7 +398,8 @@ async function pollAndSeed(opts: {
   // Send credentials email
   try {
     console.log(`[demo/${demoId}] Sending credentials email to ${email}`)
-    await mailer.sendDemoCredentials(email, {
+    const mail = createMailer(settings)
+    await mail.sendDemoCredentials(email, {
       demoUrl,
       adminEmail: email,
       adminPassword,

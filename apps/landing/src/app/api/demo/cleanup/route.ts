@@ -2,19 +2,21 @@ import crypto from 'crypto'
 import { NextRequest, NextResponse } from 'next/server'
 import { getPayload } from 'payload'
 import config from '@payload-config'
-import { getS3, getCoolify, deleteS3Prefix, dropDemoDatabase } from '@/lib/cleanup-utils'
+import { getInfraSettings } from '@/lib/infra-settings'
+import { getS3, getCoolify, deleteS3Prefix, dropDemoDatabase, buildMongoUrl } from '@/lib/cleanup-utils'
 
 export async function POST(req: NextRequest) {
-  // Auth check — constant-time comparison to prevent timing attacks
+  const payload = await getPayload({ config })
+  const settings = await getInfraSettings(payload)
+
+  // Auth check — constant-time comparison
   const authHeader = req.headers.get('authorization') ?? ''
   const token = authHeader.startsWith('Bearer ') ? authHeader.slice(7) : null
-  const secret = process.env.CLEANUP_SECRET ?? ''
+  const secret = settings.cleanupSecret || process.env.CLEANUP_SECRET || ''
   if (!token || !secret || token.length !== secret.length ||
       !crypto.timingSafeEqual(Buffer.from(token), Buffer.from(secret))) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
-
-  const payload = await getPayload({ config })
 
   const expired = await payload.find({
     collection: 'demo-instances',
@@ -25,9 +27,10 @@ export async function POST(req: NextRequest) {
     limit: 100,
   })
 
-  const s3 = getS3()
-  const coolify = getCoolify()
-  const dbUrl = process.env.DATABASE_URL!
+  const s3 = getS3(settings)
+  const coolify = getCoolify(settings)
+  const mongoUrl = buildMongoUrl(settings)
+  const s3Bucket = settings.s3Bucket || process.env.S3_BUCKET || ''
 
   let expiredCount = 0
   let failedCount = 0
@@ -38,8 +41,8 @@ export async function POST(req: NextRequest) {
         coolify
           ? coolify.deleteService(demo.coolifyServiceId)
           : Promise.resolve(),
-        dropDemoDatabase(dbUrl, demo.dbName),
-        deleteS3Prefix(s3, demo.s3Prefix),
+        dropDemoDatabase(mongoUrl, demo.dbName),
+        deleteS3Prefix(s3, s3Bucket, demo.s3Prefix),
       ])
 
       const anyFailed = results.some((r) => r.status === 'rejected')
@@ -54,7 +57,6 @@ export async function POST(req: NextRequest) {
         expiredCount++
       }
 
-      // Always mark expired to avoid re-processing
       await payload.update({
         collection: 'demo-instances',
         id: demo.id,
