@@ -31,13 +31,28 @@ export function ImageCarousel({ slides, interval = 5000 }: Props) {
 
   // Trigger fade-out on the next frame when prevIndex changes
   useEffect(() => {
-    if (prevIndex !== null) {
-      setFadeOutPrev(false)
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          setFadeOutPrev(true)
-        })
+    if (prevIndex === null) return
+
+    setFadeOutPrev(false)
+    const rafIds = { outer: 0, inner: 0 }
+    rafIds.outer = requestAnimationFrame(() => {
+      rafIds.inner = requestAnimationFrame(() => {
+        setFadeOutPrev(true)
       })
+    })
+
+    // Safety: if onTransitionEnd never fires (bubbled event, interrupted transition),
+    // force cleanup so the carousel never permanently locks.
+    const timeout = setTimeout(() => {
+      setPrevIndex(null)
+      setFadeOutPrev(false)
+      setIsTransitioning(false)
+    }, 900) // 700ms transition + 200ms buffer
+
+    return () => {
+      cancelAnimationFrame(rafIds.outer)
+      cancelAnimationFrame(rafIds.inner)
+      clearTimeout(timeout)
     }
   }, [prevIndex])
 
@@ -69,10 +84,16 @@ export function ImageCarousel({ slides, interval = 5000 }: Props) {
   }, [slides.length, interval, goNext])
 
   // Clear prevIndex after transition ends
-  const handleTransitionEnd = useCallback(() => {
-    setPrevIndex(null)
-    setIsTransitioning(false)
-  }, [])
+  const handleTransitionEnd = useCallback(
+    (e: React.TransitionEvent<HTMLDivElement>) => {
+      // Ignore bubbled events from child elements (e.g. next/image load transitions)
+      if (e.target !== e.currentTarget) return
+      setPrevIndex(null)
+      setFadeOutPrev(false)
+      setIsTransitioning(false)
+    },
+    [],
+  )
 
   if (slides.length === 0) return null
 
