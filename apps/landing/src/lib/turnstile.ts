@@ -1,8 +1,11 @@
-export async function verifyTurnstile(token: string): Promise<boolean> {
-  const secret = process.env.TURNSTILE_SECRET_KEY
+import type { InfrastructureSetting } from '@/payload-types'
+
+export async function verifyTurnstile(
+  token: string,
+  settings?: InfrastructureSetting | null,
+): Promise<boolean> {
+  const secret = settings?.turnstileSecretKey || process.env.TURNSTILE_SECRET_KEY
   if (!secret) {
-    // Intentional dev bypass: skip Turnstile when no secret key is configured in development.
-    // In production TURNSTILE_SECRET_KEY must always be set — without it, verification fails closed.
     if (process.env.NODE_ENV === 'development') return true
     return false
   }
