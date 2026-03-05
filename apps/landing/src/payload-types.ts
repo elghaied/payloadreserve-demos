@@ -98,12 +98,14 @@ export interface Config {
     navigation: Navigation;
     'home-page': HomePage;
     footer: Footer;
+    'infrastructure-settings': InfrastructureSetting;
   };
   globalsSelect: {
     'site-settings': SiteSettingsSelect<false> | SiteSettingsSelect<true>;
     navigation: NavigationSelect<false> | NavigationSelect<true>;
     'home-page': HomePageSelect<false> | HomePageSelect<true>;
     footer: FooterSelect<false> | FooterSelect<true>;
+    'infrastructure-settings': InfrastructureSettingsSelect<false> | InfrastructureSettingsSelect<true>;
   };
   locale: 'en' | 'fr';
   user: User;
@@ -831,6 +833,68 @@ export interface Footer {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "infrastructure-settings".
+ */
+export interface InfrastructureSetting {
+  id: string;
+  coolifyApiUrl?: string | null;
+  coolifyApiKey?: string | null;
+  coolifyProjectUuid?: string | null;
+  coolifyServerUuid?: string | null;
+  coolifyDestinationUuid?: string | null;
+  salonImage?: {
+    name?: string | null;
+    tag?: string | null;
+  };
+  hotelImage?: {
+    name?: string | null;
+    tag?: string | null;
+  };
+  restaurantImage?: {
+    name?: string | null;
+    tag?: string | null;
+  };
+  eventsImage?: {
+    name?: string | null;
+    tag?: string | null;
+  };
+  /**
+   * Docker network hostname of the shared MongoDB instance
+   */
+  mongoHost?: string | null;
+  mongoRootUsername?: string | null;
+  mongoRootPassword?: string | null;
+  smtpHost?: string | null;
+  smtpPort?: number | null;
+  smtpUser?: string | null;
+  smtpPass?: string | null;
+  smtpFrom?: string | null;
+  smtpFromName?: string | null;
+  s3Endpoint?: string | null;
+  s3AccessKey?: string | null;
+  s3SecretKey?: string | null;
+  s3Region?: string | null;
+  s3Bucket?: string | null;
+  s3Prefix?: string | null;
+  /**
+   * Enable for MinIO or S3-compatible storage
+   */
+  s3ForcePathStyle?: boolean | null;
+  stripeSecretKey?: string | null;
+  stripeWebhookSecret?: string | null;
+  stripePublishableKey?: string | null;
+  demoBaseDomain?: string | null;
+  demoProtocol?: ('https' | 'http') | null;
+  demoTtlHours?: number | null;
+  maxActiveDemos?: number | null;
+  cleanupSecret?: string | null;
+  turnstileSecretKey?: string | null;
+  turnstileSiteKey?: string | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "site-settings_select".
  */
 export interface SiteSettingsSelect<T extends boolean = true> {
@@ -1061,6 +1125,70 @@ export interface FooterSelect<T extends boolean = true> {
         github?: T;
         payloadCms?: T;
       };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "infrastructure-settings_select".
+ */
+export interface InfrastructureSettingsSelect<T extends boolean = true> {
+  coolifyApiUrl?: T;
+  coolifyApiKey?: T;
+  coolifyProjectUuid?: T;
+  coolifyServerUuid?: T;
+  coolifyDestinationUuid?: T;
+  salonImage?:
+    | T
+    | {
+        name?: T;
+        tag?: T;
+      };
+  hotelImage?:
+    | T
+    | {
+        name?: T;
+        tag?: T;
+      };
+  restaurantImage?:
+    | T
+    | {
+        name?: T;
+        tag?: T;
+      };
+  eventsImage?:
+    | T
+    | {
+        name?: T;
+        tag?: T;
+      };
+  mongoHost?: T;
+  mongoRootUsername?: T;
+  mongoRootPassword?: T;
+  smtpHost?: T;
+  smtpPort?: T;
+  smtpUser?: T;
+  smtpPass?: T;
+  smtpFrom?: T;
+  smtpFromName?: T;
+  s3Endpoint?: T;
+  s3AccessKey?: T;
+  s3SecretKey?: T;
+  s3Region?: T;
+  s3Bucket?: T;
+  s3Prefix?: T;
+  s3ForcePathStyle?: T;
+  stripeSecretKey?: T;
+  stripeWebhookSecret?: T;
+  stripePublishableKey?: T;
+  demoBaseDomain?: T;
+  demoProtocol?: T;
+  demoTtlHours?: T;
+  maxActiveDemos?: T;
+  cleanupSecret?: T;
+  turnstileSecretKey?: T;
+  turnstileSiteKey?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;

@@ -15,6 +15,7 @@ import { SiteSettings } from './globals/SiteSettings'
 import { Navigation } from './globals/Navigation'
 import { HomePage } from './globals/HomePage'
 import { Footer } from './globals/Footer'
+import { InfrastructureSettings } from './globals/InfrastructureSettings'
 import { seoPlugin } from '@payloadcms/plugin-seo'
 
 const filename = fileURLToPath(import.meta.url)
@@ -43,7 +44,7 @@ export default buildConfig({
     fallback: true,
   },
   collections: [Users, Media, Demos, DemoInstances, DemoRequests],
-  globals: [SiteSettings, Navigation, HomePage, Footer],
+  globals: [SiteSettings, Navigation, HomePage, Footer, InfrastructureSettings],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {
