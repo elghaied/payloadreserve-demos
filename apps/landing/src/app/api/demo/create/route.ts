@@ -76,19 +76,11 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Turnstile verification failed' }, { status: 400 })
   }
 
-  const requestIp = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ?? 'unknown'
-
-  // Create demo request record
-  const demoRequest = await payload.create({
-    collection: 'demo-requests',
-    data: {
-      name,
-      email,
-      demoType: demoType as DemoType,
-      requestIp,
-      status: 'submitted',
-    },
-  })
+  const requestIp =
+    req.headers.get('cf-connecting-ip') ??
+    req.headers.get('x-real-ip') ??
+    req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ??
+    'unknown'
 
   // Rate limit: max 1 demo per IP or email per 24h
   const since = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString()
@@ -104,14 +96,6 @@ export async function POST(req: NextRequest) {
     limit: 0,
   })
   if (recent.totalDocs > 0) {
-    await payload.update({
-      collection: 'demo-requests',
-      id: demoRequest.id,
-      data: {
-        status: 'rejected',
-        rejectionReason: 'Rate limit: already have a demo running within 24 hours',
-      },
-    })
     return NextResponse.json(
       { error: 'You already have a demo running. Please wait 24 hours before requesting another.' },
       { status: 429 },
@@ -127,19 +111,23 @@ export async function POST(req: NextRequest) {
     },
   })
   if (activeCount.totalDocs >= maxActive) {
-    await payload.update({
-      collection: 'demo-requests',
-      id: demoRequest.id,
-      data: {
-        status: 'rejected',
-        rejectionReason: 'All demo slots are currently in use',
-      },
-    })
     return NextResponse.json(
       { error: 'All demo slots are currently in use. Please try again later.' },
       { status: 503 },
     )
   }
+
+  // Create demo request record
+  const demoRequest = await payload.create({
+    collection: 'demo-requests',
+    data: {
+      name,
+      email,
+      demoType: demoType as DemoType,
+      requestIp,
+      status: 'submitted',
+    },
+  })
 
   // Generate IDs and credentials
   const demoId = nanoid()
