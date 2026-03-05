@@ -1,54 +1,30 @@
 'use client'
 
-import Image from 'next/image'
-import { useEffect, useState } from 'react'
 import type { HomePage, Media } from '@/payload-types'
-
-// Static screenshot paths — used when Payload slides don't have uploaded images
-const staticScreenshots = [
-  '/imgs/screenshot-reservations-month.png',
-  '/imgs/screenshot-reservations-week.png',
-  '/imgs/screenshot-reservations-day.png',
-  '/imgs/screenshot-pending.png',
-  '/imgs/screenshot-add-reservation.png',
-  '/imgs/screenshot-module.png',
-]
+import { ImageCarousel, type CarouselSlide } from './ImageCarousel'
 
 type Props = {
   adminUiSection: HomePage['adminUiSection']
 }
 
 export function AdminUISection({ adminUiSection }: Props) {
-  const [currentIndex, setCurrentIndex] = useState(0)
-  const [fade, setFade] = useState(true)
+  if (!adminUiSection) return null
 
-  const payloadSlides = adminUiSection?.adminUiSlides ?? []
+  const payloadSlides = adminUiSection.adminUiSlides ?? []
 
-  const slides = staticScreenshots.map((staticSrc, i) => {
-    const payloadSlide = payloadSlides[i]
-    const img = payloadSlide?.image
-    const src =
-      img && typeof img === 'object' && (img as Media).url ? (img as Media).url! : staticSrc
-    return { src, description: payloadSlide?.caption ?? '' }
-  })
-
-  useEffect(() => {
-    if (!adminUiSection) return
-    const interval = setInterval(() => {
-      setFade(false)
-
-      setTimeout(() => {
-        setCurrentIndex((prev) => (prev + 1) % slides.length)
-        setFade(true)
-      }, 300)
-    }, 4000)
-
-    return () => clearInterval(interval)
-  }, [adminUiSection, slides.length])
-
-  if (!adminUiSection) {
-    return null
-  }
+  const slides: CarouselSlide[] = payloadSlides
+    .filter((s) => {
+      const img = s.image
+      return img && typeof img === 'object' && (img as Media).url
+    })
+    .map((s) => {
+      const img = s.image as Media
+      return {
+        src: img.url!,
+        alt: img.alt || s.caption,
+        caption: s.caption,
+      }
+    })
 
   return (
     <section className="py-24 lg:py-32 px-6 lg:px-8 bg-[#F7F7F5] dark:bg-stone-950">
@@ -78,32 +54,8 @@ export function AdminUISection({ adminUiSection }: Props) {
             </div>
           </div>
 
-          {/* Screenshot area */}
-          <div className="relative aspect-[16/9] w-full bg-gray-100 dark:bg-stone-800 overflow-hidden">
-            <div
-              className={`absolute inset-0 transition-opacity duration-500 ${
-                fade ? 'opacity-100' : 'opacity-0'
-              }`}
-            >
-              <Image
-                key={slides[currentIndex].src}
-                src={slides[currentIndex].src}
-                alt="payload-reserve admin panel screenshot"
-                fill
-                className="object-cover object-top"
-                sizes="(max-width: 1024px) 100vw, 960px"
-                priority
-              />
-            </div>
-
-            {/* Overlay badge */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent flex items-end p-6 pointer-events-none">
-              <span className="inline-flex items-center gap-2 text-xs font-semibold text-white/90 bg-black/40 backdrop-blur-sm px-3 py-1.5 rounded-full border border-white/20">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                {slides[currentIndex].description}
-              </span>
-            </div>
-          </div>
+          {/* Screenshot carousel */}
+          <ImageCarousel slides={slides} />
         </div>
       </div>
     </section>
