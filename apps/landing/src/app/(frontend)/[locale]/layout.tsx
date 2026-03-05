@@ -34,6 +34,8 @@ type Props = {
   params: Promise<{ locale: string }>
 }
 
+export const dynamic = 'force-dynamic'
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params
   const loc = locale as TypedLocale
@@ -42,11 +44,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title: siteSettings.defaultMeta?.title ?? 'payload-reserve',
     description: siteSettings.defaultMeta?.description ?? '',
   }
-}
-
-export function generateStaticParams() {
-  // Return empty — all pages rendered at runtime (no DB available at build time)
-  return []
 }
 
 export default async function LocaleLayout({ children, params }: Props) {
