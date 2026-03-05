@@ -27,7 +27,7 @@ export default async function HomePage({ params }: Props) {
   const urls = siteSettings.externalUrls
 
   return (
-    <main>
+    <main id="main-content">
       <Hero heroSection={homepage.heroSection} urls={urls} />
       <UseCaseStrip useCasesSection={homepage.useCasesSection} />
       <FeatureSection featuresSection={homepage.featuresSection} />

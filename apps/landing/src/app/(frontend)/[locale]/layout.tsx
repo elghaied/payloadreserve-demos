@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react'
+import { ThemeProvider } from 'next-themes'
 import { NextIntlClientProvider } from 'next-intl'
 import { getMessages } from 'next-intl/server'
 import { routing } from '@/i18n/routing'
@@ -69,11 +70,19 @@ export default async function LocaleLayout({ children, params }: Props) {
       className={`${outfit.variable} ${dmSerifDisplay.variable} ${dmMono.variable}`}
     >
       <body className="antialiased">
-        <NextIntlClientProvider messages={messages} locale={locale}>
-          <Nav navigation={navigation} urls={urls} />
-          {children}
-          <Footer footerData={footerData} urls={urls} />
-        </NextIntlClientProvider>
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[100] focus:bg-violet-700 focus:text-white focus:px-4 focus:py-2 focus:rounded-lg focus:text-sm focus:font-semibold"
+        >
+          Skip to content
+        </a>
+        <ThemeProvider attribute="class" defaultTheme="light" disableTransitionOnChange>
+          <NextIntlClientProvider messages={messages} locale={locale}>
+            <Nav navigation={navigation} urls={urls} />
+            {children}
+            <Footer footerData={footerData} urls={urls} />
+          </NextIntlClientProvider>
+        </ThemeProvider>
       </body>
     </html>
   )

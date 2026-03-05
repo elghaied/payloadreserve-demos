@@ -56,7 +56,7 @@ export default async function DemoDetailPage({ params }: Props) {
   const isLive = !!demo.liveUrl
 
   return (
-    <main className="pt-16 bg-[#FAFAF8] dark:bg-stone-900 min-h-screen">
+    <main id="main-content" className="pt-16 bg-[#FAFAF8] dark:bg-stone-900 min-h-screen">
       {/* Hero */}
       <section className="bg-[#FAFAF8] dark:bg-stone-900 px-6 lg:px-8 py-20">
         <div className="max-w-4xl mx-auto">

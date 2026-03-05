@@ -25,7 +25,7 @@ export default async function DemoPage({ params }: Props) {
 
   return (
     <>
-      <main className="min-h-screen bg-[#FAFAF8] pt-16 px-6 py-20">
+      <main id="main-content" className="min-h-screen bg-[#FAFAF8] pt-16 px-6 py-20">
         <div className="max-w-lg mx-auto">
           {/* Back link */}
           <Link
