@@ -2,6 +2,7 @@
 
 import { useState, type FormEvent } from 'react'
 import { Turnstile } from '@marsidev/react-turnstile'
+import { useTheme } from 'next-themes'
 import { useTranslations } from 'next-intl'
 import { DemoStatusPoller } from './DemoStatusPoller'
 import { ErrorScreen } from './ErrorScreen'
@@ -23,6 +24,7 @@ const inactiveClass =
 
 export function DemoRequestForm() {
   const t = useTranslations('demoRequestForm')
+  const { resolvedTheme } = useTheme()
 
   const demoTypes = t.raw('demoTypes') as DemoOption[]
 
@@ -164,7 +166,7 @@ export function DemoRequestForm() {
             siteKey={siteKey}
             onSuccess={(token) => setTurnstileToken(token)}
             onError={() => setTurnstileToken(null)}
-            options={{ theme: 'light', size: 'normal' }}
+            options={{ theme: resolvedTheme === 'dark' ? 'dark' : 'light', size: 'normal' }}
           />
         </div>
       )}
