@@ -92,7 +92,19 @@ export function ImageCarousel({ slides, interval = 5000 }: Props) {
         isPaused.current = false
       }}
     >
-      {/* Previous image — fades out */}
+      {/* Current image — always visible underneath */}
+      <div className="absolute inset-0">
+        <Image
+          src={slides[currentIndex].src}
+          alt={slides[currentIndex].alt}
+          fill
+          className="object-cover object-top"
+          sizes="(max-width: 1024px) 100vw, 960px"
+          priority={currentIndex === 0}
+        />
+      </div>
+
+      {/* Previous image — on top, fades out to reveal current */}
       {prevIndex !== null && (
         <div
           className={`absolute inset-0 transition-opacity duration-700 ease-in-out ${
@@ -109,18 +121,6 @@ export function ImageCarousel({ slides, interval = 5000 }: Props) {
           />
         </div>
       )}
-
-      {/* Current image — fades in */}
-      <div className="absolute inset-0">
-        <Image
-          src={slides[currentIndex].src}
-          alt={slides[currentIndex].alt}
-          fill
-          className="object-cover object-top"
-          sizes="(max-width: 1024px) 100vw, 960px"
-          priority={currentIndex === 0}
-        />
-      </div>
 
       {/* Hidden preload of next image */}
       {nextIndex !== currentIndex && (
