@@ -10,12 +10,17 @@ export async function verifyTurnstile(
     return false
   }
 
-  const res = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ secret, response: token }),
-  })
+  try {
+    const res = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ secret, response: token }),
+      signal: AbortSignal.timeout(10_000),
+    })
 
-  const data = (await res.json()) as { success: boolean }
-  return data.success === true
+    const data = (await res.json()) as { success: boolean }
+    return data.success === true
+  } catch {
+    return false
+  }
 }
