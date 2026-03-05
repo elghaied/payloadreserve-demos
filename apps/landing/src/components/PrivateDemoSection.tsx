@@ -16,7 +16,7 @@ export function PrivateDemoSection({ privateDemoSection }: Props) {
   return (
     <section className="py-24 lg:py-32 px-6 lg:px-8 bg-[#F7F7F5] dark:bg-stone-950">
       <div className="max-w-6xl mx-auto">
-        <div className="grid lg:grid-cols-2 gap-16 items-center">
+        <div className="grid md:grid-cols-2 gap-16 items-center">
           {/* Left: copy */}
           <div className="space-y-8">
             <div>
@@ -85,7 +85,7 @@ export function PrivateDemoSection({ privateDemoSection }: Props) {
           </div>
 
           {/* Right: photo */}
-          <div className="relative hidden lg:block">
+          <div className="relative hidden md:block">
             <div className="absolute inset-0 -z-10 rounded-3xl bg-violet-100/40 dark:bg-violet-900/10 blur-3xl" />
             <div className="relative rounded-2xl overflow-hidden shadow-2xl shadow-black/10 dark:shadow-black/40">
               <Image

@@ -78,8 +78,8 @@ export default async function DemoDetailPage({ params }: Props) {
             {ui.backToDemos ?? 'All Demos'}
           </Link>
 
-          <div className="flex items-center gap-5 mb-6">
-            <span className="text-6xl">{demo.emoji}</span>
+          <div className="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-5 mb-6">
+            <span className="text-5xl sm:text-6xl">{demo.emoji}</span>
             <div>
               <h1 className="font-display text-[clamp(2.2rem,5vw,4rem)] text-[#1C1917] dark:text-stone-50 leading-[1.05]">
                 {demo.name}
@@ -219,7 +219,7 @@ export default async function DemoDetailPage({ params }: Props) {
                 {ui.payloadConfigFile ?? 'payload.config.ts'}
               </span>
             </div>
-            <pre className="p-6 font-mono text-[13px] leading-relaxed text-zinc-300 overflow-x-auto">
+            <pre className="p-4 sm:p-6 font-mono text-[12px] sm:text-[13px] leading-relaxed text-zinc-300 overflow-x-auto">
               <code>{demo.pluginSnippet}</code>
             </pre>
           </div>

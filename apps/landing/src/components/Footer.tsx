@@ -34,7 +34,7 @@ export function Footer({ footerData, urls }: Props) {
           </div>
 
           {/* Links */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-x-16 gap-y-8 text-sm">
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-x-8 sm:gap-x-12 lg:gap-x-16 gap-y-8 text-sm">
             <div>
               <p className="text-[#78716C] font-semibold text-xs uppercase tracking-widest mb-4">
                 {product?.heading}

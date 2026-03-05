@@ -50,7 +50,7 @@ export function DeveloperSection({ developerSection, githubUrl }: Props) {
                     <span className="w-2 h-2 rounded-full bg-[#febc2e]" />
                     <span className="w-2 h-2 rounded-full bg-[#28c840]" />
                   </div>
-                  <pre className="p-4 font-mono text-[12px] leading-relaxed text-violet-300 overflow-x-auto">
+                  <pre className="p-3 sm:p-4 font-mono text-[11px] sm:text-[12px] leading-relaxed text-violet-300 overflow-x-auto">
                     <code>{step.code}</code>
                   </pre>
                 </div>

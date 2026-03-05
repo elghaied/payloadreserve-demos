@@ -90,7 +90,7 @@ export function DemoCards({ demosSection }: Props) {
                   </p>
 
                   {/* Feature list */}
-                  <ul className="grid grid-cols-2 gap-y-2 gap-x-3 mb-7">
+                  <ul className="grid grid-cols-1 min-[420px]:grid-cols-2 gap-y-2 gap-x-3 mb-7">
                     {features.map((f) => (
                       <li
                         key={f.id ?? f.text}
