@@ -229,7 +229,7 @@ export async function POST(req: NextRequest) {
         data: { coolifyServiceId },
       })
     } catch (err) {
-      console.error(`[demo/${demoId}] Coolify createService failed:`, err)
+      console.error(`[demo/${demoId}] Coolify createService failed: ${(err as Error)?.message ?? 'Unknown error'}`)
       await payload.update({
         collection: 'demo-instances',
         id: instance.id,

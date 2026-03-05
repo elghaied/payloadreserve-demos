@@ -26,7 +26,7 @@ export class CoolifyClient {
     if (!res.ok) {
       const text = await res.text().catch(() => '')
       console.error(`[coolify-sdk] ${method} ${path} → ${res.status}: ${text}`)
-      throw new Error(`Coolify API ${method} ${path} failed with ${res.status}: ${text}`)
+      throw new Error(`Coolify API ${method} ${path} failed with ${res.status}`)
     }
 
     const text = await res.text()
