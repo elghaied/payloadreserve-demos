@@ -19,22 +19,41 @@ export function ImageCarousel({ slides, interval = 5000 }: Props) {
   const [currentIndex, setCurrentIndex] = useState(0)
   const [prevIndex, setPrevIndex] = useState<number | null>(null)
   const [isTransitioning, setIsTransitioning] = useState(false)
+  const [fadeOutPrev, setFadeOutPrev] = useState(false)
   const isPaused = useRef(false)
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null)
+  const currentIndexRef = useRef(0)
+  const isTransitioningRef = useRef(false)
+
+  // Keep refs in sync with state
+  useEffect(() => { currentIndexRef.current = currentIndex }, [currentIndex])
+  useEffect(() => { isTransitioningRef.current = isTransitioning }, [isTransitioning])
+
+  // Trigger fade-out on the next frame when prevIndex changes
+  useEffect(() => {
+    if (prevIndex !== null) {
+      setFadeOutPrev(false)
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          setFadeOutPrev(true)
+        })
+      })
+    }
+  }, [prevIndex])
 
   const goTo = useCallback(
     (next: number) => {
-      if (isTransitioning || next === currentIndex) return
-      setPrevIndex(currentIndex)
+      if (isTransitioningRef.current || next === currentIndexRef.current) return
+      setPrevIndex(currentIndexRef.current)
       setCurrentIndex(next)
       setIsTransitioning(true)
     },
-    [currentIndex, isTransitioning],
+    [],
   )
 
   const goNext = useCallback(() => {
-    goTo((currentIndex + 1) % slides.length)
-  }, [currentIndex, slides.length, goTo])
+    goTo((currentIndexRef.current + 1) % slides.length)
+  }, [slides.length, goTo])
 
   // Auto-advance
   useEffect(() => {
@@ -62,6 +81,9 @@ export function ImageCarousel({ slides, interval = 5000 }: Props) {
 
   return (
     <div
+      role="region"
+      aria-roledescription="carousel"
+      aria-label="Admin interface screenshots"
       className="relative aspect-[16/9] w-full bg-gray-100 dark:bg-stone-800 overflow-hidden"
       onMouseEnter={() => {
         isPaused.current = true
@@ -73,7 +95,9 @@ export function ImageCarousel({ slides, interval = 5000 }: Props) {
       {/* Previous image — fades out */}
       {prevIndex !== null && (
         <div
-          className="absolute inset-0 transition-opacity duration-700 ease-in-out opacity-0"
+          className={`absolute inset-0 transition-opacity duration-700 ease-in-out ${
+            fadeOutPrev ? 'opacity-0' : 'opacity-100'
+          }`}
           onTransitionEnd={handleTransitionEnd}
         >
           <Image
@@ -87,11 +111,7 @@ export function ImageCarousel({ slides, interval = 5000 }: Props) {
       )}
 
       {/* Current image — fades in */}
-      <div
-        className={`absolute inset-0 transition-opacity duration-700 ease-in-out ${
-          prevIndex !== null ? 'opacity-100' : 'opacity-100'
-        }`}
-      >
+      <div className="absolute inset-0">
         <Image
           src={slides[currentIndex].src}
           alt={slides[currentIndex].alt}
@@ -131,7 +151,7 @@ export function ImageCarousel({ slides, interval = 5000 }: Props) {
               key={i}
               onClick={() => goTo(i)}
               aria-label={`Go to slide ${i + 1}`}
-              className={`rounded-full transition-all duration-300 ${
+              className={`rounded-full transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/80 focus-visible:ring-offset-1 focus-visible:ring-offset-black/20 ${
                 i === currentIndex
                   ? 'w-6 h-2 bg-white/90'
                   : 'w-2 h-2 bg-white/40 hover:bg-white/60'
