@@ -19,6 +19,12 @@ import { InfrastructureSettings } from './globals/InfrastructureSettings'
 import { DemoDashboard } from './globals/DemoDashboard'
 import { seoPlugin } from '@payloadcms/plugin-seo'
 
+function requireEnv(name: string): string {
+  const val = process.env[name]
+  if (!val) throw new Error(`Missing required environment variable: ${name}`)
+  return val
+}
+
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
@@ -40,12 +46,12 @@ export default buildConfig({
   collections: [Users, Media, Demos, DemoInstances, DemoRequests],
   globals: [SiteSettings, Navigation, HomePage, Footer, InfrastructureSettings, DemoDashboard],
   editor: lexicalEditor(),
-  secret: process.env.PAYLOAD_SECRET || '',
+  secret: requireEnv('PAYLOAD_SECRET'),
   typescript: {
     outputFile: path.resolve(dirname, 'payload-types.ts'),
   },
   db: mongooseAdapter({
-    url: process.env.DATABASE_URL || '',
+    url: requireEnv('DATABASE_URL'),
   }),
   sharp,
   // Only initialise the email transport when SMTP vars are present.
