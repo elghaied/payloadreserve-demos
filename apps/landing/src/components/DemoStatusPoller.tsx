@@ -57,8 +57,8 @@ export function DemoStatusPoller({ demoId, statusToken }: { demoId: string; stat
   if (status === 'failed') {
     return (
       <div className="text-center py-10">
-        <p className="text-red-400 font-medium mb-2">{t('failedTitle')}</p>
-        <p className="text-zinc-500 text-sm">{t('failedSubtitle')}</p>
+        <p className="text-red-600 dark:text-red-400 font-medium mb-2">{t('failedTitle')}</p>
+        <p className="text-[#78716C] dark:text-zinc-500 text-sm">{t('failedSubtitle')}</p>
       </div>
     )
   }
@@ -67,31 +67,31 @@ export function DemoStatusPoller({ demoId, statusToken }: { demoId: string; stat
     <div className="text-center py-10 space-y-6">
       {/* Spinner ring */}
       <div className="relative w-14 h-14 mx-auto">
-        <div className="absolute inset-0 rounded-full border-2 border-zinc-800" />
-        <div className="absolute inset-0 rounded-full border-2 border-transparent border-t-amber-500 animate-spin" />
+        <div className="absolute inset-0 rounded-full border-2 border-gray-200 dark:border-zinc-800" />
+        <div className="absolute inset-0 rounded-full border-2 border-transparent border-t-violet-600 dark:border-t-amber-500 animate-spin" />
       </div>
 
       {/* Status message */}
       <div>
-        <p className="text-white font-medium text-sm mb-1">
+        <p className="text-[#1C1917] dark:text-white font-medium text-sm mb-1">
           {statusMessages[status]}
-          {status === 'provisioning' && <span className="text-amber-400">{dots}</span>}
+          {status === 'provisioning' && <span className="text-violet-600 dark:text-amber-400">{dots}</span>}
         </p>
-        <p className="text-zinc-500 text-xs">{t('eta')}</p>
+        <p className="text-[#78716C] dark:text-zinc-500 text-xs">{t('eta')}</p>
       </div>
 
       {/* Progress steps */}
-      <div className="flex items-center justify-center gap-3 text-xs font-mono text-zinc-600">
-        <span className="text-emerald-500">✓ {t('progress.containerCreated')}</span>
-        <span className="text-zinc-700">·</span>
-        <span className={status === 'provisioning' ? 'text-amber-400 animate-pulse' : 'text-emerald-500'}>
+      <div className="flex flex-wrap items-center justify-center gap-3 text-xs font-mono text-[#78716C] dark:text-zinc-600">
+        <span className="text-emerald-600 dark:text-emerald-500">✓ {t('progress.containerCreated')}</span>
+        <span className="text-gray-300 dark:text-zinc-700">·</span>
+        <span className={status === 'provisioning' ? 'text-violet-600 dark:text-amber-400 animate-pulse' : 'text-emerald-600 dark:text-emerald-500'}>
           {t('progress.waitingHealth')}
         </span>
-        <span className="text-zinc-700">·</span>
-        <span className="text-zinc-600">{t('progress.seedingData')}</span>
+        <span className="text-gray-300 dark:text-zinc-700">·</span>
+        <span className="text-[#78716C] dark:text-zinc-600">{t('progress.seedingData')}</span>
       </div>
 
-      <p className="text-[11px] text-zinc-600">
+      <p className="text-[11px] text-[#78716C] dark:text-zinc-600">
         {t('demoIdLabel')}: {demoId}
       </p>
     </div>

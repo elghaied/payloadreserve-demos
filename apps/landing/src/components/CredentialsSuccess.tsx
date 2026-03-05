@@ -32,16 +32,16 @@ export function CredentialsSuccess({
           </svg>
         </div>
         <div>
-          <p className="text-white font-semibold text-sm">{t('success.title')}</p>
-          <p className="text-zinc-500 text-xs">{t('success.subtitle')}</p>
+          <p className="text-[#1C1917] dark:text-white font-semibold text-sm">{t('success.title')}</p>
+          <p className="text-[#78716C] dark:text-zinc-500 text-xs">{t('success.subtitle')}</p>
         </div>
       </div>
 
       {/* Demo URL card */}
-      <div className="bg-zinc-900/80 border border-zinc-800 rounded-xl p-5 space-y-3">
+      <div className="bg-gray-50 dark:bg-zinc-900/80 border border-gray-200 dark:border-zinc-800 rounded-xl p-5 space-y-3">
         <div className="flex items-center justify-between">
-          <span className="text-xs text-zinc-500 font-mono">{t('success.urlLabel')}</span>
-          <span className="text-[10px] text-zinc-600 font-mono">
+          <span className="text-xs text-[#78716C] dark:text-zinc-500 font-mono">{t('success.urlLabel')}</span>
+          <span className="text-[10px] text-gray-400 dark:text-zinc-600 font-mono">
             {expiresFormatted ? t('success.expires', { date: expiresFormatted }) : ''}
           </span>
         </div>
@@ -49,7 +49,7 @@ export function CredentialsSuccess({
           href={demoUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="block text-sm text-amber-400 font-mono hover:text-amber-300 transition-colors break-all"
+          className="block text-sm text-violet-700 dark:text-amber-400 font-mono hover:text-violet-600 dark:hover:text-amber-300 transition-colors break-all"
         >
           {demoUrl}
         </a>
@@ -61,7 +61,7 @@ export function CredentialsSuccess({
           href={`${demoUrl}/admin`}
           target="_blank"
           rel="noopener noreferrer"
-          className="w-full inline-flex items-center justify-center gap-2 bg-amber-500 hover:bg-amber-400 text-black font-semibold text-sm px-5 py-3 rounded-lg transition-colors"
+          className="w-full inline-flex items-center justify-center gap-2 bg-violet-700 dark:bg-amber-500 hover:bg-violet-600 dark:hover:bg-amber-400 text-white dark:text-black font-semibold text-sm px-5 py-3 rounded-lg transition-colors"
         >
           {t('success.openAdmin')}
           <svg width="13" height="13" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
@@ -76,13 +76,13 @@ export function CredentialsSuccess({
           href={demoUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="w-full inline-flex items-center justify-center gap-2 text-zinc-300 hover:text-white border border-zinc-700/70 hover:border-zinc-500 font-medium text-sm px-5 py-2.5 rounded-lg transition-colors"
+          className="w-full inline-flex items-center justify-center gap-2 text-[#78716C] dark:text-zinc-300 hover:text-[#1C1917] dark:hover:text-white border border-gray-200 dark:border-zinc-700/70 hover:border-gray-400 dark:hover:border-zinc-500 font-medium text-sm px-5 py-2.5 rounded-lg transition-colors"
         >
           {t('success.viewBooking')}
         </a>
       </div>
 
-      <p className="text-[11px] text-zinc-600 text-center">{t('success.footnote')}</p>
+      <p className="text-[11px] text-gray-400 dark:text-zinc-600 text-center">{t('success.footnote')}</p>
     </div>
   )
 }
