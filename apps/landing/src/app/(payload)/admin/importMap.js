@@ -6,10 +6,9 @@ import { MetaImageComponent as MetaImageComponent_a8a977ebc872c5d5ea7ee689724c08
 import { PreviewComponent as PreviewComponent_a8a977ebc872c5d5ea7ee689724c0860 } from '@payloadcms/plugin-seo/client'
 import { default as default_7e4c630fe14b5126d1109dd759481cd0 } from '@/components/admin/StatusBadge'
 import { default as default_15a790addfeffe484dd465108998359a } from '@/components/admin/SecretField'
-import { default as default_deb41979a6cda41c27254e955a6f42c0 } from '@/components/admin/DemoDashboardNavLink'
+import { default as default_da85ab4b3eb779fe121d8450aa770ff3 } from '@/components/admin/DemoDashboard'
 import { default as default_ca888f53ba8e3eb3eab602cf2e92999b } from '@/components/admin/SeedButton'
 import { S3ClientUploadHandler as S3ClientUploadHandler_f97aa6c64367fa259c5bc0567239ef24 } from '@payloadcms/storage-s3/client'
-import { default as default_da85ab4b3eb779fe121d8450aa770ff3 } from '@/components/admin/DemoDashboard'
 import { CollectionCards as CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1 } from '@payloadcms/next/rsc'
 
 export const importMap = {
@@ -21,9 +20,8 @@ export const importMap = {
   "@payloadcms/plugin-seo/client#PreviewComponent": PreviewComponent_a8a977ebc872c5d5ea7ee689724c0860,
   "@/components/admin/StatusBadge#default": default_7e4c630fe14b5126d1109dd759481cd0,
   "@/components/admin/SecretField#default": default_15a790addfeffe484dd465108998359a,
-  "@/components/admin/DemoDashboardNavLink#default": default_deb41979a6cda41c27254e955a6f42c0,
+  "@/components/admin/DemoDashboard#default": default_da85ab4b3eb779fe121d8450aa770ff3,
   "@/components/admin/SeedButton#default": default_ca888f53ba8e3eb3eab602cf2e92999b,
   "@payloadcms/storage-s3/client#S3ClientUploadHandler": S3ClientUploadHandler_f97aa6c64367fa259c5bc0567239ef24,
-  "@/components/admin/DemoDashboard#default": default_da85ab4b3eb779fe121d8450aa770ff3,
   "@payloadcms/next/rsc#CollectionCards": CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1
 }

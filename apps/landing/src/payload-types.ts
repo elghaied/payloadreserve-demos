@@ -99,6 +99,7 @@ export interface Config {
     'home-page': HomePage;
     footer: Footer;
     'infrastructure-settings': InfrastructureSetting;
+    'demo-dashboard': DemoDashboard;
   };
   globalsSelect: {
     'site-settings': SiteSettingsSelect<false> | SiteSettingsSelect<true>;
@@ -106,6 +107,7 @@ export interface Config {
     'home-page': HomePageSelect<false> | HomePageSelect<true>;
     footer: FooterSelect<false> | FooterSelect<true>;
     'infrastructure-settings': InfrastructureSettingsSelect<false> | InfrastructureSettingsSelect<true>;
+    'demo-dashboard': DemoDashboardSelect<false> | DemoDashboardSelect<true>;
   };
   locale: 'en' | 'fr';
   user: User;
@@ -895,6 +897,15 @@ export interface InfrastructureSetting {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "demo-dashboard".
+ */
+export interface DemoDashboard {
+  id: string;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "site-settings_select".
  */
 export interface SiteSettingsSelect<T extends boolean = true> {
@@ -1189,6 +1200,15 @@ export interface InfrastructureSettingsSelect<T extends boolean = true> {
   cleanupSecret?: T;
   turnstileSecretKey?: T;
   turnstileSiteKey?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "demo-dashboard_select".
+ */
+export interface DemoDashboardSelect<T extends boolean = true> {
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;

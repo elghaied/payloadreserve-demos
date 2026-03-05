@@ -16,6 +16,7 @@ import { Navigation } from './globals/Navigation'
 import { HomePage } from './globals/HomePage'
 import { Footer } from './globals/Footer'
 import { InfrastructureSettings } from './globals/InfrastructureSettings'
+import { DemoDashboard } from './globals/DemoDashboard'
 import { seoPlugin } from '@payloadcms/plugin-seo'
 
 const filename = fileURLToPath(import.meta.url)
@@ -28,13 +29,6 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
     components: {
-      views: {
-        demoDashboard: {
-          Component: '@/components/admin/DemoDashboard',
-          path: '/demo-dashboard',
-        },
-      },
-      afterNavLinks: ['@/components/admin/DemoDashboardNavLink'],
       beforeDashboard: ['@/components/admin/SeedButton'],
     },
   },
@@ -44,7 +38,7 @@ export default buildConfig({
     fallback: true,
   },
   collections: [Users, Media, Demos, DemoInstances, DemoRequests],
-  globals: [SiteSettings, Navigation, HomePage, Footer, InfrastructureSettings],
+  globals: [SiteSettings, Navigation, HomePage, Footer, InfrastructureSettings, DemoDashboard],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {

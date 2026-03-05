@@ -1,10 +1,9 @@
-import type { AdminViewServerProps } from 'payload'
-import { DefaultTemplate } from '@payloadcms/next/templates'
+import type { AdminViewServerProps, Payload } from 'payload'
+import type { DemoInstance } from '@/payload-types'
 import { Gutter } from '@payloadcms/ui'
 import { getPayload } from 'payload'
 import config from '@payload-config'
-import Link from 'next/link'
-import { ManualCleanupButton } from './ManualCleanupButton'
+import { DeleteInstanceButton } from './DeleteInstanceButton'
 
 export default async function DemoDashboard({
   initPageResult,
@@ -36,132 +35,100 @@ export default async function DemoDashboard({
     ])
 
   return (
-    <DefaultTemplate
-      i18n={initPageResult.req.i18n}
-      locale={initPageResult.locale}
-      params={params}
-      payload={payload}
-      permissions={initPageResult.permissions}
-      searchParams={searchParams}
-      user={initPageResult.req.user ?? undefined}
-      visibleEntities={initPageResult.visibleEntities}
-    >
-      <Gutter>
-        <h1 style={{ marginBottom: '24px' }}>Demo Dashboard</h1>
+    <Gutter>
+      <div
+        style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
+          gap: '16px',
+          marginBottom: '32px',
+        }}
+      >
+        <StatCard label="Running" value={readyCount.totalDocs} color="#166534" bg="#dcfce7" />
+        <StatCard
+          label="Provisioning"
+          value={provisioningCount.totalDocs}
+          color="#92400e"
+          bg="#fef3c7"
+        />
+        <StatCard label="Failed" value={failedCount.totalDocs} color="#991b1b" bg="#fee2e2" />
+        <StatCard
+          label="Total Requests"
+          value={totalRequests.totalDocs}
+          color="#1e40af"
+          bg="#dbeafe"
+        />
+      </div>
 
-        {/* Stats grid */}
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
-            gap: '16px',
-            marginBottom: '32px',
-          }}
-        >
-          <StatCard label="Running" value={readyCount.totalDocs} color="#166534" bg="#dcfce7" />
-          <StatCard label="Provisioning" value={provisioningCount.totalDocs} color="#92400e" bg="#fef3c7" />
-          <StatCard label="Failed" value={failedCount.totalDocs} color="#991b1b" bg="#fee2e2" />
-          <StatCard label="Total Requests" value={totalRequests.totalDocs} color="#1e40af" bg="#dbeafe" />
-        </div>
-
-        {/* Actions */}
-        <div style={{ marginBottom: '32px', display: 'flex', gap: '12px', alignItems: 'center' }}>
-          <ManualCleanupButton />
-          <Link
-            href="/admin/collections/demo-instances"
-            style={{
-              padding: '8px 16px',
-              borderRadius: '6px',
-              border: '1px solid var(--theme-elevation-150)',
-              background: 'var(--theme-elevation-50)',
-              color: 'var(--theme-text)',
-              textDecoration: 'none',
-              fontSize: '13px',
-              fontWeight: 600,
-            }}
-          >
-            View All Instances
-          </Link>
-          <Link
-            href="/admin/collections/demo-requests"
-            style={{
-              padding: '8px 16px',
-              borderRadius: '6px',
-              border: '1px solid var(--theme-elevation-150)',
-              background: 'var(--theme-elevation-50)',
-              color: 'var(--theme-text)',
-              textDecoration: 'none',
-              fontSize: '13px',
-              fontWeight: 600,
-            }}
-          >
-            View All Requests
-          </Link>
-        </div>
-
-        {/* Recent instances table */}
-        <h2 style={{ marginBottom: '12px' }}>Recent Instances</h2>
-        <div style={{ overflowX: 'auto' }}>
-          <table
-            style={{
-              width: '100%',
-              borderCollapse: 'collapse',
-              fontSize: '13px',
-            }}
-          >
-            <thead>
+      <h2 style={{ marginBottom: '12px' }}>Recent Instances</h2>
+      <div style={{ overflowX: 'auto' }}>
+        <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
+          <thead>
+            <tr
+              style={{ borderBottom: '2px solid var(--theme-elevation-150)', textAlign: 'left' }}
+            >
+              <th style={cellStyle}>Demo ID</th>
+              <th style={cellStyle}>Type</th>
+              <th style={cellStyle}>Status</th>
+              <th style={cellStyle}>Email</th>
+              <th style={cellStyle}>Expires</th>
+              <th style={cellStyle}>Created</th>
+              <th style={cellStyle} />
+            </tr>
+          </thead>
+          <tbody>
+            {recentInstances.docs.map((inst) => (
               <tr
-                style={{
-                  borderBottom: '2px solid var(--theme-elevation-150)',
-                  textAlign: 'left',
-                }}
+                key={inst.id}
+                style={{ borderBottom: '1px solid var(--theme-elevation-100)' }}
               >
-                <th style={{ padding: '8px' }}>Demo ID</th>
-                <th style={{ padding: '8px' }}>Type</th>
-                <th style={{ padding: '8px' }}>Status</th>
-                <th style={{ padding: '8px' }}>Email</th>
-                <th style={{ padding: '8px' }}>Expires</th>
-                <th style={{ padding: '8px' }}>Created</th>
+                <td style={cellStyle}>
+                  <a href={`/admin/collections/demo-instances/${inst.id}`}>{inst.demoId}</a>
+                </td>
+                <td style={cellStyle}>{inst.type}</td>
+                <td style={cellStyle}>
+                  <StatusPill status={inst.status} />
+                </td>
+                <td style={cellStyle}>{inst.adminEmail}</td>
+                <td style={cellStyle}>
+                  {inst.expiresAt ? new Date(inst.expiresAt).toLocaleString() : '—'}
+                </td>
+                <td style={cellStyle}>
+                  {inst.createdAt ? new Date(inst.createdAt).toLocaleString() : '—'}
+                </td>
+                <td style={cellStyle}>
+                  <DeleteInstanceButton id={inst.id} demoId={inst.demoId} />
+                </td>
               </tr>
-            </thead>
-            <tbody>
-              {recentInstances.docs.map((inst) => (
-                <tr
-                  key={inst.id}
-                  style={{ borderBottom: '1px solid var(--theme-elevation-100)' }}
+            ))}
+            {recentInstances.docs.length === 0 && (
+              <tr>
+                <td
+                  colSpan={7}
+                  style={{ padding: '16px', textAlign: 'center', color: 'var(--theme-elevation-500)' }}
                 >
-                  <td style={{ padding: '8px' }}>
-                    <a href={`/admin/collections/demo-instances/${inst.id}`}>{inst.demoId}</a>
-                  </td>
-                  <td style={{ padding: '8px' }}>{inst.type}</td>
-                  <td style={{ padding: '8px' }}>
-                    <StatusPill status={inst.status} />
-                  </td>
-                  <td style={{ padding: '8px' }}>{inst.adminEmail}</td>
-                  <td style={{ padding: '8px' }}>
-                    {inst.expiresAt ? new Date(inst.expiresAt).toLocaleString() : '—'}
-                  </td>
-                  <td style={{ padding: '8px' }}>
-                    {inst.createdAt ? new Date(inst.createdAt).toLocaleString() : '—'}
-                  </td>
-                </tr>
-              ))}
-              {recentInstances.docs.length === 0 && (
-                <tr>
-                  <td colSpan={6} style={{ padding: '16px', textAlign: 'center', color: 'var(--theme-elevation-500)' }}>
-                    No demo instances yet
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
-      </Gutter>
-    </DefaultTemplate>
+                  No demo instances yet
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
+    </Gutter>
   )
 }
 
-function StatCard({ label, value, color, bg }: { label: string; value: number; color: string; bg: string }) {
+function StatCard({
+  label,
+  value,
+  color,
+  bg,
+}: {
+  label: string
+  value: number
+  color: string
+  bg: string
+}) {
   return (
     <div
       style={{
@@ -204,3 +171,5 @@ function StatusPill({ status }: { status: string }) {
     </span>
   )
 }
+
+const cellStyle: React.CSSProperties = { padding: '8px' }
