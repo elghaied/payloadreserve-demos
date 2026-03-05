@@ -1,19 +1,22 @@
 import type { CollectionAfterDeleteHook } from 'payload'
-import { getCoolify, getS3, deleteS3Prefix, dropDemoDatabase } from '@/lib/cleanup-utils'
+import { getCoolify, getS3, deleteS3Prefix, dropDemoDatabase, buildMongoUrl } from '@/lib/cleanup-utils'
+import { getInfraSettings } from '@/lib/infra-settings'
 
-export const cleanupDemoInstance: CollectionAfterDeleteHook = async ({ doc }) => {
+export const cleanupDemoInstance: CollectionAfterDeleteHook = async ({ doc, req }) => {
   const { demoId, coolifyServiceId, dbName, s3Prefix } = doc
 
   // Fire-and-forget — errors are logged, not thrown
   void (async () => {
-    const coolify = getCoolify()
-    const s3 = getS3()
-    const dbUrl = process.env.DATABASE_URL!
+    const settings = await getInfraSettings(req.payload)
+    const coolify = getCoolify(settings)
+    const s3 = getS3(settings)
+    const mongoUrl = buildMongoUrl(settings)
+    const s3Bucket = settings.s3Bucket || process.env.S3_BUCKET || ''
 
     const results = await Promise.allSettled([
       coolify ? coolify.deleteService(coolifyServiceId) : Promise.resolve(),
-      dropDemoDatabase(dbUrl, dbName),
-      deleteS3Prefix(s3, s3Prefix),
+      dropDemoDatabase(mongoUrl, dbName),
+      deleteS3Prefix(s3, s3Bucket, s3Prefix),
     ])
 
     results.forEach((r, i) => {
