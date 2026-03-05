@@ -5,7 +5,19 @@ import config from '@payload-config'
 import { getInfraSettings } from '@/lib/infra-settings'
 import { getS3, getCoolify, deleteS3Prefix, dropDemoDatabase, buildMongoUrl } from '@/lib/cleanup-utils'
 
+let lastCleanupAt = 0
+const CLEANUP_COOLDOWN_MS = 60_000
+
 export async function POST(req: NextRequest) {
+  const now = Date.now()
+  if (now - lastCleanupAt < CLEANUP_COOLDOWN_MS) {
+    return NextResponse.json(
+      { error: 'Cleanup already ran recently. Try again later.' },
+      { status: 429 },
+    )
+  }
+  lastCleanupAt = now
+
   const payload = await getPayload({ config })
   const settings = await getInfraSettings(payload)
 
@@ -49,19 +61,19 @@ export async function POST(req: NextRequest) {
       if (anyFailed) {
         results.forEach((r, i) => {
           if (r.status === 'rejected') {
-            console.error(`[cleanup/${demo.demoId}] step ${i} failed:`, r.reason)
+            console.error(`[cleanup/${demo.demoId}] step ${i} failed:`, (r.reason as Error)?.message ?? r.reason)
           }
         })
         failedCount++
+        // Do NOT mark as expired — leave for next cleanup run to retry
       } else {
         expiredCount++
+        await payload.update({
+          collection: 'demo-instances',
+          id: demo.id,
+          data: { status: 'expired' },
+        })
       }
-
-      await payload.update({
-        collection: 'demo-instances',
-        id: demo.id,
-        data: { status: 'expired' },
-      })
     }),
   )
 
