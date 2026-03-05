@@ -1,5 +1,3 @@
-'use client'
-
 import type { HomePage, Media } from '@/payload-types'
 import { ImageCarousel, type CarouselSlide } from './ImageCarousel'
 
