@@ -20,7 +20,7 @@ export default async function HomePage({ params }: Props) {
   const loc = locale as TypedLocale
 
   const [homepage, siteSettings] = await Promise.all([
-    getCachedGlobal('home-page', 1, loc)(),
+    getCachedGlobal('home-page', 2, loc)(),
     getCachedGlobal('site-settings', 0, loc)(),
   ])
 
