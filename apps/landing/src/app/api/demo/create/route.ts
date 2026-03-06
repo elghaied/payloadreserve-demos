@@ -98,7 +98,7 @@ export async function POST(req: NextRequest) {
 
     try {
       const result = await provisionAndDeploy({
-        name, email, demoType: demoType as DemoType, requestIp,
+        email, demoType: demoType as DemoType, requestIp,
         demoRequestId: demoRequest.id, payload, settings,
       })
       return NextResponse.json({ demoId: result.demoId, statusToken: result.statusToken }, { status: 202 })

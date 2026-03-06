@@ -39,7 +39,6 @@ export interface ProvisionResult {
 }
 
 export async function provisionAndDeploy(opts: {
-  name: string
   email: string
   demoType: DemoType
   requestIp: string
@@ -47,7 +46,7 @@ export async function provisionAndDeploy(opts: {
   payload: Payload
   settings: InfrastructureSetting
 }): Promise<ProvisionResult> {
-  const { name, email, demoType, requestIp, demoRequestId, payload, settings } = opts
+  const { email, demoType, requestIp, demoRequestId, payload, settings } = opts
 
   const demoId = nanoid()
   const adminPassword = crypto.randomBytes(12).toString('base64url')

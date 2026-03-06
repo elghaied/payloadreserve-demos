@@ -101,7 +101,6 @@ export async function POST(req: NextRequest) {
       try {
         console.log(`[queue] Provisioning pending request ${request.id} (${request.email}, ${request.demoType})`)
         await provisionAndDeploy({
-          name: request.name,
           email: request.email,
           demoType: request.demoType as DemoType,
           requestIp: request.requestIp || 'unknown',
