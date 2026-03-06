@@ -5,10 +5,11 @@ import { Turnstile } from '@marsidev/react-turnstile'
 import { useTheme } from 'next-themes'
 import { useTranslations } from 'next-intl'
 import { DemoStatusPoller } from './DemoStatusPoller'
+import { QueueConfirmation } from './QueueConfirmation'
 import { ErrorScreen } from './ErrorScreen'
 import type { DemoType } from '@payload-reserve-demos/types'
 
-type Stage = 'form' | 'polling' | 'error'
+type Stage = 'form' | 'polling' | 'queued' | 'error'
 
 type DemoOption = {
   value: DemoType
@@ -32,6 +33,7 @@ export function DemoRequestForm() {
   const [demoId, setDemoId] = useState<string | null>(null)
   const [statusToken, setStatusToken] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
+  const [estimatedAvailability, setEstimatedAvailability] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
   const [turnstileToken, setTurnstileToken] = useState<string | null>(null)
   const [selectedType, setSelectedType] = useState<DemoType>('salon')
@@ -54,10 +56,28 @@ export function DemoRequestForm() {
         body: JSON.stringify({ name, email, demoType: selectedType, turnstileToken }),
       })
 
-      const data = (await res.json()) as { demoId?: string; statusToken?: string; error?: string }
+      const data = (await res.json()) as {
+        demoId?: string
+        statusToken?: string
+        queued?: boolean
+        estimatedAvailability?: string
+        error?: string
+      }
 
-      if (!res.ok || !data.demoId || !data.statusToken) {
+      if (!res.ok) {
         setError(data.error ?? t('errors.createFailed'))
+        setStage('error')
+        return
+      }
+
+      if (data.queued) {
+        setEstimatedAvailability(data.estimatedAvailability ?? null)
+        setStage('queued')
+        return
+      }
+
+      if (!data.demoId || !data.statusToken) {
+        setError(t('errors.createFailed'))
         setStage('error')
         return
       }
@@ -75,6 +95,10 @@ export function DemoRequestForm() {
 
   if (stage === 'polling' && demoId && statusToken) {
     return <DemoStatusPoller demoId={demoId} statusToken={statusToken} />
+  }
+
+  if (stage === 'queued' && estimatedAvailability) {
+    return <QueueConfirmation estimatedAvailability={estimatedAvailability} />
   }
 
   if (stage === 'error') {
