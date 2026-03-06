@@ -44,8 +44,9 @@ export const DemoRequests: CollectionConfig = {
       name: 'status',
       type: 'select',
       required: true,
-      defaultValue: 'submitted',
+      defaultValue: 'pending',
       options: [
+        { label: 'Pending', value: 'pending' },
         { label: 'Submitted', value: 'submitted' },
         { label: 'Provisioning', value: 'provisioning' },
         { label: 'Completed', value: 'completed' },

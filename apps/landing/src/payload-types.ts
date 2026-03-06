@@ -323,7 +323,7 @@ export interface DemoRequest {
   email: string;
   demoType: 'salon' | 'hotel' | 'restaurant' | 'events';
   requestIp?: string | null;
-  status: 'submitted' | 'provisioning' | 'completed' | 'failed' | 'rejected';
+  status: 'pending' | 'submitted' | 'provisioning' | 'completed' | 'failed' | 'rejected';
   demoInstance?: (string | null) | DemoInstance;
   rejectionReason?: string | null;
   updatedAt: string;
