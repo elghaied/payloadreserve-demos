@@ -35,6 +35,11 @@ ARG NEXT_PUBLIC_TURNSTILE_SITE_KEY
 ENV NEXT_PUBLIC_SERVER_URL="${NEXT_PUBLIC_SERVER_URL}"
 ENV NEXT_PUBLIC_TURNSTILE_SITE_KEY="${NEXT_PUBLIC_TURNSTILE_SITE_KEY}"
 
+# Dummy values so Payload config can load during next build (no DB connection happens).
+# Real values are provided at runtime via the container's environment.
+ENV PAYLOAD_SECRET="build-time-placeholder-secret-not-used"
+ENV DATABASE_URL="mongodb://placeholder:27017/placeholder"
+
 RUN corepack enable pnpm && pnpm --filter=landing run build
 
 # ── Runner ────────────────────────────────────────────────────────────────────
