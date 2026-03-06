@@ -408,10 +408,18 @@
       "viewBooking": "Voir la page de réservation",
       "footnote": "La démo est pré-remplie avec des données réalistes. Toutes les données sont supprimées définitivement à expiration."
     },
+    "queue": {
+      "title": "Vous êtes dans la file d'attente !",
+      "subtitle": "Votre demande de démo a été enregistrée. Nous vous enverrons un e-mail avec vos identifiants dès qu'elle sera prête.",
+      "estimatedTime": "Disponibilité estimée : {date}",
+      "note": "Ce délai peut varier selon la demande actuelle.",
+      "backHome": "Retour à l'accueil"
+    },
     "error": {
       "rateLimitTitle": "Limite de démo atteinte",
       "capacityTitle": "Capacité atteinte",
       "defaultTitle": "Échec de la demande",
+      "alreadyRequestedTitle": "Demande déjà en cours",
       "tryAgain": "Réessayer",
       "backHome": "Retour à l'accueil"
     }

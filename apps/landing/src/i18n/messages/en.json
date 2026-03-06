@@ -408,10 +408,18 @@
       "viewBooking": "View Booking Page",
       "footnote": "The demo is pre-seeded with realistic data. All data is permanently deleted on expiry."
     },
+    "queue": {
+      "title": "You're in the queue!",
+      "subtitle": "Your demo request has been registered. We'll send you an email with your credentials when it's ready.",
+      "estimatedTime": "Estimated availability: {date}",
+      "note": "This may vary depending on current demand.",
+      "backHome": "Back to home"
+    },
     "error": {
       "rateLimitTitle": "Demo limit reached",
       "capacityTitle": "At capacity",
       "defaultTitle": "Request failed",
+      "alreadyRequestedTitle": "Request already in progress",
       "tryAgain": "Try again",
       "backHome": "Back to home"
     }
