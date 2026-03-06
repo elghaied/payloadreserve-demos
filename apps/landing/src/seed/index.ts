@@ -66,14 +66,14 @@ export async function seed(payload: Payload): Promise<void> {
     privateDemo: privDemo.id,
   }
 
-  // ── 3. Globals ─────────────────────────────────────────────────────────────
+  // ── 3. Demos (before HomePage so we can wire the relationship) ──────────
+  const demoIds = await seedDemos(payload, media)
+
+  // ── 4. Globals ─────────────────────────────────────────────────────────────
   await seedSiteSettings(payload)
   await seedNavigation(payload)
   await seedFooter(payload)
-  await seedHomePage(payload, media)
-
-  // ── 4. Demos ───────────────────────────────────────────────────────────────
-  await seedDemos(payload, media)
+  await seedHomePage(payload, media, demoIds)
 
   payload.logger.info('\n✅ Landing seed complete.\n')
 }
@@ -150,7 +150,7 @@ async function seedFooter(payload: Payload) {
 
 // ─── HomePage ─────────────────────────────────────────────────────────────────
 
-async function seedHomePage(payload: Payload, media: SeedMedia) {
+async function seedHomePage(payload: Payload, media: SeedMedia, demoIds: string[]) {
   payload.logger.info('🏠 Seeding HomePage…')
 
   // Merge slide image IDs into the adminUiSlides arrays.
@@ -163,6 +163,10 @@ async function seedHomePage(payload: Payload, media: SeedMedia) {
     locale: 'en',
     data: {
       ...homePageData.en,
+      demosSection: {
+        ...homePageData.en.demosSection,
+        demos: demoIds,
+      },
       adminUiSection: {
         ...homePageData.en.adminUiSection,
         adminUiSlides: withSlides(homePageData.en.adminUiSection.adminUiSlides),
@@ -194,8 +198,10 @@ async function seedHomePage(payload: Payload, media: SeedMedia) {
 
 // ─── Demos ────────────────────────────────────────────────────────────────────
 
-async function seedDemos(payload: Payload, media: SeedMedia) {
+async function seedDemos(payload: Payload, media: SeedMedia): Promise<string[]> {
   payload.logger.info('🎮 Seeding Demos…')
+
+  const ids: string[] = []
 
   for (const demo of demosData) {
     payload.logger.info(`  → ${demo.slug}`)
@@ -237,6 +243,8 @@ async function seedDemos(payload: Payload, media: SeedMedia) {
       },
     })
 
+    ids.push(created.id)
+
     await payload.update({
       collection: 'demos',
       id: created.id,
@@ -260,4 +268,6 @@ async function seedDemos(payload: Payload, media: SeedMedia) {
 
     payload.logger.info(`    ✓ ${demo.slug} seeded (en + fr)`)
   }
+
+  return ids
 }
