@@ -18,6 +18,7 @@ import { Footer } from './globals/Footer'
 import { InfrastructureSettings } from './globals/InfrastructureSettings'
 import { DemoDashboard } from './globals/DemoDashboard'
 import { seoPlugin } from '@payloadcms/plugin-seo'
+import { cleanupExpiredDemosHandler } from './jobs/cleanupExpiredDemos'
 
 function requireEnv(name: string): string {
   const val = process.env[name]
@@ -79,6 +80,35 @@ export default buildConfig({
         }),
       }
     : {}),
+  jobs: {
+    tasks: [
+      {
+        slug: 'cleanupExpiredDemos',
+        label: 'Cleanup Expired Demos',
+        outputSchema: [
+          { name: 'expired', type: 'number' },
+          { name: 'failed', type: 'number' },
+          { name: 'queued', type: 'number' },
+        ],
+        retries: 0,
+        handler: cleanupExpiredDemosHandler,
+        schedule: [
+          {
+            cron: '* * * * *', // every minute
+            queue: 'cleanup',
+          },
+        ],
+      },
+    ],
+    autoRun: [
+      {
+        cron: '* * * * *', // check for queued jobs every minute
+        queue: 'cleanup',
+        limit: 1,
+      },
+    ],
+    deleteJobOnComplete: true,
+  },
   plugins: [
     s3Storage({
       collections: {
