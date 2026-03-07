@@ -29,6 +29,9 @@
       "esbuild",
       "sharp",
       "unrs-resolver"
-    ]
+    ],
+    "overrides": {
+      "payload": "3.79.0"
+    }
   }
 }
