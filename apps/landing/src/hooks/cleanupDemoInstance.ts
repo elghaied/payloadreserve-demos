@@ -11,7 +11,7 @@ export const cleanupDemoInstance: CollectionAfterDeleteHook = async ({ doc, req 
     const coolify = getCoolify(settings)
     const s3 = getS3(settings)
     const mongoUrl = buildMongoUrl(settings)
-    const s3Bucket = settings.s3Bucket || process.env.S3_BUCKET || ''
+    const s3Bucket = settings.s3Bucket || ''
 
     const results = await Promise.allSettled([
       coolify ? coolify.deleteService(coolifyServiceId) : Promise.resolve(),

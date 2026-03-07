@@ -25,11 +25,9 @@ function getDemoImage(settings: InfrastructureSetting, type: DemoType): { name: 
     events: settings.eventsImage,
   }
   const imageGroup = imageMap[type]
-  const envName = process.env[`DOCKER_IMAGE_${type.toUpperCase()}_NAME`] ?? ''
-  const envTag = process.env[`DOCKER_IMAGE_${type.toUpperCase()}_TAG`] ?? 'latest'
   return {
-    name: imageGroup?.name || envName,
-    tag: imageGroup?.tag || envTag,
+    name: imageGroup?.name || '',
+    tag: imageGroup?.tag || 'latest',
   }
 }
 
@@ -55,12 +53,12 @@ export async function provisionAndDeploy(opts: {
   const demoSeedSecret = crypto.randomBytes(24).toString('hex')
   const statusToken = crypto.randomBytes(24).toString('base64url')
   const statusTokenHash = crypto.createHash('sha256').update(statusToken).digest('hex')
-  const demoProtocol = settings.demoProtocol || process.env.DEMO_PROTOCOL || 'https'
-  const baseDomain = settings.demoBaseDomain || process.env.DEMO_BASE_DOMAIN || 'payloadreserve.com'
+  const demoProtocol = settings.demoProtocol || 'https'
+  const baseDomain = settings.demoBaseDomain || 'payloadreserve.com'
   const subdomain = `demo-${demoId}.${baseDomain}`
   const dbName = `payloadreserve-demo-${demoId}`
   const s3Prefix = `${demoType}/demo-${demoId}`
-  const ttlHours = settings.demoTtlHours || Number(process.env.DEMO_TTL_HOURS ?? 24)
+  const ttlHours = settings.demoTtlHours || 24
   const expiresAt = new Date(Date.now() + ttlHours * 60 * 60 * 1000)
 
   const instance = await payload.create({
@@ -95,23 +93,24 @@ export async function provisionAndDeploy(opts: {
   console.log(`[demo/${demoId}] Coolify client: ${coolify ? 'ready' : 'MISSING — check COOLIFY_API_URL / COOLIFY_API_KEY'}`)
   if (coolify) {
     const image = getDemoImage(settings, demoType)
-    const mongoUser = encodeURIComponent(settings.mongoRootUsername || process.env.MONGO_ROOT_USERNAME || '')
-    const mongoPass = encodeURIComponent(settings.mongoRootPassword || process.env.MONGO_ROOT_PASSWORD || '')
-    const mongoHost = settings.mongoHost || process.env.MONGO_HOST || 'mongodb'
+    const mongoUser = encodeURIComponent(settings.mongoRootUsername || '')
+    const mongoPass = encodeURIComponent(settings.mongoRootPassword || '')
+    const rawHost = settings.mongoHost || 'mongodb'
+    const mongoHost = rawHost.includes(':') ? rawHost : `${rawHost}:27017`
     console.log(`[demo/${demoId}] Creating Coolify service — image: ${image.name}:${image.tag}, fqdn: ${demoProtocol}://${subdomain}`)
     try {
       const service = await coolify.createService({
         name: `demo-${demoId}`,
-        projectUuid: settings.coolifyProjectUuid || process.env.COOLIFY_PROJECT_UUID || '',
-        serverUuid: settings.coolifyServerUuid || process.env.COOLIFY_SERVER_UUID || '',
-        destinationUuid: settings.coolifyDestinationUuid || process.env.COOLIFY_DESTINATION_UUID || '',
+        projectUuid: settings.coolifyProjectUuid || '',
+        serverUuid: settings.coolifyServerUuid || '',
+        destinationUuid: settings.coolifyDestinationUuid || '',
         environmentName: 'production',
         dockerImageName: image.name,
         dockerImageTag: image.tag,
         ports: '3000',
         fqdn: `${demoProtocol}://${subdomain}`,
         envVars: [
-          { key: 'DATABASE_URL', value: `mongodb://${mongoUser}:${mongoPass}@${mongoHost}:27017/${dbName}?authSource=admin&directConnection=true`, is_secret: true },
+          { key: 'DATABASE_URL', value: `mongodb://${mongoUser}:${mongoPass}@${mongoHost}/${dbName}?authSource=admin&directConnection=true`, is_secret: true },
           { key: 'PAYLOAD_SECRET', value: payloadSecret, is_secret: true },
           { key: 'ADMIN_EMAIL', value: email },
           { key: 'ADMIN_PASSWORD', value: adminPassword, is_secret: true },
@@ -120,19 +119,19 @@ export async function provisionAndDeploy(opts: {
           { key: 'S3_PREFIX', value: s3Prefix },
           { key: 'S3_BUCKET', value: `${demoType}-demo` },
           { key: 'SMTP_FROM_NAME', value: DEMO_SMTP_FROM_NAMES[demoType] },
-          { key: 'S3_ACCESS_KEY', value: settings.s3AccessKey || process.env.S3_ACCESS_KEY || '', is_secret: true },
-          { key: 'S3_SECRET_KEY', value: settings.s3SecretKey || process.env.S3_SECRET_KEY || '', is_secret: true },
-          { key: 'S3_ENDPOINT', value: settings.s3Endpoint || process.env.S3_ENDPOINT || '' },
-          { key: 'S3_REGION', value: settings.s3Region || process.env.S3_REGION || 'us-east-1' },
-          { key: 'S3_FORCE_PATH_STYLE', value: String(settings.s3ForcePathStyle ?? (process.env.S3_FORCE_PATH_STYLE ?? 'true')) },
-          { key: 'SMTP_HOST', value: settings.smtpHost || process.env.SMTP_HOST || '' },
-          { key: 'SMTP_PORT', value: String(settings.smtpPort || process.env.SMTP_PORT || '587') },
-          { key: 'SMTP_USER', value: settings.smtpUser || process.env.SMTP_USER || '' },
-          { key: 'SMTP_PASS', value: settings.smtpPass || process.env.SMTP_PASS || '', is_secret: true },
-          { key: 'SMTP_FROM', value: settings.smtpFrom || process.env.SMTP_FROM || '' },
-          { key: 'STRIPE_SECRET_KEY', value: settings.stripeSecretKey || process.env.STRIPE_SECRET_KEY || '', is_secret: true },
-          { key: 'STRIPE_WEBHOOK_SECRET', value: settings.stripeWebhookSecret || process.env.STRIPE_WEBHOOK_SECRET || '', is_secret: true },
-          { key: 'NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY', value: settings.stripePublishableKey || process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || '' },
+          { key: 'S3_ACCESS_KEY', value: settings.s3AccessKey || '', is_secret: true },
+          { key: 'S3_SECRET_KEY', value: settings.s3SecretKey || '', is_secret: true },
+          { key: 'S3_ENDPOINT', value: settings.s3Endpoint || '' },
+          { key: 'S3_REGION', value: settings.s3Region || 'us-east-1' },
+          { key: 'S3_FORCE_PATH_STYLE', value: String(settings.s3ForcePathStyle ?? true) },
+          { key: 'SMTP_HOST', value: settings.smtpHost || '' },
+          { key: 'SMTP_PORT', value: String(settings.smtpPort || 587) },
+          { key: 'SMTP_USER', value: settings.smtpUser || '' },
+          { key: 'SMTP_PASS', value: settings.smtpPass || '', is_secret: true },
+          { key: 'SMTP_FROM', value: settings.smtpFrom || '' },
+          { key: 'STRIPE_SECRET_KEY', value: settings.stripeSecretKey || '', is_secret: true },
+          { key: 'STRIPE_WEBHOOK_SECRET', value: settings.stripeWebhookSecret || '', is_secret: true },
+          { key: 'NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY', value: settings.stripePublishableKey || '' },
         ],
       })
       coolifyServiceId = service.id

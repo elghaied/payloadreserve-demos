@@ -121,14 +121,16 @@ export const InfrastructureSettings: GlobalConfig = {
         },
         {
           label: 'MongoDB',
+          description: 'Shared MongoDB server where demo databases are created. NOT the landing app database.',
           fields: [
-            { name: 'mongoHost', type: 'text', label: 'Host', admin: { description: 'Docker network hostname of the shared MongoDB instance' } },
+            { name: 'mongoHost', type: 'text', label: 'Host', admin: { description: 'Docker network hostname of the shared MongoDB instance. May include port (e.g. "hostname:27017").' } },
             secretText({ name: 'mongoRootUsername', label: 'Root Username' }),
             secretText({ name: 'mongoRootPassword', label: 'Root Password' }),
           ],
         },
         {
           label: 'SMTP',
+          description: 'Mail server for sending demo credential emails and passed to demo containers. Separate from the landing app email adapter.',
           fields: [
             { name: 'smtpHost', type: 'text', label: 'Host', admin: { placeholder: 'smtp.gmail.com' } },
             { name: 'smtpPort', type: 'number', label: 'Port', defaultValue: 587 },
@@ -140,6 +142,7 @@ export const InfrastructureSettings: GlobalConfig = {
         },
         {
           label: 'S3 Storage',
+          description: 'S3/MinIO for demo media storage and cleanup. Separate from the landing app media bucket.',
           fields: [
             { name: 's3Endpoint', type: 'text', label: 'Endpoint' },
             secretText({ name: 's3AccessKey', label: 'Access Key' }),

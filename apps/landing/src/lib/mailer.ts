@@ -9,15 +9,15 @@ export interface Mailer {
 }
 
 function createTransport(settings: InfrastructureSetting) {
-  const port = settings.smtpPort || Number(process.env.SMTP_PORT ?? 587)
+  const port = settings.smtpPort || 587
   return nodemailer.createTransport({
-    host: settings.smtpHost || process.env.SMTP_HOST!,
+    host: settings.smtpHost!,
     port,
     secure: port === 465,
     requireTLS: port !== 465,
     auth: {
-      user: settings.smtpUser || process.env.SMTP_USER!,
-      pass: settings.smtpPass || process.env.SMTP_PASS!,
+      user: settings.smtpUser || '',
+      pass: settings.smtpPass || '',
     },
   })
 }
@@ -25,14 +25,13 @@ function createTransport(settings: InfrastructureSetting) {
 export function createMailer(settings: InfrastructureSetting): Mailer {
   return {
     async sendDemoCredentials(to: string, data: DemoCredentialsData): Promise<void> {
-      const host = settings.smtpHost || process.env.SMTP_HOST
-      if (!host) return
+      if (!settings.smtpHost) return
 
       const transport = createTransport(settings)
       const element = DemoCredentials(data)
       const html = await render(element)
-      const fromName = settings.smtpFromName || process.env.SMTP_FROM_NAME || 'payload-reserve'
-      const fromAddr = settings.smtpFrom || process.env.SMTP_FROM!
+      const fromName = settings.smtpFromName || 'payload-reserve'
+      const fromAddr = settings.smtpFrom || ''
 
       await transport.sendMail({
         from: `"${fromName}" <${fromAddr}>`,

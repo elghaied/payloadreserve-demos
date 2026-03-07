@@ -4,7 +4,7 @@ export async function verifyTurnstile(
   token: string,
   settings?: InfrastructureSetting | null,
 ): Promise<boolean> {
-  const secret = settings?.turnstileSecretKey || process.env.TURNSTILE_SECRET_KEY
+  const secret = settings?.turnstileSecretKey
   if (!secret) {
     if (process.env.NODE_ENV === 'development') return true
     return false

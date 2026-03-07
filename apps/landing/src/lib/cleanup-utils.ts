@@ -5,19 +5,19 @@ import type { InfrastructureSetting } from '@/payload-types'
 
 export function getS3(settings: InfrastructureSetting): S3Client {
   return new S3Client({
-    endpoint: settings.s3Endpoint || process.env.S3_ENDPOINT,
-    region: settings.s3Region || process.env.S3_REGION || 'us-east-1',
+    endpoint: settings.s3Endpoint || undefined,
+    region: settings.s3Region || 'us-east-1',
     credentials: {
-      accessKeyId: settings.s3AccessKey || process.env.S3_ACCESS_KEY || '',
-      secretAccessKey: settings.s3SecretKey || process.env.S3_SECRET_KEY || '',
+      accessKeyId: settings.s3AccessKey || '',
+      secretAccessKey: settings.s3SecretKey || '',
     },
-    forcePathStyle: settings.s3ForcePathStyle ?? (process.env.S3_FORCE_PATH_STYLE === 'true'),
+    forcePathStyle: settings.s3ForcePathStyle ?? false,
   })
 }
 
 export function getCoolify(settings: InfrastructureSetting): CoolifyClient | null {
-  const url = settings.coolifyApiUrl || process.env.COOLIFY_API_URL
-  const key = settings.coolifyApiKey || process.env.COOLIFY_API_KEY
+  const url = settings.coolifyApiUrl
+  const key = settings.coolifyApiKey
   if (!url || !key) return null
   return new CoolifyClient(url, key)
 }
@@ -44,10 +44,11 @@ export async function deleteS3Prefix(s3: S3Client, bucket: string, prefix: strin
 const SAFE_DB_NAME_RE = /^payloadreserve-demo-[a-z0-9]+$/
 
 export function buildMongoUrl(settings: InfrastructureSetting): string {
-  const user = encodeURIComponent(settings.mongoRootUsername || process.env.MONGO_ROOT_USERNAME || '')
-  const pass = encodeURIComponent(settings.mongoRootPassword || process.env.MONGO_ROOT_PASSWORD || '')
-  const host = settings.mongoHost || process.env.MONGO_HOST || 'localhost'
-  return `mongodb://${user}:${pass}@${host}:27017/?authSource=admin&directConnection=true`
+  const user = encodeURIComponent(settings.mongoRootUsername || '')
+  const pass = encodeURIComponent(settings.mongoRootPassword || '')
+  const rawHost = settings.mongoHost || 'localhost'
+  const host = rawHost.includes(':') ? rawHost : `${rawHost}:27017`
+  return `mongodb://${user}:${pass}@${host}/?authSource=admin&directConnection=true`
 }
 
 export async function dropDemoDatabase(mongoUrl: string, dbName: string): Promise<void> {

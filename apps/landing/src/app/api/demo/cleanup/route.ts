@@ -26,7 +26,7 @@ export async function POST(req: NextRequest) {
   // Auth check — constant-time comparison
   const authHeader = req.headers.get('authorization') ?? ''
   const token = authHeader.startsWith('Bearer ') ? authHeader.slice(7) : null
-  const secret = settings.cleanupSecret || process.env.CLEANUP_SECRET || ''
+  const secret = settings.cleanupSecret || ''
   if (!token || !secret || token.length !== secret.length ||
       !crypto.timingSafeEqual(Buffer.from(token), Buffer.from(secret))) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
@@ -44,7 +44,7 @@ export async function POST(req: NextRequest) {
   const s3 = getS3(settings)
   const coolify = getCoolify(settings)
   const mongoUrl = buildMongoUrl(settings)
-  const s3Bucket = settings.s3Bucket || process.env.S3_BUCKET || ''
+  const s3Bucket = settings.s3Bucket || ''
 
   let expiredCount = 0
   let failedCount = 0
@@ -80,7 +80,7 @@ export async function POST(req: NextRequest) {
   )
 
   // --- Phase 2: Process pending queue ---
-  const maxActive = settings.maxActiveDemos || Number(process.env.MAX_ACTIVE_DEMOS ?? 20)
+  const maxActive = settings.maxActiveDemos || 20
   const currentActive = await payload.count({
     collection: 'demo-instances',
     where: { status: { in: ['provisioning', 'ready'] } },

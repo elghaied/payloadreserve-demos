@@ -35,7 +35,7 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
   }
 
   const settings = await getInfraSettings(payload)
-  const demoProtocol = settings.demoProtocol || process.env.DEMO_PROTOCOL || 'https'
+  const demoProtocol = settings.demoProtocol || 'https'
   const demoUrl = demo.status === 'ready' ? `${demoProtocol}://${demo.subdomain}` : undefined
 
   return NextResponse.json({

@@ -81,7 +81,7 @@ export async function POST(req: NextRequest) {
   }
 
   // Capacity check
-  const maxActive = settings.maxActiveDemos || Number(process.env.MAX_ACTIVE_DEMOS ?? 20)
+  const maxActive = settings.maxActiveDemos || 20
   const activeCount = await payload.count({
     collection: 'demo-instances',
     where: {
