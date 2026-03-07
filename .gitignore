@@ -52,3 +52,6 @@ playwright/.cache/
 # claude
 CLAUDE.md
 plans/
+
+# worktrees
+.worktrees/
