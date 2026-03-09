@@ -269,23 +269,25 @@ export function BookingWizard() {
               {slots.length === 0 ? (
                 <p className="text-muted text-sm">{t('noSlots')}</p>
               ) : (
-                <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 gap-2">
-                  {slots.map((time) => (
-                    <button
-                      key={time}
-                      onClick={() => {
-                        setSelectedTime(time)
-                        setStep(3)
-                      }}
-                      className={`py-3 text-sm border transition-all ${
-                        selectedTime === time
-                          ? 'border-primary bg-primary text-white'
-                          : 'border-border hover:border-primary/50'
-                      }`}
-                    >
-                      {time}
-                    </button>
-                  ))}
+                <div className="max-h-[320px] overflow-y-auto">
+                  <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 gap-2">
+                    {slots.map((time) => (
+                      <button
+                        key={time}
+                        onClick={() => {
+                          setSelectedTime(time)
+                          setStep(3)
+                        }}
+                        className={`py-3 text-sm border transition-all ${
+                          selectedTime === time
+                            ? 'border-primary bg-primary text-white'
+                            : 'border-border hover:border-primary/50'
+                        }`}
+                      >
+                        {time}
+                      </button>
+                    ))}
+                  </div>
                 </div>
               )}
             </>
