@@ -117,7 +117,7 @@ export async function provisionAndDeploy(opts: {
           { key: 'SEED_SECRET', value: demoSeedSecret, is_secret: true },
           { key: 'NEXT_PUBLIC_SERVER_URL', value: `${demoProtocol}://${subdomain}` },
           { key: 'S3_PREFIX', value: s3Prefix },
-          { key: 'S3_BUCKET', value: `${demoType}-demo` },
+          { key: 'S3_BUCKET', value: settings.s3Bucket || '' },
           { key: 'SMTP_FROM_NAME', value: DEMO_SMTP_FROM_NAMES[demoType] },
           { key: 'S3_ACCESS_KEY', value: settings.s3AccessKey || '', is_secret: true },
           { key: 'S3_SECRET_KEY', value: settings.s3SecretKey || '', is_secret: true },
