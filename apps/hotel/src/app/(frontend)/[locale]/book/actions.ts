@@ -24,6 +24,7 @@ export async function getAvailableRooms(
   checkInDate: string,
   checkOutDate: string,
   locale: string,
+  guestCount: number = 1,
 ) {
   const payload = await getPayload({ config })
   const req = await createLocalReq({}, payload)
@@ -79,7 +80,7 @@ export async function getAvailableRooms(
         blockingStatuses: ['pending', 'confirmed'],
         bufferAfter: roomType.bufferTimeAfter ?? 0,
         bufferBefore: 0,
-        guestCount: 1,
+        guestCount,
       })
 
       const image = roomType.image && typeof roomType.image === 'object' ? (roomType.image.url ?? null) : null

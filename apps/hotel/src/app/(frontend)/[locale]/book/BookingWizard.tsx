@@ -84,7 +84,7 @@ export function BookingWizard() {
     setLoading(true)
     setError('')
     try {
-      const rooms = await getAvailableRooms(checkInDate, checkOutDate, locale)
+      const rooms = await getAvailableRooms(checkInDate, checkOutDate, locale, guestCount)
       setAvailableRooms(rooms)
 
       if (preselectedRoomTypeId) {
