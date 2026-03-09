@@ -52,7 +52,7 @@ export async function runSeed(payload: Payload): Promise<void> {
     roomImages[rt.imageKey] = await uploadImage(payload, rt.imageKey, rt.name)
   }
   const amenityImages: Record<string, string> = {}
-  for (const key of ['pool', 'spa', 'restaurant'] as const) {
+  for (const key of ['pool', 'spa', 'restaurant', 'fitness'] as const) {
     amenityImages[key] = await uploadImage(payload, key, key)
   }
   const galleryImageIds: string[] = []
@@ -67,6 +67,7 @@ export async function runSeed(payload: Payload): Promise<void> {
     const imageId = a.icon === 'pool' ? amenityImages.pool
       : a.icon === 'spa' ? amenityImages.spa
       : a.icon === 'restaurant' ? amenityImages.restaurant
+      : a.icon === 'fitness' ? amenityImages.fitness
       : undefined
     await payload.create({
       collection: 'amenities',

@@ -3,6 +3,7 @@ import { getTranslations } from 'next-intl/server'
 import { MapPin, Phone, Mail, Clock } from 'lucide-react'
 
 import { Container } from './Container'
+import { GShellBrand } from './GShellBrand'
 import { Ornament } from './Ornament'
 
 type Props = {
@@ -122,9 +123,10 @@ export async function Footer({ locale }: Props) {
           <p className="text-xs text-muted-light">
             &copy; {new Date().getFullYear()} Grand Hotel. {t('rights')}
           </p>
-          <div className="flex items-center gap-1 text-xs text-muted-light">
-            <span>Powered by</span>
-            <span className="text-primary font-medium">payload-reserve</span>
+          <div className="flex items-center gap-4 text-xs text-muted-light">
+            <span>Powered by <span className="text-primary font-medium">payload-reserve</span></span>
+            <span className="text-muted-light/30">|</span>
+            <GShellBrand size="sm" />
           </div>
         </div>
       </Container>
