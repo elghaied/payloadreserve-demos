@@ -70,9 +70,12 @@ export interface Config {
   collections: {
     users: User;
     media: Media;
-    'menu-categories': MenuCategory;
+    menu: Menu;
+    team: Team;
+    'wine-list': WineList;
+    spaces: Space;
+    announcements: Announcement;
     testimonials: Testimonial;
-    gallery: Gallery;
     'dining-experiences': DiningExperience;
     tables: Table;
     schedules: Schedule;
@@ -92,9 +95,12 @@ export interface Config {
   collectionsSelect: {
     users: UsersSelect<false> | UsersSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
-    'menu-categories': MenuCategoriesSelect<false> | MenuCategoriesSelect<true>;
+    menu: MenuSelect<false> | MenuSelect<true>;
+    team: TeamSelect<false> | TeamSelect<true>;
+    'wine-list': WineListSelect<false> | WineListSelect<true>;
+    spaces: SpacesSelect<false> | SpacesSelect<true>;
+    announcements: AnnouncementsSelect<false> | AnnouncementsSelect<true>;
     testimonials: TestimonialsSelect<false> | TestimonialsSelect<true>;
-    gallery: GallerySelect<false> | GallerySelect<true>;
     'dining-experiences': DiningExperiencesSelect<false> | DiningExperiencesSelect<true>;
     tables: TablesSelect<false> | TablesSelect<true>;
     schedules: SchedulesSelect<false> | SchedulesSelect<true>;
@@ -220,10 +226,13 @@ export interface Media {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "menu-categories".
+ * via the `definition` "menu".
  */
-export interface MenuCategory {
+export interface Menu {
   id: string;
+  /**
+   * Course name (e.g. Starters, Mains, Cheese, Desserts)
+   */
   name: string;
   description?: string | null;
   image?: (string | null) | Media;
@@ -232,11 +241,163 @@ export interface MenuCategory {
         name: string;
         description?: string | null;
         price: number;
-        dietary?: ('vegetarian' | 'vegan' | 'gluten-free' | 'dairy-free')[] | null;
+        dietary?: ('vegetarian' | 'vegan' | 'gluten-free' | 'dairy-free' | 'nut-free')[] | null;
+        /**
+         * Mark as seasonal / limited availability
+         */
+        seasonal?: boolean | null;
+        /**
+         * Chef's recommendation
+         */
+        chefRecommendation?: boolean | null;
+        /**
+         * Suggested wine pairing
+         */
+        winePairing?: (string | null) | WineList;
         id?: string | null;
       }[]
     | null;
   order?: number | null;
+  active?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "wine-list".
+ */
+export interface WineList {
+  id: string;
+  /**
+   * e.g. "Château Margaux 2015"
+   */
+  name: string;
+  type: 'red' | 'white' | 'rose' | 'champagne' | 'dessert';
+  /**
+   * e.g. "Bordeaux, France" or "Tuscany, Italy"
+   */
+  region: string;
+  /**
+   * Year of production
+   */
+  vintage?: number | null;
+  /**
+   * e.g. "Cabernet Sauvignon / Merlot blend"
+   */
+  grape?: string | null;
+  tastingNotes?: string | null;
+  /**
+   * What dishes this wine pairs well with
+   */
+  pairingNotes?: string | null;
+  /**
+   * Price per glass (leave empty if bottle only)
+   */
+  priceGlass?: number | null;
+  priceBottle: number;
+  image?: (string | null) | Media;
+  /**
+   * Show on homepage wine section
+   */
+  featured?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "team".
+ */
+export interface Team {
+  id: string;
+  name: string;
+  role: 'head-chef' | 'sous-chef' | 'pastry-chef' | 'sommelier' | 'maitre-d' | 'bartender';
+  photo?: (string | null) | Media;
+  bio?: string | null;
+  /**
+   * e.g. "Classical French sauces" or "Natural wines"
+   */
+  specialty?: string | null;
+  /**
+   * Their most famous creation
+   */
+  signatureDish?: string | null;
+  awards?:
+    | {
+        title: string;
+        year?: number | null;
+        id?: string | null;
+      }[]
+    | null;
+  order?: number | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "spaces".
+ */
+export interface Space {
+  id: string;
+  name: string;
+  description?: string | null;
+  featuredImage: string | Media;
+  gallery?:
+    | {
+        image: string | Media;
+        caption?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Maximum number of seated guests
+   */
+  capacity: number;
+  features?:
+    | (
+        | 'natural-light'
+        | 'garden-view'
+        | 'fireplace'
+        | 'sound-system'
+        | 'projector'
+        | 'private-entrance'
+        | 'bar-access'
+        | 'outdoor'
+      )[]
+    | null;
+  /**
+   * Available for private event bookings
+   */
+  privateEventAvailable?: boolean | null;
+  /**
+   * Minimum spend for private events (€)
+   */
+  minimumSpend?: number | null;
+  order?: number | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "announcements".
+ */
+export interface Announcement {
+  id: string;
+  title: string;
+  description?: string | null;
+  type: 'seasonal-menu' | 'special-event' | 'holiday-menu' | 'chef-collab' | 'live-entertainment' | 'wine-tasting';
+  image?: (string | null) | Media;
+  startDate: string;
+  /**
+   * Leave empty for single-day events
+   */
+  endDate?: string | null;
+  /**
+   * Button text (e.g. "Reserve Now", "Learn More")
+   */
+  ctaText?: string | null;
+  ctaLink?: string | null;
+  active?: boolean | null;
+  featured?: boolean | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -250,6 +411,11 @@ export interface Testimonial {
   author: string;
   rating: number;
   diningExperience?: (string | null) | DiningExperience;
+  /**
+   * Which dining space was the guest seated in
+   */
+  space?: (string | null) | Space;
+  visitDate?: string | null;
   featured?: boolean | null;
   updatedAt: string;
   createdAt: string;
@@ -269,19 +435,6 @@ export interface DiningExperience {
   bufferTimeBefore?: number | null;
   bufferTimeAfter?: number | null;
   active?: boolean | null;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "gallery".
- */
-export interface Gallery {
-  id: string;
-  image: string | Media;
-  caption?: string | null;
-  category?: ('dining-room' | 'terrace' | 'cuisine' | 'bar' | 'events') | null;
-  featured?: boolean | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -542,16 +695,28 @@ export interface PayloadLockedDocument {
         value: string | Media;
       } | null)
     | ({
-        relationTo: 'menu-categories';
-        value: string | MenuCategory;
+        relationTo: 'menu';
+        value: string | Menu;
+      } | null)
+    | ({
+        relationTo: 'team';
+        value: string | Team;
+      } | null)
+    | ({
+        relationTo: 'wine-list';
+        value: string | WineList;
+      } | null)
+    | ({
+        relationTo: 'spaces';
+        value: string | Space;
+      } | null)
+    | ({
+        relationTo: 'announcements';
+        value: string | Announcement;
       } | null)
     | ({
         relationTo: 'testimonials';
         value: string | Testimonial;
-      } | null)
-    | ({
-        relationTo: 'gallery';
-        value: string | Gallery;
       } | null)
     | ({
         relationTo: 'dining-experiences';
@@ -668,9 +833,9 @@ export interface MediaSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "menu-categories_select".
+ * via the `definition` "menu_select".
  */
-export interface MenuCategoriesSelect<T extends boolean = true> {
+export interface MenuSelect<T extends boolean = true> {
   name?: T;
   description?: T;
   image?: T;
@@ -681,9 +846,95 @@ export interface MenuCategoriesSelect<T extends boolean = true> {
         description?: T;
         price?: T;
         dietary?: T;
+        seasonal?: T;
+        chefRecommendation?: T;
+        winePairing?: T;
         id?: T;
       };
   order?: T;
+  active?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "team_select".
+ */
+export interface TeamSelect<T extends boolean = true> {
+  name?: T;
+  role?: T;
+  photo?: T;
+  bio?: T;
+  specialty?: T;
+  signatureDish?: T;
+  awards?:
+    | T
+    | {
+        title?: T;
+        year?: T;
+        id?: T;
+      };
+  order?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "wine-list_select".
+ */
+export interface WineListSelect<T extends boolean = true> {
+  name?: T;
+  type?: T;
+  region?: T;
+  vintage?: T;
+  grape?: T;
+  tastingNotes?: T;
+  pairingNotes?: T;
+  priceGlass?: T;
+  priceBottle?: T;
+  image?: T;
+  featured?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "spaces_select".
+ */
+export interface SpacesSelect<T extends boolean = true> {
+  name?: T;
+  description?: T;
+  featuredImage?: T;
+  gallery?:
+    | T
+    | {
+        image?: T;
+        caption?: T;
+        id?: T;
+      };
+  capacity?: T;
+  features?: T;
+  privateEventAvailable?: T;
+  minimumSpend?: T;
+  order?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "announcements_select".
+ */
+export interface AnnouncementsSelect<T extends boolean = true> {
+  title?: T;
+  description?: T;
+  type?: T;
+  image?: T;
+  startDate?: T;
+  endDate?: T;
+  ctaText?: T;
+  ctaLink?: T;
+  active?: T;
+  featured?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -696,18 +947,8 @@ export interface TestimonialsSelect<T extends boolean = true> {
   author?: T;
   rating?: T;
   diningExperience?: T;
-  featured?: T;
-  updatedAt?: T;
-  createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "gallery_select".
- */
-export interface GallerySelect<T extends boolean = true> {
-  image?: T;
-  caption?: T;
-  category?: T;
+  space?: T;
+  visitDate?: T;
   featured?: T;
   updatedAt?: T;
   createdAt?: T;
@@ -919,35 +1160,30 @@ export interface Homepage {
   heroBackgroundImage?: (string | null) | Media;
   heroCtaText?: string | null;
   heroCtaLink?: string | null;
-  aboutHeading?: string | null;
-  aboutBody?: {
-    root: {
-      type: string;
-      children: {
-        type: any;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  } | null;
-  aboutImage?: (string | null) | Media;
+  storyHeading?: string | null;
+  storyBody?: string | null;
+  storyImage?: (string | null) | Media;
+  /**
+   * e.g. "Est. 1987"
+   */
+  storyEstablished?: string | null;
   menuHeading?: string | null;
   menuSubtitle?: string | null;
+  menuCtaText?: string | null;
+  menuCtaLink?: string | null;
+  teamHeading?: string | null;
+  teamSubtitle?: string | null;
+  spacesHeading?: string | null;
+  spacesSubtitle?: string | null;
+  wineHeading?: string | null;
+  wineSubtitle?: string | null;
+  wineImage?: (string | null) | Media;
   experiencesHeading?: string | null;
   experiencesSubtitle?: string | null;
-  testimonials?:
-    | {
-        quote?: string | null;
-        author?: string | null;
-        rating?: number | null;
-        id?: string | null;
-      }[]
-    | null;
+  testimonialsHeading?: string | null;
+  testimonialsSubtitle?: string | null;
+  announcementsHeading?: string | null;
+  announcementsSubtitle?: string | null;
   ctaHeading?: string | null;
   ctaBody?: string | null;
   ctaButtonText?: string | null;
@@ -963,12 +1199,21 @@ export interface SiteSetting {
   id: string;
   restaurantName: string;
   logo?: (string | null) | Media;
+  /**
+   * e.g. "Contemporary French"
+   */
+  cuisineType?: string | null;
+  michelinStars?: ('0' | '1' | '2' | '3') | null;
+  /**
+   * Short motto or slogan
+   */
+  tagline?: string | null;
   address?: string | null;
   phone?: string | null;
   email?: string | null;
   socialLinks?:
     | {
-        platform: 'instagram' | 'facebook' | 'tripadvisor' | 'twitter';
+        platform: 'instagram' | 'facebook' | 'tripadvisor' | 'twitter' | 'google-maps';
         url: string;
         id?: string | null;
       }[]
@@ -982,6 +1227,11 @@ export interface SiteSetting {
         id?: string | null;
       }[]
     | null;
+  dressCode?: ('casual' | 'smart-casual' | 'business-casual' | 'formal') | null;
+  parkingInfo?: string | null;
+  accessibilityInfo?: string | null;
+  reservationPolicy?: string | null;
+  cancellationPolicy?: string | null;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -1013,21 +1263,27 @@ export interface HomepageSelect<T extends boolean = true> {
   heroBackgroundImage?: T;
   heroCtaText?: T;
   heroCtaLink?: T;
-  aboutHeading?: T;
-  aboutBody?: T;
-  aboutImage?: T;
+  storyHeading?: T;
+  storyBody?: T;
+  storyImage?: T;
+  storyEstablished?: T;
   menuHeading?: T;
   menuSubtitle?: T;
+  menuCtaText?: T;
+  menuCtaLink?: T;
+  teamHeading?: T;
+  teamSubtitle?: T;
+  spacesHeading?: T;
+  spacesSubtitle?: T;
+  wineHeading?: T;
+  wineSubtitle?: T;
+  wineImage?: T;
   experiencesHeading?: T;
   experiencesSubtitle?: T;
-  testimonials?:
-    | T
-    | {
-        quote?: T;
-        author?: T;
-        rating?: T;
-        id?: T;
-      };
+  testimonialsHeading?: T;
+  testimonialsSubtitle?: T;
+  announcementsHeading?: T;
+  announcementsSubtitle?: T;
   ctaHeading?: T;
   ctaBody?: T;
   ctaButtonText?: T;
@@ -1043,6 +1299,9 @@ export interface HomepageSelect<T extends boolean = true> {
 export interface SiteSettingsSelect<T extends boolean = true> {
   restaurantName?: T;
   logo?: T;
+  cuisineType?: T;
+  michelinStars?: T;
+  tagline?: T;
   address?: T;
   phone?: T;
   email?: T;
@@ -1062,6 +1321,11 @@ export interface SiteSettingsSelect<T extends boolean = true> {
         endTime?: T;
         id?: T;
       };
+  dressCode?: T;
+  parkingInfo?: T;
+  accessibilityInfo?: T;
+  reservationPolicy?: T;
+  cancellationPolicy?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;
