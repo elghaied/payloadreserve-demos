@@ -12,9 +12,12 @@ import { createAdminUser } from '@payload-reserve-demos/seed-utils'
 
 import { Users } from './collections/Users'
 import { Media } from './collections/Media'
-import { MenuCategories } from './collections/MenuCategories'
+import { Menu } from './collections/Menu'
+import { Team } from './collections/Team'
+import { WineList } from './collections/WineList'
+import { Spaces } from './collections/Spaces'
+import { Announcements } from './collections/Announcements'
 import { Testimonials } from './collections/Testimonials'
-import { Gallery } from './collections/Gallery'
 import { Homepage } from './globals/Homepage'
 import { SiteSettings } from './globals/SiteSettings'
 import { seedEndpoint } from './endpoints/seed'
@@ -35,7 +38,7 @@ export default buildConfig({
     },
   },
   endpoints: [seedEndpoint],
-  collections: [Users, Media, MenuCategories, Testimonials, Gallery],
+  collections: [Users, Media, Menu, Team, WineList, Spaces, Announcements, Testimonials],
   globals: [Homepage, SiteSettings],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
