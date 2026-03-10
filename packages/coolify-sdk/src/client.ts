@@ -1,4 +1,4 @@
-import type { CoolifyEnvVar, CoolifyService, CoolifyServiceStatus, CreateServiceOptions } from './types'
+import type { CoolifyEnvVar, CoolifyProject, CoolifyServer, CoolifyService, CoolifyServiceStatus, CreateServiceOptions } from './types'
 
 export class CoolifyClient {
   private readonly baseUrl: string
@@ -90,5 +90,13 @@ export class CoolifyClient {
 
   async startService(serviceId: string): Promise<void> {
     await this.request<void>('GET', `/applications/${serviceId}/start`)
+  }
+
+  async listProjects(): Promise<CoolifyProject[]> {
+    return this.request<CoolifyProject[]>('GET', '/projects')
+  }
+
+  async listServers(): Promise<CoolifyServer[]> {
+    return this.request<CoolifyServer[]>('GET', '/servers')
   }
 }
