@@ -24,7 +24,7 @@ export async function runSeed(payload: Payload) {
   for (const collection of collectionsToClear) {
     try {
       await payload.delete({
-        collection: collection as string,
+        collection,
         where: { id: { exists: true } },
         context: { skipReservationHooks: true },
       })
@@ -53,7 +53,8 @@ export async function runSeed(payload: Payload) {
   ]
 
   for (const c of customerData) {
-    const customer = await payload.create({
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const customer = await (payload.create as any)({
       collection: 'users',
       data: {
         email: c.email,
@@ -107,7 +108,7 @@ export async function runSeed(payload: Payload) {
           name: d.name.en,
           description: d.description.en,
           price: d.price,
-          dietary: d.dietary,
+          dietary: d.dietary as ('vegetarian' | 'vegan' | 'gluten-free' | 'dairy-free')[],
         })),
         order: cat.order,
       },
@@ -131,7 +132,7 @@ export async function runSeed(payload: Payload) {
             name: d.name.fr,
             description: d.description.fr,
             price: d.price,
-            dietary: d.dietary,
+            dietary: d.dietary as ('vegetarian' | 'vegan' | 'gluten-free' | 'dairy-free')[],
           })),
         },
       })
@@ -140,9 +141,10 @@ export async function runSeed(payload: Payload) {
 
   // 5. Create dining experiences (services)
   payload.logger.info('Creating dining experiences...')
-  const experiences: Array<{ id: string | number }> = []
+  const experiences: Array<{ id: string }> = []
   for (const exp of diningExperiencesData) {
-    const created = await payload.create({
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const created = await (payload.create as any)({
       collection: 'dining-experiences',
       data: {
         name: exp.name.en,
@@ -170,11 +172,12 @@ export async function runSeed(payload: Payload) {
 
   // 6. Create tables (resources) with schedules
   payload.logger.info('Creating tables and schedules...')
-  const tables: Array<{ id: string | number }> = []
+  const tables: Array<{ id: string }> = []
   for (const table of tablesData) {
     const serviceIds = table.supportedExperiences.map((idx) => experiences[idx]?.id).filter(Boolean)
 
-    const created = await payload.create({
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const created = await (payload.create as any)({
       collection: 'tables',
       data: {
         name: table.name.en,
@@ -303,7 +306,8 @@ export async function runSeed(payload: Payload) {
 
   for (const res of reservationSamples) {
     try {
-      await payload.create({
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      await (payload.create as any)({
         collection: 'reservations',
         data: res,
         context: { skipReservationHooks: true },
@@ -353,7 +357,7 @@ export async function runSeed(payload: Payload) {
         quote: t.quote.en,
         author: t.author,
         rating: t.rating,
-        diningExperience: t.experience,
+        diningExperience: t.experience as string,
         featured: t.featured,
       },
     })
@@ -368,9 +372,9 @@ export async function runSeed(payload: Payload) {
   // 9. Create gallery items
   payload.logger.info('Creating gallery items...')
   const galleryItems = [
-    { imageKey: 'gallery1' as ImageKey, caption: { en: 'The main dining room', fr: 'La salle principale' }, category: 'dining-room', featured: true },
-    { imageKey: 'gallery2' as ImageKey, caption: { en: 'Chef at work', fr: 'Le chef au travail' }, category: 'cuisine', featured: true },
-    { imageKey: 'gallery3' as ImageKey, caption: { en: 'Our wine cellar', fr: 'Notre cave a vin' }, category: 'bar', featured: false },
+    { imageKey: 'gallery1' as ImageKey, caption: { en: 'The main dining room', fr: 'La salle principale' }, category: 'dining-room' as const, featured: true },
+    { imageKey: 'gallery2' as ImageKey, caption: { en: 'Chef at work', fr: 'Le chef au travail' }, category: 'cuisine' as const, featured: true },
+    { imageKey: 'gallery3' as ImageKey, caption: { en: 'Our wine cellar', fr: 'Notre cave a vin' }, category: 'bar' as const, featured: false },
   ]
 
   for (const item of galleryItems) {
@@ -457,8 +461,8 @@ export async function runSeed(payload: Payload) {
       address: siteSettingsData.en.address,
       phone: siteSettingsData.en.phone,
       email: siteSettingsData.en.email,
-      socialLinks: siteSettingsData.en.socialLinks,
-      serviceHours: siteSettingsData.en.serviceHours,
+      socialLinks: siteSettingsData.en.socialLinks as { platform: 'instagram' | 'facebook' | 'tripadvisor' | 'twitter'; url: string }[],
+      serviceHours: siteSettingsData.en.serviceHours as { service: 'lunch' | 'dinner' | 'brunch' | 'bar'; days: string; startTime: string; endTime: string }[],
     },
   })
 

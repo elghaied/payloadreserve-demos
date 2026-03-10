@@ -23,9 +23,9 @@ async function sendReservationEmail(
       req,
     })
 
-    const service = reservation.service as Record<string, unknown> | undefined
-    const resource = reservation.resource as Record<string, unknown> | undefined
-    const customer = reservation.customer as Record<string, unknown> | undefined
+    const service = reservation.service as unknown as Record<string, unknown> | undefined
+    const resource = reservation.resource as unknown as Record<string, unknown> | undefined
+    const customer = reservation.customer as unknown as Record<string, unknown> | undefined
 
     if (!customer?.email) {
       payload.logger.warn(`No customer email for reservation ${doc.id}`)
@@ -54,7 +54,7 @@ async function sendReservationEmail(
       tableName: (resource?.name as string) || 'Table',
       date: dateStr,
       time: timeStr,
-      partySize: (reservation as Record<string, unknown>).partySize as number | undefined,
+      partySize: (reservation as unknown as Record<string, unknown>).partySize as number | undefined,
       locale,
     }
 
