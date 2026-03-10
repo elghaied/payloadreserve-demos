@@ -1,4 +1,7 @@
 @import 'tailwindcss';
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
 
 @theme {
   --color-background: #1a0a14;
@@ -21,6 +24,19 @@
 
   --font-heading: 'Cormorant Garamond', Georgia, serif;
   --font-body: 'Outfit', system-ui, sans-serif;
+
+  --radius: 0.625rem;
+
+  /* shadcn component aliases — mapped to Midnight Burgundy theme */
+  --color-popover: #2d1525;
+  --color-popover-foreground: #f0e6ea;
+  --color-accent: #3d2035;
+  --color-accent-foreground: #f0e6ea;
+  --color-muted-foreground: #9a7a8a;
+  --color-ring: #c4758a;
+  --color-input: #3d2035;
+  --color-card: rgba(45, 21, 37, 0.6);
+  --color-card-foreground: #f0e6ea;
 }
 
 /* ─── Base ─── */
