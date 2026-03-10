@@ -24,22 +24,43 @@ export const Homepage: GlobalConfig = {
           ],
         },
         {
-          label: 'About',
+          label: 'Story',
           fields: [
-            { name: 'aboutHeading', type: 'text', localized: true },
-            {
-              name: 'aboutBody',
-              type: 'richText',
-              localized: true,
-            },
-            { name: 'aboutImage', type: 'upload', relationTo: 'media' },
+            { name: 'storyHeading', type: 'text', localized: true },
+            { name: 'storyBody', type: 'textarea', localized: true },
+            { name: 'storyImage', type: 'upload', relationTo: 'media' },
+            { name: 'storyEstablished', type: 'text', localized: true, admin: { description: 'e.g. "Est. 1987"' } },
           ],
         },
         {
-          label: 'Menu Showcase',
+          label: 'Menu Preview',
           fields: [
             { name: 'menuHeading', type: 'text', localized: true },
             { name: 'menuSubtitle', type: 'text', localized: true },
+            { name: 'menuCtaText', type: 'text', localized: true },
+            { name: 'menuCtaLink', type: 'text' },
+          ],
+        },
+        {
+          label: 'Meet the Team',
+          fields: [
+            { name: 'teamHeading', type: 'text', localized: true },
+            { name: 'teamSubtitle', type: 'text', localized: true },
+          ],
+        },
+        {
+          label: 'Our Spaces',
+          fields: [
+            { name: 'spacesHeading', type: 'text', localized: true },
+            { name: 'spacesSubtitle', type: 'text', localized: true },
+          ],
+        },
+        {
+          label: 'Wine Program',
+          fields: [
+            { name: 'wineHeading', type: 'text', localized: true },
+            { name: 'wineSubtitle', type: 'text', localized: true },
+            { name: 'wineImage', type: 'upload', relationTo: 'media' },
           ],
         },
         {
@@ -52,15 +73,15 @@ export const Homepage: GlobalConfig = {
         {
           label: 'Testimonials',
           fields: [
-            {
-              name: 'testimonials',
-              type: 'array',
-              fields: [
-                { name: 'quote', type: 'textarea', localized: true },
-                { name: 'author', type: 'text' },
-                { name: 'rating', type: 'number', min: 1, max: 5 },
-              ],
-            },
+            { name: 'testimonialsHeading', type: 'text', localized: true },
+            { name: 'testimonialsSubtitle', type: 'text', localized: true },
+          ],
+        },
+        {
+          label: "What's On",
+          fields: [
+            { name: 'announcementsHeading', type: 'text', localized: true },
+            { name: 'announcementsSubtitle', type: 'text', localized: true },
           ],
         },
         {
