@@ -1,13 +1,27 @@
 ---
-title: Getting Started
-description: Install payload-reserve and add reservation functionality to your Payload CMS 3.x project.
+title: payload-reserve
+description: A reservation and booking plugin for Payload CMS 3.x. Add scheduling, availability, and booking management to any Payload project.
 ---
 
 ## Installation
 
-```bash
-npm install payload-reserve
-```
+<Tabs items={['pnpm', 'npm', 'yarn']} groupId="pkg" persist>
+  <Tab value="pnpm">
+  ```bash
+  pnpm add payload-reserve
+  ```
+  </Tab>
+  <Tab value="npm">
+  ```bash
+  npm install payload-reserve
+  ```
+  </Tab>
+  <Tab value="yarn">
+  ```bash
+  yarn add payload-reserve
+  ```
+  </Tab>
+</Tabs>
 
 ## Quick Setup
 
@@ -15,13 +29,11 @@ Add the plugin to your `payload.config.ts`:
 
 ```typescript
 import { buildConfig } from 'payload'
-import { reservePlugin } from 'payload-reserve'
+import { payloadReserve } from 'payload-reserve'
 
 export default buildConfig({
   plugins: [
-    reservePlugin({
-      resources: ['specialists'],
-    }),
+    payloadReserve(),
   ],
   // ... rest of config
 })
@@ -31,13 +43,8 @@ export default buildConfig({
 
 After installing, the plugin automatically adds:
 
-- **Reservations** collection — stores all bookings with status, timestamps, and linked resource
-- **Schedules** collection — defines available time windows per resource
-- **Public REST API** — `/api/reserve/availability`, `/api/reserve/create`, etc.
-
-## Next Steps
-
-- Configure [resources and services](/docs/resources)
-- Set up [email notifications](/docs/notifications)
-- Add [Stripe payments](/docs/stripe)
-- Explore [status workflows](/docs/status-machine)
+- **5 collections** — Services, Resources, Schedules, Customers, and Reservations
+- **Calendar view** replacing the default reservations list (month/week/day)
+- **Dashboard widget** showing today's booking stats
+- **Availability overview** at `/admin/reservation-availability`
+- **Public REST API** — `/api/reserve/availability`, `/api/reserve/book`, and more
