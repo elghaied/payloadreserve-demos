@@ -9,40 +9,40 @@ Performance tuning, database indexes, and high-concurrency patterns.
 
 For production deployments with high booking volume, add these indexes to your database. The conflict detection query filters by `resource`, `status`, `startTime`, and `endTime` on every create and update — the composite `reservation_conflict_lookup` index is the most important one to add.
 
-### MongoDB
-
-```js
-db.reservations.createIndex(
-  { resource: 1, status: 1, startTime: 1, endTime: 1 },
-  { name: 'reservation_conflict_lookup' }
-)
-db.reservations.createIndex(
-  { customer: 1, startTime: -1 },
-  { name: 'reservation_customer_history' }
-)
-db.reservations.createIndex(
-  { idempotencyKey: 1 },
-  { unique: true, sparse: true, name: 'reservation_idempotency' }
-)
-```
-
-### PostgreSQL
-
-```sql
-CREATE INDEX reservation_conflict_lookup
-  ON reservations (resource, status, "startTime", "endTime");
-CREATE INDEX reservation_customer_history
-  ON reservations (customer, "startTime" DESC);
-CREATE UNIQUE INDEX reservation_idempotency
-  ON reservations ("idempotencyKey") WHERE "idempotencyKey" IS NOT NULL;
-```
-
-### SQLite
-
-```sql
-CREATE INDEX reservation_conflict_lookup
-  ON reservations (resource, status, startTime, endTime);
-```
+<Tabs items={['MongoDB', 'PostgreSQL', 'SQLite']}>
+  <Tab value="MongoDB">
+  ```js
+  db.reservations.createIndex(
+    { resource: 1, status: 1, startTime: 1, endTime: 1 },
+    { name: 'reservation_conflict_lookup' }
+  )
+  db.reservations.createIndex(
+    { customer: 1, startTime: -1 },
+    { name: 'reservation_customer_history' }
+  )
+  db.reservations.createIndex(
+    { idempotencyKey: 1 },
+    { unique: true, sparse: true, name: 'reservation_idempotency' }
+  )
+  ```
+  </Tab>
+  <Tab value="PostgreSQL">
+  ```sql
+  CREATE INDEX reservation_conflict_lookup
+    ON reservations (resource, status, "startTime", "endTime");
+  CREATE INDEX reservation_customer_history
+    ON reservations (customer, "startTime" DESC);
+  CREATE UNIQUE INDEX reservation_idempotency
+    ON reservations ("idempotencyKey") WHERE "idempotencyKey" IS NOT NULL;
+  ```
+  </Tab>
+  <Tab value="SQLite">
+  ```sql
+  CREATE INDEX reservation_conflict_lookup
+    ON reservations (resource, status, startTime, endTime);
+  ```
+  </Tab>
+</Tabs>
 
 <Callout type="info">
 The `idempotencyKey` field has `unique: true` in the Payload schema definition, so Payload-managed databases will have this automatically. The snippets above are for manually adding it if your database was created before this field was introduced.
