@@ -27,3 +27,19 @@ export interface CreateServiceOptions {
   connectToDockerNetwork?: boolean
   instantDeploy?: boolean
 }
+
+export interface CoolifyProject {
+  id: number
+  uuid: string
+  name: string
+  description?: string
+}
+
+export interface CoolifyServer {
+  uuid: string
+  name: string
+  ip: string
+  description?: string
+  is_reachable?: boolean
+  is_usable?: boolean
+}
