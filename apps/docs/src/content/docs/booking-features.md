@@ -1,4 +1,7 @@
-# Booking Features
+---
+title: Booking Features
+description: Covers duration types, multi-resource bookings, and capacity/inventory management.
+---
 
 Covers duration types, multi-resource bookings, and capacity/inventory management.
 
@@ -91,7 +94,12 @@ Each item in the `items` array has its own `resource`, optional `service`, optio
 
 **Inheritance rules:** Items missing `startTime`, `endTime`, `service`, or `guestCount` inherit the parent reservation's values.
 
-**Conflict detection** runs independently for each resource in the `items` array as well as the primary resource.
+**Validation:**
+- Every item must have a `resource` and `startTime` (either its own or inherited from the parent). Items missing required fields throw a `ValidationError` identifying which item is incomplete (e.g., `items.1.resource`).
+- Duplicate `(resource, startTime)` pairs within the same booking are rejected.
+- Conflict errors include the item index (e.g., `items.2.startTime`) so you know which item failed.
+
+**Conflict detection** runs independently for each resource in the `items` array. Each item's own service determines its buffer times (`bufferTimeBefore`/`bufferTimeAfter`), so different items can have different buffer windows.
 
 ---
 
@@ -145,6 +153,3 @@ await payload.create({
 // When 20 total guests are booked, the class is full
 ```
 
----
-
-← [Status Machine](./status-machine.md) | → [Hooks API](./hooks-api.md) | ↑ [Back to README](../README.md)

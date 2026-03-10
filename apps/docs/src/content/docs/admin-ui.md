@@ -1,4 +1,7 @@
-# Admin UI
+---
+title: Admin UI
+description: Calendar view, dashboard widget, and availability overview — the three admin components registered by the plugin.
+---
 
 Three admin components are registered by the plugin automatically.
 
@@ -85,6 +88,3 @@ config.admin.custom.reservationStatusMachine
 // { statuses, defaultStatus, terminalStatuses, blockingStatuses, transitions }
 ```
 
----
-
-← [REST API](./rest-api.md) | → [Examples](./examples.md) | ↑ [Back to README](../README.md)

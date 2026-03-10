@@ -3,3 +3,22 @@
 
 /* ─── Class-based dark mode (used by next-themes / fumadocs RootProvider) ── */
 @variant dark (&:is(.dark, .dark *));
+
+/* ─── Font families matching the landing app ── */
+@theme {
+  --font-sans: var(--font-outfit), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-dm-mono), ui-monospace, monospace;
+}
+
+/* ─── Purple/violet theme to match payloadreserve.com ── */
+:root {
+  --fd-primary: 263 70% 50%;
+  --fd-primary-foreground: 0 0% 100%;
+  --fd-ring: 263 70% 50%;
+}
+
+.dark {
+  --fd-primary: 263 70% 72%;
+  --fd-primary-foreground: 263 70% 10%;
+  --fd-ring: 263 70% 72%;
+}

@@ -1,4 +1,7 @@
-# Examples
+---
+title: Examples
+description: Real-world use case configurations — salon, hotel, restaurant, event venue — plus Stripe and email integration patterns.
+---
 
 Real-world use case configurations and integration patterns.
 
@@ -250,6 +253,3 @@ payloadReserve({
 })
 ```
 
----
-
-← [Admin UI](./admin-ui.md) | → [Advanced](./advanced.md) | ↑ [Back to README](../README.md)
