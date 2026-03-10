@@ -1,20 +1,37 @@
-# Getting Started
+---
+title: Getting Started
+description: Everything you need to install payload-reserve and have it running in your Payload CMS project.
+---
 
 Everything you need to install `payload-reserve` and have it running in your Payload CMS project.
 
 ## Installation
 
-```bash
-pnpm add payload-reserve
-# or
-npm install payload-reserve
-```
+<Tabs items={['pnpm', 'npm', 'yarn']} groupId="pkg" persist>
+  <Tab value="pnpm">
+  ```bash
+  pnpm add payload-reserve
+  ```
+  </Tab>
+  <Tab value="npm">
+  ```bash
+  npm install payload-reserve
+  ```
+  </Tab>
+  <Tab value="yarn">
+  ```bash
+  yarn add payload-reserve
+  ```
+  </Tab>
+</Tabs>
 
-**Peer dependency:** `payload ^3.37.0`
+**Peer dependencies:** `payload ^3.79.0`, `@payloadcms/ui ^3.79.0`, `@payloadcms/translations ^3.79.0`
 
 ## Quick Start
 
-Add the plugin to your `payload.config.ts`:
+<div className='fd-steps [&_h3]:fd-step'>
+
+### Add the plugin to your config
 
 ```typescript
 import { buildConfig } from 'payload'
@@ -30,7 +47,11 @@ export default buildConfig({
 })
 ```
 
+### Start your dev server
+
 That's it. The plugin registers the domain collections, adds a dashboard widget, replaces the reservations list view with a calendar, and mounts the public API endpoints. All plugin collections appear under the **"Reservations"** admin group by default.
+
+</div>
 
 ## What Gets Created
 
@@ -65,8 +86,4 @@ payloadReserve({
 })
 ```
 
-When `userCollection` is set, the plugin injects `phone`, `notes`, and a `bookings` join field into your existing collection rather than creating a separate Customers collection. See [Collections → Customers](./collections.md#customers) for details.
-
----
-
-← [Back to README](../README.md) | → [Configuration](./configuration.md)
+When `userCollection` is set, the plugin injects `phone`, `notes`, and a `bookings` join field into your existing collection rather than creating a separate Customers collection. See [Collections → Customers](/collections#customers) for details.
