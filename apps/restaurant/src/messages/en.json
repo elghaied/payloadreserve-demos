@@ -1,0 +1,20 @@
+{
+  "common": {
+    "bookNow": "Book a Table",
+    "learnMore": "Learn More",
+    "viewAll": "View All",
+    "perPerson": "per person"
+  },
+  "nav": {
+    "home": "Home",
+    "menu": "Menu",
+    "experiences": "Experiences",
+    "gallery": "Gallery",
+    "contact": "Contact",
+    "book": "Reserve",
+    "login": "Login",
+    "register": "Register",
+    "account": "My Account",
+    "logout": "Logout"
+  }
+}
