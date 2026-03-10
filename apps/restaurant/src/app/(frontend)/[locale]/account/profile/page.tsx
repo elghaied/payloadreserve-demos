@@ -1,0 +1,124 @@
+'use client'
+
+import { useTranslations } from 'next-intl'
+import { useParams } from 'next/navigation'
+import { useEffect, useState } from 'react'
+
+import { updateProfile } from '../actions'
+
+export default function ProfilePage() {
+  const t = useTranslations('profile')
+  const tBooking = useTranslations('booking')
+  const tCommon = useTranslations('common')
+  const params = useParams()
+  const locale = params.locale as string
+
+  const [firstName, setFirstName] = useState('')
+  const [lastName, setLastName] = useState('')
+  const [email, setEmail] = useState('')
+  const [phone, setPhone] = useState('')
+  const [saving, setSaving] = useState(false)
+  const [saved, setSaved] = useState(false)
+  const [error, setError] = useState('')
+
+  useEffect(() => {
+    fetch('/api/customer-session', { credentials: 'include' })
+      .then((r) => r.json())
+      .then((data) => {
+        if (data.user) {
+          setFirstName(data.user.firstName || '')
+          setLastName(data.user.lastName || '')
+          setEmail(data.user.email || '')
+          setPhone(data.user.phone || '')
+        }
+      })
+      .catch(() => {})
+  }, [])
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setSaving(true)
+    setSaved(false)
+    setError('')
+    try {
+      await updateProfile({ firstName, lastName, email, phone })
+      setSaved(true)
+    } catch {
+      setError(locale === 'fr' ? 'Erreur lors de la mise à jour' : 'Failed to update profile')
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  return (
+    <div className="max-w-md">
+      <h1 className="font-heading text-2xl font-semibold mb-6">{t('title')}</h1>
+
+      <form onSubmit={handleSubmit} className="space-y-5">
+        {saved && (
+          <div className="bg-success/10 text-success text-sm p-3 rounded-lg border border-success/20">
+            {t('updateSuccess')}
+          </div>
+        )}
+        {error && (
+          <div className="bg-destructive/10 text-destructive text-sm p-3 rounded-lg border border-destructive/20">
+            {error}
+          </div>
+        )}
+
+        <div className="grid grid-cols-2 gap-4">
+          <div>
+            <label className="block text-sm font-medium mb-1.5">{tBooking('firstName')}</label>
+            <input
+              type="text"
+              value={firstName}
+              onChange={(e) => setFirstName(e.target.value)}
+              className="w-full border border-border px-4 py-3 text-sm bg-surface text-foreground rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors"
+              autoComplete="given-name"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium mb-1.5">{tBooking('lastName')}</label>
+            <input
+              type="text"
+              value={lastName}
+              onChange={(e) => setLastName(e.target.value)}
+              className="w-full border border-border px-4 py-3 text-sm bg-surface text-foreground rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors"
+              autoComplete="family-name"
+            />
+          </div>
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium mb-1.5">{tBooking('email')}</label>
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="w-full border border-border px-4 py-3 text-sm bg-surface text-foreground rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors"
+            autoComplete="email"
+          />
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium mb-1.5">{tBooking('phone')}</label>
+          <input
+            type="tel"
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
+            className="w-full border border-border px-4 py-3 text-sm bg-surface text-foreground rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors"
+            autoComplete="tel"
+          />
+        </div>
+
+        <button
+          type="submit"
+          disabled={saving}
+          className="bg-primary text-background px-6 py-3 text-sm tracking-wide hover:bg-primary-hover transition-colors disabled:opacity-50 rounded-lg font-medium"
+        >
+          {saving ? '...' : tCommon('save')}
+        </button>
+      </form>
+    </div>
+  )
+}
