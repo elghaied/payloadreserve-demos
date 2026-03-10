@@ -18,14 +18,27 @@ export const SiteSettings: GlobalConfig = {
           fields: [
             { name: 'restaurantName', type: 'text', required: true, localized: true },
             { name: 'logo', type: 'upload', relationTo: 'media' },
-            { name: 'address', type: 'text' },
-            { name: 'phone', type: 'text' },
-            { name: 'email', type: 'email' },
+            { name: 'cuisineType', type: 'text', localized: true, admin: { description: 'e.g. "Contemporary French"' } },
+            {
+              name: 'michelinStars',
+              type: 'select',
+              options: [
+                { label: 'None', value: '0' },
+                { label: '1 Star', value: '1' },
+                { label: '2 Stars', value: '2' },
+                { label: '3 Stars', value: '3' },
+              ],
+              defaultValue: '0',
+            },
+            { name: 'tagline', type: 'text', localized: true, admin: { description: 'Short motto or slogan' } },
           ],
         },
         {
-          label: 'Social Links',
+          label: 'Contact',
           fields: [
+            { name: 'address', type: 'text' },
+            { name: 'phone', type: 'text' },
+            { name: 'email', type: 'email' },
             {
               name: 'socialLinks',
               type: 'array',
@@ -38,7 +51,8 @@ export const SiteSettings: GlobalConfig = {
                     { label: 'Instagram', value: 'instagram' },
                     { label: 'Facebook', value: 'facebook' },
                     { label: 'TripAdvisor', value: 'tripadvisor' },
-                    { label: 'Twitter', value: 'twitter' },
+                    { label: 'Twitter / X', value: 'twitter' },
+                    { label: 'Google Maps', value: 'google-maps' },
                   ],
                 },
                 { name: 'url', type: 'text', required: true },
@@ -69,6 +83,26 @@ export const SiteSettings: GlobalConfig = {
                 { name: 'endTime', type: 'text', required: true },
               ],
             },
+          ],
+        },
+        {
+          label: 'Policies & Info',
+          fields: [
+            {
+              name: 'dressCode',
+              type: 'select',
+              options: [
+                { label: 'Casual', value: 'casual' },
+                { label: 'Smart Casual', value: 'smart-casual' },
+                { label: 'Business Casual', value: 'business-casual' },
+                { label: 'Formal', value: 'formal' },
+              ],
+              defaultValue: 'smart-casual',
+            },
+            { name: 'parkingInfo', type: 'textarea', localized: true },
+            { name: 'accessibilityInfo', type: 'textarea', localized: true },
+            { name: 'reservationPolicy', type: 'textarea', localized: true },
+            { name: 'cancellationPolicy', type: 'textarea', localized: true },
           ],
         },
       ],
