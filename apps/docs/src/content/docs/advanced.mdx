@@ -1,4 +1,7 @@
-# Advanced
+---
+title: Advanced
+description: Performance tuning, database indexes, and high-concurrency patterns for production deployments.
+---
 
 Performance tuning, database indexes, and high-concurrency patterns.
 
@@ -41,7 +44,9 @@ CREATE INDEX reservation_conflict_lookup
   ON reservations (resource, status, startTime, endTime);
 ```
 
-> **Note:** The `idempotencyKey` field has `unique: true` in the Payload schema definition, so Payload-managed databases will have this automatically. The snippets above are for manually adding it if your database was created before this field was introduced.
+<Callout type="info">
+The `idempotencyKey` field has `unique: true` in the Payload schema definition, so Payload-managed databases will have this automatically. The snippets above are for manually adding it if your database was created before this field was introduced.
+</Callout>
 
 ---
 
@@ -105,6 +110,3 @@ export const reconcileReservations: TaskConfig = {
 
 Run this job on a schedule (e.g., hourly) using Payload's job queue. The job does not resolve conflicts automatically — it flags them for human review.
 
----
-
-← [Examples](./examples.md) | → [Development](./development.md) | ↑ [Back to README](../README.md)
