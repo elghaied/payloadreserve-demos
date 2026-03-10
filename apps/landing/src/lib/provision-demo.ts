@@ -89,7 +89,7 @@ export async function provisionAndDeploy(opts: {
   })
 
   let coolifyServiceId = 'pending'
-  const coolify = getCoolify(settings)
+  const coolify = getCoolify()
   console.log(`[demo/${demoId}] Coolify client: ${coolify ? 'ready' : 'MISSING — check COOLIFY_API_URL / COOLIFY_API_KEY'}`)
   if (coolify) {
     const image = getDemoImage(settings, demoType)

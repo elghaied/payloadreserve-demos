@@ -1,7 +1,6 @@
 import { getPayload } from 'payload'
 import config from '@payload-config'
 import { headers } from 'next/headers'
-import { getInfraSettings } from '@/lib/infra-settings'
 import { getCoolify } from '@/lib/cleanup-utils'
 
 export async function POST(req: Request) {
@@ -24,11 +23,10 @@ export async function POST(req: Request) {
       return Response.json({ error: 'Invalid resource' }, { status: 400 })
     }
 
-    const settings = await getInfraSettings(payload)
-    const coolify = getCoolify(settings)
+    const coolify = getCoolify()
     if (!coolify) {
       return Response.json(
-        { error: 'Coolify not configured. Save the API URL and API Key first.' },
+        { error: 'Coolify not configured. Set COOLIFY_API_URL and COOLIFY_API_KEY environment variables.' },
         { status: 422 },
       )
     }

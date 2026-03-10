@@ -42,7 +42,7 @@ export async function POST(req: NextRequest) {
   })
 
   const s3 = getS3(settings)
-  const coolify = getCoolify(settings)
+  const coolify = getCoolify()
   const mongoUrl = buildMongoUrl(settings)
   const s3Bucket = settings.s3Bucket || ''
 

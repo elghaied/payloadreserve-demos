@@ -25,7 +25,7 @@ export const cleanupExpiredDemosHandler = async ({ req }: { req: PayloadRequest 
     console.log(`[cleanup-job] Found ${expired.docs.length} expired demo(s)`)
 
     const s3 = getS3(settings)
-    const coolify = getCoolify(settings)
+    const coolify = getCoolify()
     const mongoUrl = buildMongoUrl(settings)
     const s3Bucket = settings.s3Bucket || ''
 

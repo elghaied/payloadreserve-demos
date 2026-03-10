@@ -3,7 +3,6 @@ import type { GlobalConfig, Field } from 'payload'
 export const SECRET_MASK = '••••••••'
 
 export const SECRET_FIELDS = [
-  'coolifyApiKey',
   'mongoRootUsername',
   'mongoRootPassword',
   'smtpPass',
@@ -71,8 +70,6 @@ export const InfrastructureSettings: GlobalConfig = {
         {
           label: 'Coolify',
           fields: [
-            { name: 'coolifyApiUrl', type: 'text', label: 'API URL', admin: { placeholder: 'https://coolify.example.com/api' } },
-            secretText({ name: 'coolifyApiKey', label: 'API Key' }),
             {
               name: 'coolifyProjectUuid',
               type: 'text',

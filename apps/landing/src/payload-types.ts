@@ -114,6 +114,9 @@ export interface Config {
     'payload-jobs-stats': PayloadJobsStatsSelect<false> | PayloadJobsStatsSelect<true>;
   };
   locale: 'en' | 'fr';
+  widgets: {
+    collections: CollectionsWidget;
+  };
   user: User;
   jobs: {
     tasks: {
@@ -982,8 +985,6 @@ export interface Footer {
  */
 export interface InfrastructureSetting {
   id: string;
-  coolifyApiUrl?: string | null;
-  coolifyApiKey?: string | null;
   coolifyProjectUuid?: string | null;
   coolifyServerUuid?: string | null;
   coolifyDestinationUuid?: string | null;
@@ -1306,8 +1307,6 @@ export interface FooterSelect<T extends boolean = true> {
  * via the `definition` "infrastructure-settings_select".
  */
 export interface InfrastructureSettingsSelect<T extends boolean = true> {
-  coolifyApiUrl?: T;
-  coolifyApiKey?: T;
   coolifyProjectUuid?: T;
   coolifyServerUuid?: T;
   coolifyDestinationUuid?: T;
@@ -1383,6 +1382,16 @@ export interface PayloadJobsStatsSelect<T extends boolean = true> {
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "collections_widget".
+ */
+export interface CollectionsWidget {
+  data?: {
+    [k: string]: unknown;
+  };
+  width: 'full';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

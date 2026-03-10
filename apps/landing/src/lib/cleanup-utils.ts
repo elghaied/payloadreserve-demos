@@ -15,9 +15,9 @@ export function getS3(settings: InfrastructureSetting): S3Client {
   })
 }
 
-export function getCoolify(settings: InfrastructureSetting): CoolifyClient | null {
-  const url = settings.coolifyApiUrl
-  const key = settings.coolifyApiKey
+export function getCoolify(): CoolifyClient | null {
+  const url = process.env.COOLIFY_API_URL
+  const key = process.env.COOLIFY_API_KEY
   if (!url || !key) return null
   return new CoolifyClient(url, key)
 }

@@ -8,7 +8,7 @@ export const cleanupDemoInstance: CollectionAfterDeleteHook = async ({ doc, req 
   // Fire-and-forget — errors are logged, not thrown
   void (async () => {
     const settings = await getInfraSettings(req.payload)
-    const coolify = getCoolify(settings)
+    const coolify = getCoolify()
     const s3 = getS3(settings)
     const mongoUrl = buildMongoUrl(settings)
     const s3Bucket = settings.s3Bucket || ''
