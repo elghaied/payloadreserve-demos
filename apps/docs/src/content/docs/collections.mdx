@@ -1,4 +1,7 @@
-# Collections
+---
+title: Collections
+description: Schemas for all five collections created by the plugin.
+---
 
 Schemas for all five collections created by the plugin.
 
@@ -35,7 +38,7 @@ await payload.create({
 })
 ```
 
-See [Booking Features → Duration Types](./booking-features.md#duration-types) for how `durationType` affects end time calculation.
+See [Booking Features → Duration Types](/booking-features#duration-types) for how `durationType` affects end time calculation.
 
 ---
 
@@ -68,7 +71,7 @@ await payload.create({
 })
 ```
 
-See [Booking Features → Capacity and Inventory](./booking-features.md#capacity-and-inventory) for how `quantity` and `capacityMode` work together.
+See [Booking Features → Capacity and Inventory](/booking-features#capacity-and-inventory) for how `quantity` and `capacityMode` work together.
 
 ---
 
@@ -88,7 +91,7 @@ Defines when a resource is available. Supports **recurring** (weekly pattern) an
 | `exceptions` | Array | Dates the resource is unavailable (`date`, `reason`) |
 | `active` | Checkbox | Whether this schedule is in effect (default: true) |
 
-Times use `HH:mm` format (24-hour). Exception dates block out the entire day.
+Times use `HH:mm` format (24-hour, e.g., `09:00`, `17:30`). The format is validated — values like `9:00` (missing leading zero) or `09:00:00` (with seconds) are rejected. Within each slot, `endTime` must be after `startTime`. Exception dates block out the entire day.
 
 ```typescript
 await payload.create({
@@ -163,8 +166,5 @@ The core booking records. Each reservation links a customer to a service perform
 | `items` | Array | No | Additional resources in a multi-resource booking |
 | `idempotencyKey` | Text | No | Unique key to prevent duplicate submissions |
 
-See [Booking Features → Multi-Resource Bookings](./booking-features.md#multi-resource-bookings) for details on the `items` array.
+See [Booking Features → Multi-Resource Bookings](/booking-features#multi-resource-bookings) for details on the `items` array.
 
----
-
-← [Configuration](./configuration.md) | → [Status Machine](./status-machine.md) | ↑ [Back to README](../README.md)
