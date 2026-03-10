@@ -1,0 +1,67 @@
+export const spacesData = [
+  {
+    name: { en: 'Main Dining Room', fr: 'Salle Principale' },
+    description: {
+      en: 'Our elegant main dining room seats up to 60 guests beneath a restored 19th-century ceiling with crystal chandeliers. Floor-to-ceiling windows overlook the courtyard garden.',
+      fr: 'Notre élégante salle principale accueille jusqu\'à 60 convives sous un plafond restauré du XIXe siècle avec des lustres en cristal. Les fenêtres du sol au plafond donnent sur le jardin de la cour.',
+    },
+    imageKey: 'spaceDining' as const,
+    capacity: 60,
+    features: ['natural-light', 'garden-view'] as const,
+    privateEventAvailable: true,
+    minimumSpend: 3000,
+    order: 1,
+  },
+  {
+    name: { en: 'Garden Terrace', fr: 'Terrasse du Jardin' },
+    description: {
+      en: 'Dine beneath centuries-old wisteria and climbing roses in our enchanting garden terrace. Available from April through October, weather permitting.',
+      fr: 'Dînez sous des glycines centenaires et des roses grimpantes sur notre terrasse-jardin enchanteresse. Disponible d\'avril à octobre, selon la météo.',
+    },
+    imageKey: 'spaceTerrace' as const,
+    capacity: 32,
+    features: ['outdoor', 'garden-view', 'natural-light'] as const,
+    privateEventAvailable: true,
+    minimumSpend: 2000,
+    order: 2,
+  },
+  {
+    name: { en: 'Private Salon', fr: 'Salon Privé' },
+    description: {
+      en: 'An intimate space with a working fireplace and antique furnishings, ideal for celebrations, business dinners, or bespoke tasting events for up to 12 guests.',
+      fr: 'Un espace intime avec cheminée fonctionnelle et mobilier ancien, idéal pour les célébrations, dîners d\'affaires ou événements de dégustation sur mesure jusqu\'à 12 convives.',
+    },
+    imageKey: 'spaceSalon' as const,
+    capacity: 12,
+    features: ['fireplace', 'private-entrance', 'sound-system'] as const,
+    privateEventAvailable: true,
+    minimumSpend: 1500,
+    order: 3,
+  },
+  {
+    name: { en: 'Chef\'s Table', fr: 'Table du Chef' },
+    description: {
+      en: 'An exclusive counter overlooking the kitchen where Chef Beaumont personally presents each course. Limited to 6 guests per seating for an immersive culinary journey.',
+      fr: 'Un comptoir exclusif avec vue sur la cuisine où le Chef Beaumont présente personnellement chaque plat. Limité à 6 convives par service pour un voyage culinaire immersif.',
+    },
+    imageKey: 'spaceChefTable' as const,
+    capacity: 6,
+    features: ['bar-access'] as const,
+    privateEventAvailable: false,
+    minimumSpend: null,
+    order: 4,
+  },
+  {
+    name: { en: 'Wine Cellar Room', fr: 'Salle de la Cave' },
+    description: {
+      en: 'Surrounded by our finest bottles in a vaulted stone cellar dating from the 17th century. An atmospheric setting for wine dinners, private tastings, and intimate gatherings of up to 10.',
+      fr: 'Entouré de nos plus belles bouteilles dans une cave voûtée en pierre du XVIIe siècle. Un cadre atmosphérique pour dîners vinicoles, dégustations privées et réunions intimes jusqu\'à 10 personnes.',
+    },
+    imageKey: 'spaceCellar' as const,
+    capacity: 10,
+    features: ['private-entrance', 'sound-system'] as const,
+    privateEventAvailable: true,
+    minimumSpend: 2500,
+    order: 5,
+  },
+]
