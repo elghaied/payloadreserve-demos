@@ -1,7 +1,7 @@
 'use client'
 import React, { useState, useEffect, useCallback } from 'react'
 import { useField, FieldLabel } from '@payloadcms/ui'
-import type { TextFieldClientComponent } from 'payload'
+import type { TextFieldClientComponent, StaticLabel } from 'payload'
 
 interface Option {
   value: string
@@ -14,7 +14,7 @@ function CoolifyRemoteSelect({
   resource,
 }: {
   path: string
-  field: { label?: string; name?: string; required?: boolean }
+  field: { label?: StaticLabel; name?: string; required?: boolean }
   resource: 'projects' | 'servers'
 }) {
   const { value, setValue } = useField<string>({ path })

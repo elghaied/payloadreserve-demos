@@ -73,8 +73,26 @@ export const InfrastructureSettings: GlobalConfig = {
           fields: [
             { name: 'coolifyApiUrl', type: 'text', label: 'API URL', admin: { placeholder: 'https://coolify.example.com/api' } },
             secretText({ name: 'coolifyApiKey', label: 'API Key' }),
-            { name: 'coolifyProjectUuid', type: 'text', label: 'Project UUID' },
-            { name: 'coolifyServerUuid', type: 'text', label: 'Server UUID' },
+            {
+              name: 'coolifyProjectUuid',
+              type: 'text',
+              label: 'Project',
+              admin: {
+                components: {
+                  Field: '@/components/admin/CoolifyRemoteSelect#CoolifyProjectSelect',
+                },
+              },
+            },
+            {
+              name: 'coolifyServerUuid',
+              type: 'text',
+              label: 'Server',
+              admin: {
+                components: {
+                  Field: '@/components/admin/CoolifyRemoteSelect#CoolifyServerSelect',
+                },
+              },
+            },
             { name: 'coolifyDestinationUuid', type: 'text', label: 'Destination UUID' },
           ],
         },
