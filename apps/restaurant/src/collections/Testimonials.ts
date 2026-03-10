@@ -34,12 +34,21 @@ export const Testimonials: CollectionConfig = {
       relationTo: 'dining-experiences',
     },
     {
+      name: 'space',
+      type: 'relationship',
+      relationTo: 'spaces',
+      admin: { description: 'Which dining space was the guest seated in' },
+    },
+    {
+      name: 'visitDate',
+      type: 'date',
+      admin: { date: { pickerAppearance: 'dayOnly' } },
+    },
+    {
       name: 'featured',
       type: 'checkbox',
       defaultValue: false,
-      admin: {
-        position: 'sidebar',
-      },
+      admin: { position: 'sidebar' },
     },
   ],
 }
