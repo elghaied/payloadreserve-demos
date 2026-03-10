@@ -64,6 +64,7 @@ export type SupportedTimezones =
 export interface Config {
   auth: {
     users: UserAuthOperations;
+    customers: CustomerAuthOperations;
   };
   blocks: {};
   collections: {
@@ -76,6 +77,7 @@ export interface Config {
     tables: Table;
     schedules: Schedule;
     reservations: Reservation;
+    customers: Customer;
     'payload-kv': PayloadKv;
     'payload-jobs': PayloadJob;
     'payload-locked-documents': PayloadLockedDocument;
@@ -83,7 +85,7 @@ export interface Config {
     'payload-migrations': PayloadMigration;
   };
   collectionsJoins: {
-    users: {
+    customers: {
       bookings: 'reservations';
     };
   };
@@ -97,6 +99,7 @@ export interface Config {
     tables: TablesSelect<false> | TablesSelect<true>;
     schedules: SchedulesSelect<false> | SchedulesSelect<true>;
     reservations: ReservationsSelect<false> | ReservationsSelect<true>;
+    customers: CustomersSelect<false> | CustomersSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-jobs': PayloadJobsSelect<false> | PayloadJobsSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
@@ -122,7 +125,7 @@ export interface Config {
     'reservation-todays-reservations': ReservationTodaysReservationsWidget;
     collections: CollectionsWidget;
   };
-  user: User;
+  user: User | Customer;
   jobs: {
     tasks: {
       cancelStaleReservations: TaskCancelStaleReservations;
@@ -152,19 +155,30 @@ export interface UserAuthOperations {
     password: string;
   };
 }
+export interface CustomerAuthOperations {
+  forgotPassword: {
+    email: string;
+    password: string;
+  };
+  login: {
+    email: string;
+    password: string;
+  };
+  registerFirstUser: {
+    email: string;
+    password: string;
+  };
+  unlock: {
+    email: string;
+    password: string;
+  };
+}
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "users".
  */
 export interface User {
   id: string;
-  phone?: string | null;
-  notes?: string | null;
-  bookings?: {
-    docs?: (string | Reservation)[];
-    hasNextPage?: boolean;
-    totalDocs?: number;
-  };
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -186,65 +200,12 @@ export interface User {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "reservations".
- */
-export interface Reservation {
-  id: string;
-  service: string | DiningExperience;
-  resource: string | Table;
-  customer: string | User;
-  startTime: string;
-  endTime?: string | null;
-  status?: ('pending' | 'confirmed' | 'completed' | 'cancelled' | 'no-show') | null;
-  cancellationReason?: string | null;
-  guestCount?: number | null;
-  notes?: string | null;
-  /**
-   * Resources included in this booking. Leave empty for single-resource bookings.
-   */
-  items?:
-    | {
-        resource: string | Table;
-        service?: (string | null) | DiningExperience;
-        startTime?: string | null;
-        endTime?: string | null;
-        guestCount?: number | null;
-        id?: string | null;
-      }[]
-    | null;
-  idempotencyKey?: string | null;
-  /**
-   * Number of guests in the party
-   */
-  partySize?: number | null;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "dining-experiences".
- */
-export interface DiningExperience {
-  id: string;
-  name: string;
-  image?: (string | null) | Media;
-  description?: string | null;
-  duration: number;
-  durationType: 'fixed' | 'flexible' | 'full-day';
-  price?: number | null;
-  bufferTimeBefore?: number | null;
-  bufferTimeAfter?: number | null;
-  active?: boolean | null;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "media".
  */
 export interface Media {
   id: string;
   alt: string;
+  prefix?: string | null;
   updatedAt: string;
   createdAt: string;
   url?: string | null;
@@ -256,27 +217,6 @@ export interface Media {
   height?: number | null;
   focalX?: number | null;
   focalY?: number | null;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "tables".
- */
-export interface Table {
-  id: string;
-  name: string;
-  image?: (string | null) | Media;
-  description?: string | null;
-  services: (string | DiningExperience)[];
-  active?: boolean | null;
-  quantity: number;
-  capacityMode?: ('per-reservation' | 'per-guest') | null;
-  timezone?: string | null;
-  /**
-   * Number of seats at this table type
-   */
-  seats?: number | null;
-  updatedAt: string;
-  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -316,6 +256,24 @@ export interface Testimonial {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "dining-experiences".
+ */
+export interface DiningExperience {
+  id: string;
+  name: string;
+  image?: (string | null) | Media;
+  description?: string | null;
+  duration: number;
+  durationType: 'fixed' | 'flexible' | 'full-day';
+  price?: number | null;
+  bufferTimeBefore?: number | null;
+  bufferTimeAfter?: number | null;
+  active?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "gallery".
  */
 export interface Gallery {
@@ -324,6 +282,23 @@ export interface Gallery {
   caption?: string | null;
   category?: ('dining-room' | 'terrace' | 'cuisine' | 'bar' | 'events') | null;
   featured?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "tables".
+ */
+export interface Table {
+  id: string;
+  name: string;
+  image?: (string | null) | Media;
+  description?: string | null;
+  services: (string | DiningExperience)[];
+  active?: boolean | null;
+  quantity: number;
+  capacityMode?: ('per-reservation' | 'per-guest') | null;
+  timezone?: string | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -362,6 +337,76 @@ export interface Schedule {
   active?: boolean | null;
   updatedAt: string;
   createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "reservations".
+ */
+export interface Reservation {
+  id: string;
+  service: string | DiningExperience;
+  resource: string | Table;
+  customer: string | Customer;
+  startTime: string;
+  endTime?: string | null;
+  status?: ('pending' | 'confirmed' | 'completed' | 'cancelled' | 'no-show') | null;
+  cancellationReason?: string | null;
+  guestCount?: number | null;
+  notes?: string | null;
+  /**
+   * Resources included in this booking. Leave empty for single-resource bookings.
+   */
+  items?:
+    | {
+        resource: string | Table;
+        service?: (string | null) | DiningExperience;
+        startTime?: string | null;
+        endTime?: string | null;
+        guestCount?: number | null;
+        id?: string | null;
+      }[]
+    | null;
+  idempotencyKey?: string | null;
+  /**
+   * Number of guests in the party
+   */
+  partySize?: number | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "customers".
+ */
+export interface Customer {
+  id: string;
+  firstName: string;
+  lastName: string;
+  phone?: string | null;
+  notes?: string | null;
+  bookings?: {
+    docs?: (string | Reservation)[];
+    hasNextPage?: boolean;
+    totalDocs?: number;
+  };
+  updatedAt: string;
+  createdAt: string;
+  email: string;
+  resetPasswordToken?: string | null;
+  resetPasswordExpiration?: string | null;
+  salt?: string | null;
+  hash?: string | null;
+  loginAttempts?: number | null;
+  lockUntil?: string | null;
+  sessions?:
+    | {
+        id: string;
+        createdAt?: string | null;
+        expiresAt: string;
+      }[]
+    | null;
+  password?: string | null;
+  collection: 'customers';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -523,12 +568,21 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'reservations';
         value: string | Reservation;
+      } | null)
+    | ({
+        relationTo: 'customers';
+        value: string | Customer;
       } | null);
   globalSlug?: string | null;
-  user: {
-    relationTo: 'users';
-    value: string | User;
-  };
+  user:
+    | {
+        relationTo: 'users';
+        value: string | User;
+      }
+    | {
+        relationTo: 'customers';
+        value: string | Customer;
+      };
   updatedAt: string;
   createdAt: string;
 }
@@ -538,10 +592,15 @@ export interface PayloadLockedDocument {
  */
 export interface PayloadPreference {
   id: string;
-  user: {
-    relationTo: 'users';
-    value: string | User;
-  };
+  user:
+    | {
+        relationTo: 'users';
+        value: string | User;
+      }
+    | {
+        relationTo: 'customers';
+        value: string | Customer;
+      };
   key?: string | null;
   value?:
     | {
@@ -571,9 +630,6 @@ export interface PayloadMigration {
  * via the `definition` "users_select".
  */
 export interface UsersSelect<T extends boolean = true> {
-  phone?: T;
-  notes?: T;
-  bookings?: T;
   updatedAt?: T;
   createdAt?: T;
   email?: T;
@@ -597,6 +653,7 @@ export interface UsersSelect<T extends boolean = true> {
  */
 export interface MediaSelect<T extends boolean = true> {
   alt?: T;
+  prefix?: T;
   updatedAt?: T;
   createdAt?: T;
   url?: T;
@@ -685,7 +742,6 @@ export interface TablesSelect<T extends boolean = true> {
   quantity?: T;
   capacityMode?: T;
   timezone?: T;
-  seats?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -752,6 +808,33 @@ export interface ReservationsSelect<T extends boolean = true> {
   partySize?: T;
   updatedAt?: T;
   createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "customers_select".
+ */
+export interface CustomersSelect<T extends boolean = true> {
+  firstName?: T;
+  lastName?: T;
+  phone?: T;
+  notes?: T;
+  bookings?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  email?: T;
+  resetPasswordToken?: T;
+  resetPasswordExpiration?: T;
+  salt?: T;
+  hash?: T;
+  loginAttempts?: T;
+  lockUntil?: T;
+  sessions?:
+    | T
+    | {
+        id?: T;
+        createdAt?: T;
+        expiresAt?: T;
+      };
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

@@ -1,13 +1,14 @@
 import { mongooseAdapter } from '@payloadcms/db-mongodb'
 import { nodemailerAdapter } from '@payloadcms/email-nodemailer'
-import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import { stripePlugin } from '@payloadcms/plugin-stripe'
+import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import { s3Storage } from '@payloadcms/storage-s3'
 import path from 'path'
 import { buildConfig } from 'payload'
 import { fileURLToPath } from 'url'
 import sharp from 'sharp'
 import { payloadReserve } from 'payload-reserve'
+import { createAdminUser } from '@payload-reserve-demos/seed-utils'
 
 import { Users } from './collections/Users'
 import { Media } from './collections/Media'
@@ -19,7 +20,6 @@ import { SiteSettings } from './globals/SiteSettings'
 import { seedEndpoint } from './endpoints/seed'
 import { cancelStaleReservationsTask } from './tasks/cancelStaleReservations'
 import { notifyAfterConfirm, notifyAfterCancel } from './hooks/reservationNotifications'
-import { createAdminUser } from '@payload-reserve-demos/seed-utils'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -27,17 +27,29 @@ const dirname = path.dirname(filename)
 export default buildConfig({
   admin: {
     user: Users.slug,
-    components: {
-      beforeDashboard: ['@/components/BeforeDashboard/index.js'],
-    },
     importMap: {
       baseDir: path.resolve(dirname),
     },
+    components: {
+      beforeDashboard: ['@/components/BeforeDashboard/index.js'],
+    },
   },
+  endpoints: [seedEndpoint],
   collections: [Users, Media, MenuCategories, Testimonials, Gallery],
   globals: [Homepage, SiteSettings],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
+  onInit: async (payload) => {
+    if (!process.env.S3_PREFIX) {
+      throw new Error('S3_PREFIX environment variable is required')
+    }
+
+    const adminEmail = process.env.ADMIN_EMAIL
+    const adminPassword = process.env.ADMIN_PASSWORD
+    if (adminEmail && adminPassword) {
+      await createAdminUser(payload, adminEmail, adminPassword)
+    }
+  },
   typescript: {
     outputFile: path.resolve(dirname, 'payload-types.ts'),
   },
@@ -48,28 +60,31 @@ export default buildConfig({
   localization: {
     locales: [
       { label: 'English', code: 'en' },
-      { label: 'French', code: 'fr' },
+      { label: 'Français', code: 'fr' },
     ],
     defaultLocale: 'en',
     fallback: true,
   },
+  // Only initialise the email transport when SMTP vars are present.
+  // Without this guard, nodemailerAdapter calls transporter.verify() at
+  // startup, which fails during `next build` (Docker builder stage) where
+  // runtime env vars are not available.
   ...(process.env.SMTP_HOST
     ? {
         email: nodemailerAdapter({
-          defaultFromAddress: process.env.SMTP_FROM || 'reservations@lejardin.com',
-          defaultFromName: process.env.SMTP_FROM_NAME || 'Le Jardin Dore',
+          defaultFromAddress: process.env.SMTP_FROM!,
+          defaultFromName: process.env.SMTP_FROM_NAME!,
           transportOptions: {
             host: process.env.SMTP_HOST,
             port: Number(process.env.SMTP_PORT) || 587,
             auth: {
-              user: process.env.SMTP_USER,
-              pass: process.env.SMTP_PASS,
+              user: process.env.SMTP_USER!,
+              pass: process.env.SMTP_PASS!,
             },
           },
         }),
       }
     : {}),
-  endpoints: [seedEndpoint],
   jobs: {
     tasks: [cancelStaleReservationsTask],
     autoRun: [
@@ -88,27 +103,8 @@ export default buildConfig({
         schedules: 'schedules',
         reservations: 'reservations',
       },
-      userCollection: 'users',
-      adminGroup: 'Restaurant',
-      defaultBufferTime: 15,
-      cancellationNoticePeriod: 4,
-      access: {
-        services: { read: () => true },
-        resources: { read: () => true },
-        schedules: { read: () => true },
-        reservations: { create: () => true },
-      },
-      hooks: {
-        afterBookingConfirm: [notifyAfterConfirm],
-        afterBookingCancel: [notifyAfterCancel],
-      },
-    }),
-    // Add restaurant-specific fields to plugin collections
-    (config) => {
-      // Add partySize to reservations
-      const reservations = config.collections?.find((c) => c.slug === 'reservations')
-      if (reservations) {
-        reservations.fields.push({
+      extraReservationFields: [
+        {
           name: 'partySize',
           type: 'number',
           min: 1,
@@ -117,57 +113,68 @@ export default buildConfig({
           admin: {
             description: 'Number of guests in the party',
           },
-        })
-      }
-
-      // Add seats to tables (resources)
-      const tables = config.collections?.find((c) => c.slug === 'tables')
-      if (tables) {
-        tables.fields.push({
-          name: 'seats',
-          type: 'number',
-          min: 1,
-          max: 30,
-          admin: {
-            description: 'Number of seats at this table type',
+        },
+      ],
+      adminGroup: 'Restaurant',
+      defaultBufferTime: 15,
+      cancellationNoticePeriod: 4,
+      hooks: {
+        afterBookingConfirm: [notifyAfterConfirm],
+        afterBookingCancel: [notifyAfterCancel],
+      },
+      access: {
+        customers: {
+          create: () => true,
+          read: ({ req }) => {
+            if (!req.user) return false
+            if (req.user.collection === 'users') return true
+            return { id: { equals: req.user.id } }
           },
-        })
-      }
-
-      return config
-    },
-    // Stripe (optional)
-    ...(process.env.STRIPE_SECRET_KEY
-      ? [
-          stripePlugin({
-            stripeSecretKey: process.env.STRIPE_SECRET_KEY,
-            stripeWebhooksEndpointSecret: process.env.STRIPE_WEBHOOK_SECRET,
-            isTestKey: process.env.STRIPE_SECRET_KEY?.startsWith('sk_test_'),
-          }),
-        ]
-      : []),
-    // S3 Storage (optional)
-    ...(process.env.S3_ENDPOINT
-      ? [
-          s3Storage({
-            collections: { media: { prefix: process.env.S3_PREFIX || 'restaurant' } },
-            bucket: process.env.S3_BUCKET || '',
-            config: {
-              region: process.env.S3_REGION || 'auto',
-              endpoint: process.env.S3_ENDPOINT,
-              credentials: {
-                accessKeyId: process.env.S3_ACCESS_KEY || '',
-                secretAccessKey: process.env.S3_SECRET_KEY || '',
-              },
-              forcePathStyle: process.env.S3_FORCE_PATH_STYLE === 'true',
-            },
-          }),
-        ]
-      : []),
+          update: ({ req }) => {
+            if (!req.user) return false
+            if (req.user.collection === 'users') return true
+            return { id: { equals: req.user.id } }
+          },
+        },
+        services: { read: () => true },
+        resources: { read: () => true },
+        schedules: { read: () => true },
+        reservations: {
+          create: () => true,
+          read: ({ req }) => {
+            if (!req.user) return false
+            if (req.user.collection === 'users') return true
+            return { customer: { equals: req.user.id } }
+          },
+          update: ({ req }) => {
+            if (!req.user) return false
+            if (req.user.collection === 'users') return true
+            return { customer: { equals: req.user.id } }
+          },
+        },
+      },
+    }),
+    stripePlugin({
+      stripeSecretKey: process.env.STRIPE_SECRET_KEY || '',
+      stripeWebhooksEndpointSecret: process.env.STRIPE_WEBHOOK_SECRET,
+      isTestKey: true,
+    }),
+    s3Storage({
+      collections: {
+        media: {
+          prefix: process.env.S3_PREFIX || 'restaurant',
+        },
+      },
+      bucket: process.env.S3_BUCKET!,
+      config: {
+        credentials: {
+          accessKeyId: process.env.S3_ACCESS_KEY || '',
+          secretAccessKey: process.env.S3_SECRET_KEY || '',
+        },
+        region: process.env.S3_REGION || 'us-east-1',
+        forcePathStyle: process.env.S3_FORCE_PATH_STYLE === 'true',
+        endpoint: process.env.S3_ENDPOINT,
+      },
+    }),
   ],
-  onInit: async (payload) => {
-    if (process.env.ADMIN_EMAIL && process.env.ADMIN_PASSWORD) {
-      await createAdminUser(payload, process.env.ADMIN_EMAIL, process.env.ADMIN_PASSWORD)
-    }
-  },
 })
