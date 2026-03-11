@@ -38,7 +38,7 @@ export type ImageKey =
 export const IMAGE_URLS: Record<ImageKey, string> = {
   // Hero & Story
   heroBackground: 'https://images.pexels.com/photos/67468/pexels-photo-67468.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080',
-  storyRestaurant: 'https://images.pexels.com/photos/3338681/pexels-photo-3338681.jpeg?auto=compress&cs=tinysrgb&w=800',
+  storyRestaurant: 'https://images.pexels.com/photos/6662510/pexels-photo-6662510.jpeg?auto=compress&cs=tinysrgb&w=800',
   // Tables
   intimateTable: 'https://images.pexels.com/photos/3201921/pexels-photo-3201921.jpeg?auto=compress&cs=tinysrgb&w=800',
   classicTable: 'https://images.pexels.com/photos/1395967/pexels-photo-1395967.jpeg?auto=compress&cs=tinysrgb&w=800',
@@ -51,9 +51,9 @@ export const IMAGE_URLS: Record<ImageKey, string> = {
   menuDesserts: 'https://images.pexels.com/photos/2067396/pexels-photo-2067396.jpeg?auto=compress&cs=tinysrgb&w=800',
   // Team
   chefHead: 'https://images.pexels.com/photos/3814446/pexels-photo-3814446.jpeg?auto=compress&cs=tinysrgb&w=600',
-  chefSous: 'https://images.pexels.com/photos/3298687/pexels-photo-3298687.jpeg?auto=compress&cs=tinysrgb&w=600',
+  chefSous: 'https://images.pexels.com/photos/6036009/pexels-photo-6036009.jpeg?auto=compress&cs=tinysrgb&w=600',
   chefPastry: 'https://images.pexels.com/photos/4252137/pexels-photo-4252137.jpeg?auto=compress&cs=tinysrgb&w=600',
-  sommelier: 'https://images.pexels.com/photos/3171837/pexels-photo-3171837.jpeg?auto=compress&cs=tinysrgb&w=600',
+  sommelier: 'https://images.pexels.com/photos/3727219/pexels-photo-3727219.jpeg?auto=compress&cs=tinysrgb&w=600',
   maitreD: 'https://images.pexels.com/photos/3184183/pexels-photo-3184183.jpeg?auto=compress&cs=tinysrgb&w=600',
   // Spaces (each uses a distinct URL)
   spaceDining: 'https://images.pexels.com/photos/262978/pexels-photo-262978.jpeg?auto=compress&cs=tinysrgb&w=800',
