@@ -15,7 +15,7 @@ export const menuData = [
         dietary: [],
         seasonal: false,
         chefRecommendation: false,
-        winePairingIndex: null,
+        winePairingIndex: 2, // Côtes du Rhône
       },
       {
         name: { en: 'Foie Gras Terrine', fr: 'Terrine de foie gras' },
@@ -52,7 +52,7 @@ export const menuData = [
       en: 'The finest catch from the Atlantic and Mediterranean.',
       fr: 'Les meilleures prises de l\'Atlantique et de la Méditerranée.',
     },
-    imageKey: 'menuMains' as const,
+    imageKey: 'menuSeafood' as const,
     order: 2,
     dishes: [
       {
@@ -137,7 +137,7 @@ export const menuData = [
       en: 'A curated selection of artisanal French cheeses.',
       fr: 'Une sélection de fromages artisanaux français.',
     },
-    imageKey: 'menuDesserts' as const,
+    imageKey: 'menuCheese' as const,
     order: 4,
     dishes: [
       {
@@ -185,7 +185,7 @@ export const menuData = [
         dietary: [],
         seasonal: false,
         chefRecommendation: true,
-        winePairingIndex: null,
+        winePairingIndex: 9, // Château d'Yquem
       },
       {
         name: { en: 'Tarte Tatin', fr: 'Tarte Tatin' },
@@ -194,7 +194,7 @@ export const menuData = [
         dietary: ['vegetarian'],
         seasonal: true,
         chefRecommendation: false,
-        winePairingIndex: null,
+        winePairingIndex: 9, // Château d'Yquem
       },
       {
         name: { en: 'Île Flottante', fr: 'Île flottante' },
@@ -203,7 +203,7 @@ export const menuData = [
         dietary: ['gluten-free'],
         seasonal: false,
         chefRecommendation: false,
-        winePairingIndex: null,
+        winePairingIndex: 8, // Ruinart Blanc de Blancs
       },
     ],
   },

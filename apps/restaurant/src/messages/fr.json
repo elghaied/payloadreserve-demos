@@ -52,7 +52,9 @@
     "vegan": "Végan",
     "glutenFree": "Sans Gluten",
     "winePairing": "Accord Mets-Vin",
-    "viewFullMenu": "Voir la Carte Complète"
+    "viewFullMenu": "Voir la Carte Complète",
+    "priceNote": "Tous les prix sont TTC · La carte évolue au fil des saisons",
+    "reserveTable": "Réserver une Table"
   },
   "wines": {
     "title": "Carte des Vins",
@@ -232,7 +234,8 @@
     "contact": "Contact",
     "hours": "Horaires",
     "followUs": "Suivez-nous",
-    "rights": "Tous droits réservés"
+    "rights": "Tous droits réservés",
+    "madeBy": "Fait par"
   },
   "cta": {
     "heading": "Votre Table Vous Attend",

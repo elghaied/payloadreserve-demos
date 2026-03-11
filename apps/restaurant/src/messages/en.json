@@ -52,7 +52,9 @@
     "vegan": "Vegan",
     "glutenFree": "Gluten Free",
     "winePairing": "Wine Pairing",
-    "viewFullMenu": "View Full Menu"
+    "viewFullMenu": "View Full Menu",
+    "priceNote": "All prices include VAT · Menu changes seasonally",
+    "reserveTable": "Reserve a Table"
   },
   "wines": {
     "title": "Wine List",
@@ -232,7 +234,8 @@
     "contact": "Contact",
     "hours": "Hours",
     "followUs": "Follow Us",
-    "rights": "All rights reserved"
+    "rights": "All rights reserved",
+    "madeBy": "Made by"
   },
   "cta": {
     "heading": "Your Table Awaits",

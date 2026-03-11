@@ -13,7 +13,9 @@ export type ImageKey =
   | 'terrace'
   // Menu courses
   | 'menuStarters'
+  | 'menuSeafood'
   | 'menuMains'
+  | 'menuCheese'
   | 'menuDesserts'
   // Team
   | 'chefHead'
@@ -47,14 +49,16 @@ export const IMAGE_URLS: Record<ImageKey, string> = {
   terrace: 'https://images.pexels.com/photos/1579253/pexels-photo-1579253.jpeg?auto=compress&cs=tinysrgb&w=800',
   // Menu
   menuStarters: 'https://images.pexels.com/photos/1410235/pexels-photo-1410235.jpeg?auto=compress&cs=tinysrgb&w=800',
+  menuSeafood: 'https://images.pexels.com/photos/3655916/pexels-photo-3655916.jpeg?auto=compress&cs=tinysrgb&w=800',
   menuMains: 'https://images.pexels.com/photos/675951/pexels-photo-675951.jpeg?auto=compress&cs=tinysrgb&w=800',
+  menuCheese: 'https://images.pexels.com/photos/4109943/pexels-photo-4109943.jpeg?auto=compress&cs=tinysrgb&w=800',
   menuDesserts: 'https://images.pexels.com/photos/2067396/pexels-photo-2067396.jpeg?auto=compress&cs=tinysrgb&w=800',
   // Team
   chefHead: 'https://images.pexels.com/photos/3814446/pexels-photo-3814446.jpeg?auto=compress&cs=tinysrgb&w=600',
   chefSous: 'https://images.pexels.com/photos/6036009/pexels-photo-6036009.jpeg?auto=compress&cs=tinysrgb&w=600',
   chefPastry: 'https://images.pexels.com/photos/4252137/pexels-photo-4252137.jpeg?auto=compress&cs=tinysrgb&w=600',
   sommelier: 'https://images.pexels.com/photos/3727219/pexels-photo-3727219.jpeg?auto=compress&cs=tinysrgb&w=600',
-  maitreD: 'https://images.pexels.com/photos/3184183/pexels-photo-3184183.jpeg?auto=compress&cs=tinysrgb&w=600',
+  maitreD: 'https://images.pexels.com/photos/3785077/pexels-photo-3785077.jpeg?auto=compress&cs=tinysrgb&w=600',
   // Spaces (each uses a distinct URL)
   spaceDining: 'https://images.pexels.com/photos/262978/pexels-photo-262978.jpeg?auto=compress&cs=tinysrgb&w=800',
   spaceTerrace: 'https://images.pexels.com/photos/1058277/pexels-photo-1058277.jpeg?auto=compress&cs=tinysrgb&w=800',

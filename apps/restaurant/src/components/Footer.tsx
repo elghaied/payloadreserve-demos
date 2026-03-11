@@ -4,6 +4,7 @@ import { getPayload } from 'payload'
 import config from '@payload-config'
 
 import { Container } from './Container'
+import { GShellBrand } from './GShellBrand'
 
 export async function Footer({ locale }: { locale: string }) {
   const t = await getTranslations({ locale, namespace: 'footer' })
@@ -146,11 +147,13 @@ export async function Footer({ locale }: { locale: string }) {
           <p>
             &copy; {year} Le Jardin. {t('rights')}.
           </p>
-          <nav className="flex items-center gap-4">
+          <div className="flex items-center gap-4">
             <Link href={`/${locale}/contact`} className="hover:text-foreground transition-colors">
               {tNav('contact')}
             </Link>
-          </nav>
+            <span className="text-border">|</span>
+            <GShellBrand prefix={t('madeBy')} />
+          </div>
         </div>
       </Container>
     </footer>

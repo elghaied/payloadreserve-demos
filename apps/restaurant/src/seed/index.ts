@@ -90,7 +90,9 @@ export async function runSeed(payload: Payload) {
     { key: 'terrace', alt: 'Garden terrace' },
     // Menu
     { key: 'menuStarters', alt: 'Artful starter dish' },
+    { key: 'menuSeafood', alt: 'Fresh seafood plating' },
     { key: 'menuMains', alt: 'Main course plating' },
+    { key: 'menuCheese', alt: 'Artisanal cheese selection' },
     { key: 'menuDesserts', alt: 'Elegant dessert' },
     // Team
     { key: 'chefHead', alt: 'Chef Laurent Beaumont' },
@@ -176,6 +178,9 @@ export async function runSeed(payload: Payload) {
       },
     })
 
+    // Update French locale — must include row IDs so Payload matches existing
+    // array rows instead of replacing them (which would lose English values)
+    const dishIds = created.dishes?.map((d) => d.id) || []
     await payload.update({
       collection: 'menu',
       id: created.id,
@@ -183,14 +188,10 @@ export async function runSeed(payload: Payload) {
       data: {
         name: course.name.fr,
         description: course.description.fr,
-        dishes: course.dishes.map((d) => ({
+        dishes: course.dishes.map((d, idx) => ({
+          id: dishIds[idx],
           name: d.name.fr,
           description: d.description.fr,
-          price: d.price,
-          dietary: d.dietary as ('vegetarian' | 'vegan' | 'gluten-free' | 'dairy-free' | 'nut-free')[],
-          seasonal: d.seasonal,
-          chefRecommendation: d.chefRecommendation,
-          winePairing: d.winePairingIndex != null ? wines[d.winePairingIndex]?.id : undefined,
         })),
       },
     })

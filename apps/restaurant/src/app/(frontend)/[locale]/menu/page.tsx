@@ -156,13 +156,13 @@ export default async function MenuPage({ params }: Props) {
         <ScrollReveal delay={200}>
           <div className="text-center mt-20 pt-10 border-t border-border/40 space-y-3">
             <p className="text-muted text-xs uppercase tracking-widest">
-              All prices include VAT · Menu changes seasonally
+              {t('priceNote')}
             </p>
             <Link
               href={`/${locale}/book`}
               className="inline-block border border-primary/40 text-primary px-10 py-3 rounded-sm text-sm uppercase tracking-widest hover:bg-primary hover:text-background transition-all duration-300 mt-4"
             >
-              Reserve a Table
+              {t('reserveTable')}
             </Link>
           </div>
         </ScrollReveal>
