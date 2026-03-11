@@ -103,7 +103,7 @@ jobs:
     - registryUrl: onedev.payloadreserve.com
       userName: '@job_token@'
       passwordSecret: ONEDEV_PASSWORD
-    moreOptions: --build-arg NEXT_PUBLIC_SERVER_URL=@secret:RESTAURANT_NEXT_PUBLIC_SERVER_URL@ --build-arg S3_ENDPOINT=@secret:S3_ENDPOINT@
+    moreOptions: --build-arg RESTAURANT_NEXT_PUBLIC_SERVER_URL=@secret:RESTAURANT_NEXT_PUBLIC_SERVER_URL@ --build-arg S3_ENDPOINT=@secret:S3_ENDPOINT@
     condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
   triggers:
   - !BranchUpdateTrigger
@@ -212,7 +212,7 @@ jobs:
     - registryUrl: onedev.payloadreserve.com
       userName: '@job_token@'
       passwordSecret: ONEDEV_PASSWORD
-    moreOptions: --build-arg NEXT_PUBLIC_SERVER_URL=@secret:RESTAURANT_NEXT_PUBLIC_SERVER_URL@ --build-arg S3_ENDPOINT=@secret:S3_ENDPOINT@
+    moreOptions: --build-arg RESTAURANT_NEXT_PUBLIC_SERVER_URL=@secret:RESTAURANT_NEXT_PUBLIC_SERVER_URL@ --build-arg S3_ENDPOINT=@secret:S3_ENDPOINT@
     condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
   triggers:
   - !TagCreateTrigger {}
