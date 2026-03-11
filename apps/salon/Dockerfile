@@ -28,9 +28,9 @@ COPY turbo.json        ./
 COPY packages/         ./packages/
 COPY apps/salon/       ./apps/salon/
 
-ARG NEXT_PUBLIC_SERVER_URL
+ARG SALON_NEXT_PUBLIC_SERVER_URL
 ARG S3_ENDPOINT
-ENV NEXT_PUBLIC_SERVER_URL="${NEXT_PUBLIC_SERVER_URL}"
+ENV NEXT_PUBLIC_SERVER_URL="${SALON_NEXT_PUBLIC_SERVER_URL}"
 ENV S3_ENDPOINT="${S3_ENDPOINT}"
 
 RUN corepack enable pnpm && pnpm --filter=salon run build
