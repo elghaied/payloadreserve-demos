@@ -85,6 +85,34 @@ jobs:
   retryDelay: 30
   timeout: 3600
 
+# ── CI: push to main → build & push restaurant image ──────────────────────
+- name: Build Restaurant Image
+  steps:
+  - !CheckoutStep
+    name: Checkout
+    cloneCredential: !DefaultCredential {}
+    withLfs: false
+    condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
+  - !BuildImageStep
+    name: Build & push to registry
+    buildPath: .
+    dockerfile: apps/restaurant/Dockerfile
+    output: !RegistryOutput
+      tags: onedev.payloadreserve.com/payloadreserve-demos/restaurant:@build_number@ onedev.payloadreserve.com/payloadreserve-demos/restaurant:latest
+    registryLogins:
+    - registryUrl: onedev.payloadreserve.com
+      userName: '@job_token@'
+      passwordSecret: ONEDEV_PASSWORD
+    moreOptions: --build-arg NEXT_PUBLIC_SERVER_URL=@secret:RESTAURANT_NEXT_PUBLIC_SERVER_URL@ --build-arg S3_ENDPOINT=@secret:S3_ENDPOINT@
+    condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
+  triggers:
+  - !BranchUpdateTrigger
+    branches: main
+  retryCondition: never
+  maxRetries: 3
+  retryDelay: 30
+  timeout: 3600
+
 # ── Release: git tag → versioned image in OneDev registry ────────────────────
 - name: Release Salon Image
   steps:
@@ -158,6 +186,33 @@ jobs:
       userName: '@job_token@'
       passwordSecret: ONEDEV_PASSWORD
     moreOptions: --build-arg NEXT_PUBLIC_SERVER_URL=@secret:LANDING_NEXT_PUBLIC_SERVER_URL@ --build-arg NEXT_PUBLIC_TURNSTILE_SITE_KEY=@secret:NEXT_PUBLIC_TURNSTILE_SITE_KEY@
+    condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
+  triggers:
+  - !TagCreateTrigger {}
+  retryCondition: never
+  maxRetries: 3
+  retryDelay: 30
+  timeout: 3600
+
+# ── Release: git tag → versioned restaurant image ─────────────────────────
+- name: Release Restaurant Image
+  steps:
+  - !CheckoutStep
+    name: Checkout
+    cloneCredential: !DefaultCredential {}
+    withLfs: false
+    condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
+  - !BuildImageStep
+    name: Build & push versioned image
+    buildPath: .
+    dockerfile: apps/restaurant/Dockerfile
+    output: !RegistryOutput
+      tags: onedev.payloadreserve.com/payloadreserve-demos/restaurant:@tag@ onedev.payloadreserve.com/payloadreserve-demos/restaurant:latest
+    registryLogins:
+    - registryUrl: onedev.payloadreserve.com
+      userName: '@job_token@'
+      passwordSecret: ONEDEV_PASSWORD
+    moreOptions: --build-arg NEXT_PUBLIC_SERVER_URL=@secret:RESTAURANT_NEXT_PUBLIC_SERVER_URL@ --build-arg S3_ENDPOINT=@secret:S3_ENDPOINT@
     condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
   triggers:
   - !TagCreateTrigger {}
