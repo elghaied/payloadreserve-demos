@@ -219,7 +219,7 @@ export function BookingWizard() {
           <h2 className="text-lg font-semibold mb-6">{t('selectDate')}</h2>
 
           {/* Date picker */}
-          <div className="flex gap-2 overflow-x-auto pb-4 mb-8">
+          <div className="flex gap-2 overflow-x-auto scrollbar-hide pb-4 mb-8">
             {dates.map((date) => {
               const d = new Date(date + 'T12:00:00')
               const dayName = d.toLocaleDateString(locale, { weekday: 'short' })

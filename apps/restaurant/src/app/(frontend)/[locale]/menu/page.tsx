@@ -159,7 +159,7 @@ export default async function MenuPage({ params }: Props) {
               All prices include VAT · Menu changes seasonally
             </p>
             <Link
-              href={`/${locale}/booking`}
+              href={`/${locale}/book`}
               className="inline-block border border-primary/40 text-primary px-10 py-3 rounded-sm text-sm uppercase tracking-widest hover:bg-primary hover:text-background transition-all duration-300 mt-4"
             >
               Reserve a Table

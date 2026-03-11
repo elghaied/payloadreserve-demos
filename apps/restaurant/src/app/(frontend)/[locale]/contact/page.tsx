@@ -202,7 +202,7 @@ export default async function ContactPage({ params }: Props) {
               <div className="glass rounded-sm p-8 text-center space-y-4">
                 <h3 className="font-heading text-2xl text-foreground">Ready to dine with us?</h3>
                 <Link
-                  href={`/${locale}/booking`}
+                  href={`/${locale}/book`}
                   className="inline-block border border-primary/40 text-primary px-10 py-3 rounded-sm text-sm uppercase tracking-widest hover:bg-primary hover:text-background transition-all duration-300"
                 >
                   Reserve a Table
