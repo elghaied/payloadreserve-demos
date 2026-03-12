@@ -28,7 +28,9 @@ COPY packages/         ./packages/
 COPY apps/events/      ./apps/events/
 
 ARG EVENTS_NEXT_PUBLIC_SERVER_URL
+ARG S3_ENDPOINT
 ENV NEXT_PUBLIC_SERVER_URL="${EVENTS_NEXT_PUBLIC_SERVER_URL}"
+ENV S3_ENDPOINT="${S3_ENDPOINT}"
 
 RUN corepack enable pnpm && pnpm --filter=events run build
 
