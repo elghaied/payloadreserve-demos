@@ -24,17 +24,17 @@ export function ArtistCard({
   return (
     <div
       className={`border-[3px] border-black transition-shadow hover:shadow-[6px_6px_0_0_rgba(0,0,0,1)] ${
-        featured ? 'md:col-span-2 md:row-span-2' : ''
+        featured ? 'md:col-span-2 md:flex md:flex-row' : ''
       }`}
     >
-      <div className={`relative aspect-square overflow-hidden ${featured ? 'md:h-80' : ''}`}>
+      <div className={`relative aspect-square overflow-hidden ${featured ? 'md:w-2/5 md:aspect-auto md:h-auto' : ''}`}>
         {photo?.url ? (
           <Image
             src={photo.url}
             alt={photo.alt || artist.name}
             fill
             className="object-cover"
-            sizes={featured ? '(max-width: 768px) 100vw, 66vw' : '(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw'}
+            sizes={featured ? '(max-width: 768px) 100vw, 40vw' : '(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw'}
           />
         ) : (
           <div className="flex h-full w-full items-center justify-center bg-neutral-100">
@@ -44,7 +44,7 @@ export function ArtistCard({
           </div>
         )}
       </div>
-      <div className="p-5">
+      <div className={`p-5 ${featured ? 'md:flex-1 md:flex md:flex-col md:justify-center' : ''}`}>
         <h3 className={`mb-2 font-bold ${featured ? 'text-xl' : 'text-base'}`}>
           {artist.name}
         </h3>
