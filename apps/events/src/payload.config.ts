@@ -21,6 +21,7 @@ import { SiteSettings } from './globals/SiteSettings'
 import { seedEndpoint } from './endpoints/seed'
 import { cancelStaleReservationsTask } from './tasks/cancelStaleReservations'
 import { notifyAfterConfirm, notifyAfterCancel } from './hooks/reservationNotifications'
+import { resetPasswordEmail, resetPasswordSubject } from './email/templates/resetPassword'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -151,6 +152,53 @@ export default buildConfig({
         },
       },
     }),
+    // Customize customers forgot-password email template.
+    // At this point in the plugin chain (after payloadReserve), auth is still
+    // the raw `true` value — Payload's sanitizer hasn't run yet. We replace it
+    // with an object containing only forgotPassword overrides; the sanitizer
+    // will fill in all other auth defaults (cookies, tokenExpiration, etc.).
+    (incomingConfig) => {
+      const config = { ...incomingConfig }
+      const customersCollection = config.collections?.find((c) => c.slug === 'customers')
+      if (customersCollection) {
+        const forgotPassword = {
+          generateEmailHTML: ({
+            token,
+            user,
+            req,
+          }: {
+            token?: string
+            user?: any
+            req?: any
+          }) => {
+            const locale = req?.locale || 'en'
+            const name = user?.firstName || ''
+            const serverURL = process.env.NEXT_PUBLIC_SERVER_URL || ''
+            return resetPasswordEmail({
+              customerName: name,
+              token: token ?? '',
+              locale,
+              serverURL,
+            }).html
+          },
+          generateEmailSubject: ({ req }: { req?: any }) => {
+            const locale = req?.locale || 'en'
+            return resetPasswordSubject(locale)
+          },
+        }
+
+        if (typeof customersCollection.auth === 'object') {
+          customersCollection.auth.forgotPassword = {
+            ...customersCollection.auth.forgotPassword,
+            ...forgotPassword,
+          }
+        } else {
+          // auth === true from payload-reserve plugin
+          customersCollection.auth = { forgotPassword }
+        }
+      }
+      return config
+    },
     stripePlugin({
       stripeSecretKey: process.env.STRIPE_SECRET_KEY || '',
       stripeWebhooksEndpointSecret: process.env.STRIPE_WEBHOOK_SECRET,
