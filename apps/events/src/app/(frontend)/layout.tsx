@@ -1,20 +1,17 @@
 import React from 'react'
-import { GeistSans } from 'geist/font/sans'
-import { GeistMono } from 'geist/font/mono'
+import { inter, jetbrainsMono } from '@/lib/fonts'
 import './globals.css'
 
 export const metadata = {
-  description: 'Events demo — payload-reserve event booking & ticketing',
-  title: 'Events Demo',
+  description: 'Éclat — Centre Culturel',
+  title: 'Éclat — Centre Culturel',
 }
 
-export default async function RootLayout(props: { children: React.ReactNode }) {
-  const { children } = props
-
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${GeistSans.variable} ${GeistMono.variable}`}>
-      <body className="min-h-screen bg-background font-sans antialiased">
-        <main>{children}</main>
+    <html className={`${inter.variable} ${jetbrainsMono.variable}`}>
+      <body className="min-h-screen bg-white text-black antialiased">
+        {children}
       </body>
     </html>
   )

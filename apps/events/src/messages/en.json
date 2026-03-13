@@ -26,6 +26,7 @@
     "bookingPolicy": "Booking Policy",
     "cancellationPolicy": "Cancellation Policy",
     "accessibility": "Accessibility",
+    "closed": "Closed",
     "copyright": "© {year} Éclat — Centre Culturel. All rights reserved."
   },
   "programme": {
