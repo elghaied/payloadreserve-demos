@@ -13,10 +13,10 @@
     "allTypes": "Tous les types"
   },
   "nav": {
-    "programme": "Programme",
-    "espaces": "Espaces",
-    "artistes": "Artistes",
-    "saison": "Saison",
+    "events": "Programme",
+    "venues": "Espaces",
+    "artists": "Artistes",
+    "season": "Saison",
     "reserver": "Réserver"
   },
   "footer": {
@@ -111,6 +111,12 @@
     "confirm": "Confirmer la réservation",
     "success": "Réservation confirmée !",
     "successMessage": "Votre réservation a été confirmée. Consultez votre e-mail pour les détails.",
+    "bookAnother": "Réserver un autre",
+    "myAccount": "Mon compte",
+    "paymentCancelled": "Paiement annulé",
+    "paymentCancelledMessage": "Votre paiement a été annulé. Le créneau a été libéré.",
+    "tryAgain": "Réessayer",
+    "backHome": "Retour à l'accueil",
     "next": "Suivant",
     "previous": "Précédent",
     "perTicket": "par billet"
@@ -141,7 +147,13 @@
       "cancelled": "Annulée",
       "no-show": "Absent"
     },
-    "ticketCount": "{count, plural, one {# billet} other {# billets}}"
+    "ticketCount": "{count, plural, one {# billet} other {# billets}}",
+    "loginError": "E-mail ou mot de passe invalide",
+    "registerError": "L'inscription a échoué. Veuillez réessayer.",
+    "noAccount": "Pas encore de compte ?",
+    "registerLink": "Créer un compte",
+    "hasAccount": "Déjà un compte ?",
+    "loginLink": "Se connecter"
   },
   "errors": {
     "notFound": "Page non trouvée",

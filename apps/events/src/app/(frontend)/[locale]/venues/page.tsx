@@ -2,7 +2,7 @@ import { setRequestLocale } from 'next-intl/server'
 import { getTranslations } from 'next-intl/server'
 import { getPayload } from 'payload'
 import config from '@payload-config'
-import { VenueCard } from '@/components/espaces/VenueCard'
+import { VenueCard } from '@/components/venues/VenueCard'
 
 type Props = {
   params: Promise<{ locale: string }>

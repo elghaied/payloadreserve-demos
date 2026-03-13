@@ -2,17 +2,9 @@
 
 import { useState, useCallback, useEffect } from 'react'
 import { useTranslations } from 'next-intl'
-import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs'
-import { LoginForm } from './LoginForm'
-import { RegisterForm } from './RegisterForm'
 import { BookingCard } from './BookingCard'
 import { CancelDialog } from './CancelDialog'
-import {
-  login,
-  register,
-  fetchBookings,
-  cancelBooking,
-} from '@/app/(frontend)/[locale]/compte/actions'
+import { fetchBookings, cancelBooking } from '@/app/(frontend)/[locale]/account/actions'
 import type { Booking, Customer } from '@/payload-types'
 
 interface AccountViewProps {
@@ -22,11 +14,9 @@ interface AccountViewProps {
 export function AccountView({ locale }: AccountViewProps) {
   const t = useTranslations('account')
 
-  const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [customer, setCustomer] = useState<Customer | null>(null)
   const [bookings, setBookings] = useState<Booking[]>([])
-  const [loading, setLoading] = useState(false)
-  const [authError, setAuthError] = useState<string | null>(null)
+  const [loading, setLoading] = useState(true)
 
   // Cancel dialog state
   const [cancelTarget, setCancelTarget] = useState<Booking | null>(null)
@@ -39,54 +29,27 @@ export function AccountView({ locale }: AccountViewProps) {
     }
   }, [])
 
-  const handleLogin = useCallback(
-    async (email: string, password: string) => {
-      setLoading(true)
-      setAuthError(null)
-      const result = await login(email, password)
-      if (result.success && result.customer) {
-        const cust = result.customer as Customer
-        setCustomer(cust)
-        setIsLoggedIn(true)
-        await loadBookings(cust.id)
-      } else {
-        setAuthError(result.success ? null : (result.error ?? null))
-      }
-      setLoading(false)
-    },
-    [loadBookings],
-  )
+  // Fetch customer session and bookings on mount
+  useEffect(() => {
+    fetch('/api/customer-session', { credentials: 'include' })
+      .then((res) => res.json())
+      .then(async (data) => {
+        if (data.user) {
+          setCustomer(data.user as Customer)
+          await loadBookings(data.user.id)
+        }
+        setLoading(false)
+      })
+      .catch(() => setLoading(false))
+  }, [loadBookings])
 
-  const handleRegister = useCallback(
-    async (data: {
-      email: string
-      password: string
-      firstName: string
-      lastName: string
-      phone: string
-    }) => {
-      setLoading(true)
-      setAuthError(null)
-      const result = await register(data)
-      if (result.success && result.customer) {
-        const cust = result.customer as Customer
-        setCustomer(cust)
-        setIsLoggedIn(true)
-        await loadBookings(cust.id)
-      } else {
-        setAuthError(result.success ? null : (result.error ?? null))
-      }
-      setLoading(false)
-    },
-    [loadBookings],
-  )
-
-  const handleLogout = useCallback(() => {
-    setIsLoggedIn(false)
-    setCustomer(null)
-    setBookings([])
-    setAuthError(null)
-  }, [])
+  const handleLogout = async () => {
+    await fetch('/api/customers/logout', {
+      method: 'POST',
+      credentials: 'include',
+    })
+    window.location.href = `/${locale}`
+  }
 
   const handleCancelRequest = useCallback(
     (bookingId: string) => {
@@ -107,6 +70,16 @@ export function AccountView({ locale }: AccountViewProps) {
     setCancelTarget(null)
   }, [cancelTarget, customer, loadBookings])
 
+  if (loading) {
+    return (
+      <section className="px-6 py-16 lg:px-12 lg:py-24">
+        <p className="text-center font-mono text-[10px] uppercase tracking-[2px] text-neutral-400">
+          {t('title')}...
+        </p>
+      </section>
+    )
+  }
+
   const now = new Date()
   const upcomingBookings = bookings.filter(
     (b) =>
@@ -121,53 +94,6 @@ export function AccountView({ locale }: AccountViewProps) {
       b.status === 'completed',
   )
 
-  if (!isLoggedIn) {
-    return (
-      <section className="px-6 py-16 lg:px-12 lg:py-24">
-        <h1 className="mb-2 text-4xl font-black uppercase tracking-[-1px] md:text-5xl">
-          {t('title')}
-        </h1>
-        <div className="mb-10 h-[3px] w-16 bg-black" />
-
-        <div className="mx-auto max-w-md">
-          <Tabs defaultValue="login">
-            <TabsList className="mb-8 flex w-full rounded-none border-[3px] border-black bg-transparent p-0">
-              <TabsTrigger
-                value="login"
-                className="flex-1 rounded-none border-0 px-4 py-3 font-mono text-[10px] uppercase tracking-[2px] data-active:bg-black data-active:text-white"
-              >
-                {t('login')}
-              </TabsTrigger>
-              <TabsTrigger
-                value="register"
-                className="flex-1 rounded-none border-0 border-l-[3px] border-black px-4 py-3 font-mono text-[10px] uppercase tracking-[2px] data-active:bg-black data-active:text-white"
-              >
-                {t('register')}
-              </TabsTrigger>
-            </TabsList>
-
-            <TabsContent value="login">
-              <LoginForm
-                onLogin={handleLogin}
-                error={authError}
-                loading={loading}
-              />
-            </TabsContent>
-
-            <TabsContent value="register">
-              <RegisterForm
-                onRegister={handleRegister}
-                error={authError}
-                loading={loading}
-              />
-            </TabsContent>
-          </Tabs>
-        </div>
-      </section>
-    )
-  }
-
-  // Logged in — Dashboard
   return (
     <section className="px-6 py-16 lg:px-12 lg:py-24">
       {/* Header */}

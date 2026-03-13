@@ -2,7 +2,7 @@ import { setRequestLocale } from 'next-intl/server'
 import { getTranslations } from 'next-intl/server'
 import { getPayload } from 'payload'
 import config from '@payload-config'
-import { EventFilters } from '@/components/programme/EventFilters'
+import { EventFilters } from '@/components/events/EventFilters'
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params

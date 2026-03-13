@@ -34,7 +34,7 @@ export function VenuesSection({
           return (
             <Link
               key={venue.id}
-              href={`/${locale}/espaces/${slugify(venue.name)}`}
+              href={`/${locale}/venues/${slugify(venue.name)}`}
               className={`group grid gap-0 border-[3px] border-black md:grid-cols-2 ${isReversed ? 'md:[&>*:first-child]:order-2' : ''}`}
             >
               <div className="relative min-h-[250px]">

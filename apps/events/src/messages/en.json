@@ -13,10 +13,10 @@
     "allTypes": "All Types"
   },
   "nav": {
-    "programme": "Programme",
-    "espaces": "Venues",
-    "artistes": "Artists",
-    "saison": "Season",
+    "events": "Events",
+    "venues": "Venues",
+    "artists": "Artists",
+    "season": "Season",
     "reserver": "Book Now"
   },
   "footer": {
@@ -111,6 +111,12 @@
     "confirm": "Confirm Booking",
     "success": "Booking Confirmed!",
     "successMessage": "Your booking has been confirmed. Check your email for details.",
+    "bookAnother": "Book Another",
+    "myAccount": "My Account",
+    "paymentCancelled": "Payment Cancelled",
+    "paymentCancelledMessage": "Your payment was cancelled. The time slot has been released.",
+    "tryAgain": "Try Again",
+    "backHome": "Back to Homepage",
     "next": "Next",
     "previous": "Previous",
     "perTicket": "per ticket"
@@ -141,7 +147,13 @@
       "cancelled": "Cancelled",
       "no-show": "No Show"
     },
-    "ticketCount": "{count, plural, one {# ticket} other {# tickets}}"
+    "ticketCount": "{count, plural, one {# ticket} other {# tickets}}",
+    "loginError": "Invalid email or password",
+    "registerError": "Registration failed. Please try again.",
+    "noAccount": "Don't have an account?",
+    "registerLink": "Create one",
+    "hasAccount": "Already have an account?",
+    "loginLink": "Sign in"
   },
   "errors": {
     "notFound": "Page Not Found",

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { useTranslations } from 'next-intl'
 import { LanguageToggle } from './LanguageToggle'
@@ -21,13 +21,32 @@ export { ColorStripe }
 
 export function Header({ locale }: { locale: string }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [customer, setCustomer] = useState<{ firstName?: string } | null>(null)
   const t = useTranslations('nav')
+  const tAccount = useTranslations('account')
+
+  useEffect(() => {
+    fetch('/api/customer-session', { credentials: 'include' })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.user) setCustomer(data.user)
+      })
+      .catch(() => {})
+  }, [])
+
+  const handleLogout = async () => {
+    await fetch('/api/customers/logout', {
+      method: 'POST',
+      credentials: 'include',
+    })
+    window.location.href = `/${locale}`
+  }
 
   const navLinks = [
-    { href: `/${locale}/programme`, label: t('programme') },
-    { href: `/${locale}/espaces`, label: t('espaces') },
-    { href: `/${locale}/artistes`, label: t('artistes') },
-    { href: `/${locale}/saison`, label: t('saison') },
+    { href: `/${locale}/events`, label: t('events') },
+    { href: `/${locale}/venues`, label: t('venues') },
+    { href: `/${locale}/artists`, label: t('artists') },
+    { href: `/${locale}/season`, label: t('season') },
   ]
 
   return (
@@ -54,6 +73,29 @@ export function Header({ locale }: { locale: string }) {
         {/* Desktop Right */}
         <div className="hidden items-center gap-4 lg:flex">
           <LanguageToggle locale={locale} />
+          {customer ? (
+            <>
+              <Link
+                href={`/${locale}/account`}
+                className="border-[2px] border-black px-4 py-2 font-mono text-[10px] uppercase tracking-[2px] transition-colors hover:bg-black hover:text-white"
+              >
+                {tAccount('title')}
+              </Link>
+              <button
+                onClick={handleLogout}
+                className="font-mono text-[10px] uppercase tracking-[2px] text-neutral-500 transition-colors hover:text-black"
+              >
+                {tAccount('logout')}
+              </button>
+            </>
+          ) : (
+            <Link
+              href={`/${locale}/login`}
+              className="border-[2px] border-black px-4 py-2 font-mono text-[10px] uppercase tracking-[2px] transition-colors hover:bg-black hover:text-white"
+            >
+              {tAccount('login')}
+            </Link>
+          )}
           <Link
             href={`/${locale}/book`}
             className="bg-black px-5 py-2.5 font-mono text-[10px] uppercase tracking-[2px] text-white transition-colors hover:bg-neutral-800"
@@ -88,6 +130,31 @@ export function Header({ locale }: { locale: string }) {
                 {link.label}
               </Link>
             ))}
+            {customer ? (
+              <div className="flex items-center justify-between border-b border-muted-light px-6 py-4">
+                <Link
+                  href={`/${locale}/account`}
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="font-mono text-[11px] uppercase tracking-[3px]"
+                >
+                  {tAccount('title')}
+                </Link>
+                <button
+                  onClick={handleLogout}
+                  className="font-mono text-[10px] uppercase tracking-[2px] text-neutral-500"
+                >
+                  {tAccount('logout')}
+                </button>
+              </div>
+            ) : (
+              <Link
+                href={`/${locale}/login`}
+                onClick={() => setMobileMenuOpen(false)}
+                className="border-b border-muted-light px-6 py-4 font-mono text-[11px] uppercase tracking-[3px]"
+              >
+                {tAccount('login')}
+              </Link>
+            )}
             <div className="flex items-center justify-between border-b border-muted-light px-6 py-4">
               <LanguageToggle locale={locale} />
               <Link

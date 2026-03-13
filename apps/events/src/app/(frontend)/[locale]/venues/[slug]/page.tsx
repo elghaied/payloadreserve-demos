@@ -7,8 +7,8 @@ import { getPayload } from 'payload'
 import config from '@payload-config'
 import { slugify } from '@/lib/utils'
 import { getEventTypeColor } from '@/lib/event-colors'
-import { VenueSchedule } from '@/components/espaces/VenueSchedule'
-import { EventCard } from '@/components/programme/EventCard'
+import { VenueSchedule } from '@/components/venues/VenueSchedule'
+import { EventCard } from '@/components/events/EventCard'
 import type { EventType, Media, Schedule } from '@/payload-types'
 
 type Props = {

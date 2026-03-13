@@ -10,7 +10,7 @@ export const announcementsData = [
     startDate: '2026-04-03',
     endDate: '2026-09-25',
     ctaText: { en: 'View Schedule', fr: 'Voir le programme' },
-    ctaLink: '/programme',
+    ctaLink: '/events',
     active: true,
     featured: true,
     eventTypeIndex: 0, // Concert
@@ -43,7 +43,7 @@ export const announcementsData = [
     startDate: '2026-05-01',
     endDate: '2026-07-15',
     ctaText: { en: 'Learn More', fr: 'En savoir plus' },
-    ctaLink: '/programme',
+    ctaLink: '/events',
     active: true,
     featured: true,
     eventTypeIndex: 2, // Exhibition
@@ -60,7 +60,7 @@ export const announcementsData = [
     startDate: '2026-07-04',
     endDate: '2026-08-29',
     ctaText: { en: 'See Films', fr: 'Voir les films' },
-    ctaLink: '/programme',
+    ctaLink: '/events',
     active: true,
     featured: false,
     eventTypeIndex: 3, // Film Screening

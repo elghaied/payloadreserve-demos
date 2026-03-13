@@ -37,17 +37,39 @@ export function BookingWizard({
   const [selectedDate, setSelectedDate] = useState<Date | null>(null)
   const [selectedTime, setSelectedTime] = useState<string | null>(null)
   const [ticketQuantity, setTicketQuantity] = useState(1)
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [customerInfo, setCustomerInfo] = useState<CustomerInfo>({
     firstName: '',
     lastName: '',
     email: '',
     phone: '',
+    password: '',
   })
   const [bookingResult, setBookingResult] = useState<{
     success: boolean
     bookingId?: string
+    checkoutUrl?: string | null
     error?: string
   } | null>(null)
+
+  // Check auth state and auto-populate customer info
+  useEffect(() => {
+    fetch('/api/customer-session', { credentials: 'include' })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.user) {
+          setIsLoggedIn(true)
+          setCustomerInfo({
+            firstName: data.user.firstName || '',
+            lastName: data.user.lastName || '',
+            email: data.user.email || '',
+            phone: data.user.phone || '',
+            password: '',
+          })
+        }
+      })
+      .catch(() => {})
+  }, [])
 
   // Pre-selection
   useEffect(() => {
@@ -99,7 +121,8 @@ export function BookingWizard({
           customerInfo.firstName.trim() !== '' &&
           customerInfo.lastName.trim() !== '' &&
           customerInfo.email.trim() !== '' &&
-          customerInfo.phone.trim() !== ''
+          customerInfo.phone.trim() !== '' &&
+          (isLoggedIn || customerInfo.password.length >= 6)
         )
       default:
         return true
@@ -131,7 +154,14 @@ export function BookingWizard({
         startTime,
         ticketQuantity,
         customer: customerInfo,
+        locale,
       })
+
+      if (result.checkoutUrl) {
+        window.location.href = result.checkoutUrl
+        return
+      }
+
       setBookingResult(result)
     })
   }
@@ -197,6 +227,7 @@ export function BookingWizard({
             eventType={selectedEventType}
             ticketQuantity={ticketQuantity}
             customerInfo={customerInfo}
+            isLoggedIn={isLoggedIn}
             onChangeQuantity={setTicketQuantity}
             onChangeCustomerInfo={setCustomerInfo}
           />

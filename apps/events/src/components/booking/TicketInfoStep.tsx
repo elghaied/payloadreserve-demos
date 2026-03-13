@@ -8,22 +8,26 @@ export interface CustomerInfo {
   lastName: string
   email: string
   phone: string
+  password: string
 }
 
 export function TicketInfoStep({
   eventType,
   ticketQuantity,
   customerInfo,
+  isLoggedIn,
   onChangeQuantity,
   onChangeCustomerInfo,
 }: {
   eventType: EventType
   ticketQuantity: number
   customerInfo: CustomerInfo
+  isLoggedIn: boolean
   onChangeQuantity: (qty: number) => void
   onChangeCustomerInfo: (info: CustomerInfo) => void
 }) {
   const t = useTranslations('booking')
+  const tAccount = useTranslations('account')
   const price = eventType.price ?? 0
   const total = price * ticketQuantity
 
@@ -98,6 +102,7 @@ export function TicketInfoStep({
               value={customerInfo.firstName}
               onChange={(e) => updateField('firstName', e.target.value)}
               className="w-full border-[3px] border-black px-4 py-3 font-mono text-sm outline-none transition-shadow focus:shadow-[4px_4px_0_0_rgba(0,0,0,1)]"
+              disabled={isLoggedIn}
             />
           </div>
           <div>
@@ -110,6 +115,7 @@ export function TicketInfoStep({
               value={customerInfo.lastName}
               onChange={(e) => updateField('lastName', e.target.value)}
               className="w-full border-[3px] border-black px-4 py-3 font-mono text-sm outline-none transition-shadow focus:shadow-[4px_4px_0_0_rgba(0,0,0,1)]"
+              disabled={isLoggedIn}
             />
           </div>
           <div>
@@ -122,6 +128,7 @@ export function TicketInfoStep({
               value={customerInfo.email}
               onChange={(e) => updateField('email', e.target.value)}
               className="w-full border-[3px] border-black px-4 py-3 font-mono text-sm outline-none transition-shadow focus:shadow-[4px_4px_0_0_rgba(0,0,0,1)]"
+              disabled={isLoggedIn}
             />
           </div>
           <div>
@@ -134,8 +141,24 @@ export function TicketInfoStep({
               value={customerInfo.phone}
               onChange={(e) => updateField('phone', e.target.value)}
               className="w-full border-[3px] border-black px-4 py-3 font-mono text-sm outline-none transition-shadow focus:shadow-[4px_4px_0_0_rgba(0,0,0,1)]"
+              disabled={isLoggedIn}
             />
           </div>
+          {!isLoggedIn && (
+            <div className="sm:col-span-2">
+              <label className="mb-1 block font-mono text-[10px] uppercase tracking-[2px] text-neutral-500">
+                {tAccount('password')} *
+              </label>
+              <input
+                type="password"
+                required
+                minLength={6}
+                value={customerInfo.password}
+                onChange={(e) => updateField('password', e.target.value)}
+                className="w-full border-[3px] border-black px-4 py-3 font-mono text-sm outline-none transition-shadow focus:shadow-[4px_4px_0_0_rgba(0,0,0,1)]"
+              />
+            </div>
+          )}
         </div>
       </div>
     </div>

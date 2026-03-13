@@ -93,7 +93,7 @@ export default async function SeasonPage({ params }: Props) {
                 </p>
               )}
               <Link
-                href={`/${locale}/programme`}
+                href={`/${locale}/events`}
                 className="inline-block bg-black px-5 py-2.5 font-mono text-[10px] uppercase tracking-[2px] text-white transition-colors hover:bg-neutral-800"
               >
                 {t('exploreEvents')}

@@ -58,7 +58,7 @@ export function AnnouncementsSection({
                   <h3 className="mb-3 text-lg font-bold">{ann.title}</h3>
                   {ann.ctaText && ann.slug && (
                     <Link
-                      href={`/${locale}/programme/${ann.slug}`}
+                      href={`/${locale}/events/${ann.slug}`}
                       className="inline-block border-[2px] border-black px-4 py-2 font-mono text-[9px] uppercase tracking-[2px] transition-colors hover:bg-black hover:text-white"
                     >
                       {ann.ctaText}

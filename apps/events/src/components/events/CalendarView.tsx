@@ -228,7 +228,7 @@ export function CalendarView({
                 )}
                 {ann.slug && (
                   <Link
-                    href={`/${locale}/programme/${ann.slug}`}
+                    href={`/${locale}/events/${ann.slug}`}
                     className="shrink-0 bg-black px-5 py-2.5 font-mono text-[10px] uppercase tracking-[2px] text-white transition-colors hover:bg-neutral-800"
                   >
                     {bookLabel}

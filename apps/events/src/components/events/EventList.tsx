@@ -61,7 +61,7 @@ export function EventList({
             {/* Book link */}
             {ann.slug && (
               <Link
-                href={`/${locale}/programme/${ann.slug}`}
+                href={`/${locale}/events/${ann.slug}`}
                 className="shrink-0 font-mono text-[10px] uppercase tracking-[2px] underline underline-offset-4 transition-colors hover:text-neutral-600"
               >
                 {bookLabel} →

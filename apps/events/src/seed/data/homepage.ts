@@ -4,7 +4,7 @@ export const homepageData = {
       title: 'Éclat',
       subtitle: 'Where Art Comes Alive — Concerts, Theater, Exhibitions, and More in the Heart of Paris',
       ctaText: 'Explore Events',
-      ctaLink: '/en/programme',
+      ctaLink: '/en/events',
     },
     about: {
       heading: 'A Cultural Beacon Since 2003',
@@ -43,7 +43,7 @@ export const homepageData = {
       title: 'Éclat',
       subtitle: 'Là où l\'art prend vie — Concerts, théâtre, expositions et plus au cœur de Paris',
       ctaText: 'Explorer les événements',
-      ctaLink: '/fr/programme',
+      ctaLink: '/fr/events',
     },
     about: {
       heading: 'Un phare culturel depuis 2003',

@@ -18,7 +18,7 @@ export function VenueCard({
 
   return (
     <Link
-      href={`/${locale}/espaces/${slugify(venue.name)}`}
+      href={`/${locale}/venues/${slugify(venue.name)}`}
       className="group border-[3px] border-black transition-shadow hover:shadow-[6px_6px_0_0_rgba(0,0,0,1)]"
     >
       <div className="relative h-64 overflow-hidden">
