@@ -60,7 +60,7 @@ export const artistsData = [
       en: 'Cultural historian and speaker whose talks on Parisian art history draw sellout crowds. Author of three books on the evolution of French cultural institutions.',
       fr: 'Historien de la culture et conférencier dont les interventions sur l\'histoire de l\'art parisien font salle comble. Auteur de trois livres sur l\'évolution des institutions culturelles françaises.',
     },
-    specialty: 'workshop' as const,
+    specialty: 'speaker' as const,
     imageKey: 'artistMarc' as const,
     website: 'https://marcantoinelevy.fr',
     featured: false,
