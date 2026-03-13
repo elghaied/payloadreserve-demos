@@ -6,8 +6,12 @@ export const Users: CollectionConfig = {
     useAsTitle: 'email',
   },
   auth: true,
-  fields: [
-    // Email added by default
-    // Add more fields as needed
-  ],
+  access: {
+    read: ({ req }) => !!req.user,
+    update: ({ req }) => !!req.user,
+    delete: ({ req }) => !!req.user,
+    create: () => false, // admin-only via local API
+    admin: () => true,
+  },
+  fields: [],
 }
