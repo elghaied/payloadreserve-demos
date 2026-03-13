@@ -55,7 +55,7 @@ export function Header({ locale }: { locale: string }) {
         <div className="hidden items-center gap-4 lg:flex">
           <LanguageToggle locale={locale} />
           <Link
-            href={`/${locale}/reserver`}
+            href={`/${locale}/book`}
             className="bg-black px-5 py-2.5 font-mono text-[10px] uppercase tracking-[2px] text-white transition-colors hover:bg-neutral-800"
           >
             {t('reserver')}
@@ -91,7 +91,7 @@ export function Header({ locale }: { locale: string }) {
             <div className="flex items-center justify-between border-b border-muted-light px-6 py-4">
               <LanguageToggle locale={locale} />
               <Link
-                href={`/${locale}/reserver`}
+                href={`/${locale}/book`}
                 onClick={() => setMobileMenuOpen(false)}
                 className="bg-black px-5 py-2.5 font-mono text-[10px] uppercase tracking-[2px] text-white"
               >

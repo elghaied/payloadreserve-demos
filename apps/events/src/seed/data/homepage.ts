@@ -35,7 +35,7 @@ export const homepageData = {
       heading: 'Experience Something Extraordinary',
       body: 'Book your tickets today and discover why Éclat has been at the heart of Parisian culture for over twenty years.',
       buttonText: 'Book Now',
-      buttonLink: '/en/reserver',
+      buttonLink: '/en/book',
     },
   },
   fr: {
@@ -74,7 +74,7 @@ export const homepageData = {
       heading: 'Vivez quelque chose d\'extraordinaire',
       body: 'Réservez vos billets aujourd\'hui et découvrez pourquoi Éclat est au cœur de la culture parisienne depuis plus de vingt ans.',
       buttonText: 'Réserver maintenant',
-      buttonLink: '/fr/reserver',
+      buttonLink: '/fr/book',
     },
   },
 }

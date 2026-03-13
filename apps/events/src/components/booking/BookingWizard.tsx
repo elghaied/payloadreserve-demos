@@ -8,7 +8,7 @@ import { EventTypeStep } from './EventTypeStep'
 import { VenueTimeStep } from './VenueTimeStep'
 import { TicketInfoStep, type CustomerInfo } from './TicketInfoStep'
 import { ReviewStep } from './ReviewStep'
-import { createBooking } from '@/app/(frontend)/[locale]/reserver/actions'
+import { createBooking } from '@/app/(frontend)/[locale]/book/actions'
 import { EVENT_TYPE_COLOR_LIST } from '@/lib/event-colors'
 
 const STRIPE_GRADIENT = `linear-gradient(90deg, ${EVENT_TYPE_COLOR_LIST.join(', ')})`

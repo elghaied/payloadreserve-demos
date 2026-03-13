@@ -27,7 +27,7 @@ export function ProgrammingSection({
           return (
             <Link
               key={et.id}
-              href={`/${locale}/reserver?eventType=${et.id}`}
+              href={`/${locale}/book?eventType=${et.id}`}
               className="group border-[3px] border-black p-6 transition-colors hover:bg-black hover:text-white"
               style={{ borderLeftWidth: '6px', borderLeftColor: color }}
             >

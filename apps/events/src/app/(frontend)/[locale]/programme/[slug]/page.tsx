@@ -97,7 +97,7 @@ export default async function EventDetailPage({
   const bookingParams = new URLSearchParams()
   if (eventType) bookingParams.set('eventType', eventType.id)
   if (venue) bookingParams.set('venue', venue.id)
-  const bookingLink = `/${locale}/reserver?${bookingParams.toString()}`
+  const bookingLink = `/${locale}/book?${bookingParams.toString()}`
 
   return (
     <>

@@ -26,7 +26,7 @@ export const announcementsData = [
     imageKey: 'announcementNuit' as const,
     startDate: '2026-10-03',
     ctaText: { en: 'Get Tickets', fr: 'Obtenir des billets' },
-    ctaLink: '/reserver',
+    ctaLink: '/book',
     active: true,
     featured: true,
     eventTypeIndex: 0, // Concert
@@ -77,7 +77,7 @@ export const announcementsData = [
     startDate: '2026-03-25',
     endDate: '2026-06-10',
     ctaText: { en: 'Register', fr: "S'inscrire" },
-    ctaLink: '/reserver',
+    ctaLink: '/book',
     active: true,
     featured: false,
     eventTypeIndex: 4, // Workshop
