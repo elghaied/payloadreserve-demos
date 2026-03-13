@@ -31,6 +31,9 @@ export default buildConfig({
     importMap: {
       baseDir: path.resolve(dirname),
     },
+    components: {
+      beforeDashboard: ['@/components/BeforeDashboard/index.js'],
+    },
   },
   endpoints: [seedEndpoint],
   collections: [Users, Media, Artists, Seasons, Testimonials, Announcements],
