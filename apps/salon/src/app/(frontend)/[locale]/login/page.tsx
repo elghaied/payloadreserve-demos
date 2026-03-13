@@ -91,6 +91,12 @@ export default function LoginPage() {
           </button>
         </form>
 
+        <p className="text-center text-sm text-muted mt-4">
+          <Link href={`/${locale}/forgot-password`} className="text-primary hover:underline">
+            {t('forgotPasswordLink')}
+          </Link>
+        </p>
+
         <p className="text-center text-sm text-muted mt-6">
           {t('noAccount')}{' '}
           <Link href={`/${locale}/register`} className="text-primary hover:underline">
