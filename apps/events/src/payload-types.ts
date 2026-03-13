@@ -64,21 +64,46 @@ export type SupportedTimezones =
 export interface Config {
   auth: {
     users: UserAuthOperations;
+    customers: CustomerAuthOperations;
   };
   blocks: {};
   collections: {
     users: User;
     media: Media;
+    artists: Artist;
+    seasons: Season;
+    testimonials: Testimonial;
+    announcements: Announcement;
+    'event-types': EventType;
+    venues: Venue;
+    schedules: Schedule;
+    bookings: Booking;
+    customers: Customer;
     'payload-kv': PayloadKv;
+    'payload-jobs': PayloadJob;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
   };
-  collectionsJoins: {};
+  collectionsJoins: {
+    customers: {
+      bookings: 'bookings';
+    };
+  };
   collectionsSelect: {
     users: UsersSelect<false> | UsersSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
+    artists: ArtistsSelect<false> | ArtistsSelect<true>;
+    seasons: SeasonsSelect<false> | SeasonsSelect<true>;
+    testimonials: TestimonialsSelect<false> | TestimonialsSelect<true>;
+    announcements: AnnouncementsSelect<false> | AnnouncementsSelect<true>;
+    'event-types': EventTypesSelect<false> | EventTypesSelect<true>;
+    venues: VenuesSelect<false> | VenuesSelect<true>;
+    schedules: SchedulesSelect<false> | SchedulesSelect<true>;
+    bookings: BookingsSelect<false> | BookingsSelect<true>;
+    customers: CustomersSelect<false> | CustomersSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
+    'payload-jobs': PayloadJobsSelect<false> | PayloadJobsSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
     'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
@@ -86,17 +111,53 @@ export interface Config {
   db: {
     defaultIDType: string;
   };
-  fallbackLocale: null;
-  globals: {};
-  globalsSelect: {};
-  locale: null;
-  user: User;
+  fallbackLocale: ('false' | 'none' | 'null') | false | null | ('en' | 'fr') | ('en' | 'fr')[];
+  globals: {
+    homepage: Homepage;
+    'site-settings': SiteSetting;
+    'payload-jobs-stats': PayloadJobsStat;
+  };
+  globalsSelect: {
+    homepage: HomepageSelect<false> | HomepageSelect<true>;
+    'site-settings': SiteSettingsSelect<false> | SiteSettingsSelect<true>;
+    'payload-jobs-stats': PayloadJobsStatsSelect<false> | PayloadJobsStatsSelect<true>;
+  };
+  locale: 'en' | 'fr';
+  widgets: {
+    'reservation-todays-reservations': ReservationTodaysReservationsWidget;
+    collections: CollectionsWidget;
+  };
+  user: User | Customer;
   jobs: {
-    tasks: unknown;
+    tasks: {
+      cancelStaleReservations: TaskCancelStaleReservations;
+      inline: {
+        input: unknown;
+        output: unknown;
+      };
+    };
     workflows: unknown;
   };
 }
 export interface UserAuthOperations {
+  forgotPassword: {
+    email: string;
+    password: string;
+  };
+  login: {
+    email: string;
+    password: string;
+  };
+  registerFirstUser: {
+    email: string;
+    password: string;
+  };
+  unlock: {
+    email: string;
+    password: string;
+  };
+}
+export interface CustomerAuthOperations {
   forgotPassword: {
     email: string;
     password: string;
@@ -146,6 +207,7 @@ export interface User {
 export interface Media {
   id: string;
   alt: string;
+  prefix?: string | null;
   updatedAt: string;
   createdAt: string;
   url?: string | null;
@@ -157,6 +219,218 @@ export interface Media {
   height?: number | null;
   focalX?: number | null;
   focalY?: number | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "artists".
+ */
+export interface Artist {
+  id: string;
+  name: string;
+  bio?: string | null;
+  specialty?: ('musician' | 'actor' | 'visual-artist' | 'filmmaker' | 'dancer' | 'speaker') | null;
+  photo?: (string | null) | Media;
+  website?: string | null;
+  featured?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "seasons".
+ */
+export interface Season {
+  id: string;
+  name: string;
+  description?: string | null;
+  startDate: string;
+  endDate: string;
+  featuredImage?: (string | null) | Media;
+  active?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "testimonials".
+ */
+export interface Testimonial {
+  id: string;
+  quote: string;
+  author: string;
+  rating: number;
+  eventType?: (string | null) | EventType;
+  venue?: (string | null) | Venue;
+  eventDate?: string | null;
+  featured?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "event-types".
+ */
+export interface EventType {
+  id: string;
+  name: string;
+  image?: (string | null) | Media;
+  description?: string | null;
+  duration: number;
+  durationType: 'fixed' | 'flexible' | 'full-day';
+  price?: number | null;
+  bufferTimeBefore?: number | null;
+  bufferTimeAfter?: number | null;
+  active?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "venues".
+ */
+export interface Venue {
+  id: string;
+  name: string;
+  image?: (string | null) | Media;
+  description?: string | null;
+  services: (string | EventType)[];
+  active?: boolean | null;
+  quantity: number;
+  capacityMode?: ('per-reservation' | 'per-guest') | null;
+  timezone?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "announcements".
+ */
+export interface Announcement {
+  id: string;
+  title: string;
+  description?: string | null;
+  type: 'concert-series' | 'festival' | 'exhibition-opening' | 'special-screening' | 'workshop-series' | 'gala';
+  image?: (string | null) | Media;
+  startDate: string;
+  /**
+   * Leave empty for single-day events
+   */
+  endDate?: string | null;
+  /**
+   * Button text (e.g. "Book Now", "Learn More")
+   */
+  ctaText?: string | null;
+  ctaLink?: string | null;
+  active?: boolean | null;
+  featured?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "schedules".
+ */
+export interface Schedule {
+  id: string;
+  name: string;
+  resource: string | Venue;
+  scheduleType?: ('recurring' | 'manual') | null;
+  recurringSlots?:
+    | {
+        day: 'mon' | 'tue' | 'wed' | 'thu' | 'fri' | 'sat' | 'sun';
+        startTime: string;
+        endTime: string;
+        id?: string | null;
+      }[]
+    | null;
+  manualSlots?:
+    | {
+        date: string;
+        startTime: string;
+        endTime: string;
+        id?: string | null;
+      }[]
+    | null;
+  exceptions?:
+    | {
+        date: string;
+        reason?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  active?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "bookings".
+ */
+export interface Booking {
+  id: string;
+  service: string | EventType;
+  resource: string | Venue;
+  customer: string | Customer;
+  startTime: string;
+  endTime?: string | null;
+  status?: ('pending' | 'confirmed' | 'completed' | 'cancelled' | 'no-show') | null;
+  cancellationReason?: string | null;
+  guestCount?: number | null;
+  notes?: string | null;
+  /**
+   * Resources included in this booking. Leave empty for single-resource bookings.
+   */
+  items?:
+    | {
+        resource: string | Venue;
+        service?: (string | null) | EventType;
+        startTime?: string | null;
+        endTime?: string | null;
+        guestCount?: number | null;
+        id?: string | null;
+      }[]
+    | null;
+  idempotencyKey?: string | null;
+  /**
+   * Number of tickets for this booking
+   */
+  ticketQuantity?: number | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "customers".
+ */
+export interface Customer {
+  id: string;
+  firstName: string;
+  lastName: string;
+  phone?: string | null;
+  notes?: string | null;
+  bookings?: {
+    docs?: (string | Booking)[];
+    hasNextPage?: boolean;
+    totalDocs?: number;
+  };
+  updatedAt: string;
+  createdAt: string;
+  email: string;
+  resetPasswordToken?: string | null;
+  resetPasswordExpiration?: string | null;
+  salt?: string | null;
+  hash?: string | null;
+  loginAttempts?: number | null;
+  lockUntil?: string | null;
+  sessions?:
+    | {
+        id: string;
+        createdAt?: string | null;
+        expiresAt: string;
+      }[]
+    | null;
+  password?: string | null;
+  collection: 'customers';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -177,6 +451,107 @@ export interface PayloadKv {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "payload-jobs".
+ */
+export interface PayloadJob {
+  id: string;
+  /**
+   * Input data provided to the job
+   */
+  input?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  taskStatus?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  completedAt?: string | null;
+  totalTried?: number | null;
+  /**
+   * If hasError is true this job will not be retried
+   */
+  hasError?: boolean | null;
+  /**
+   * If hasError is true, this is the error that caused it
+   */
+  error?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  /**
+   * Task execution log
+   */
+  log?:
+    | {
+        executedAt: string;
+        completedAt: string;
+        taskSlug: 'inline' | 'cancelStaleReservations';
+        taskID: string;
+        input?:
+          | {
+              [k: string]: unknown;
+            }
+          | unknown[]
+          | string
+          | number
+          | boolean
+          | null;
+        output?:
+          | {
+              [k: string]: unknown;
+            }
+          | unknown[]
+          | string
+          | number
+          | boolean
+          | null;
+        state: 'failed' | 'succeeded';
+        error?:
+          | {
+              [k: string]: unknown;
+            }
+          | unknown[]
+          | string
+          | number
+          | boolean
+          | null;
+        id?: string | null;
+      }[]
+    | null;
+  taskSlug?: ('inline' | 'cancelStaleReservations') | null;
+  queue?: string | null;
+  waitUntil?: string | null;
+  processing?: boolean | null;
+  meta?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-locked-documents".
  */
 export interface PayloadLockedDocument {
@@ -189,12 +564,53 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'media';
         value: string | Media;
+      } | null)
+    | ({
+        relationTo: 'artists';
+        value: string | Artist;
+      } | null)
+    | ({
+        relationTo: 'seasons';
+        value: string | Season;
+      } | null)
+    | ({
+        relationTo: 'testimonials';
+        value: string | Testimonial;
+      } | null)
+    | ({
+        relationTo: 'announcements';
+        value: string | Announcement;
+      } | null)
+    | ({
+        relationTo: 'event-types';
+        value: string | EventType;
+      } | null)
+    | ({
+        relationTo: 'venues';
+        value: string | Venue;
+      } | null)
+    | ({
+        relationTo: 'schedules';
+        value: string | Schedule;
+      } | null)
+    | ({
+        relationTo: 'bookings';
+        value: string | Booking;
+      } | null)
+    | ({
+        relationTo: 'customers';
+        value: string | Customer;
       } | null);
   globalSlug?: string | null;
-  user: {
-    relationTo: 'users';
-    value: string | User;
-  };
+  user:
+    | {
+        relationTo: 'users';
+        value: string | User;
+      }
+    | {
+        relationTo: 'customers';
+        value: string | Customer;
+      };
   updatedAt: string;
   createdAt: string;
 }
@@ -204,10 +620,15 @@ export interface PayloadLockedDocument {
  */
 export interface PayloadPreference {
   id: string;
-  user: {
-    relationTo: 'users';
-    value: string | User;
-  };
+  user:
+    | {
+        relationTo: 'users';
+        value: string | User;
+      }
+    | {
+        relationTo: 'customers';
+        value: string | Customer;
+      };
   key?: string | null;
   value?:
     | {
@@ -260,6 +681,7 @@ export interface UsersSelect<T extends boolean = true> {
  */
 export interface MediaSelect<T extends boolean = true> {
   alt?: T;
+  prefix?: T;
   updatedAt?: T;
   createdAt?: T;
   url?: T;
@@ -274,11 +696,228 @@ export interface MediaSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "artists_select".
+ */
+export interface ArtistsSelect<T extends boolean = true> {
+  name?: T;
+  bio?: T;
+  specialty?: T;
+  photo?: T;
+  website?: T;
+  featured?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "seasons_select".
+ */
+export interface SeasonsSelect<T extends boolean = true> {
+  name?: T;
+  description?: T;
+  startDate?: T;
+  endDate?: T;
+  featuredImage?: T;
+  active?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "testimonials_select".
+ */
+export interface TestimonialsSelect<T extends boolean = true> {
+  quote?: T;
+  author?: T;
+  rating?: T;
+  eventType?: T;
+  venue?: T;
+  eventDate?: T;
+  featured?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "announcements_select".
+ */
+export interface AnnouncementsSelect<T extends boolean = true> {
+  title?: T;
+  description?: T;
+  type?: T;
+  image?: T;
+  startDate?: T;
+  endDate?: T;
+  ctaText?: T;
+  ctaLink?: T;
+  active?: T;
+  featured?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "event-types_select".
+ */
+export interface EventTypesSelect<T extends boolean = true> {
+  name?: T;
+  image?: T;
+  description?: T;
+  duration?: T;
+  durationType?: T;
+  price?: T;
+  bufferTimeBefore?: T;
+  bufferTimeAfter?: T;
+  active?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "venues_select".
+ */
+export interface VenuesSelect<T extends boolean = true> {
+  name?: T;
+  image?: T;
+  description?: T;
+  services?: T;
+  active?: T;
+  quantity?: T;
+  capacityMode?: T;
+  timezone?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "schedules_select".
+ */
+export interface SchedulesSelect<T extends boolean = true> {
+  name?: T;
+  resource?: T;
+  scheduleType?: T;
+  recurringSlots?:
+    | T
+    | {
+        day?: T;
+        startTime?: T;
+        endTime?: T;
+        id?: T;
+      };
+  manualSlots?:
+    | T
+    | {
+        date?: T;
+        startTime?: T;
+        endTime?: T;
+        id?: T;
+      };
+  exceptions?:
+    | T
+    | {
+        date?: T;
+        reason?: T;
+        id?: T;
+      };
+  active?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "bookings_select".
+ */
+export interface BookingsSelect<T extends boolean = true> {
+  service?: T;
+  resource?: T;
+  customer?: T;
+  startTime?: T;
+  endTime?: T;
+  status?: T;
+  cancellationReason?: T;
+  guestCount?: T;
+  notes?: T;
+  items?:
+    | T
+    | {
+        resource?: T;
+        service?: T;
+        startTime?: T;
+        endTime?: T;
+        guestCount?: T;
+        id?: T;
+      };
+  idempotencyKey?: T;
+  ticketQuantity?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "customers_select".
+ */
+export interface CustomersSelect<T extends boolean = true> {
+  firstName?: T;
+  lastName?: T;
+  phone?: T;
+  notes?: T;
+  bookings?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  email?: T;
+  resetPasswordToken?: T;
+  resetPasswordExpiration?: T;
+  salt?: T;
+  hash?: T;
+  loginAttempts?: T;
+  lockUntil?: T;
+  sessions?:
+    | T
+    | {
+        id?: T;
+        createdAt?: T;
+        expiresAt?: T;
+      };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv_select".
  */
 export interface PayloadKvSelect<T extends boolean = true> {
   key?: T;
   data?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "payload-jobs_select".
+ */
+export interface PayloadJobsSelect<T extends boolean = true> {
+  input?: T;
+  taskStatus?: T;
+  completedAt?: T;
+  totalTried?: T;
+  hasError?: T;
+  error?: T;
+  log?:
+    | T
+    | {
+        executedAt?: T;
+        completedAt?: T;
+        taskSlug?: T;
+        taskID?: T;
+        input?: T;
+        output?: T;
+        state?: T;
+        error?: T;
+        id?: T;
+      };
+  taskSlug?: T;
+  queue?: T;
+  waitUntil?: T;
+  processing?: T;
+  meta?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -311,6 +950,200 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
   batch?: T;
   updatedAt?: T;
   createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "homepage".
+ */
+export interface Homepage {
+  id: string;
+  heroTitle?: string | null;
+  heroSubtitle?: string | null;
+  heroBackgroundImage?: (string | null) | Media;
+  heroCtaText?: string | null;
+  heroCtaLink?: string | null;
+  aboutHeading?: string | null;
+  aboutBody?: string | null;
+  aboutImage?: (string | null) | Media;
+  aboutEstablished?: string | null;
+  programmingHeading?: string | null;
+  programmingSubtitle?: string | null;
+  venuesHeading?: string | null;
+  venuesSubtitle?: string | null;
+  artistsHeading?: string | null;
+  artistsSubtitle?: string | null;
+  testimonialsHeading?: string | null;
+  testimonialsSubtitle?: string | null;
+  announcementsHeading?: string | null;
+  announcementsSubtitle?: string | null;
+  ctaHeading?: string | null;
+  ctaBody?: string | null;
+  ctaButtonText?: string | null;
+  ctaButtonLink?: string | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "site-settings".
+ */
+export interface SiteSetting {
+  id: string;
+  venueName: string;
+  logo?: (string | null) | Media;
+  tagline?: string | null;
+  address?: string | null;
+  phone?: string | null;
+  email?: string | null;
+  socialLinks?:
+    | {
+        platform: 'instagram' | 'facebook' | 'tiktok' | 'x-twitter' | 'youtube';
+        url: string;
+        id?: string | null;
+      }[]
+    | null;
+  boxOfficeHours?:
+    | {
+        day: 'mon' | 'tue' | 'wed' | 'thu' | 'fri' | 'sat' | 'sun';
+        /**
+         * HH:MM format
+         */
+        open?: string | null;
+        /**
+         * HH:MM format
+         */
+        close?: string | null;
+        closed?: boolean | null;
+        id?: string | null;
+      }[]
+    | null;
+  bookingPolicy?: string | null;
+  cancellationPolicy?: string | null;
+  accessibilityInfo?: string | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "payload-jobs-stats".
+ */
+export interface PayloadJobsStat {
+  id: string;
+  stats?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "homepage_select".
+ */
+export interface HomepageSelect<T extends boolean = true> {
+  heroTitle?: T;
+  heroSubtitle?: T;
+  heroBackgroundImage?: T;
+  heroCtaText?: T;
+  heroCtaLink?: T;
+  aboutHeading?: T;
+  aboutBody?: T;
+  aboutImage?: T;
+  aboutEstablished?: T;
+  programmingHeading?: T;
+  programmingSubtitle?: T;
+  venuesHeading?: T;
+  venuesSubtitle?: T;
+  artistsHeading?: T;
+  artistsSubtitle?: T;
+  testimonialsHeading?: T;
+  testimonialsSubtitle?: T;
+  announcementsHeading?: T;
+  announcementsSubtitle?: T;
+  ctaHeading?: T;
+  ctaBody?: T;
+  ctaButtonText?: T;
+  ctaButtonLink?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "site-settings_select".
+ */
+export interface SiteSettingsSelect<T extends boolean = true> {
+  venueName?: T;
+  logo?: T;
+  tagline?: T;
+  address?: T;
+  phone?: T;
+  email?: T;
+  socialLinks?:
+    | T
+    | {
+        platform?: T;
+        url?: T;
+        id?: T;
+      };
+  boxOfficeHours?:
+    | T
+    | {
+        day?: T;
+        open?: T;
+        close?: T;
+        closed?: T;
+        id?: T;
+      };
+  bookingPolicy?: T;
+  cancellationPolicy?: T;
+  accessibilityInfo?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "payload-jobs-stats_select".
+ */
+export interface PayloadJobsStatsSelect<T extends boolean = true> {
+  stats?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "reservation-todays-reservations_widget".
+ */
+export interface ReservationTodaysReservationsWidget {
+  data?: {
+    [k: string]: unknown;
+  };
+  width: 'medium' | 'large';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "collections_widget".
+ */
+export interface CollectionsWidget {
+  data?: {
+    [k: string]: unknown;
+  };
+  width: 'full';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "TaskCancelStaleReservations".
+ */
+export interface TaskCancelStaleReservations {
+  input?: unknown;
+  output?: unknown;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
