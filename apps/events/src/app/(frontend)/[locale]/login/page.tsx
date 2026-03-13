@@ -82,6 +82,15 @@ export default function LoginPage() {
             />
           </div>
 
+          <div className="text-right">
+            <Link
+              href={`/${locale}/forgot-password`}
+              className="font-mono text-[10px] uppercase tracking-[2px] text-neutral-500 underline underline-offset-4 hover:text-black"
+            >
+              {t('forgotPasswordLink')}
+            </Link>
+          </div>
+
           <button
             type="submit"
             disabled={loading}
