@@ -8,7 +8,7 @@ export const venuesData = [
     imageKey: 'venueGrandeSalle' as const,
     seats: 500,
     quantity: 1,
-    capacityMode: 'shared' as const,
+    capacityMode: 'per-reservation' as const,
     supportedEventTypes: [0, 1, 5], // Concert, Theater, Dance
     schedule: {
       days: ['tue', 'wed', 'thu', 'fri', 'sat', 'sun'] as const,
@@ -24,7 +24,7 @@ export const venuesData = [
     imageKey: 'venueSalonNoir' as const,
     seats: 100,
     quantity: 1,
-    capacityMode: 'shared' as const,
+    capacityMode: 'per-reservation' as const,
     supportedEventTypes: [1, 3, 4], // Theater, Film, Workshop
     schedule: {
       days: ['mon', 'tue', 'wed', 'thu', 'fri', 'sat'] as const,
@@ -40,7 +40,7 @@ export const venuesData = [
     imageKey: 'venueGalerie' as const,
     seats: 80,
     quantity: 1,
-    capacityMode: 'shared' as const,
+    capacityMode: 'per-reservation' as const,
     supportedEventTypes: [2, 4], // Exhibition, Workshop
     schedule: {
       days: ['wed', 'thu', 'fri', 'sat', 'sun'] as const,
@@ -56,7 +56,7 @@ export const venuesData = [
     imageKey: 'venueStudio' as const,
     seats: 50,
     quantity: 1,
-    capacityMode: 'shared' as const,
+    capacityMode: 'per-reservation' as const,
     supportedEventTypes: [3, 4], // Film, Workshop
     schedule: {
       days: ['mon', 'tue', 'wed', 'thu', 'fri'] as const,
@@ -72,7 +72,7 @@ export const venuesData = [
     imageKey: 'venueTerrasse' as const,
     seats: 200,
     quantity: 1,
-    capacityMode: 'shared' as const,
+    capacityMode: 'per-reservation' as const,
     supportedEventTypes: [0, 3, 5], // Concert, Film, Dance
     schedule: {
       days: ['thu', 'fri', 'sat', 'sun'] as const,
