@@ -10,9 +10,11 @@ export const announcementsData = [
     startDate: '2026-04-03',
     endDate: '2026-09-25',
     ctaText: { en: 'View Schedule', fr: 'Voir le programme' },
-    ctaLink: '/en/events',
+    ctaLink: '/programme',
     active: true,
     featured: true,
+    eventTypeIndex: 0, // Concert
+    venueIndex: 4, // La Terrasse
   },
   {
     title: { en: 'Nuit Blanche at Éclat', fr: 'Nuit Blanche a Éclat' },
@@ -24,9 +26,11 @@ export const announcementsData = [
     imageKey: 'announcementNuit' as const,
     startDate: '2026-10-04',
     ctaText: { en: 'Get Tickets', fr: 'Obtenir des billets' },
-    ctaLink: '/en/book',
+    ctaLink: '/reserver',
     active: true,
     featured: true,
+    eventTypeIndex: 5, // Dance Performance
+    venueIndex: 0, // Grande Salle
   },
   {
     title: { en: 'Yuki Tanaka: Reflets', fr: 'Yuki Tanaka : Reflets' },
@@ -38,9 +42,11 @@ export const announcementsData = [
     startDate: '2026-05-01',
     endDate: '2026-07-15',
     ctaText: { en: 'Learn More', fr: 'En savoir plus' },
-    ctaLink: '/en/events',
+    ctaLink: '/programme',
     active: true,
     featured: true,
+    eventTypeIndex: 2, // Exhibition
+    venueIndex: 2, // Galerie Lumière
   },
   {
     title: { en: 'Ciné en Plein Air', fr: 'Cine en Plein Air' },
@@ -52,9 +58,11 @@ export const announcementsData = [
     startDate: '2026-07-04',
     endDate: '2026-08-29',
     ctaText: { en: 'See Films', fr: 'Voir les films' },
-    ctaLink: '/en/events',
+    ctaLink: '/programme',
     active: true,
     featured: false,
+    eventTypeIndex: 3, // Film Screening
+    venueIndex: 4, // La Terrasse
   },
   {
     title: { en: 'Atelier Créatif: Danse', fr: 'Atelier Creatif : Danse' },
@@ -66,8 +74,10 @@ export const announcementsData = [
     startDate: '2026-03-25',
     endDate: '2026-06-10',
     ctaText: { en: 'Register', fr: "S'inscrire" },
-    ctaLink: '/en/book',
+    ctaLink: '/reserver',
     active: true,
     featured: false,
+    eventTypeIndex: 4, // Workshop
+    venueIndex: 3, // Studio Éclat
   },
 ]

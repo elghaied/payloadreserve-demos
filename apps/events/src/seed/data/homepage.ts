@@ -4,7 +4,7 @@ export const homepageData = {
       title: 'Éclat',
       subtitle: 'Where Art Comes Alive — Concerts, Theater, Exhibitions, and More in the Heart of Paris',
       ctaText: 'Explore Events',
-      ctaLink: '/en/events',
+      ctaLink: '/en/programme',
     },
     about: {
       heading: 'A Cultural Beacon Since 2003',
@@ -35,7 +35,7 @@ export const homepageData = {
       heading: 'Experience Something Extraordinary',
       body: 'Book your tickets today and discover why Éclat has been at the heart of Parisian culture for over twenty years.',
       buttonText: 'Book Now',
-      buttonLink: '/en/book',
+      buttonLink: '/en/reserver',
     },
   },
   fr: {
@@ -43,7 +43,7 @@ export const homepageData = {
       title: 'Éclat',
       subtitle: 'La ou l\'art prend vie — Concerts, theatre, expositions et plus au coeur de Paris',
       ctaText: 'Explorer les evenements',
-      ctaLink: '/fr/events',
+      ctaLink: '/fr/programme',
     },
     about: {
       heading: 'Un phare culturel depuis 2003',
@@ -74,7 +74,7 @@ export const homepageData = {
       heading: 'Vivez quelque chose d\'extraordinaire',
       body: 'Reservez vos billets aujourd\'hui et decouvrez pourquoi Éclat est au coeur de la culture parisienne depuis plus de vingt ans.',
       buttonText: 'Reserver maintenant',
-      buttonLink: '/fr/book',
+      buttonLink: '/fr/reserver',
     },
   },
 }

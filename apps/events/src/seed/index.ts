@@ -37,14 +37,14 @@ export async function runSeed(payload: Payload) {
     }
   }
 
-  // Delete non-admin users (customers)
-  const nonAdminUsers = await payload.find({
-    collection: 'users',
-    where: { email: { not_equals: process.env.ADMIN_EMAIL || 'admin@eclat-paris.com' } },
-    limit: 100,
-  })
-  for (const user of nonAdminUsers.docs) {
-    await payload.delete({ collection: 'users', id: user.id })
+  // Delete test customers
+  try {
+    await payload.delete({
+      collection: 'customers',
+      where: { id: { exists: true } },
+    })
+  } catch {
+    // Collection may be empty or not exist yet
   }
 
   // 2. Create test customers
@@ -59,7 +59,7 @@ export async function runSeed(payload: Payload) {
   for (const c of customerData) {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const customer = await (payload.create as any)({
-      collection: 'users',
+      collection: 'customers',
       data: {
         email: c.email,
         password: c.password,
@@ -251,6 +251,8 @@ export async function runSeed(payload: Payload) {
         ctaLink: ann.ctaLink,
         active: ann.active,
         featured: ann.featured,
+        eventType: eventTypes[ann.eventTypeIndex]?.id,
+        venue: venues[ann.venueIndex]?.id,
       },
     })
     await payload.update({

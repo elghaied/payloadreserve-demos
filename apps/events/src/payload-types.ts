@@ -308,8 +308,20 @@ export interface Venue {
 export interface Announcement {
   id: string;
   title: string;
+  /**
+   * Auto-generated from the English title. Can be overridden.
+   */
+  slug?: string | null;
   description?: string | null;
   type: 'concert-series' | 'festival' | 'exhibition-opening' | 'special-screening' | 'workshop-series' | 'gala';
+  /**
+   * Links to the bookable event type (drives color display and booking flow)
+   */
+  eventType?: (string | null) | EventType;
+  /**
+   * The venue where this event takes place
+   */
+  venue?: (string | null) | Venue;
   image?: (string | null) | Media;
   startDate: string;
   /**
@@ -743,8 +755,11 @@ export interface TestimonialsSelect<T extends boolean = true> {
  */
 export interface AnnouncementsSelect<T extends boolean = true> {
   title?: T;
+  slug?: T;
   description?: T;
   type?: T;
+  eventType?: T;
+  venue?: T;
   image?: T;
   startDate?: T;
   endDate?: T;

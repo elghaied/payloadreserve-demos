@@ -1,5 +1,14 @@
 import type { CollectionConfig } from 'payload'
 
+function slugify(text: string): string {
+  return text
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '') // strip accents
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-') // non-alphanumeric to hyphens
+    .replace(/^-+|-+$/g, '') // trim leading/trailing hyphens
+}
+
 export const Announcements: CollectionConfig = {
   slug: 'announcements',
   admin: {
@@ -10,12 +19,36 @@ export const Announcements: CollectionConfig = {
   access: {
     read: () => true,
   },
+  hooks: {
+    beforeValidate: [
+      ({ data, operation }) => {
+        if (data && (operation === 'create' || operation === 'update')) {
+          // Generate slug from English title if not already set or if title changed
+          const title = typeof data.title === 'string' ? data.title : data.title?.en
+          if (title && !data.slug) {
+            data.slug = slugify(title)
+          }
+        }
+        return data
+      },
+    ],
+  },
   fields: [
     {
       name: 'title',
       type: 'text',
       required: true,
       localized: true,
+    },
+    {
+      name: 'slug',
+      type: 'text',
+      unique: true,
+      index: true,
+      admin: {
+        position: 'sidebar',
+        description: 'Auto-generated from the English title. Can be overridden.',
+      },
     },
     {
       name: 'description',
@@ -34,6 +67,18 @@ export const Announcements: CollectionConfig = {
         { label: 'Workshop Series', value: 'workshop-series' },
         { label: 'Gala', value: 'gala' },
       ],
+    },
+    {
+      name: 'eventType',
+      type: 'relationship',
+      relationTo: 'event-types',
+      admin: { description: 'Links to the bookable event type (drives color display and booking flow)' },
+    },
+    {
+      name: 'venue',
+      type: 'relationship',
+      relationTo: 'venues',
+      admin: { description: 'The venue where this event takes place' },
     },
     {
       name: 'image',
