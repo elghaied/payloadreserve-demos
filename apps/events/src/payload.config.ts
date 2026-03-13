@@ -162,27 +162,21 @@ export default buildConfig({
       const customersCollection = config.collections?.find((c) => c.slug === 'customers')
       if (customersCollection) {
         const forgotPassword = {
-          generateEmailHTML: ({
-            token,
-            user,
-            req,
-          }: {
-            token?: string
-            user?: any
-            req?: any
-          }) => {
-            const locale = req?.locale || 'en'
-            const name = user?.firstName || ''
+          generateEmailHTML: (
+            args?: { token?: string; user?: any; req?: any },
+          ) => {
+            const locale = args?.req?.locale || 'en'
+            const name = args?.user?.firstName || ''
             const serverURL = process.env.NEXT_PUBLIC_SERVER_URL || ''
             return resetPasswordEmail({
               customerName: name,
-              token: token ?? '',
+              token: args?.token ?? '',
               locale,
               serverURL,
             }).html
           },
-          generateEmailSubject: ({ req }: { req?: any }) => {
-            const locale = req?.locale || 'en'
+          generateEmailSubject: (args?: { req?: any }) => {
+            const locale = args?.req?.locale || 'en'
             return resetPasswordSubject(locale)
           },
         }
