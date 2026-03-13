@@ -9,6 +9,7 @@ import { fileURLToPath } from 'url'
 import sharp from 'sharp'
 import { payloadReserve } from 'payload-reserve'
 import { createAdminUser } from '@payload-reserve-demos/seed-utils'
+import { resetPasswordEmail, resetPasswordSubject } from './email/templates/resetPassword'
 
 import { Users } from './collections/Users'
 import { Media } from './collections/Media'
@@ -157,6 +158,43 @@ export default buildConfig({
         },
       },
     }),
+    // Customize customers forgot-password email template.
+    // After payloadReserve, auth is still the raw `true` value — Payload's
+    // sanitizer hasn't run yet. We replace it with an object containing only
+    // forgotPassword overrides; the sanitizer fills in all other auth defaults.
+    (incomingConfig) => {
+      const config = { ...incomingConfig }
+      const customersCollection = config.collections?.find((c) => c.slug === 'customers')
+      if (customersCollection) {
+        const forgotPassword = {
+          generateEmailHTML: (args?: { token?: string; user?: any; req?: any }) => {
+            const locale = args?.req?.locale || 'en'
+            const name = args?.user?.firstName || ''
+            const serverURL = process.env.NEXT_PUBLIC_SERVER_URL || ''
+            return resetPasswordEmail({
+              customerName: name,
+              token: args?.token ?? '',
+              locale,
+              serverURL,
+            }).html
+          },
+          generateEmailSubject: (args?: { req?: any }) => {
+            const locale = args?.req?.locale || 'en'
+            return resetPasswordSubject(locale)
+          },
+        }
+
+        if (typeof customersCollection.auth === 'object') {
+          customersCollection.auth.forgotPassword = {
+            ...customersCollection.auth.forgotPassword,
+            ...forgotPassword,
+          }
+        } else {
+          customersCollection.auth = { forgotPassword }
+        }
+      }
+      return config
+    },
     stripePlugin({
       stripeSecretKey: process.env.STRIPE_SECRET_KEY || '',
       stripeWebhooksEndpointSecret: process.env.STRIPE_WEBHOOK_SECRET,
