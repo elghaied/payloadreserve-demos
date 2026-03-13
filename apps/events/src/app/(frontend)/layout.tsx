@@ -2,6 +2,8 @@ import React from 'react'
 import { inter, jetbrainsMono } from '@/lib/fonts'
 import './globals.css'
 
+export const dynamic = 'force-dynamic'
+
 export const metadata = {
   description: 'Éclat — Centre Culturel',
   title: 'Éclat — Centre Culturel',

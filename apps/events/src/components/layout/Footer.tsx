@@ -1,9 +1,8 @@
 import Link from 'next/link'
 import { getTranslations } from 'next-intl/server'
 import { ColorStripe } from './Header'
-import type { SiteSetting } from '@/payload-types'
 
-export async function Footer({ locale, settings }: { locale: string; settings: SiteSetting }) {
+export async function Footer({ locale }: { locale: string }) {
   const t = await getTranslations({ locale, namespace: 'footer' })
   const tDays = await getTranslations({ locale, namespace: 'days' })
 
@@ -15,19 +14,16 @@ export async function Footer({ locale, settings }: { locale: string; settings: S
           {/* Column 1: Contact */}
           <div>
             <h3 className="mb-4 text-lg font-black uppercase tracking-[-1px]">
-              {settings.venueName}
+              Éclat
             </h3>
-            {settings.address && (
-              <p className="mb-1 text-sm text-muted-text">{settings.address}</p>
-            )}
-            {settings.phone && (
-              <p className="mb-1 text-sm text-muted-text">{settings.phone}</p>
-            )}
-            {settings.email && (
-              <a href={`mailto:${settings.email}`} className="text-sm text-muted-text underline hover:text-black">
-                {settings.email}
-              </a>
-            )}
+            <p className="mb-1 text-sm text-muted-text">
+              {locale === 'fr' ? '250 Rue Sainte-Catherine O' : '250 Sainte-Catherine St W'}
+            </p>
+            <p className="mb-1 text-sm text-muted-text">Montréal, QC H2X 1K9</p>
+            <p className="mb-1 text-sm text-muted-text">(514) 555-0199</p>
+            <a href="mailto:info@eclat-events.com" className="text-sm text-muted-text underline hover:text-black">
+              info@eclat-events.com
+            </a>
           </div>
 
           {/* Column 2: Box Office Hours */}
@@ -35,13 +31,13 @@ export async function Footer({ locale, settings }: { locale: string; settings: S
             <h3 className="mb-4 font-mono text-[10px] uppercase tracking-[3px]">
               {t('boxOffice')}
             </h3>
-            {settings.boxOfficeHours?.map((entry) => (
-              <div key={entry.day} className="flex justify-between border-b border-muted-light py-1.5 text-sm">
+            {(['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'] as const).map((day) => (
+              <div key={day} className="flex justify-between border-b border-muted-light py-1.5 text-sm">
                 <span className="font-mono text-[10px] uppercase tracking-[2px]">
-                  {tDays(entry.day as 'mon' | 'tue' | 'wed' | 'thu' | 'fri' | 'sat' | 'sun')}
+                  {tDays(day)}
                 </span>
                 <span className="text-muted-text">
-                  {entry.closed ? t('closed') : `${entry.open} — ${entry.close}`}
+                  {day === 'sun' ? t('closed') : day === 'sat' ? '10:00 — 18:00' : '11:00 — 19:00'}
                 </span>
               </div>
             ))}
@@ -53,16 +49,13 @@ export async function Footer({ locale, settings }: { locale: string; settings: S
               {t('followUs')}
             </h3>
             <div className="mb-6 flex gap-4">
-              {settings.socialLinks?.map((link) => (
-                <a
-                  key={link.platform}
-                  href={link.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
+              {['Instagram', 'Facebook', 'X'].map((platform) => (
+                <span
+                  key={platform}
                   className="font-mono text-[10px] uppercase tracking-[2px] text-muted-text transition-colors hover:text-black"
                 >
-                  {link.platform}
-                </a>
+                  {platform}
+                </span>
               ))}
             </div>
             <h3 className="mb-4 font-mono text-[10px] uppercase tracking-[3px]">
