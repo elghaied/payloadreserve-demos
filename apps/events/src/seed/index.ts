@@ -90,8 +90,13 @@ export async function runSeed(payload: Payload) {
     { key: 'artistMarc', alt: 'Marc-Antoine Lévy, cultural historian' },
     { key: 'announcementJazz', alt: 'Jazz performance' },
     { key: 'announcementNuit', alt: 'Night arts event' },
+    { key: 'announcementYuki', alt: 'Yuki Tanaka light installation' },
+    { key: 'announcementCine', alt: 'Outdoor cinema at dusk' },
+    { key: 'announcementAtelier', alt: 'Dancer rehearsing in studio' },
     { key: 'seasonSpring', alt: 'Spring season' },
     { key: 'seasonSummer', alt: 'Summer season' },
+    { key: 'seasonAutumn', alt: 'Autumn leaves on tree-lined path' },
+    { key: 'seasonWinter', alt: 'Snowy European street lamp' },
   ]
 
   for (const img of imageKeys) {
@@ -296,7 +301,7 @@ export async function runSeed(payload: Payload) {
 
   function getNextWeekday(date: Date): Date {
     const d = new Date(date)
-    while (d.getDay() === 0) d.setDate(d.getDate() + 1)
+    while (d.getDay() === 0 || d.getDay() === 1) d.setDate(d.getDate() + 1)
     return d
   }
 

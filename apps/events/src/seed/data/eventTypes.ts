@@ -3,7 +3,7 @@ export const eventTypesData = [
     name: { en: 'Concert', fr: 'Concert' },
     description: {
       en: 'Live music performances featuring world-class musicians in an intimate setting. From classical to jazz, each concert at Éclat is a unique sonic experience.',
-      fr: 'Spectacles de musique live avec des musiciens de renommee mondiale dans un cadre intime. Du classique au jazz, chaque concert a Éclat est une experience sonore unique.',
+      fr: 'Spectacles de musique live avec des musiciens de renommée mondiale dans un cadre intime. Du classique au jazz, chaque concert à Éclat est une expérience sonore unique.',
     },
     duration: 120,
     price: 35,
@@ -12,10 +12,10 @@ export const eventTypesData = [
     active: true,
   },
   {
-    name: { en: 'Theater', fr: 'Theatre' },
+    name: { en: 'Theater', fr: 'Théâtre' },
     description: {
       en: 'Captivating theatrical productions from emerging and established directors. Our intimate stages bring you closer to the drama than ever before.',
-      fr: 'Productions theatrales captivantes de metteurs en scene emergents et etablis. Nos scenes intimes vous rapprochent du drame comme jamais.',
+      fr: 'Productions théâtrales captivantes de metteurs en scène émergents et établis. Nos scènes intimes vous rapprochent du drame comme jamais.',
     },
     duration: 150,
     price: 40,
@@ -27,7 +27,7 @@ export const eventTypesData = [
     name: { en: 'Exhibition', fr: 'Exposition' },
     description: {
       en: 'Curated visual art exhibitions showcasing contemporary and classical works. Immersive installations that transform our gallery spaces.',
-      fr: 'Expositions d\'art visuel mettant en valeur des oeuvres contemporaines et classiques. Des installations immersives qui transforment nos espaces.',
+      fr: 'Expositions d\'art visuel mettant en valeur des œuvres contemporaines et classiques. Des installations immersives qui transforment nos espaces.',
     },
     duration: 180,
     price: 15,
@@ -39,7 +39,7 @@ export const eventTypesData = [
     name: { en: 'Film Screening', fr: 'Projection' },
     description: {
       en: 'Independent and art-house film screenings followed by director Q&As. Discover cinema beyond the mainstream.',
-      fr: 'Projections de films independants et d\'art et essai suivies de discussions avec les realisateurs. Decouvrez le cinema autrement.',
+      fr: 'Projections de films indépendants et d\'art et essai suivies de discussions avec les réalisateurs. Découvrez le cinéma autrement.',
     },
     duration: 120,
     price: 12,
@@ -51,7 +51,7 @@ export const eventTypesData = [
     name: { en: 'Workshop', fr: 'Atelier' },
     description: {
       en: 'Hands-on creative workshops led by practicing artists. From dance to filmmaking, develop your skills in an inspiring environment.',
-      fr: 'Ateliers creatifs pratiques animes par des artistes en activite. De la danse au cinema, developpez vos competences dans un environnement inspirant.',
+      fr: 'Ateliers créatifs pratiques animés par des artistes en activité. De la danse au cinéma, développez vos compétences dans un environnement inspirant.',
     },
     duration: 90,
     price: 25,

@@ -41,39 +41,39 @@ export const homepageData = {
   fr: {
     hero: {
       title: 'Éclat',
-      subtitle: 'La ou l\'art prend vie — Concerts, theatre, expositions et plus au coeur de Paris',
-      ctaText: 'Explorer les evenements',
+      subtitle: 'Là où l\'art prend vie — Concerts, théâtre, expositions et plus au cœur de Paris',
+      ctaText: 'Explorer les événements',
       ctaLink: '/fr/programme',
     },
     about: {
       heading: 'Un phare culturel depuis 2003',
-      body: 'Installe dans un magnifique batiment du XIXe siecle restaure dans le Marais, le Centre Culturel Éclat est depuis plus de vingt ans le foyer parisien de l\'art audacieux et transversal. Des soirees jazz intimes aux installations a grande echelle, du theatre experimental au cinema en plein air, nos cinq espaces uniques accueillent plus de 300 evenements chaque annee. Éclat est l\'endroit ou les maitres etablis et les voix emergentes partagent les memes scenes — et ou le public decouvre ce que l\'art peut etre.',
+      body: 'Installé dans un magnifique bâtiment du XIXe siècle restauré dans le Marais, le Centre Culturel Éclat est depuis plus de vingt ans le foyer parisien de l\'art audacieux et transversal. Des soirées jazz intimes aux installations à grande échelle, du théâtre expérimental au cinéma en plein air, nos cinq espaces uniques accueillent plus de 300 événements chaque année. Éclat est l\'endroit où les maîtres établis et les voix émergentes partagent les mêmes scènes — et où le public découvre ce que l\'art peut être.',
       established: 'Depuis 2003',
     },
     programming: {
       heading: 'Notre Programmation',
-      subtitle: 'Six disciplines, cinq lieux, une mission : rendre l\'art extraordinaire accessible a tous',
+      subtitle: 'Six disciplines, cinq lieux, une mission : rendre l\'art extraordinaire accessible à tous',
     },
     venues: {
       heading: 'Nos Espaces',
-      subtitle: 'Cinq espaces distincts, chacun avec son propre caractere — de la Grande Salle de 500 places a la Terrasse ensoleillée',
+      subtitle: 'Cinq espaces distincts, chacun avec son propre caractère — de la Grande Salle de 500 places à la Terrasse ensoleillée',
     },
     artists: {
       heading: 'Artistes en Vedette',
-      subtitle: 'Les createurs et interpretes qui donnent vie a Éclat',
+      subtitle: 'Les créateurs et interprètes qui donnent vie à Éclat',
     },
     testimonials: {
       heading: 'Ce que disent nos visiteurs',
-      subtitle: 'Temoignages de ceux qui ont vecu l\'experience Éclat',
+      subtitle: 'Témoignages de ceux qui ont vécu l\'expérience Éclat',
     },
     announcements: {
-      heading: 'A l\'Affiche',
-      subtitle: 'Les temps forts a venir de notre saison actuelle et prochaine',
+      heading: 'À l\'Affiche',
+      subtitle: 'Les temps forts à venir de notre saison actuelle et prochaine',
     },
     cta: {
       heading: 'Vivez quelque chose d\'extraordinaire',
-      body: 'Reservez vos billets aujourd\'hui et decouvrez pourquoi Éclat est au coeur de la culture parisienne depuis plus de vingt ans.',
-      buttonText: 'Reserver maintenant',
+      body: 'Réservez vos billets aujourd\'hui et découvrez pourquoi Éclat est au cœur de la culture parisienne depuis plus de vingt ans.',
+      buttonText: 'Réserver maintenant',
       buttonLink: '/fr/reserver',
     },
   },
@@ -106,9 +106,9 @@ export const siteSettingsData = {
   },
   fr: {
     venueName: 'Éclat — Centre Culturel',
-    tagline: 'La ou l\'art prend vie',
-    bookingPolicy: 'Les reservations peuvent etre effectuees jusqu\'a 3 mois a l\'avance. Maximum 10 billets par reservation. Groupes de 15+ veuillez nous contacter directement.',
-    cancellationPolicy: 'Annulation gratuite jusqu\'a 48 heures avant l\'evenement. Aucun remboursement dans les 48 heures precedant le debut de l\'evenement.',
-    accessibilityInfo: 'Acces complet en fauteuil roulant a tous les espaces. Boucles auditives installees dans la Grande Salle et le Salon Noir. Toilettes accessibles a tous les etages. Chiens guides bienvenus.',
+    tagline: 'Là où l\'art prend vie',
+    bookingPolicy: 'Les réservations peuvent être effectuées jusqu\'à 3 mois à l\'avance. Maximum 10 billets par réservation. Groupes de 15+ veuillez nous contacter directement.',
+    cancellationPolicy: 'Annulation gratuite jusqu\'à 48 heures avant l\'événement. Aucun remboursement dans les 48 heures précédant le début de l\'événement.',
+    accessibilityInfo: 'Accès complet en fauteuil roulant à tous les espaces. Boucles auditives installées dans la Grande Salle et le Salon Noir. Toilettes accessibles à tous les étages. Chiens guides bienvenus.',
   },
 }
