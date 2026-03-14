@@ -141,6 +141,33 @@ jobs:
   retryDelay: 30
   timeout: 3600
 
+# ── CI: push to main → build & push docs image ────────────────────────────────
+- name: Build Docs Image
+  steps:
+  - !CheckoutStep
+    name: Checkout
+    cloneCredential: !DefaultCredential {}
+    withLfs: false
+    condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
+  - !BuildImageStep
+    name: Build & push to registry
+    buildPath: .
+    dockerfile: apps/docs/Dockerfile
+    output: !RegistryOutput
+      tags: onedev.payloadreserve.com/payloadreserve-demos/docs:@build_number@ onedev.payloadreserve.com/payloadreserve-demos/docs:latest
+    registryLogins:
+    - registryUrl: onedev.payloadreserve.com
+      userName: '@job_token@'
+      passwordSecret: ONEDEV_PASSWORD
+    condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
+  triggers:
+  - !BranchUpdateTrigger
+    branches: main
+  retryCondition: never
+  maxRetries: 3
+  retryDelay: 30
+  timeout: 3600
+
 # ── Release: git tag → versioned image in OneDev registry ────────────────────
 - name: Release Salon Image
   steps:
@@ -241,6 +268,32 @@ jobs:
       userName: '@job_token@'
       passwordSecret: ONEDEV_PASSWORD
     moreOptions: --build-arg RESTAURANT_NEXT_PUBLIC_SERVER_URL=@secret:RESTAURANT_NEXT_PUBLIC_SERVER_URL@ --build-arg S3_ENDPOINT=@secret:S3_ENDPOINT@
+    condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
+  triggers:
+  - !TagCreateTrigger {}
+  retryCondition: never
+  maxRetries: 3
+  retryDelay: 30
+  timeout: 3600
+
+# ── Release: git tag → versioned docs image ──────────────────────────────────
+- name: Release Docs Image
+  steps:
+  - !CheckoutStep
+    name: Checkout
+    cloneCredential: !DefaultCredential {}
+    withLfs: false
+    condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
+  - !BuildImageStep
+    name: Build & push versioned image
+    buildPath: .
+    dockerfile: apps/docs/Dockerfile
+    output: !RegistryOutput
+      tags: onedev.payloadreserve.com/payloadreserve-demos/docs:@tag@ onedev.payloadreserve.com/payloadreserve-demos/docs:latest
+    registryLogins:
+    - registryUrl: onedev.payloadreserve.com
+      userName: '@job_token@'
+      passwordSecret: ONEDEV_PASSWORD
     condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
   triggers:
   - !TagCreateTrigger {}
