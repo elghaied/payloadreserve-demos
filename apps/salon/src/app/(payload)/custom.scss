@@ -1,0 +1,76 @@
+// Lumière Salon — Admin Panel Theme
+// Full Brand Takeover: warm brown sidebar, gold accents, cream backgrounds
+// See spec: docs/superpowers/specs/2026-03-14-upcoming-features-design.md
+
+// ─── Light Mode ───────────────────────────────────────────────
+:root {
+  // Elevation scale (backgrounds, from lightest to darkest)
+  --theme-elevation-0: #FAF8F5;       // Page background — warm cream
+  --theme-elevation-50: #F5F2ED;      // Subtle bg variation
+  --theme-elevation-100: #FFFFFF;     // Cards, inputs
+  --theme-elevation-150: #F0EDE7;     // Hover states
+  --theme-elevation-200: #E8E4DC;     // Borders
+  --theme-elevation-250: #DDD8CF;     // Stronger borders
+  --theme-elevation-300: #D1CBC1;     // Disabled borders
+  --theme-elevation-350: #C4BDB2;     // Muted elements
+  --theme-elevation-400: #B0A899;     // Placeholder text
+  --theme-elevation-500: #8B7355;     // Secondary text — warm brown
+  --theme-elevation-600: #6B6560;     // Body text
+  --theme-elevation-700: #4A4540;     // Strong text
+  --theme-elevation-800: #2C2419;     // Sidebar/nav — warm dark brown
+  --theme-elevation-900: #1E1A12;     // Darkest UI elements
+  --theme-elevation-1000: #0F0D08;    // Near-black
+
+  // Brand colors
+  --theme-success-500: #4A7C59;
+  --theme-error-500: #B04040;
+  --theme-warning-500: #C4A35A;
+
+  // Text on colored backgrounds
+  --theme-color-base-0: #FFFFFF;
+  --theme-color-base-1000: #1A1A1A;
+}
+
+// ─── Dark Mode ────────────────────────────────────────────────
+[data-theme="dark"] {
+  --theme-elevation-0: #0F0D08;       // Darkest background
+  --theme-elevation-50: #161209;      // Subtle bg variation
+  --theme-elevation-100: #1E1A12;     // Cards, inputs
+  --theme-elevation-150: #262015;     // Hover states
+  --theme-elevation-200: #2C2419;     // Borders
+  --theme-elevation-250: #3D3428;     // Stronger borders
+  --theme-elevation-300: #4A4035;     // Disabled borders
+  --theme-elevation-350: #5A4F42;     // Muted elements
+  --theme-elevation-400: #6B6050;     // Placeholder text
+  --theme-elevation-500: #8B7355;     // Secondary text — warm brown
+  --theme-elevation-600: #B0A899;     // Body text (lighter in dark mode)
+  --theme-elevation-700: #D1CBC1;     // Strong text
+  --theme-elevation-800: #E8E4DC;     // Nav text, headings
+  --theme-elevation-900: #F0EDE7;     // Bright text
+  --theme-elevation-1000: #FAF8F5;    // Near-white
+}
+
+// ─── Component Overrides ──────────────────────────────────────
+
+// Dashboard cards — gold top accent
+.card {
+  background-color: var(--theme-elevation-100);
+  border: 1px solid var(--theme-elevation-200);
+  border-top: 3px solid #C4A35A;
+}
+
+// Table fix — Payload tables can be affected by global CSS resets
+.table {
+  display: block;
+  width: 100%;
+}
+
+// ─── Return to Website Bar ────────────────────────────────────
+[data-theme="dark"] .return-to-website-bar {
+  background-color: #1A1A1A !important;
+  color: #C4A35A !important;
+}
+
+[data-theme="dark"] .return-to-website-bar a {
+  color: #C4A35A !important;
+}
