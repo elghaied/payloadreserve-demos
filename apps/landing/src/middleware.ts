@@ -1,24 +1,47 @@
 import createMiddleware from 'next-intl/middleware'
+import { type NextRequest, NextResponse } from 'next/server'
 import { routing } from './i18n/routing'
-import type { NextRequest } from 'next/server'
 
 const intlMiddleware = createMiddleware(routing)
+
+const securityHeaders: Record<string, string> = {
+  'Strict-Transport-Security': 'max-age=31536000; includeSubDomains',
+  'X-Content-Type-Options': 'nosniff',
+  'X-Frame-Options': 'DENY',
+  'X-XSS-Protection': '0',
+  'Referrer-Policy': 'strict-origin-when-cross-origin',
+  'Permissions-Policy': 'camera=(), microphone=(), geolocation=()',
+  'Content-Security-Policy': [
+    "default-src 'self'",
+    "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://challenges.cloudflare.com",
+    "style-src 'self' 'unsafe-inline'",
+    "img-src 'self' data: blob: https://images.pexels.com https://*.payloadreserve.com",
+    "font-src 'self' data:",
+    "connect-src 'self' https://*.payloadreserve.com",
+    "frame-src https://challenges.cloudflare.com",
+    "frame-ancestors 'none'",
+  ].join('; '),
+}
 
 export default function middleware(request: NextRequest) {
   const response = intlMiddleware(request)
 
-  // Expose the resolved locale via a header so the root layout can set <html lang>
+  // Preserve existing pathname-based locale detection
   const pathname = request.nextUrl.pathname
   const firstSegment = pathname.split('/')[1]
   const locale = (routing.locales as readonly string[]).includes(firstSegment)
     ? firstSegment
     : routing.defaultLocale
-
   response.headers.set('x-locale', locale)
+
+  // Add security headers
+  for (const [key, value] of Object.entries(securityHeaders)) {
+    response.headers.set(key, value)
+  }
+
   return response
 }
 
 export const config = {
-  // Match all routes except: /docs, /api, /_next, /_vercel, static files
-  matcher: ['/((?!docs|api|admin|_next|_vercel|favicon|.*\\..*).*)'],
+  matcher: ['/((?!docs|api|admin|_next|_vercel|media|favicon\\.ico|.*\\..*).*)'],
 }
