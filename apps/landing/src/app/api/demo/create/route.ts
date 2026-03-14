@@ -10,6 +10,13 @@ import { estimateAvailability } from '@/lib/estimate-availability'
 const DEMO_TYPES: DemoType[] = ['salon', 'hotel', 'restaurant', 'events']
 
 export async function POST(req: NextRequest) {
+  // CSRF origin validation
+  const origin = req.headers.get('origin')
+  const allowedOrigin = process.env.NEXT_PUBLIC_SERVER_URL
+  if (origin && allowedOrigin && !origin.startsWith(allowedOrigin)) {
+    return NextResponse.json({ error: 'Invalid origin' }, { status: 403 })
+  }
+
   let body: { name?: string; email?: string; demoType?: string; turnstileToken?: string }
   try {
     body = await req.json()
