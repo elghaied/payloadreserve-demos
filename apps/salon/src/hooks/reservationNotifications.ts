@@ -54,6 +54,7 @@ async function sendReservationEmail(
       collection: 'reservations',
       id: reservation.id,
       depth: 1,
+      req,
     })
 
     const service = populatedReservation.service as Service
