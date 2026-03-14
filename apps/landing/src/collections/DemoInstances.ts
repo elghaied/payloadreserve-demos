@@ -82,6 +82,7 @@ export const DemoInstances: CollectionConfig = {
       options: [
         { label: 'Provisioning', value: 'provisioning' },
         { label: 'Ready', value: 'ready' },
+        { label: 'Ready (Email Failed)', value: 'ready_email_failed' },
         { label: 'Expired', value: 'expired' },
         { label: 'Failed', value: 'failed' },
       ],

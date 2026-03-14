@@ -313,6 +313,11 @@ async function pollAndSeed(opts: {
       console.log(`[demo/${demoId}] Credentials email sent`)
     } catch (err) {
       console.error(`[demo/${demoId}] email failed: ${(err as Error)?.message ?? 'Unknown error'}`)
+      await payload.update({
+        collection: 'demo-instances',
+        where: { demoId: { equals: demoId } },
+        data: { status: 'ready_email_failed' as any },
+      })
     }
   } catch (err) {
     console.error(`[demo/${demoId}] pollAndSeed unhandled error: ${(err as Error)?.message ?? err}`)

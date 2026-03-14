@@ -1,5 +1,5 @@
 export type DemoType = 'salon' | 'hotel' | 'restaurant' | 'events'
-export type DemoStatus = 'provisioning' | 'ready' | 'expired' | 'failed'
+export type DemoStatus = 'provisioning' | 'ready' | 'ready_email_failed' | 'expired' | 'failed' | 'cleanup_failed'
 
 export interface Demo {
   demoId: string
