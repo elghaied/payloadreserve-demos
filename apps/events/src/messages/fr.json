@@ -27,7 +27,8 @@
     "cancellationPolicy": "Politique d'annulation",
     "accessibility": "Accessibilité",
     "closed": "Fermé",
-    "copyright": "© {year} Éclat — Centre Culturel. Tous droits réservés."
+    "copyright": "© {year} Éclat — Centre Culturel. Tous droits réservés.",
+    "madeBy": "Créé par"
   },
   "programme": {
     "title": "Programme",
@@ -169,7 +170,23 @@
     "resetError": "Ce lien est invalide ou a expiré.",
     "resetErrorNoToken": "Aucun jeton trouvé. Veuillez demander un nouveau lien.",
     "requestNewLink": "Demander un nouveau lien",
-    "forgotPasswordLink": "Mot de passe oublié ?"
+    "forgotPasswordLink": "Mot de passe oublié ?",
+    "myBookings": "Mes réservations",
+    "profile": "Profil"
+  },
+  "profile": {
+    "title": "Profil",
+    "updateSuccess": "Profil mis à jour avec succès.",
+    "updateError": "Échec de la mise à jour du profil.",
+    "changePassword": "Changer le mot de passe",
+    "currentPassword": "Mot de passe actuel",
+    "newPassword": "Nouveau mot de passe",
+    "confirmPassword": "Confirmer le mot de passe",
+    "passwordMismatch": "Les mots de passe ne correspondent pas.",
+    "passwordSuccess": "Mot de passe changé avec succès.",
+    "passwordError": "Échec du changement de mot de passe. Vérifiez votre mot de passe actuel.",
+    "save": "Enregistrer les modifications",
+    "updatePassword": "Mettre à jour le mot de passe"
   },
   "errors": {
     "notFound": "Page non trouvée",

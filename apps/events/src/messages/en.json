@@ -27,7 +27,8 @@
     "cancellationPolicy": "Cancellation Policy",
     "accessibility": "Accessibility",
     "closed": "Closed",
-    "copyright": "© {year} Éclat — Centre Culturel. All rights reserved."
+    "copyright": "© {year} Éclat — Centre Culturel. All rights reserved.",
+    "madeBy": "Built by"
   },
   "programme": {
     "title": "Programme",
@@ -169,7 +170,23 @@
     "resetError": "This reset link is invalid or has expired.",
     "resetErrorNoToken": "No reset token found. Please request a new reset link.",
     "requestNewLink": "Request a new link",
-    "forgotPasswordLink": "Forgot your password?"
+    "forgotPasswordLink": "Forgot your password?",
+    "myBookings": "My Bookings",
+    "profile": "Profile"
+  },
+  "profile": {
+    "title": "Profile",
+    "updateSuccess": "Profile updated successfully.",
+    "updateError": "Failed to update profile.",
+    "changePassword": "Change Password",
+    "currentPassword": "Current Password",
+    "newPassword": "New Password",
+    "confirmPassword": "Confirm Password",
+    "passwordMismatch": "Passwords do not match.",
+    "passwordSuccess": "Password changed successfully.",
+    "passwordError": "Failed to change password. Check your current password.",
+    "save": "Save Changes",
+    "updatePassword": "Update Password"
   },
   "errors": {
     "notFound": "Page Not Found",
