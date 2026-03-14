@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { getTranslations } from 'next-intl/server'
+import { GShellBrand } from '@/components/GShellBrand'
 import { ColorStripe } from './Header'
 
 export async function Footer({ locale }: { locale: string }) {
@@ -70,10 +71,11 @@ export async function Footer({ locale }: { locale: string }) {
         </div>
 
         {/* Copyright */}
-        <div className="border-t border-muted-light px-6 py-4 lg:px-12">
+        <div className="flex items-center justify-between border-t border-muted-light px-6 py-4 lg:px-12">
           <p className="font-mono text-[9px] uppercase tracking-[2px] text-muted-text">
             {t('copyright', { year: new Date().getFullYear() })}
           </p>
+          <GShellBrand prefix={t('madeBy')} />
         </div>
       </div>
     </footer>
