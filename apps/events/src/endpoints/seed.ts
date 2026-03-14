@@ -17,7 +17,8 @@ export const seedEndpoint: Omit<Endpoint, 'root'> = {
       return Response.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    const { success } = rateLimit('seed', 3, 60_000)
+    const ip = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 'unknown'
+    const { success } = rateLimit(`seed:${ip}`, 1, 60_000)
     if (!success) {
       return Response.json({ error: 'Too many requests' }, { status: 429 })
     }

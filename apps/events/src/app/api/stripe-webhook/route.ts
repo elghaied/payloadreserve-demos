@@ -5,7 +5,8 @@ import config from '@payload-config'
 import { rateLimit } from '@/lib/rate-limit'
 
 export async function POST(req: NextRequest) {
-  const { success } = rateLimit('stripe-webhook', 100, 60_000)
+  const webhookIp = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 'unknown'
+  const { success } = rateLimit(`webhook:${webhookIp}`, 60, 60_000)
   if (!success) {
     return NextResponse.json({ error: 'Too many requests' }, { status: 429 })
   }
