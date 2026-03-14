@@ -36,7 +36,7 @@ export async function POST(req: NextRequest) {
     collection: 'demo-instances',
     where: {
       expiresAt: { less_than: new Date().toISOString() },
-      status: { not_equals: 'expired' },
+      status: { not_in: ['expired', 'cleanup_failed'] },
     },
     limit: 100,
   })
@@ -67,7 +67,21 @@ export async function POST(req: NextRequest) {
           }
         })
         failedCount++
-        // Do NOT mark as expired — leave for next cleanup run to retry
+        const attempts = ((demo.cleanupAttempts as number) || 0) + 1
+        if (attempts >= 3) {
+          await payload.update({
+            collection: 'demo-instances',
+            id: demo.id,
+            data: { status: 'cleanup_failed', cleanupAttempts: attempts },
+          })
+          console.error(`[cleanup] demo ${demo.id} failed 3+ times, marking as cleanup_failed`)
+        } else {
+          await payload.update({
+            collection: 'demo-instances',
+            id: demo.id,
+            data: { cleanupAttempts: attempts },
+          })
+        }
       } else {
         expiredCount++
         await payload.update({

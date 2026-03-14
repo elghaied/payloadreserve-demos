@@ -85,6 +85,7 @@ export const DemoInstances: CollectionConfig = {
         { label: 'Ready (Email Failed)', value: 'ready_email_failed' },
         { label: 'Expired', value: 'expired' },
         { label: 'Failed', value: 'failed' },
+        { label: 'Cleanup Failed', value: 'cleanup_failed' },
       ],
       admin: {
         components: {
@@ -96,6 +97,12 @@ export const DemoInstances: CollectionConfig = {
       name: 'expiresAt',
       type: 'date',
       required: true,
+    },
+    {
+      name: 'cleanupAttempts',
+      type: 'number',
+      defaultValue: 0,
+      admin: { readOnly: true },
     },
     {
       name: 'requestIp',
