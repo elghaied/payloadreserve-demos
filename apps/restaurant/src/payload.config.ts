@@ -241,8 +241,6 @@ export default buildConfig({
         endpoint: process.env.S3_ENDPOINT,
       },
     }),
-    ...(process.env.NEXT_PUBLIC_SENTRY_DSN
-      ? [sentryPlugin({ Sentry })]
-      : []),
+    sentryPlugin({ Sentry }),
   ],
 })

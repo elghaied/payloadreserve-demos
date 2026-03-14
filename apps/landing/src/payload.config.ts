@@ -145,8 +145,6 @@ export default buildConfig({
         return (d.description ?? d.detailDescription ?? '') as string
       },
     }),
-    ...(process.env.NEXT_PUBLIC_SENTRY_DSN
-      ? [sentryPlugin({ Sentry })]
-      : []),
+    sentryPlugin({ Sentry }),
   ],
 })

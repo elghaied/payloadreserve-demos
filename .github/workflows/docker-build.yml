@@ -6,7 +6,7 @@ on:
         description: 'App to build'
         required: true
         type: choice
-        options: [salon, landing, docs]
+        options: [salon, landing, docs, restaurant, events, hotel]
       tag:
         description: 'Image tag (default: latest)'
         required: false
@@ -43,6 +43,12 @@ jobs:
               echo "server_url=${{ vars.LANDING_NEXT_PUBLIC_SERVER_URL }}" >> $GITHUB_OUTPUT ;;
             docs)
               echo "server_url=${{ vars.DOCS_NEXT_PUBLIC_SERVER_URL }}" >> $GITHUB_OUTPUT ;;
+            restaurant)
+              echo "server_url=${{ vars.RESTAURANT_NEXT_PUBLIC_SERVER_URL }}" >> $GITHUB_OUTPUT ;;
+            events)
+              echo "server_url=${{ vars.EVENTS_NEXT_PUBLIC_SERVER_URL }}" >> $GITHUB_OUTPUT ;;
+            hotel)
+              echo "server_url=${{ vars.HOTEL_NEXT_PUBLIC_SERVER_URL }}" >> $GITHUB_OUTPUT ;;
           esac
 
       - name: Generate image metadata

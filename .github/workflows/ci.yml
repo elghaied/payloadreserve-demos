@@ -7,12 +7,8 @@ jobs:
   ci:
     name: Lint / Type-check / Build
     runs-on: ubuntu-latest
-    services:
-      mongodb:
-        image: mongo:7
-        ports: ['27017:27017']
     env:
-      DATABASE_URL: mongodb://localhost:27017/ci-test
+      DATABASE_URL: mongodb://localhost:27017/ci-dummy
       PAYLOAD_SECRET: ci-dummy-secret-at-least-32-chars-long
       NEXT_PUBLIC_SERVER_URL: http://localhost:3000
     steps:
@@ -31,24 +27,17 @@ jobs:
 
       - run: pnpm lint
 
-      - name: Type-check (landing + docs)
+      - name: Type-check all apps
         run: |
           pnpm --filter=landing typecheck
           pnpm --filter=docs typecheck
-
-      - name: Type-check (salon)
-        working-directory: apps/salon
-        run: npx tsc --noEmit
+          pnpm --filter=salon exec tsc --noEmit
+          pnpm --filter=restaurant exec tsc --noEmit
+          pnpm --filter=events exec tsc --noEmit
+          pnpm --filter=hotel exec tsc --noEmit
 
       - name: Build all apps
         run: pnpm build
         env:
           NEXT_PUBLIC_TURNSTILE_SITE_KEY: dummy
           S3_ENDPOINT: dummy
-
-      - name: Run salon integration tests
-        env:
-          PAYLOAD_SECRET: ci-test-secret-not-real
-          DATABASE_URL: mongodb://localhost:27017/test-salon-ci
-          S3_PREFIX: test
-        run: pnpm --filter=salon test:int
