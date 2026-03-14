@@ -2,6 +2,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import type { Homepage, Announcement, EventType, Media } from '@/payload-types'
 import { getEventTypeColor } from '@/lib/event-colors'
+import { toBcp47 } from '@/lib/utils'
 
 export function AnnouncementsSection({
   homepage,
@@ -44,12 +45,12 @@ export function AnnouncementsSection({
                 )}
                 <div className="p-5">
                   <p className="mb-2 font-mono text-[9px] uppercase tracking-[2px] text-muted-text">
-                    {new Date(ann.startDate).toLocaleDateString(locale, {
+                    {new Date(ann.startDate).toLocaleDateString(toBcp47(locale), {
                       month: 'short',
                       day: 'numeric',
                     })}
                     {ann.endDate &&
-                      ` — ${new Date(ann.endDate).toLocaleDateString(locale, {
+                      ` — ${new Date(ann.endDate).toLocaleDateString(toBcp47(locale), {
                         month: 'short',
                         day: 'numeric',
                         year: 'numeric',

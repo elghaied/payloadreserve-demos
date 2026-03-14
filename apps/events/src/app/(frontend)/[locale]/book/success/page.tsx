@@ -2,6 +2,7 @@ import { setRequestLocale } from 'next-intl/server'
 import { getTranslations } from 'next-intl/server'
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
+import { toBcp47 } from '@/lib/utils'
 import { getBookingConfirmation, confirmBookingViaStripe } from '../actions'
 
 type Props = {
@@ -79,7 +80,7 @@ export default async function BookingSuccessPage({ params, searchParams }: Props
                   {t('date')}
                 </span>
                 <span className="font-bold">
-                  {new Date(booking.startTime).toLocaleDateString(locale, {
+                  {new Date(booking.startTime).toLocaleDateString(toBcp47(locale), {
                     weekday: 'long',
                     year: 'numeric',
                     month: 'long',
@@ -92,7 +93,7 @@ export default async function BookingSuccessPage({ params, searchParams }: Props
                   {t('time')}
                 </span>
                 <span className="font-bold">
-                  {new Date(booking.startTime).toLocaleTimeString(locale, {
+                  {new Date(booking.startTime).toLocaleTimeString(toBcp47(locale), {
                     hour: '2-digit',
                     minute: '2-digit',
                   })}

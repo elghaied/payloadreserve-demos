@@ -3,6 +3,7 @@
 import { useTranslations } from 'next-intl'
 import type { EventType, Venue } from '@/payload-types'
 import { getEventTypeColor } from '@/lib/event-colors'
+import { toBcp47 } from '@/lib/utils'
 import type { CustomerInfo } from './TicketInfoStep'
 
 export function ReviewStep({
@@ -33,7 +34,7 @@ export function ReviewStep({
   const price = eventType.price ?? 0
   const total = price * ticketQuantity
 
-  const formattedDate = date.toLocaleDateString(locale, {
+  const formattedDate = date.toLocaleDateString(toBcp47(locale), {
     weekday: 'long',
     year: 'numeric',
     month: 'long',
