@@ -45,3 +45,10 @@ jobs:
         env:
           NEXT_PUBLIC_TURNSTILE_SITE_KEY: dummy
           S3_ENDPOINT: dummy
+
+      - name: Run salon integration tests
+        env:
+          PAYLOAD_SECRET: ci-test-secret-not-real
+          DATABASE_URL: mongodb://localhost:27017/test-salon-ci
+          S3_PREFIX: test
+        run: pnpm --filter=salon test:int
