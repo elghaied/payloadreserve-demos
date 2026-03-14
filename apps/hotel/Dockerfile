@@ -31,7 +31,14 @@ ARG S3_ENDPOINT
 ENV NEXT_PUBLIC_SERVER_URL="${NEXT_PUBLIC_SERVER_URL}"
 ENV S3_ENDPOINT="${S3_ENDPOINT}"
 
-RUN corepack enable pnpm && pnpm --filter=hotel run build
+# Dummy values so Payload config can load during build (no DB connection happens).
+ENV PAYLOAD_SECRET="build-time-placeholder-secret-not-used"
+ENV DATABASE_URL="mongodb://placeholder:27017/placeholder"
+
+RUN corepack enable pnpm \
+    && pnpm --filter=hotel run generate:types \
+    && pnpm --filter=hotel run generate:importmap \
+    && pnpm --filter=hotel run build
 
 # -- Runner -----------------------------------------------------------------------
 FROM base AS runner

@@ -40,7 +40,10 @@ ENV NEXT_PUBLIC_TURNSTILE_SITE_KEY="${NEXT_PUBLIC_TURNSTILE_SITE_KEY}"
 ENV PAYLOAD_SECRET="build-time-placeholder-secret-not-used"
 ENV DATABASE_URL="mongodb://placeholder:27017/placeholder"
 
-RUN corepack enable pnpm && pnpm --filter=landing run build
+RUN corepack enable pnpm \
+    && pnpm --filter=landing run generate:types \
+    && pnpm --filter=landing run generate:importmap \
+    && pnpm --filter=landing run build
 
 # ── Runner ────────────────────────────────────────────────────────────────────
 FROM base AS runner
