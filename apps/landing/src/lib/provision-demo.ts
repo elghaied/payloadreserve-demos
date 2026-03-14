@@ -3,7 +3,7 @@ import crypto from 'crypto'
 import bcrypt from 'bcrypt'
 import type { CoolifyClient } from '@payload-reserve-demos/coolify-sdk'
 import type { DemoType } from '@payload-reserve-demos/types'
-import type { InfrastructureSetting } from '@/payload-types'
+import type { DemoInstance, InfrastructureSetting } from '@/payload-types'
 import type { Payload } from 'payload'
 import { getCoolify } from '@/lib/cleanup-utils'
 import { createMailer } from '@/lib/mailer'
@@ -316,7 +316,7 @@ async function pollAndSeed(opts: {
       await payload.update({
         collection: 'demo-instances',
         where: { demoId: { equals: demoId } },
-        data: { status: 'ready_email_failed' as any },
+        data: { status: 'ready_email_failed' as DemoInstance['status'] },
       })
     }
   } catch (err) {
