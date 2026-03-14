@@ -5,10 +5,7 @@ export async function verifyTurnstile(
   settings?: InfrastructureSetting | null,
 ): Promise<boolean> {
   const secret = settings?.turnstileSecretKey
-  if (!secret) {
-    if (process.env.NODE_ENV === 'development') return true
-    return false
-  }
+  if (!secret) return false
 
   try {
     const res = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
