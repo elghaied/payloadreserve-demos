@@ -1,4 +1,5 @@
 import type { Endpoint } from 'payload'
+import { rateLimit } from '@/lib/rate-limit'
 
 export const seedEndpoint: Omit<Endpoint, 'root'> = {
   path: '/seed',
@@ -14,6 +15,11 @@ export const seedEndpoint: Omit<Endpoint, 'root'> = {
 
     if (!isAdmin && !(seedSecret && headerSecret === seedSecret)) {
       return Response.json({ error: 'Unauthorized' }, { status: 401 })
+    }
+
+    const { success } = rateLimit('seed', 3, 60_000)
+    if (!success) {
+      return Response.json({ error: 'Too many requests' }, { status: 429 })
     }
 
     try {

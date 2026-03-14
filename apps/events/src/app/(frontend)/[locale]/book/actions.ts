@@ -1,5 +1,6 @@
 'use server'
 
+import crypto from 'crypto'
 import Stripe from 'stripe'
 import { getPayload } from 'payload'
 import { headers as getHeaders } from 'next/headers'
@@ -45,7 +46,7 @@ export async function createBooking(data: {
           firstName: data.customer.firstName,
           lastName: data.customer.lastName,
           email: data.customer.email,
-          password: data.customer.password || data.customer.email,
+          password: data.customer.password || crypto.randomBytes(16).toString('hex'),
           phone: data.customer.phone,
         },
       })
@@ -75,8 +76,8 @@ export async function createBooking(data: {
     if (stripeKey && eventType?.price) {
       try {
         const stripeClient = new Stripe(stripeKey)
-        const siteUrl =
-          process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
+        const siteUrl = process.env.NEXT_PUBLIC_SERVER_URL
+        if (!siteUrl) throw new Error('NEXT_PUBLIC_SERVER_URL is not set')
 
         const session = await stripeClient.checkout.sessions.create({
           payment_method_types: ['card'],

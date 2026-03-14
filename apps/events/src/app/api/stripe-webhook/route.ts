@@ -2,8 +2,14 @@ import Stripe from 'stripe'
 import { NextRequest, NextResponse } from 'next/server'
 import { getPayload } from 'payload'
 import config from '@payload-config'
+import { rateLimit } from '@/lib/rate-limit'
 
 export async function POST(req: NextRequest) {
+  const { success } = rateLimit('stripe-webhook', 100, 60_000)
+  if (!success) {
+    return NextResponse.json({ error: 'Too many requests' }, { status: 429 })
+  }
+
   const stripeKey = process.env.STRIPE_SECRET_KEY
   const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET
 
