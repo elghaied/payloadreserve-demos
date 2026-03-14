@@ -41,7 +41,7 @@
     "next": "15.4.11",
     "next-intl": "^4.8.2",
     "payload": "3.79.0",
-    "payload-reserve": "^1.3.0",
+    "payload-reserve": "^1.3.2",
     "react": "19.2.1",
     "react-dom": "19.2.1",
     "shadcn": "^4.0.3",
