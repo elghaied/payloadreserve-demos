@@ -37,9 +37,20 @@ export async function Footer({ locale }: Props) {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
           {/* Brand */}
           <div className="lg:col-span-1">
-            <h3 className="font-heading text-2xl font-bold mb-4">
-              Grand<span className="text-gradient-copper"> Hotel</span>
-            </h3>
+            <div className="flex items-center gap-2.5 mb-4">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 32 32"
+                className="w-8 h-8 shrink-0"
+                aria-hidden="true"
+              >
+                <rect x="6" y="6" width="20" height="20" rx="1" fill="none" stroke="#C47D5A" strokeWidth="1.5" transform="rotate(45 16 16)" />
+                <text x="16" y="19.5" textAnchor="middle" fontFamily="Georgia, serif" fontSize="9" fontWeight="700" letterSpacing="0.5" fill="#C47D5A">GH</text>
+              </svg>
+              <h3 className="font-heading text-2xl font-bold">
+                Grand<span className="text-gradient-copper"> Hotel</span>
+              </h3>
+            </div>
             <p className="text-sm leading-relaxed text-muted">
               {locale === 'fr'
                 ? 'Un luxe intemporel au coeur de la ville depuis 1928.'
