@@ -1,1 +1,81 @@
+// Grand Hotel — Admin Panel Theme
+// Dark luxury: charcoal backgrounds, copper accents, Art Deco refinement
+// Brand: copper #C47D5A, charcoal #0B0F14, off-white #F5F0EB
 
+// ─── Font ─────────────────────────────────────────────────────
+@import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&display=swap');
+
+// ─── Light Mode ───────────────────────────────────────────────
+// Hotel's brand is dark-first, so light mode uses muted charcoal tones
+:root {
+  // Elevation scale
+  --theme-elevation-0: #F5F0EB;       // Page background — warm off-white
+  --theme-elevation-50: #EDE8E2;      // Subtle bg variation
+  --theme-elevation-100: #FFFFFF;     // Cards, inputs
+  --theme-elevation-150: #E8E3DC;     // Hover states
+  --theme-elevation-200: #D5CFC8;     // Borders
+  --theme-elevation-250: #C8C1B9;     // Stronger borders
+  --theme-elevation-300: #B8B0A6;     // Disabled borders
+  --theme-elevation-350: #9E9589;     // Muted elements
+  --theme-elevation-400: #8A9AAD;     // Placeholder text
+  --theme-elevation-500: #5A6A7A;     // Secondary text
+  --theme-elevation-600: #3A4A5A;     // Body text
+  --theme-elevation-700: #1E2A35;     // Strong text — dark blue-grey
+  --theme-elevation-800: #141A22;     // Sidebar/nav — charcoal surface
+  --theme-elevation-900: #0B0F14;     // Darkest UI elements
+  --theme-elevation-1000: #050709;    // Near-black
+
+  // Brand colors
+  --theme-success-500: #4A9E6E;
+  --theme-error-500: #D45555;
+  --theme-warning-500: #D4A44A;
+
+  // Text on colored backgrounds
+  --theme-color-base-0: #FFFFFF;
+  --theme-color-base-1000: #0B0F14;
+}
+
+// ─── Dark Mode ────────────────────────────────────────────────
+// This IS the hotel's natural brand environment
+[data-theme="dark"] {
+  --theme-elevation-0: #050709;       // Deepest background
+  --theme-elevation-50: #0B0F14;      // Main background — charcoal
+  --theme-elevation-100: #141A22;     // Cards, inputs — surface
+  --theme-elevation-150: #1A2029;     // Hover states
+  --theme-elevation-200: #2A3441;     // Borders
+  --theme-elevation-250: #354050;     // Stronger borders
+  --theme-elevation-300: #3E4A5A;     // Disabled borders
+  --theme-elevation-350: #4A5668;     // Muted elements
+  --theme-elevation-400: #5A6A7A;     // Placeholder text
+  --theme-elevation-500: #8A9AAD;     // Secondary text — muted
+  --theme-elevation-600: #A8B4C2;     // Body text
+  --theme-elevation-700: #C8D0DA;     // Strong text
+  --theme-elevation-800: #E0E6EC;     // Nav text, headings
+  --theme-elevation-900: #EDF0F4;     // Bright text
+  --theme-elevation-1000: #F5F0EB;    // Near-white — warm off-white
+}
+
+// ─── Component Overrides ──────────────────────────────────────
+
+// Dashboard cards — copper top accent
+.card {
+  background-color: var(--theme-elevation-100);
+  border: 1px solid var(--theme-elevation-200);
+  border-top: 3px solid #C47D5A;
+}
+
+// Table fix — Payload tables can be affected by global CSS resets
+.table {
+  display: block;
+  width: 100%;
+}
+
+// ─── Return to Website Bar ────────────────────────────────────
+[data-theme="dark"] .return-to-website-bar {
+  background-color: #0B0F14 !important;
+  color: #C47D5A !important;
+}
+
+[data-theme="dark"] .return-to-website-bar a {
+  color: #C47D5A !important;
+}
