@@ -10,6 +10,8 @@ import sharp from 'sharp'
 import { payloadReserve } from 'payload-reserve'
 import { createAdminUser } from '@payload-reserve-demos/seed-utils'
 import { resetPasswordEmail, resetPasswordSubject } from './email/templates/resetPassword'
+import * as Sentry from '@sentry/nextjs'
+import { sentryPlugin } from '@payloadcms/plugin-sentry'
 
 import { Users } from './collections/Users'
 import { Media } from './collections/Media'
@@ -28,6 +30,27 @@ import { notifyAfterConfirm, notifyAfterCancel } from './hooks/reservationNotifi
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
+function requireEnv(name: string): string {
+  const val = process.env[name]
+  if (!val) {
+    // Allow builds without env vars (Next.js evaluates config at build time)
+    if (process.env.NEXT_PHASE === 'phase-production-build') return ''
+    throw new Error(`Missing required environment variable: ${name}`)
+  }
+  return val
+}
+
+// SMTP all-or-nothing validation: if SMTP_HOST is set, require the other SMTP vars too.
+if (process.env.SMTP_HOST && process.env.NEXT_PHASE !== 'phase-production-build') {
+  const required = ['SMTP_FROM', 'SMTP_USER', 'SMTP_PASS'] as const
+  const missing = required.filter((k) => !process.env[k])
+  if (missing.length > 0) {
+    throw new Error(
+      `SMTP_HOST is set but the following required SMTP variables are missing: ${missing.join(', ')}`,
+    )
+  }
+}
+
 export default buildConfig({
   admin: {
     user: Users.slug,
@@ -42,7 +65,7 @@ export default buildConfig({
   collections: [Users, Media, Menu, Team, WineList, Spaces, Announcements, Testimonials],
   globals: [Homepage, SiteSettings],
   editor: lexicalEditor(),
-  secret: process.env.PAYLOAD_SECRET || '',
+  secret: requireEnv('PAYLOAD_SECRET'),
   onInit: async (payload) => {
     if (!process.env.S3_PREFIX) {
       throw new Error('S3_PREFIX environment variable is required')
@@ -58,7 +81,7 @@ export default buildConfig({
     outputFile: path.resolve(dirname, 'payload-types.ts'),
   },
   db: mongooseAdapter({
-    url: process.env.DATABASE_URL || '',
+    url: requireEnv('DATABASE_URL'),
   }),
   sharp,
   localization: {
@@ -206,16 +229,19 @@ export default buildConfig({
           prefix: process.env.S3_PREFIX || 'restaurant',
         },
       },
-      bucket: process.env.S3_BUCKET!,
+      bucket: requireEnv('S3_BUCKET'),
       config: {
         credentials: {
-          accessKeyId: process.env.S3_ACCESS_KEY || '',
-          secretAccessKey: process.env.S3_SECRET_KEY || '',
+          accessKeyId: requireEnv('S3_ACCESS_KEY'),
+          secretAccessKey: requireEnv('S3_SECRET_KEY'),
         },
         region: process.env.S3_REGION || 'us-east-1',
         forcePathStyle: process.env.S3_FORCE_PATH_STYLE === 'true',
         endpoint: process.env.S3_ENDPOINT,
       },
     }),
+    ...(process.env.NEXT_PUBLIC_SENTRY_DSN
+      ? [sentryPlugin({ Sentry })]
+      : []),
   ],
 })

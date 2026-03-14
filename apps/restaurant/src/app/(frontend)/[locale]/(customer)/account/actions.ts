@@ -7,6 +7,12 @@ import Stripe from 'stripe'
 import config from '@/payload.config'
 import type { DiningExperience } from '@/payload-types'
 
+function requireSiteUrl(): string {
+  const url = process.env.NEXT_PUBLIC_SITE_URL
+  if (!url) throw new Error('Missing NEXT_PUBLIC_SITE_URL environment variable')
+  return url
+}
+
 export async function getUser() {
   const payload = await getPayload({ config })
   const headers = await getHeaders()
@@ -94,7 +100,7 @@ export async function createPaymentSession(
   if (!service?.price) throw new Error('Service has no price')
 
   const stripeClient = new Stripe(stripeKey)
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3003'
+  const siteUrl = requireSiteUrl()
 
   const session = await stripeClient.checkout.sessions.create({
     payment_method_types: ['card'],
