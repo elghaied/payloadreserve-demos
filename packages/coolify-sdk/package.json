@@ -9,5 +9,8 @@
   "devDependencies": {
     "@payload-reserve-demos/tsconfig": "workspace:*",
     "typescript": "5.7.3"
+  },
+  "dependencies": {
+    "p-retry": "^7.1.1"
   }
 }

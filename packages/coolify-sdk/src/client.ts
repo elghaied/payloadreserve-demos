@@ -1,3 +1,4 @@
+import pRetry from 'p-retry'
 import type { CoolifyEnvVar, CoolifyProject, CoolifyServer, CoolifyService, CoolifyServiceStatus, CreateServiceOptions } from './types'
 
 export class CoolifyClient {
@@ -10,6 +11,13 @@ export class CoolifyClient {
   }
 
   private async request<T>(method: string, path: string, body?: unknown): Promise<T> {
+    return pRetry(
+      () => this._doRequest<T>(method, path, body),
+      { retries: 3, minTimeout: 1000, factor: 2, randomize: true },
+    )
+  }
+
+  private async _doRequest<T>(method: string, path: string, body?: unknown): Promise<T> {
     const url = `${this.baseUrl}/v1${path}`
     console.log(`[coolify-sdk] ${method} ${url}${body !== undefined ? ' ' + JSON.stringify(body).slice(0, 300) : ''}`)
     const res = await fetch(url, {
