@@ -320,8 +320,9 @@ export interface DemoInstance {
   adminPasswordHash: string;
   statusTokenHash?: string | null;
   coolifyServiceId: string;
-  status: 'provisioning' | 'ready' | 'expired' | 'failed';
+  status: 'provisioning' | 'ready' | 'ready_email_failed' | 'expired' | 'failed' | 'cleanup_failed';
   expiresAt: string;
+  cleanupAttempts?: number | null;
   requestIp?: string | null;
   updatedAt: string;
   createdAt: string;
@@ -672,6 +673,7 @@ export interface DemoInstancesSelect<T extends boolean = true> {
   coolifyServiceId?: T;
   status?: T;
   expiresAt?: T;
+  cleanupAttempts?: T;
   requestIp?: T;
   updatedAt?: T;
   createdAt?: T;

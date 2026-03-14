@@ -31,8 +31,9 @@ const dirname = path.dirname(filename)
 function requireEnv(name: string): string {
   const val = process.env[name]
   if (!val) {
-    // Allow builds without env vars (Next.js evaluates config at build time)
+    // Skip during Next.js build or Payload CLI (generate:types, etc.)
     if (process.env.NEXT_PHASE === 'phase-production-build') return ''
+    if (process.argv.some((arg) => arg.includes('payload'))) return ''
     throw new Error(`Missing required environment variable: ${name}`)
   }
   return val
