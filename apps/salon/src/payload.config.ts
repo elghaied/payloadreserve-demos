@@ -29,12 +29,16 @@ const dirname = path.dirname(filename)
 
 function requireEnv(name: string): string {
   const val = process.env[name]
-  if (!val) throw new Error(`Missing required environment variable: ${name}`)
+  if (!val) {
+    // Allow builds without env vars (Next.js evaluates config at build time)
+    if (process.env.NEXT_PHASE === 'phase-production-build') return ''
+    throw new Error(`Missing required environment variable: ${name}`)
+  }
   return val
 }
 
 // SMTP all-or-nothing validation: if SMTP_HOST is set, require the other SMTP vars too.
-if (process.env.SMTP_HOST) {
+if (process.env.SMTP_HOST && process.env.NEXT_PHASE !== 'phase-production-build') {
   const required = ['SMTP_FROM', 'SMTP_USER', 'SMTP_PASS'] as const
   const missing = required.filter((k) => !process.env[k])
   if (missing.length > 0) {
