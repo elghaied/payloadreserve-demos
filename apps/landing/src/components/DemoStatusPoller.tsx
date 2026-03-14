@@ -17,8 +17,10 @@ export function DemoStatusPoller({ demoId, statusToken }: { demoId: string; stat
   const statusMessages: Record<DemoStatus, string> = {
     provisioning: t('states.provisioning'),
     ready: t('states.ready'),
+    ready_email_failed: t('states.ready'),
     failed: t('states.failed'),
     expired: t('states.expired'),
+    cleanup_failed: t('states.failed'),
   }
 
   const [status, setStatus] = useState<DemoStatus>('provisioning')
