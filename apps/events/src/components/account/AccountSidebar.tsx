@@ -42,7 +42,7 @@ export function AccountSidebar({ locale }: AccountSidebarProps) {
         <Link
           key={link.href}
           href={link.href}
-          className={`px-3 py-2 font-mono text-[10px] uppercase tracking-[1.5px] transition-colors lg:px-3 lg:py-2.5 ${
+          className={`px-3 py-2 font-mono text-[10px] uppercase tracking-[2px] transition-colors lg:px-3 lg:py-2.5 ${
             isActive(link.href)
               ? 'bg-black text-white'
               : 'text-neutral-500 hover:text-black'
@@ -54,7 +54,7 @@ export function AccountSidebar({ locale }: AccountSidebarProps) {
 
       <button
         onClick={handleLogout}
-        className="ml-auto px-3 py-2 font-mono text-[10px] uppercase tracking-[1.5px] text-[#e53e3e] transition-colors hover:text-[#c53030] lg:ml-0 lg:mt-auto lg:border-t lg:border-neutral-200 lg:pt-4"
+        className="ml-auto px-3 py-2 font-mono text-[10px] uppercase tracking-[2px] text-[#e53e3e] transition-colors hover:text-[#c53030] lg:ml-0 lg:mt-auto lg:border-t lg:border-neutral-200 lg:pt-4"
       >
         {t('logout')}
       </button>

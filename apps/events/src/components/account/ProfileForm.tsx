@@ -129,6 +129,7 @@ export function ProfileForm({ locale }: ProfileFormProps) {
             <input
               id="profile-firstName"
               type="text"
+              required
               value={firstName}
               onChange={(e) => {
                 setFirstName(e.target.value)
@@ -147,6 +148,7 @@ export function ProfileForm({ locale }: ProfileFormProps) {
             <input
               id="profile-lastName"
               type="text"
+              required
               value={lastName}
               onChange={(e) => {
                 setLastName(e.target.value)
@@ -167,6 +169,7 @@ export function ProfileForm({ locale }: ProfileFormProps) {
           <input
             id="profile-email"
             type="email"
+            required
             value={email}
             onChange={(e) => {
               setEmail(e.target.value)
