@@ -112,7 +112,7 @@ export async function createReservation(data: {
           firstName: data.firstName,
           lastName: data.lastName,
           email: data.email,
-          password: data.password || data.email,
+          password: data.password || crypto.randomBytes(16).toString('hex'),
           phone: data.phone,
         },
       })
