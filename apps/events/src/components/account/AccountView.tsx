@@ -4,7 +4,7 @@ import { useState, useCallback, useEffect } from 'react'
 import { useTranslations } from 'next-intl'
 import { BookingCard } from './BookingCard'
 import { CancelDialog } from './CancelDialog'
-import { fetchBookings, cancelBooking } from '@/app/(frontend)/[locale]/account/actions'
+import { fetchBookings, cancelBooking } from '@/app/(frontend)/[locale]/(customer)/account/actions'
 import type { Booking, Customer } from '@/payload-types'
 
 interface AccountViewProps {
@@ -43,14 +43,6 @@ export function AccountView({ locale }: AccountViewProps) {
       .catch(() => setLoading(false))
   }, [loadBookings])
 
-  const handleLogout = async () => {
-    await fetch('/api/customers/logout', {
-      method: 'POST',
-      credentials: 'include',
-    })
-    window.location.href = `/${locale}`
-  }
-
   const handleCancelRequest = useCallback(
     (bookingId: string) => {
       const booking = bookings.find((b) => b.id === bookingId)
@@ -72,11 +64,11 @@ export function AccountView({ locale }: AccountViewProps) {
 
   if (loading) {
     return (
-      <section className="px-6 py-16 lg:px-12 lg:py-24">
+      <div>
         <p className="text-center font-mono text-[10px] uppercase tracking-[2px] text-neutral-400">
           {t('title')}...
         </p>
-      </section>
+      </div>
     )
   }
 
@@ -95,28 +87,7 @@ export function AccountView({ locale }: AccountViewProps) {
   )
 
   return (
-    <section className="px-6 py-16 lg:px-12 lg:py-24">
-      {/* Header */}
-      <div className="mb-10 flex items-start justify-between">
-        <div>
-          <h1 className="mb-2 text-4xl font-black uppercase tracking-[-1px] md:text-5xl">
-            {t('title')}
-          </h1>
-          <div className="mb-4 h-[3px] w-16 bg-black" />
-          {customer && (
-            <p className="font-mono text-[10px] uppercase tracking-[2px] text-neutral-500">
-              {customer.firstName} {customer.lastName} — {customer.email}
-            </p>
-          )}
-        </div>
-        <button
-          onClick={handleLogout}
-          className="border-[3px] border-black bg-white px-4 py-2 font-mono text-[10px] uppercase tracking-[2px] text-black transition-colors hover:bg-black hover:text-white"
-        >
-          {t('logout')}
-        </button>
-      </div>
-
+    <div>
       {/* Upcoming bookings */}
       <div className="mb-12">
         <h2 className="mb-1 text-2xl font-black uppercase tracking-[-0.5px]">
@@ -173,6 +144,6 @@ export function AccountView({ locale }: AccountViewProps) {
           loading={cancelLoading}
         />
       )}
-    </section>
+    </div>
   )
 }
