@@ -1,5 +1,6 @@
 'use server'
 
+import crypto from 'crypto'
 import Stripe from 'stripe'
 import { getPayload, createLocalReq } from 'payload'
 import { checkAvailability } from 'payload-reserve'
@@ -7,6 +8,12 @@ import config from '@/payload.config'
 import { headers as getHeaders } from 'next/headers'
 
 type Locale = 'en' | 'fr'
+
+function requireServerUrl(): string {
+  const url = process.env.NEXT_PUBLIC_SERVER_URL
+  if (!url) throw new Error('NEXT_PUBLIC_SERVER_URL is not set')
+  return url
+}
 
 export async function getRoomTypes(locale: string) {
   const payload = await getPayload({ config })
@@ -128,6 +135,13 @@ export async function createReservation(data: {
   const headers = await getHeaders()
   const { user } = await payload.auth({ headers })
 
+  const checkIn = new Date(data.checkInDate)
+  const checkOut = new Date(data.checkOutDate)
+  if (checkOut <= checkIn) throw new Error('Check-out must be after check-in')
+  if (checkIn < new Date(new Date().toISOString().split('T')[0])) {
+    throw new Error('Check-in cannot be in the past')
+  }
+
   const startTime = new Date(`${data.checkInDate}T15:00:00.000Z`)
   const endTime = new Date(`${data.checkOutDate}T11:00:00.000Z`)
 
@@ -151,7 +165,7 @@ export async function createReservation(data: {
           firstName: data.firstName,
           lastName: data.lastName,
           email: data.email,
-          password: data.password || data.email,
+          password: data.password || crypto.randomBytes(16).toString('hex'),
           phone: data.phone,
         },
       })
@@ -198,8 +212,8 @@ export async function createReservation(data: {
           },
         ],
         mode: 'payment',
-        success_url: `${process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3002'}/${data.locale}/book/success?session_id={CHECKOUT_SESSION_ID}&reservation=${reservation.id}`,
-        cancel_url: `${process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3002'}/${data.locale}/book/cancel?reservation=${reservation.id}`,
+        success_url: `${requireServerUrl()}/${data.locale}/book/success?session_id={CHECKOUT_SESSION_ID}&reservation=${reservation.id}`,
+        cancel_url: `${requireServerUrl()}/${data.locale}/book/cancel?reservation=${reservation.id}`,
         metadata: { reservationId: reservation.id },
       })
 

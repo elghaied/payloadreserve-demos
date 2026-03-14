@@ -21,9 +21,32 @@ import { Gallery } from './collections/Gallery'
 import { Homepage } from './globals/Homepage'
 import { SiteSettings } from './globals/SiteSettings'
 import { s3Storage } from '@payloadcms/storage-s3'
+import * as Sentry from '@sentry/nextjs'
+import { sentryPlugin } from '@payloadcms/plugin-sentry'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
+
+function requireEnv(name: string): string {
+  const val = process.env[name]
+  if (!val) {
+    // Allow builds without env vars (Next.js evaluates config at build time)
+    if (process.env.NEXT_PHASE === 'phase-production-build') return ''
+    throw new Error(`Missing required environment variable: ${name}`)
+  }
+  return val
+}
+
+// SMTP all-or-nothing validation: if SMTP_HOST is set, require the other SMTP vars too.
+if (process.env.SMTP_HOST && process.env.NEXT_PHASE !== 'phase-production-build') {
+  const required = ['SMTP_FROM', 'SMTP_USER', 'SMTP_PASS'] as const
+  const missing = required.filter((k) => !process.env[k])
+  if (missing.length > 0) {
+    throw new Error(
+      `SMTP_HOST is set but the following required SMTP variables are missing: ${missing.join(', ')}`,
+    )
+  }
+}
 
 export default buildConfig({
   admin: {
@@ -39,7 +62,7 @@ export default buildConfig({
   collections: [Users, Media, Amenities, Testimonials, Gallery],
   globals: [Homepage, SiteSettings],
   editor: lexicalEditor(),
-  secret: process.env.PAYLOAD_SECRET || '',
+  secret: requireEnv('PAYLOAD_SECRET'),
   onInit: async (payload) => {
     const adminEmail = process.env.ADMIN_EMAIL
     const adminPassword = process.env.ADMIN_PASSWORD
@@ -51,7 +74,7 @@ export default buildConfig({
     outputFile: path.resolve(dirname, 'payload-types.ts'),
   },
   db: mongooseAdapter({
-    url: process.env.DATABASE_URL || '',
+    url: requireEnv('DATABASE_URL'),
   }),
   sharp,
   localization: {
@@ -186,26 +209,25 @@ export default buildConfig({
       stripeWebhooksEndpointSecret: process.env.STRIPE_WEBHOOK_SECRET,
       isTestKey: true,
     }),
-    ...(process.env.S3_BUCKET
-      ? [
-          s3Storage({
-            collections: {
-              media: {
-                prefix: process.env.S3_PREFIX || 'media',
-              },
-            },
-            bucket: process.env.S3_BUCKET,
-            config: {
-              credentials: {
-                accessKeyId: process.env.S3_ACCESS_KEY || '',
-                secretAccessKey: process.env.S3_SECRET_KEY || '',
-              },
-              region: process.env.S3_REGION || 'us-east-1',
-              forcePathStyle: process.env.S3_FORCE_PATH_STYLE === 'true',
-              endpoint: process.env.S3_ENDPOINT,
-            },
-          }),
-        ]
+    s3Storage({
+      collections: {
+        media: {
+          prefix: process.env.S3_PREFIX || 'media',
+        },
+      },
+      bucket: requireEnv('S3_BUCKET'),
+      config: {
+        credentials: {
+          accessKeyId: requireEnv('S3_ACCESS_KEY'),
+          secretAccessKey: requireEnv('S3_SECRET_KEY'),
+        },
+        region: process.env.S3_REGION || 'us-east-1',
+        forcePathStyle: process.env.S3_FORCE_PATH_STYLE === 'true',
+        endpoint: process.env.S3_ENDPOINT,
+      },
+    }),
+    ...(process.env.NEXT_PUBLIC_SENTRY_DSN
+      ? [sentryPlugin({ Sentry })]
       : []),
   ],
 })

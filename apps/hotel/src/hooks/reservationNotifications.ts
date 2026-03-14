@@ -42,6 +42,7 @@ async function sendReservationEmail(
       collection: 'reservations',
       id: reservation.id,
       depth: 1,
+      req,
     })
 
     const roomType = populatedReservation.service as { name?: string; duration?: number } | null
