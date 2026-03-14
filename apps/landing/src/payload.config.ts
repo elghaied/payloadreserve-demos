@@ -22,7 +22,11 @@ import { cleanupExpiredDemosHandler } from './jobs/cleanupExpiredDemos'
 
 function requireEnv(name: string): string {
   const val = process.env[name]
-  if (!val) throw new Error(`Missing required environment variable: ${name}`)
+  if (!val) {
+    // Allow builds without env vars (Next.js evaluates config at build time)
+    if (process.env.NEXT_PHASE === 'phase-production-build') return ''
+    throw new Error(`Missing required environment variable: ${name}`)
+  }
   return val
 }
 
