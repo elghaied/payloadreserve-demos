@@ -1,0 +1,11 @@
+.git
+node_modules
+.next
+.env*
+!.env.example
+*.md
+test-results
+coverage
+.turbo
+playwright-report
+.playwright
