@@ -11,6 +11,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@sentry/nextjs": "^10.43.0",
     "fumadocs-core": "^14",
     "fumadocs-mdx": "^11",
     "fumadocs-ui": "^14",
