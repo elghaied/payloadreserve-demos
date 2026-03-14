@@ -1,10 +1,17 @@
 'use server'
 
+import crypto from 'crypto'
 import Stripe from 'stripe'
 import { getPayload, createLocalReq } from 'payload'
 import { getAvailableSlots as pluginGetAvailableSlots } from 'payload-reserve'
 import config from '@/payload.config'
 import { headers as getHeaders } from 'next/headers'
+
+function requireSiteUrl(): string {
+  const url = process.env.NEXT_PUBLIC_SITE_URL
+  if (!url) throw new Error('NEXT_PUBLIC_SITE_URL is not set')
+  return url
+}
 
 type Locale = 'en' | 'fr'
 
@@ -145,8 +152,8 @@ export async function createReservation(data: {
           },
         ],
         mode: 'payment',
-        success_url: `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/${data.locale}/book/success?session_id={CHECKOUT_SESSION_ID}&reservation=${reservation.id}`,
-        cancel_url: `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/${data.locale}/book/cancel?reservation=${reservation.id}`,
+        success_url: `${requireSiteUrl()}/${data.locale}/book/success?session_id={CHECKOUT_SESSION_ID}&reservation=${reservation.id}`,
+        cancel_url: `${requireSiteUrl()}/${data.locale}/book/cancel?reservation=${reservation.id}`,
         metadata: { reservationId: reservation.id },
       })
 

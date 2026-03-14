@@ -25,6 +25,23 @@ import { s3Storage } from '@payloadcms/storage-s3'
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
+function requireEnv(name: string): string {
+  const val = process.env[name]
+  if (!val) throw new Error(`Missing required environment variable: ${name}`)
+  return val
+}
+
+// SMTP all-or-nothing validation: if SMTP_HOST is set, require the other SMTP vars too.
+if (process.env.SMTP_HOST) {
+  const required = ['SMTP_FROM', 'SMTP_USER', 'SMTP_PASS'] as const
+  const missing = required.filter((k) => !process.env[k])
+  if (missing.length > 0) {
+    throw new Error(
+      `SMTP_HOST is set but the following required SMTP variables are missing: ${missing.join(', ')}`,
+    )
+  }
+}
+
 export default buildConfig({
   admin: {
     user: Users.slug,
@@ -39,7 +56,7 @@ export default buildConfig({
   collections: [Users, Media, ServiceCategories, Testimonials, Gallery],
   globals: [Homepage, SiteSettings],
   editor: lexicalEditor(),
-  secret: process.env.PAYLOAD_SECRET || '',
+  secret: requireEnv('PAYLOAD_SECRET'),
   onInit: async (payload) => {
     if (!process.env.S3_PREFIX) {
       throw new Error('S3_PREFIX environment variable is required')
@@ -55,7 +72,7 @@ export default buildConfig({
     outputFile: path.resolve(dirname, 'payload-types.ts'),
   },
   db: mongooseAdapter({
-    url: process.env.DATABASE_URL || '',
+    url: requireEnv('DATABASE_URL'),
   }),
   sharp,
   localization: {
@@ -202,11 +219,11 @@ export default buildConfig({
           prefix: process.env.S3_PREFIX || 'media',
         },
       },
-      bucket: process.env.S3_BUCKET!,
+      bucket: requireEnv('S3_BUCKET'),
       config: {
         credentials: {
-          accessKeyId: process.env.S3_ACCESS_KEY || '',
-          secretAccessKey: process.env.S3_SECRET_KEY || '',
+          accessKeyId: requireEnv('S3_ACCESS_KEY'),
+          secretAccessKey: requireEnv('S3_SECRET_KEY'),
         },
         region: process.env.S3_REGION || 'us-east-1',
         forcePathStyle: process.env.S3_FORCE_PATH_STYLE === 'true',
