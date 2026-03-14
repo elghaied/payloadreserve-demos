@@ -1,4 +1,5 @@
 import { withPayload } from "@payloadcms/next/withPayload";
+import { withSentryConfig } from '@sentry/nextjs'
 import type { NextConfig } from 'next'
 
 import createNextIntlPlugin from 'next-intl/plugin'
@@ -22,4 +23,5 @@ const nextConfig: NextConfig = {
   },
 }
 
-export default withPayload(withNextIntl(nextConfig))
+const payloadConfig = withPayload(withNextIntl(nextConfig))
+export default withSentryConfig(payloadConfig, { silent: true, disableLogger: true })

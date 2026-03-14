@@ -18,6 +18,8 @@ import { Footer } from './globals/Footer'
 import { InfrastructureSettings } from './globals/InfrastructureSettings'
 import { DemoDashboard } from './globals/DemoDashboard'
 import { seoPlugin } from '@payloadcms/plugin-seo'
+import * as Sentry from '@sentry/nextjs'
+import { sentryPlugin } from '@payloadcms/plugin-sentry'
 import { cleanupExpiredDemosHandler } from './jobs/cleanupExpiredDemos'
 
 function requireEnv(name: string): string {
@@ -142,5 +144,8 @@ export default buildConfig({
         return (d.description ?? d.detailDescription ?? '') as string
       },
     }),
+    ...(process.env.NEXT_PUBLIC_SENTRY_DSN
+      ? [sentryPlugin({ Sentry })]
+      : []),
   ],
 })
