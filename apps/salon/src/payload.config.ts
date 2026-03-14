@@ -1,5 +1,5 @@
 import { mongooseAdapter } from '@payloadcms/db-mongodb'
-import { nodemailerAdapter } from '@payloadcms/email-nodemailer'
+import { resendAdapter } from '@payloadcms/email-resend'
 import { stripePlugin } from '@payloadcms/plugin-stripe'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import path from 'path'
@@ -36,17 +36,6 @@ function requireEnv(name: string): string {
     throw new Error(`Missing required environment variable: ${name}`)
   }
   return val
-}
-
-// SMTP all-or-nothing validation: if SMTP_HOST is set, require the other SMTP vars too.
-if (process.env.SMTP_HOST && process.env.NEXT_PHASE !== 'phase-production-build') {
-  const required = ['SMTP_FROM', 'SMTP_USER', 'SMTP_PASS'] as const
-  const missing = required.filter((k) => !process.env[k])
-  if (missing.length > 0) {
-    throw new Error(
-      `SMTP_HOST is set but the following required SMTP variables are missing: ${missing.join(', ')}`,
-    )
-  }
 }
 
 export default buildConfig({
@@ -90,25 +79,12 @@ export default buildConfig({
     defaultLocale: 'en',
     fallback: true,
   },
-  // Only initialise the email transport when SMTP vars are present.
-  // Without this guard, nodemailerAdapter calls transporter.verify() at
-  // startup, which fails during `next build` (Docker builder stage) where
-  // runtime env vars are not available.
-  ...(process.env.SMTP_HOST
+  ...(process.env.RESEND_API_KEY
     ? {
-        email: nodemailerAdapter({
-          defaultFromAddress: process.env.SMTP_FROM!,
-          defaultFromName: process.env.SMTP_FROM_NAME!,
-          transportOptions: {
-            host: process.env.SMTP_HOST,
-            port: Number(process.env.SMTP_PORT) || 587,
-            auth: {
-              user: process.env.SMTP_USER!,
-              // Google App Passwords contain spaces — pass as-is, no quotes
-              // in .env (Docker Compose preserves spaces in unquoted values).
-              pass: process.env.SMTP_PASS!,
-            },
-          },
+        email: resendAdapter({
+          defaultFromAddress: process.env.RESEND_FROM_ADDRESS || 'noreply@payload-reserve.com',
+          defaultFromName: process.env.RESEND_FROM_NAME || 'Lumière Salon',
+          apiKey: process.env.RESEND_API_KEY,
         }),
       }
     : {}),

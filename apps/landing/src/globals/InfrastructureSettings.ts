@@ -5,7 +5,7 @@ export const SECRET_MASK = '••••••••'
 export const SECRET_FIELDS = [
   'mongoRootUsername',
   'mongoRootPassword',
-  'smtpPass',
+  'resendApiKey',
   's3AccessKey',
   's3SecretKey',
   'stripeSecretKey',
@@ -144,15 +144,12 @@ export const InfrastructureSettings: GlobalConfig = {
           ],
         },
         {
-          label: 'SMTP',
-          description: 'Mail server for sending demo credential emails and passed to demo containers. Separate from the landing app email adapter.',
+          label: 'Resend',
+          description: 'Resend API for sending demo credential emails and passed to demo containers.',
           fields: [
-            { name: 'smtpHost', type: 'text', label: 'Host', admin: { placeholder: 'smtp.gmail.com' } },
-            { name: 'smtpPort', type: 'number', label: 'Port', defaultValue: 587 },
-            { name: 'smtpUser', type: 'text', label: 'Username' },
-            secretText({ name: 'smtpPass', label: 'Password' }),
-            { name: 'smtpFrom', type: 'email', label: 'From Address' },
-            { name: 'smtpFromName', type: 'text', label: 'From Name', defaultValue: 'payload-reserve' },
+            secretText({ name: 'resendApiKey', label: 'API Key' }),
+            { name: 'resendFromAddress', type: 'email', label: 'From Address' },
+            { name: 'resendFromName', type: 'text', label: 'From Name', defaultValue: 'payload-reserve' },
           ],
         },
         {

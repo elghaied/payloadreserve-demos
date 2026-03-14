@@ -58,12 +58,9 @@ NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_test_...
 STRIPE_WEBHOOK_SECRET=whsec_...   # ← filled automatically by stripe-listen.sh (see below)
 
 # Email (optional — leave blank to skip sending emails)
-SMTP_HOST=
-SMTP_PORT=587
-SMTP_USER=
-SMTP_PASS=
-SMTP_FROM=salon@yoursalon.com
-SMTP_FROM_NAME=Lumière Salon
+RESEND_API_KEY=
+RESEND_FROM_ADDRESS=salon@yoursalon.com
+RESEND_FROM_NAME=Lumière Salon
 
 # App URL
 NEXT_PUBLIC_SITE_URL=http://localhost:3000

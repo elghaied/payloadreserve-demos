@@ -5,7 +5,7 @@ import { buildConfig } from 'payload'
 import { fileURLToPath } from 'url'
 import sharp from 'sharp'
 import { s3Storage } from '@payloadcms/storage-s3'
-import { nodemailerAdapter } from '@payloadcms/email-nodemailer'
+import { resendAdapter } from '@payloadcms/email-resend'
 import { Users } from './collections/Users'
 import { Media } from './collections/Media'
 import { Demos } from './collections/Demos'
@@ -65,25 +65,12 @@ export default buildConfig({
     url: requireEnv('DATABASE_URL'),
   }),
   sharp,
-  // Only initialise the email transport when SMTP vars are present.
-  // Without this guard, nodemailerAdapter calls transporter.verify() at
-  // startup, which fails during `next build` (Docker builder stage) where
-  // runtime env vars are not available.
-  ...(process.env.SMTP_HOST
+  ...(process.env.RESEND_API_KEY
     ? {
-        email: nodemailerAdapter({
-          defaultFromAddress: process.env.SMTP_FROM!,
-          defaultFromName: process.env.SMTP_FROM_NAME!,
-          transportOptions: {
-            host: process.env.SMTP_HOST,
-            port: Number(process.env.SMTP_PORT) || 587,
-            auth: {
-              user: process.env.SMTP_USER!,
-              // Google App Passwords contain spaces — pass as-is, no quotes
-              // in .env (Docker Compose preserves spaces in unquoted values).
-              pass: process.env.SMTP_PASS!,
-            },
-          },
+        email: resendAdapter({
+          defaultFromAddress: process.env.RESEND_FROM_ADDRESS || 'noreply@payloadreserve.com',
+          defaultFromName: process.env.RESEND_FROM_NAME || 'payload-reserve',
+          apiKey: process.env.RESEND_API_KEY,
         }),
       }
     : {}),

@@ -22,7 +22,7 @@
     "@base-ui/react": "^1.2.0",
     "@payload-reserve-demos/seed-utils": "workspace:*",
     "@payloadcms/db-mongodb": "3.79.0",
-    "@payloadcms/email-nodemailer": "3.79.0",
+    "@payloadcms/email-resend": "3.79.0",
     "@payloadcms/next": "3.79.0",
     "@payloadcms/plugin-sentry": "^3.79.0",
     "@payloadcms/plugin-stripe": "3.79.0",

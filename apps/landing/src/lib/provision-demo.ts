@@ -10,7 +10,7 @@ import { createMailer } from '@/lib/mailer'
 
 const nanoid = customAlphabet('abcdefghijklmnopqrstuvwxyz0123456789', 16)
 
-const DEMO_SMTP_FROM_NAMES: Record<DemoType, string> = {
+const DEMO_FROM_NAMES: Record<DemoType, string> = {
   salon:      'Lumière Salon',
   hotel:      'Grand Hotel',
   restaurant: 'Le Bistrot',
@@ -118,17 +118,14 @@ export async function provisionAndDeploy(opts: {
           { key: 'NEXT_PUBLIC_SERVER_URL', value: `${demoProtocol}://${subdomain}` },
           { key: 'S3_PREFIX', value: s3Prefix },
           { key: 'S3_BUCKET', value: settings.s3Bucket || '' },
-          { key: 'SMTP_FROM_NAME', value: DEMO_SMTP_FROM_NAMES[demoType] },
+          { key: 'RESEND_FROM_NAME', value: DEMO_FROM_NAMES[demoType] },
           { key: 'S3_ACCESS_KEY', value: settings.s3AccessKey || '', is_secret: true },
           { key: 'S3_SECRET_KEY', value: settings.s3SecretKey || '', is_secret: true },
           { key: 'S3_ENDPOINT', value: settings.s3Endpoint || '' },
           { key: 'S3_REGION', value: settings.s3Region || 'us-east-1' },
           { key: 'S3_FORCE_PATH_STYLE', value: String(settings.s3ForcePathStyle ?? true) },
-          { key: 'SMTP_HOST', value: settings.smtpHost || '' },
-          { key: 'SMTP_PORT', value: String(settings.smtpPort || 587) },
-          { key: 'SMTP_USER', value: settings.smtpUser || '' },
-          { key: 'SMTP_PASS', value: settings.smtpPass || '', is_secret: true },
-          { key: 'SMTP_FROM', value: settings.smtpFrom || '' },
+          { key: 'RESEND_API_KEY', value: settings.resendApiKey || '', is_secret: true },
+          { key: 'RESEND_FROM_ADDRESS', value: settings.resendFromAddress || '' },
           { key: 'STRIPE_SECRET_KEY', value: settings.stripeSecretKey || '', is_secret: true },
           { key: 'STRIPE_WEBHOOK_SECRET', value: settings.stripeWebhookSecret || '', is_secret: true },
           { key: 'NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY', value: settings.stripePublishableKey || '' },
