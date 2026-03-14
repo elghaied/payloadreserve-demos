@@ -1,6 +1,7 @@
 import { getPayload } from 'payload'
 import { headers } from 'next/headers'
 import config from '@/payload.config'
+import { rateLimit } from '@/lib/rate-limit'
 
 /**
  * GET /api/customer-session
@@ -20,6 +21,12 @@ import config from '@/payload.config'
  * the logged-in user is not a customer.
  */
 export async function GET(req: Request) {
+  const sessionIp = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 'unknown'
+  const { success } = rateLimit(`session:${sessionIp}`, 10, 60_000)
+  if (!success) {
+    return Response.json({ error: 'Rate limited' }, { status: 429 })
+  }
+
   const payload = await getPayload({ config })
   const { user } = await payload.auth({ headers: await headers() })
 
