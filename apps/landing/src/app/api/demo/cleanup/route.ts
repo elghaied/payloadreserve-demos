@@ -1,3 +1,4 @@
+import * as Sentry from '@sentry/nextjs'
 import crypto from 'crypto'
 import { NextRequest, NextResponse } from 'next/server'
 import { getPayload } from 'payload'
@@ -69,6 +70,8 @@ export async function POST(req: NextRequest) {
         results.forEach((r, i) => {
           if (r.status === 'rejected') {
             console.error(`[cleanup/${demo.demoId}] step ${i} failed:`, (r.reason as Error)?.message ?? r.reason)
+            const err = r.reason instanceof Error ? r.reason : new Error(String(r.reason))
+            Sentry.captureException(err, { tags: { demoId: demo.demoId, cleanupStep: String(i) } })
           }
         })
         failedCount++
@@ -134,5 +137,6 @@ export async function POST(req: NextRequest) {
     }
   }
 
+  Sentry.addBreadcrumb({ message: 'Cleanup complete', category: 'demo', data: { expired: expiredCount, failed: failedCount, queued: queuedCount } })
   return NextResponse.json({ expired: expiredCount, failed: failedCount, queued: queuedCount })
 }

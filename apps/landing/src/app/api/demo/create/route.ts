@@ -1,3 +1,4 @@
+import * as Sentry from '@sentry/nextjs'
 import { NextRequest, NextResponse } from 'next/server'
 import type { DemoType } from '@payload-reserve-demos/types'
 import { getPayload } from 'payload'
@@ -50,12 +51,14 @@ export async function POST(req: NextRequest) {
   if (!turnstileOk) {
     return NextResponse.json({ error: 'Turnstile verification failed' }, { status: 400 })
   }
+  Sentry.addBreadcrumb({ message: 'Turnstile passed', category: 'demo' })
 
   const requestIp =
     req.headers.get('cf-connecting-ip') ??
     req.headers.get('x-real-ip') ??
     req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ??
     'unknown'
+  Sentry.setContext('demo', { demoType, email, requestIp })
 
   // Rate limit: block if IP or email has a pending, provisioning, or active demo
   const existingInstance = await payload.find({
@@ -108,8 +111,10 @@ export async function POST(req: NextRequest) {
         email, demoType: demoType as DemoType, requestIp,
         demoRequestId: demoRequest.id, payload, settings,
       })
+      Sentry.addBreadcrumb({ message: 'Demo provisioned', category: 'demo', data: { demoType, demoId: result.demoId } })
       return NextResponse.json({ demoId: result.demoId, statusToken: result.statusToken }, { status: 202 })
-    } catch {
+    } catch (err) {
+      Sentry.captureException(err)
       return NextResponse.json({ error: 'Failed to provision demo container' }, { status: 500 })
     }
   }
@@ -121,6 +126,7 @@ export async function POST(req: NextRequest) {
   })
 
   const estimated = await estimateAvailability(payload, settings)
+  Sentry.addBreadcrumb({ message: 'Demo queued', category: 'demo', data: { demoType, email } })
 
   return NextResponse.json(
     {
