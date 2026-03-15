@@ -40,12 +40,19 @@ export async function Footer({ locale }: { locale: string }) {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-8">
           {/* Brand */}
           <div className="lg:col-span-1">
-            <Link
-              href={`/${locale}`}
-              className="font-heading italic text-2xl font-medium tracking-wide text-foreground hover:text-primary transition-colors"
-            >
-              Le Jardin
-            </Link>
+            <div className="flex items-center gap-2 mb-1">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" className="w-7 h-7 shrink-0" aria-hidden="true">
+                <rect width="32" height="32" rx="4" fill="#1a0a14" />
+                <line x1="4" y1="4" x2="28" y2="4" stroke="#d4a574" strokeWidth="1.5" opacity="0.6" />
+                <text x="16" y="22" textAnchor="middle" fontFamily="Georgia, serif" fontSize="16" fill="#c4758a">✦</text>
+              </svg>
+              <Link
+                href={`/${locale}`}
+                className="font-heading italic text-2xl font-medium tracking-wide text-foreground hover:text-primary transition-colors"
+              >
+                Le Jardin
+              </Link>
+            </div>
             <p className="mt-3 text-sm text-muted leading-relaxed">
               {siteSettings.tagline || t('tagline')}
             </p>
