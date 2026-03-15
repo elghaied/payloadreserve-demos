@@ -15,7 +15,7 @@ const dressCodeLabelMap: Record<string, string> = {
   formal: 'Formal',
 }
 
-const socialIconMap: Record<string, string> = {
+const _socialIconMap: Record<string, string> = {
   instagram: '📷',
   facebook: 'f',
   tripadvisor: '🦉',

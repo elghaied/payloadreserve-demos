@@ -3,7 +3,6 @@
 import { useState, useMemo } from 'react'
 import { useTranslations } from 'next-intl'
 import type { EventType, Venue, Media } from '@/payload-types'
-import { getEventTypeColor } from '@/lib/event-colors'
 import Image from 'next/image'
 import { Calendar } from '@/components/ui/calendar'
 
@@ -28,7 +27,7 @@ export function VenueTimeStep({
   selectedVenueId,
   selectedDate,
   selectedTime,
-  locale,
+  locale: _locale,
   onSelectVenue,
   onSelectDate,
   onSelectTime,

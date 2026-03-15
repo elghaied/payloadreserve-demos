@@ -76,6 +76,7 @@ export default async function AccountLayout({ children, params }: Props) {
                 </Link>
               ))}
               <hr className="border-border my-1 hidden lg:block" />
+              {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
               <a
                 href="/api/customers/logout"
                 className="flex items-center gap-3 text-sm text-muted hover:text-error hover:bg-error/5 rounded-lg px-4 py-3 transition-all"

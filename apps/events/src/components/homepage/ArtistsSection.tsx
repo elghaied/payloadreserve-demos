@@ -5,7 +5,7 @@ import { getSpecialtyColor } from '@/lib/event-colors'
 export function ArtistsSection({
   homepage,
   artists,
-  locale,
+  locale: _locale,
 }: {
   homepage: Homepage
   artists: Artist[]

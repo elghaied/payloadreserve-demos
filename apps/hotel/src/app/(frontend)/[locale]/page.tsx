@@ -243,7 +243,7 @@ export default async function HomePage({ params }: Props) {
 
           {/* Remaining rooms grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 stagger-children">
-            {(otherRooms.length > 0 ? otherRooms : roomTypes.docs).map((room, idx) => (
+            {(otherRooms.length > 0 ? otherRooms : roomTypes.docs).map((room) => (
               <ScrollReveal key={room.id}>
                 <Card className="room-card group h-full">
                   {room.image && typeof room.image === 'object' && room.image.url && (

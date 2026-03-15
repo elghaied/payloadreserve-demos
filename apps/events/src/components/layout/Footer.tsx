@@ -1,4 +1,3 @@
-import Link from 'next/link'
 import { getTranslations } from 'next-intl/server'
 import { GShellBrand } from '@/components/GShellBrand'
 import { ColorStripe } from './Header'

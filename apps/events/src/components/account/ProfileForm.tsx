@@ -8,7 +8,7 @@ interface ProfileFormProps {
   locale: string
 }
 
-export function ProfileForm({ locale }: ProfileFormProps) {
+export function ProfileForm({ locale: _locale }: ProfileFormProps) {
   const t = useTranslations('profile')
   const tAccount = useTranslations('account')
 

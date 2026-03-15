@@ -5,7 +5,7 @@ import { getPayload } from 'payload'
 import config from '@payload-config'
 import Image from 'next/image'
 import Link from 'next/link'
-import type { Announcement, EventType, Venue, Artist, Media } from '@/payload-types'
+import type { EventType, Venue, Artist, Media } from '@/payload-types'
 import { getEventTypeColor, getSpecialtyColor } from '@/lib/event-colors'
 import { toBcp47 } from '@/lib/utils'
 

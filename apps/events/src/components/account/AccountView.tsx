@@ -11,7 +11,7 @@ interface AccountViewProps {
   locale: string
 }
 
-export function AccountView({ locale }: AccountViewProps) {
+export function AccountView({ locale: _locale }: AccountViewProps) {
   const t = useTranslations('account')
 
   const [customer, setCustomer] = useState<Customer | null>(null)

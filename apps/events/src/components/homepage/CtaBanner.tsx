@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import type { Homepage } from '@/payload-types'
 
-export function CtaBanner({ homepage, locale }: { homepage: Homepage; locale: string }) {
+export function CtaBanner({ homepage, locale: _locale }: { homepage: Homepage; locale: string }) {
   return (
     <section className="bg-black px-6 py-16 text-center lg:px-12 lg:py-24">
       {homepage.ctaHeading && (

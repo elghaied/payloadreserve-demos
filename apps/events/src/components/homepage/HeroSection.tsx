@@ -3,7 +3,7 @@ import Image from 'next/image'
 import type { Homepage, Media } from '@/payload-types'
 import { ColorStripe } from '@/components/layout/Header'
 
-export function HeroSection({ homepage, locale }: { homepage: Homepage; locale: string }) {
+export function HeroSection({ homepage, locale: _locale }: { homepage: Homepage; locale: string }) {
   const image = homepage.heroBackgroundImage as Media | null
 
   return (

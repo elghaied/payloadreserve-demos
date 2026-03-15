@@ -1,14 +1,13 @@
-import type { AdminViewServerProps, Payload } from 'payload'
-import type { DemoInstance } from '@/payload-types'
+import type { AdminViewServerProps } from 'payload'
 import { Gutter } from '@payloadcms/ui'
 import { getPayload } from 'payload'
 import config from '@payload-config'
 import { DeleteInstanceButton } from './DeleteInstanceButton'
 
 export default async function DemoDashboard({
-  initPageResult,
-  params,
-  searchParams,
+  initPageResult: _initPageResult,
+  params: _params,
+  searchParams: _searchParams,
 }: AdminViewServerProps) {
   const payload = await getPayload({ config })
 

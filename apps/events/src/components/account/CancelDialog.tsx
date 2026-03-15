@@ -3,7 +3,6 @@
 import { useTranslations } from 'next-intl'
 import {
   Dialog,
-  DialogTrigger,
   DialogContent,
   DialogHeader,
   DialogTitle,

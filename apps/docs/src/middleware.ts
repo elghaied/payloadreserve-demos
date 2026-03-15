@@ -18,7 +18,7 @@ const securityHeaders: Record<string, string> = {
   ].join('; '),
 }
 
-export function middleware(request: NextRequest) {
+export function middleware(_request: NextRequest) {
   const response = NextResponse.next()
 
   for (const [key, value] of Object.entries(securityHeaders)) {
