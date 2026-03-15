@@ -7,6 +7,7 @@ import config from '@payload-config'
 import type { Config, Demo, Media } from '@/payload-types'
 import { getCachedGlobal } from '@/utilities/getGlobals'
 import { getCachedDocument } from '@/utilities/getDocument'
+import { buildAlternates } from '@/utilities/seo'
 
 type Props = {
   params: Promise<{ locale: string; type: string }>
@@ -31,6 +32,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: `${demo.name} Demo - payload-reserve`,
     description: demo.detailDescription ?? demo.description,
+    alternates: buildAlternates(locale, `/demos/${type}`),
   }
 }
 

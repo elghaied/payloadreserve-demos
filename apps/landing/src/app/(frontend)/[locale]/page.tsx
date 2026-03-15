@@ -1,3 +1,4 @@
+import type { Metadata } from 'next'
 import { TypedLocale } from 'payload'
 
 import { Hero } from '@/components/Hero'
@@ -10,9 +11,17 @@ import { DeveloperSection } from '@/components/DeveloperSection'
 import { HowItWorks } from '@/components/HowItWorks'
 import { CTABanner } from '@/components/CTABanner'
 import { getCachedGlobal } from '@/utilities/getGlobals'
+import { buildAlternates } from '@/utilities/seo'
 
 type Props = {
   params: Promise<{ locale: string }>
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { locale } = await params
+  return {
+    alternates: buildAlternates(locale, '/'),
+  }
 }
 
 export default async function HomePage({ params }: Props) {

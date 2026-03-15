@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { getTranslations } from 'next-intl/server'
 import { DemoRequestForm } from '@/components/DemoRequestForm'
 import { Link } from '@/i18n/navigation'
+import { buildAlternates } from '@/utilities/seo'
 
 type Props = {
   params: Promise<{ locale: string }>
@@ -14,6 +15,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: t('title'),
     description: t('description'),
+    alternates: buildAlternates(locale, '/demo'),
   }
 }
 
