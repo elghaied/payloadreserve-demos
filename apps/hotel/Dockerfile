@@ -32,10 +32,10 @@ ENV NEXT_PUBLIC_SERVER_URL="${NEXT_PUBLIC_SERVER_URL}"
 ENV S3_ENDPOINT="${S3_ENDPOINT}"
 
 # Dummy values so Payload config can load during build (no DB connection happens).
-ENV PAYLOAD_SECRET="build-time-placeholder-secret-not-used"
-ENV DATABASE_URL="mongodb://placeholder:27017/placeholder"
-
+# Set inline (not ENV) to avoid baking secrets into image layers.
 RUN corepack enable pnpm \
+    && export PAYLOAD_SECRET="build-time-placeholder-secret-not-used" \
+    && export DATABASE_URL="mongodb://placeholder:27017/placeholder" \
     && pnpm --filter=hotel run generate:types \
     && pnpm --filter=hotel run generate:importmap \
     && pnpm --filter=hotel run build

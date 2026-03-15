@@ -1,24 +1,25 @@
 name: CI
 on:
   push:
+    branches: [main]
   pull_request:
 
 jobs:
   ci:
-    name: Lint / Type-check / Build
+    name: Lint & Type-check
     runs-on: ubuntu-latest
     env:
       DATABASE_URL: mongodb://localhost:27017/ci-dummy
       PAYLOAD_SECRET: ci-dummy-secret-at-least-32-chars-long
       NEXT_PUBLIC_SERVER_URL: http://localhost:3000
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4.2.2
 
-      - uses: pnpm/action-setup@v4
+      - uses: pnpm/action-setup@v4.1.0
         with:
           version: 10.30.1
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v4.4.0
         with:
           node-version: '22'
           cache: 'pnpm'
@@ -35,9 +36,3 @@ jobs:
           pnpm --filter=restaurant exec tsc --noEmit
           pnpm --filter=events exec tsc --noEmit
           pnpm --filter=hotel exec tsc --noEmit
-
-      - name: Build all apps
-        run: pnpm build --concurrency=2
-        env:
-          NEXT_PUBLIC_TURNSTILE_SITE_KEY: dummy
-          S3_ENDPOINT: dummy

@@ -37,10 +37,10 @@ ENV NEXT_PUBLIC_TURNSTILE_SITE_KEY="${NEXT_PUBLIC_TURNSTILE_SITE_KEY}"
 
 # Dummy values so Payload config can load during next build (no DB connection happens).
 # Real values are provided at runtime via the container's environment.
-ENV PAYLOAD_SECRET="build-time-placeholder-secret-not-used"
-ENV DATABASE_URL="mongodb://placeholder:27017/placeholder"
-
+# Set inline (not ENV) to avoid baking secrets into image layers.
 RUN corepack enable pnpm \
+    && export PAYLOAD_SECRET="build-time-placeholder-secret-not-used" \
+    && export DATABASE_URL="mongodb://placeholder:27017/placeholder" \
     && pnpm --filter=landing run generate:types \
     && pnpm --filter=landing run generate:importmap \
     && pnpm --filter=landing run build
