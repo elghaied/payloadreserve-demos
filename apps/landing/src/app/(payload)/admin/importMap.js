@@ -9,7 +9,10 @@ import { CoolifyProjectSelect as CoolifyProjectSelect_22ce74103db492ad8336d199dd
 import { CoolifyServerSelect as CoolifyServerSelect_22ce74103db492ad8336d199ddbf4631 } from '@/components/admin/CoolifyRemoteSelect'
 import { default as default_15a790addfeffe484dd465108998359a } from '@/components/admin/SecretField'
 import { default as default_da85ab4b3eb779fe121d8450aa770ff3 } from '@/components/admin/DemoDashboard'
+import { default as default_534076e2c753ea5d539a54b05f456b1b } from '@/components/admin/Icon'
+import { default as default_a44df17d0fc3dcd873dae43dc3bf66bd } from '@/components/admin/Logo'
 import { default as default_ca888f53ba8e3eb3eab602cf2e92999b } from '@/components/admin/SeedButton'
+import { default as default_196fe9b869f19b6d1a406063dcc4a261 } from '@/components/admin/ReturnToWebsite'
 import { S3ClientUploadHandler as S3ClientUploadHandler_f97aa6c64367fa259c5bc0567239ef24 } from '@payloadcms/storage-s3/client'
 import { AdminErrorBoundary as AdminErrorBoundary_e5a9e14bdbe97e70ba60697217fe7688 } from '@payloadcms/plugin-sentry/client'
 import { CollectionCards as CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1 } from '@payloadcms/next/rsc'
@@ -26,7 +29,10 @@ export const importMap = {
   "@/components/admin/CoolifyRemoteSelect#CoolifyServerSelect": CoolifyServerSelect_22ce74103db492ad8336d199ddbf4631,
   "@/components/admin/SecretField#default": default_15a790addfeffe484dd465108998359a,
   "@/components/admin/DemoDashboard#default": default_da85ab4b3eb779fe121d8450aa770ff3,
+  "@/components/admin/Icon#default": default_534076e2c753ea5d539a54b05f456b1b,
+  "@/components/admin/Logo#default": default_a44df17d0fc3dcd873dae43dc3bf66bd,
   "@/components/admin/SeedButton#default": default_ca888f53ba8e3eb3eab602cf2e92999b,
+  "@/components/admin/ReturnToWebsite#default": default_196fe9b869f19b6d1a406063dcc4a261,
   "@payloadcms/storage-s3/client#S3ClientUploadHandler": S3ClientUploadHandler_f97aa6c64367fa259c5bc0567239ef24,
   "@payloadcms/plugin-sentry/client#AdminErrorBoundary": AdminErrorBoundary_e5a9e14bdbe97e70ba60697217fe7688,
   "@payloadcms/next/rsc#CollectionCards": CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1
