@@ -1012,12 +1012,9 @@ export interface InfrastructureSetting {
   mongoHost?: string | null;
   mongoRootUsername?: string | null;
   mongoRootPassword?: string | null;
-  smtpHost?: string | null;
-  smtpPort?: number | null;
-  smtpUser?: string | null;
-  smtpPass?: string | null;
-  smtpFrom?: string | null;
-  smtpFromName?: string | null;
+  resendApiKey?: string | null;
+  resendFromAddress?: string | null;
+  resendFromName?: string | null;
   s3Endpoint?: string | null;
   s3AccessKey?: string | null;
   s3SecretKey?: string | null;
@@ -1038,6 +1035,7 @@ export interface InfrastructureSetting {
   cleanupSecret?: string | null;
   turnstileSecretKey?: string | null;
   turnstileSiteKey?: string | null;
+  lastCleanupAt?: string | null;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -1339,12 +1337,9 @@ export interface InfrastructureSettingsSelect<T extends boolean = true> {
   mongoHost?: T;
   mongoRootUsername?: T;
   mongoRootPassword?: T;
-  smtpHost?: T;
-  smtpPort?: T;
-  smtpUser?: T;
-  smtpPass?: T;
-  smtpFrom?: T;
-  smtpFromName?: T;
+  resendApiKey?: T;
+  resendFromAddress?: T;
+  resendFromName?: T;
   s3Endpoint?: T;
   s3AccessKey?: T;
   s3SecretKey?: T;
@@ -1362,6 +1357,7 @@ export interface InfrastructureSettingsSelect<T extends boolean = true> {
   cleanupSecret?: T;
   turnstileSecretKey?: T;
   turnstileSiteKey?: T;
+  lastCleanupAt?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;

@@ -196,5 +196,10 @@ export const InfrastructureSettings: GlobalConfig = {
         },
       ],
     },
+    {
+      name: 'lastCleanupAt',
+      type: 'date',
+      admin: { hidden: true },
+    },
   ],
 }

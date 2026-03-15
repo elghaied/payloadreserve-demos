@@ -7,23 +7,13 @@ import { getS3, getCoolify, deleteS3Prefix, dropDemoDatabase, buildMongoUrl } fr
 import { provisionAndDeploy } from '@/lib/provision-demo'
 import type { DemoType } from '@payload-reserve-demos/types'
 
-let lastCleanupAt = 0
-const CLEANUP_COOLDOWN_MS = 60_000
-
 export async function POST(req: NextRequest) {
-  const now = Date.now()
-  if (now - lastCleanupAt < CLEANUP_COOLDOWN_MS) {
-    return NextResponse.json(
-      { error: 'Cleanup already ran recently. Try again later.' },
-      { status: 429 },
-    )
-  }
-  lastCleanupAt = now
-
   const payload = await getPayload({ config })
   const settings = await getInfraSettings(payload)
+  // Note: getInfraSettings() uses context: { includeSecrets: true } to bypass
+  // the afterRead masking hook, so settings.cleanupSecret has the real value.
 
-  // Auth check — constant-time comparison
+  // Auth check FIRST — prevent unauthenticated callers from triggering cooldown writes
   const authHeader = req.headers.get('authorization') ?? ''
   const token = authHeader.startsWith('Bearer ') ? authHeader.slice(7) : null
   const secret = settings.cleanupSecret || ''
@@ -31,6 +21,21 @@ export async function POST(req: NextRequest) {
       !crypto.timingSafeEqual(Buffer.from(token), Buffer.from(secret))) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
+
+  // Distributed cooldown — stored in MongoDB via InfrastructureSettings global
+  const lastCleanup = settings.lastCleanupAt ? new Date(settings.lastCleanupAt).getTime() : 0
+  if (Date.now() - lastCleanup < 60_000) {
+    return NextResponse.json(
+      { error: 'Cleanup already ran recently. Try again later.' },
+      { status: 429 },
+    )
+  }
+
+  // Optimistic lock — update timestamp before doing work
+  await payload.updateGlobal({
+    slug: 'infrastructure-settings',
+    data: { lastCleanupAt: new Date().toISOString() },
+  })
 
   const expired = await payload.find({
     collection: 'demo-instances',
