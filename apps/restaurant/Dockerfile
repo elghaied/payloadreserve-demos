@@ -53,6 +53,7 @@ RUN mkdir -p apps/restaurant/.next && chown nextjs:nodejs apps/restaurant/.next
 
 COPY --from=builder --chown=nextjs:nodejs /app/apps/restaurant/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/apps/restaurant/.next/static     ./apps/restaurant/.next/static
+COPY --from=builder /app/apps/restaurant/public ./apps/restaurant/public
 
 USER nextjs
 

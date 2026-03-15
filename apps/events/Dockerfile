@@ -60,6 +60,7 @@ RUN mkdir -p apps/events/.next && chown nextjs:nodejs apps/events/.next
 COPY --from=builder --chown=nextjs:nodejs /app/apps/events/.next/standalone ./
 # static assets must sit at the path server.js expects
 COPY --from=builder --chown=nextjs:nodejs /app/apps/events/.next/static     ./apps/events/.next/static
+COPY --from=builder /app/apps/events/public ./apps/events/public
 
 USER nextjs
 
