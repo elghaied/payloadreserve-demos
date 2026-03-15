@@ -25,6 +25,8 @@ const securityHeaders: Record<string, string> = {
   ].join('; '),
 }
 
+let cfAccessWarned = false
+
 function addSecurityHeaders(response: NextResponse) {
   for (const [key, value] of Object.entries(securityHeaders)) {
     response.headers.set(key, value)
@@ -34,6 +36,11 @@ function addSecurityHeaders(response: NextResponse) {
 
 export default async function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname
+
+  if (process.env.NODE_ENV === 'production' && !isCfAccessEnabled() && !cfAccessWarned) {
+    console.warn('[security] CF Access is not configured — API routes are unprotected')
+    cfAccessWarned = true
+  }
 
   // ─── CF Access gate for /api routes ───────────────────────────
   // Public routes pass through; all others require a valid CF Access JWT.
