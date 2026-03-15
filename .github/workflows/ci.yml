@@ -37,7 +37,7 @@ jobs:
           pnpm --filter=hotel exec tsc --noEmit
 
       - name: Build all apps
-        run: pnpm build
+        run: pnpm build --concurrency=2
         env:
           NEXT_PUBLIC_TURNSTILE_SITE_KEY: dummy
           S3_ENDPOINT: dummy
