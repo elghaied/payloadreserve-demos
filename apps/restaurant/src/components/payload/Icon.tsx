@@ -9,18 +9,21 @@ export default function Icon() {
       height="24"
       aria-hidden="true"
     >
-      <rect width="32" height="32" rx="4" fill="#1a0a14" />
-      <line x1="4" y1="4" x2="28" y2="4" stroke="#d4a574" strokeWidth="1.5" opacity="0.6" />
-      <text
-        x="16"
-        y="22"
-        textAnchor="middle"
-        fontFamily="Georgia, serif"
-        fontSize="16"
-        fill="#c4758a"
-      >
-        ✦
-      </text>
+      <rect width="32" height="32" rx="6" fill="#1a0a14" />
+      {/* Golden leaf */}
+      <path
+        d="M16 5 C10 10, 8 18, 16 27 C24 18, 22 10, 16 5Z"
+        fill="#d4a574"
+        opacity="0.9"
+      />
+      {/* Central vein */}
+      <path d="M16 8 L16 24" stroke="#1a0a14" strokeWidth="0.8" fill="none" opacity="0.4" />
+      {/* Side veins */}
+      <path d="M16 12 C14 14, 12.5 15, 11 15.5" stroke="#1a0a14" strokeWidth="0.6" fill="none" opacity="0.3" />
+      <path d="M16 15 C18 17, 19.5 18, 21 18.5" stroke="#1a0a14" strokeWidth="0.6" fill="none" opacity="0.3" />
+      <path d="M16 18 C14 20, 12.5 21, 11.5 21.5" stroke="#1a0a14" strokeWidth="0.6" fill="none" opacity="0.3" />
+      {/* Rosé bud */}
+      <circle cx="16" cy="6.5" r="1" fill="#c4758a" opacity="0.8" />
     </svg>
   )
 }
