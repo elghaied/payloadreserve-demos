@@ -4,6 +4,7 @@ import { useState, useMemo } from 'react'
 import Link from 'next/link'
 import type { Announcement, EventType, Venue } from '@/payload-types'
 import { getEventTypeColor } from '@/lib/event-colors'
+import { toBcp47 } from '@/lib/utils'
 
 function getDaysInMonth(year: number, month: number): number {
   return new Date(year, month + 1, 0).getDate()
@@ -194,7 +195,7 @@ export function CalendarView({
         <div className="mt-6 border-[3px] border-black">
           <div className="border-b-[2px] border-black bg-black px-5 py-3">
             <h4 className="font-mono text-[10px] uppercase tracking-[2px] text-white">
-              {new Date(currentYear, currentMonth, selectedDay).toLocaleDateString(locale, {
+              {new Date(currentYear, currentMonth, selectedDay).toLocaleDateString(toBcp47(locale), {
                 weekday: 'long',
                 month: 'long',
                 day: 'numeric',

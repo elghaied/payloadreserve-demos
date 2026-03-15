@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <rect width="32" height="32" fill="#000000"/>
+  <!-- Color stripe at top (6 event type colors) -->
+  <rect x="0" y="0" width="5.33" height="3" fill="#e53e3e"/>
+  <rect x="5.33" y="0" width="5.33" height="3" fill="#d69e2e"/>
+  <rect x="10.66" y="0" width="5.33" height="3" fill="#3182ce"/>
+  <rect x="16" y="0" width="5.33" height="3" fill="#805ad5"/>
+  <rect x="21.33" y="0" width="5.33" height="3" fill="#38a169"/>
+  <rect x="26.66" y="0" width="5.34" height="3" fill="#dd6b20"/>
+  <!-- É letter -->
+  <text x="16" y="23" text-anchor="middle" font-family="Arial, sans-serif" font-size="18" font-weight="900" fill="#ffffff">É</text>
+</svg>

@@ -7,6 +7,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import type { Announcement, EventType, Venue, Artist, Media } from '@/payload-types'
 import { getEventTypeColor, getSpecialtyColor } from '@/lib/event-colors'
+import { toBcp47 } from '@/lib/utils'
 
 const SPECIALTY_MAP: Record<string, string> = {
   'Concert': 'musician',
@@ -143,14 +144,14 @@ export default async function EventDetailPage({
         )}
         <span className="font-mono text-[10px] uppercase tracking-[2px] text-neutral-600">
           {t('date')}:{' '}
-          {new Date(event.startDate).toLocaleDateString(locale, {
+          {new Date(event.startDate).toLocaleDateString(toBcp47(locale), {
             weekday: 'long',
             month: 'long',
             day: 'numeric',
             year: 'numeric',
           })}
           {event.endDate &&
-            ` — ${new Date(event.endDate).toLocaleDateString(locale, {
+            ` — ${new Date(event.endDate).toLocaleDateString(toBcp47(locale), {
               weekday: 'long',
               month: 'long',
               day: 'numeric',
@@ -211,13 +212,13 @@ export default async function EventDetailPage({
                     {t('date')}
                   </p>
                   <p className="font-bold">
-                    {new Date(event.startDate).toLocaleDateString(locale, {
+                    {new Date(event.startDate).toLocaleDateString(toBcp47(locale), {
                       month: 'long',
                       day: 'numeric',
                       year: 'numeric',
                     })}
                     {event.endDate &&
-                      ` — ${new Date(event.endDate).toLocaleDateString(locale, {
+                      ` — ${new Date(event.endDate).toLocaleDateString(toBcp47(locale), {
                         month: 'long',
                         day: 'numeric',
                         year: 'numeric',

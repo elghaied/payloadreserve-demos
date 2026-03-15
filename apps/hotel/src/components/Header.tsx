@@ -55,9 +55,20 @@ export function Header({ locale }: Props) {
       <Container className="flex items-center justify-between h-18 lg:h-22">
         <Link
           href={`/${locale}`}
-          className="font-heading text-xl lg:text-2xl font-bold tracking-tight text-foreground"
+          className="flex items-center gap-2.5 text-foreground"
         >
-          Grand<span className="text-gradient-copper"> Hotel</span>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 32 32"
+            className="w-8 h-8 lg:w-9 lg:h-9 shrink-0"
+            aria-hidden="true"
+          >
+            <rect x="6" y="6" width="20" height="20" rx="1" fill="none" stroke="#C47D5A" strokeWidth="1.5" transform="rotate(45 16 16)" />
+            <text x="16" y="19.5" textAnchor="middle" fontFamily="Georgia, serif" fontSize="9" fontWeight="700" letterSpacing="0.5" fill="#C47D5A">GH</text>
+          </svg>
+          <span className="font-heading text-xl lg:text-2xl font-bold tracking-tight">
+            Grand<span className="text-gradient-copper"> Hotel</span>
+          </span>
         </Link>
 
         {/* Desktop nav */}

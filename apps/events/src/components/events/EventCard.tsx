@@ -2,6 +2,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import type { Announcement, EventType, Venue, Media } from '@/payload-types'
 import { getEventTypeColor } from '@/lib/event-colors'
+import { toBcp47 } from '@/lib/utils'
 
 export function EventCard({
   announcement,
@@ -48,12 +49,12 @@ export function EventCard({
           )}
           <h3 className="mb-2 text-lg font-bold leading-tight">{announcement.title}</h3>
           <p className="mb-1 font-mono text-[10px] uppercase tracking-[2px] text-neutral-500">
-            {new Date(announcement.startDate).toLocaleDateString(locale, {
+            {new Date(announcement.startDate).toLocaleDateString(toBcp47(locale), {
               month: 'short',
               day: 'numeric',
             })}
             {announcement.endDate &&
-              ` — ${new Date(announcement.endDate).toLocaleDateString(locale, {
+              ` — ${new Date(announcement.endDate).toLocaleDateString(toBcp47(locale), {
                 month: 'short',
                 day: 'numeric',
                 year: 'numeric',

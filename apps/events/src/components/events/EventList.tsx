@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import type { Announcement, EventType, Venue } from '@/payload-types'
 import { getEventTypeColor } from '@/lib/event-colors'
+import { toBcp47 } from '@/lib/utils'
 
 export function EventList({
   announcements,
@@ -27,7 +28,7 @@ export function EventList({
           >
             {/* Date */}
             <span className="w-24 shrink-0 font-mono text-[11px] uppercase tracking-[1px] text-neutral-600">
-              {new Date(ann.startDate).toLocaleDateString(locale, {
+              {new Date(ann.startDate).toLocaleDateString(toBcp47(locale), {
                 month: 'short',
                 day: 'numeric',
               })}

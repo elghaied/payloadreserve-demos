@@ -45,8 +45,17 @@ export default buildConfig({
     importMap: {
       baseDir: path.resolve(dirname),
     },
+    meta: {
+      titleSuffix: ' — Éclat',
+      icons: [{ rel: 'icon', url: '/favicon.svg' }],
+    },
     components: {
       beforeDashboard: ['@/components/BeforeDashboard/index.js'],
+      graphics: {
+        Logo: '@/components/payload/Logo',
+        Icon: '@/components/payload/Icon',
+      },
+      providers: ['@/components/payload/ReturnToWebsite'],
     },
   },
   endpoints: [seedEndpoint],

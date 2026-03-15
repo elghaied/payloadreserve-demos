@@ -1,0 +1,80 @@
+// Le Jardin Doré — Admin Panel Theme
+// Midnight burgundy: deep burgundy backgrounds, rosé and gold accents
+// Brand: burgundy #1a0a14, rosé #c4758a, gold #d4a574, cream #f0e6ea
+
+// ─── Font ─────────────────────────────────────────────────────
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap');
+
+// ─── Light Mode ───────────────────────────────────────────────
+:root {
+  // Elevation scale
+  --theme-elevation-0: #faf5f7;       // Page background — soft rose-white
+  --theme-elevation-50: #f5edf0;      // Subtle bg variation
+  --theme-elevation-100: #ffffff;     // Cards, inputs
+  --theme-elevation-150: #f0e6ea;     // Hover states — cream
+  --theme-elevation-200: #e0d0d6;     // Borders
+  --theme-elevation-250: #d0bec6;     // Stronger borders
+  --theme-elevation-300: #baa5ae;     // Disabled borders
+  --theme-elevation-350: #9a7a8a;     // Muted elements
+  --theme-elevation-400: #8a6a7a;     // Placeholder text
+  --theme-elevation-500: #7a5a6a;     // Secondary text
+  --theme-elevation-600: #5a3a4a;     // Body text
+  --theme-elevation-700: #3d2035;     // Strong text — surface elevated
+  --theme-elevation-800: #2d1525;     // Sidebar/nav — surface
+  --theme-elevation-900: #1a0a14;     // Darkest — background
+  --theme-elevation-1000: #0d0509;    // Near-black
+
+  // Brand colors
+  --theme-success-500: #6ab87a;
+  --theme-error-500: #e85d75;
+  --theme-warning-500: #d4a44a;
+
+  // Text on colored backgrounds
+  --theme-color-base-0: #FFFFFF;
+  --theme-color-base-1000: #1a0a14;
+}
+
+// ─── Dark Mode ────────────────────────────────────────────────
+// This IS Le Jardin Doré's natural brand environment
+[data-theme="dark"] {
+  --theme-elevation-0: #0d0509;       // Deepest background
+  --theme-elevation-50: #1a0a14;      // Main background — midnight burgundy
+  --theme-elevation-100: #2d1525;     // Cards, inputs — surface
+  --theme-elevation-150: #351a2d;     // Hover states
+  --theme-elevation-200: #3d2035;     // Borders — surface elevated
+  --theme-elevation-250: #4d2a45;     // Stronger borders
+  --theme-elevation-300: #5a3550;     // Disabled borders
+  --theme-elevation-350: #6a455a;     // Muted elements
+  --theme-elevation-400: #7a5a6a;     // Placeholder text
+  --theme-elevation-500: #9a7a8a;     // Secondary text — muted
+  --theme-elevation-600: #baa5ae;     // Body text
+  --theme-elevation-700: #d0bec6;     // Strong text
+  --theme-elevation-800: #e0d0d6;     // Nav text, headings
+  --theme-elevation-900: #f0e6ea;     // Bright text — cream
+  --theme-elevation-1000: #faf5f7;    // Near-white
+}
+
+// ─── Component Overrides ──────────────────────────────────────
+
+// Dashboard cards — rosé top accent
+.card {
+  background-color: var(--theme-elevation-100);
+  border: 1px solid var(--theme-elevation-200);
+  border-top: 3px solid #c4758a;
+}
+
+// Table fix — Payload tables can be affected by global CSS resets
+.table {
+  display: block;
+  width: 100%;
+}
+
+// ─── Return to Website Bar ────────────────────────────────────
+[data-theme="dark"] .return-to-website-bar {
+  background-color: #1a0a14 !important;
+  color: #c4758a !important;
+}
+
+[data-theme="dark"] .return-to-website-bar a {
+  color: #c4758a !important;
+}

@@ -1,0 +1,79 @@
+// payload-reserve — Admin Panel Theme
+// Violet accent on clean stone palette
+// Brand: violet #5B21B6, amber #F59E0B, stone #1C1917, cream #FAFAF8
+
+// ─── Font ─────────────────────────────────────────────────────
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&display=swap');
+
+// ─── Light Mode ───────────────────────────────────────────────
+:root {
+  // Elevation scale — clean, warm stone palette
+  --theme-elevation-0: #FAFAF8;       // Page background — warm cream
+  --theme-elevation-50: #F5F5F3;      // Subtle bg variation
+  --theme-elevation-100: #FFFFFF;     // Cards, inputs
+  --theme-elevation-150: #F0F0ED;     // Hover states
+  --theme-elevation-200: #E7E5E4;     // Borders — stone-200
+  --theme-elevation-250: #D6D3D1;     // Stronger borders — stone-300
+  --theme-elevation-300: #A8A29E;     // Disabled borders — stone-400
+  --theme-elevation-350: #8A8480;     // Muted elements
+  --theme-elevation-400: #78716C;     // Placeholder text — stone-500
+  --theme-elevation-500: #57534E;     // Secondary text — stone-600
+  --theme-elevation-600: #44403C;     // Body text — stone-700
+  --theme-elevation-700: #292524;     // Strong text — stone-800
+  --theme-elevation-800: #1C1917;     // Sidebar/nav — stone-900
+  --theme-elevation-900: #0C0A09;     // Darkest — stone-950
+  --theme-elevation-1000: #000000;    // Pure black
+
+  // Brand colors
+  --theme-success-500: #059669;
+  --theme-error-500: #DC2626;
+  --theme-warning-500: #F59E0B;
+
+  // Text on colored backgrounds
+  --theme-color-base-0: #FFFFFF;
+  --theme-color-base-1000: #1C1917;
+}
+
+// ─── Dark Mode ────────────────────────────────────────────────
+[data-theme="dark"] {
+  --theme-elevation-0: #0C0A09;       // Deepest background — stone-950
+  --theme-elevation-50: #1C1917;      // Main background — stone-900
+  --theme-elevation-100: #292524;     // Cards, inputs — stone-800
+  --theme-elevation-150: #322F2D;     // Hover states
+  --theme-elevation-200: #44403C;     // Borders — stone-700
+  --theme-elevation-250: #57534E;     // Stronger borders — stone-600
+  --theme-elevation-300: #6B6560;     // Disabled borders
+  --theme-elevation-350: #78716C;     // Muted elements — stone-500
+  --theme-elevation-400: #8A8480;     // Placeholder text
+  --theme-elevation-500: #A8A29E;     // Secondary text — stone-400
+  --theme-elevation-600: #D6D3D1;     // Body text — stone-300
+  --theme-elevation-700: #E7E5E4;     // Strong text — stone-200
+  --theme-elevation-800: #F5F5F3;     // Nav text, headings
+  --theme-elevation-900: #FAFAF8;     // Bright text
+  --theme-elevation-1000: #FFFFFF;    // Pure white
+}
+
+// ─── Component Overrides ──────────────────────────────────────
+
+// Dashboard cards — violet top accent
+.card {
+  background-color: var(--theme-elevation-100);
+  border: 1px solid var(--theme-elevation-200);
+  border-top: 3px solid #5B21B6;
+}
+
+// Table fix — Payload tables can be affected by global CSS resets
+.table {
+  display: block;
+  width: 100%;
+}
+
+// ─── Return to Website Bar ────────────────────────────────────
+[data-theme="dark"] .return-to-website-bar {
+  background-color: #1C1917 !important;
+  color: #A78BFA !important;
+}
+
+[data-theme="dark"] .return-to-website-bar a {
+  color: #A78BFA !important;
+}

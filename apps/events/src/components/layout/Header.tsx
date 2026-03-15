@@ -53,7 +53,17 @@ export function Header({ locale }: { locale: string }) {
     <header className="sticky top-0 z-50 bg-white">
       <div className="flex items-center justify-between px-6 py-4 lg:px-12">
         {/* Logo */}
-        <Link href={`/${locale}`} className="text-3xl font-black tracking-[-3px] lg:text-4xl">
+        <Link href={`/${locale}`} className="flex items-center gap-2 text-3xl font-black tracking-[-3px] lg:text-4xl">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" className="w-8 h-8 lg:w-9 lg:h-9 shrink-0" aria-hidden="true">
+            <rect width="32" height="32" fill="currentColor" />
+            <rect x="0" y="0" width="5.33" height="3" fill="#e53e3e" />
+            <rect x="5.33" y="0" width="5.33" height="3" fill="#d69e2e" />
+            <rect x="10.66" y="0" width="5.33" height="3" fill="#3182ce" />
+            <rect x="16" y="0" width="5.33" height="3" fill="#805ad5" />
+            <rect x="21.33" y="0" width="5.33" height="3" fill="#38a169" />
+            <rect x="26.66" y="0" width="5.34" height="3" fill="#dd6b20" />
+            <text x="16" y="23" textAnchor="middle" fontFamily="Arial, sans-serif" fontSize="18" fontWeight="900" fill="white">É</text>
+          </svg>
           ÉCLAT
         </Link>
 

@@ -45,8 +45,17 @@ export default buildConfig({
     importMap: {
       baseDir: path.resolve(dirname),
     },
+    meta: {
+      titleSuffix: ' — payload-reserve',
+      icons: [{ rel: 'icon', url: '/reserve-logo.svg' }],
+    },
     components: {
       beforeDashboard: ['@/components/admin/SeedButton'],
+      graphics: {
+        Logo: '@/components/admin/Logo',
+        Icon: '@/components/admin/Icon',
+      },
+      providers: ['@/components/admin/ReturnToWebsite'],
     },
   },
   localization: {

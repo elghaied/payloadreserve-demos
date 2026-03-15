@@ -5,6 +5,7 @@ import { getTranslations } from 'next-intl/server'
 import { getPayload } from 'payload'
 import config from '@payload-config'
 import type { Media } from '@/payload-types'
+import { toBcp47 } from '@/lib/utils'
 
 type Props = {
   params: Promise<{ locale: string }>
@@ -42,10 +43,10 @@ export default async function SeasonPage({ params }: Props) {
   const formatDateRange = (start: string, end: string) => {
     const startDate = new Date(start)
     const endDate = new Date(end)
-    return `${startDate.toLocaleDateString(locale, {
+    return `${startDate.toLocaleDateString(toBcp47(locale), {
       month: 'long',
       year: 'numeric',
-    })} — ${endDate.toLocaleDateString(locale, {
+    })} — ${endDate.toLocaleDateString(toBcp47(locale), {
       month: 'long',
       year: 'numeric',
     })}`
