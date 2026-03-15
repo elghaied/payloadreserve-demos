@@ -1,4 +1,6 @@
-# Lumière Salon — `payload-reserve` Demo
+# Lumiere Salon — `payload-reserve` Demo
+
+> **Live:** [salon.payloadreserve.com](https://salon.payloadreserve.com)
 
 A full-stack booking app built with **Payload CMS 3.x** + **Next.js 15** (App Router).
 It is the reference implementation for the [`payload-reserve`](https://www.npmjs.com/package/payload-reserve) plugin and lives inside the `payload-reserve-demos` monorepo.

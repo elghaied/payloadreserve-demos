@@ -1,67 +1,190 @@
-# Payload Blank Template
+# Le Jardin Dore — `payload-reserve` Demo
 
-This template comes configured with the bare minimum to get started on anything you need.
+> **Live:** [restaurant.payloadreserve.com](https://restaurant.payloadreserve.com)
 
-## Quick start
+A restaurant reservation app built with **Payload CMS 3.x** + **Next.js 15** (App Router).
+Demonstrates **party-size bookings**, custom reservation fields, and short-notice cancellation — a fine dining experience where guests choose dining experiences in specific spaces.
 
-This template can be deployed directly from our Cloud hosting and it will setup MongoDB and cloud S3 object storage for media.
+Part of the [`payload-reserve-demos`](../../README.md) monorepo.
 
-## Quick Start - local setup
+---
 
-To spin up this template locally, follow these steps:
+## What This Demo Shows
 
-### Clone
+| Concept | Implementation |
+|---|---|
+| **Custom reservation fields** | `partySize` (1–20) added via `extraReservationFields` |
+| **Short cancellation window** | 4-hour notice period (same-day bookings friendly) |
+| **Table turnover buffer** | 15-minute gap between seatings for cleanup |
+| **Rich content collections** | Full menu, wine list, chef team, and dining spaces |
+| **Space-based booking** | 5 distinct dining areas with different capacities and ambiance |
 
-After you click the `Deploy` button above, you'll want to have standalone copy of this repo on your machine. If you've already cloned this repo, skip to [Development](#development).
+---
 
-### Development
+## Tech Stack
 
-1. First [clone the repo](#clone) if you have not done so already
-2. `cd my-project && cp .env.example .env` to copy the example environment variables. You'll need to add the `MONGODB_URL` from your Cloud project to your `.env` if you want to use S3 storage and the MongoDB database that was created for you.
+| Layer | Technology |
+|---|---|
+| Framework | Next.js 15 (App Router, React 19) |
+| CMS / API | Payload CMS 3.x |
+| Database | MongoDB (via `@payloadcms/db-mongodb`) |
+| Plugin | `payload-reserve` |
+| Payments | Stripe Checkout |
+| i18n | `next-intl` (English + French) |
+| Styling | Tailwind CSS v4 |
+| Testing | Vitest (integration) + Playwright (e2e) |
 
-3. `pnpm install && pnpm dev` to install dependencies and start the dev server
-4. open `http://localhost:3000` to open the app in your browser
+---
 
-That's it! Changes made in `./src` will be reflected in your app. Follow the on-screen instructions to login and create your first admin user. Then check out [Production](#production) once you're ready to build and serve your app, and [Deployment](#deployment) when you're ready to go live.
+## Prerequisites
 
-#### Docker (Optional)
+- **Node.js** `>=20.9.0`
+- **pnpm** `>=10`
+- **MongoDB** running locally
+- **Stripe CLI** installed (for webhook forwarding)
 
-If you prefer to use Docker for local development instead of a local MongoDB instance, the provided docker-compose.yml file can be used.
+---
 
-To do so, follow these steps:
+## Quick Start
 
-- Modify the `MONGODB_URL` in your `.env` file to `mongodb://127.0.0.1/<dbname>`
-- Modify the `docker-compose.yml` file's `MONGODB_URL` to match the above `<dbname>`
-- Run `docker-compose up` to start the database, optionally pass `-d` to run in the background.
+```bash
+# From monorepo root
+pnpm install
+cp apps/restaurant/.env.example apps/restaurant/.env   # Fill in your values
+cd apps/restaurant && pnpm seed                         # Seed sample data
+pnpm dev:restaurant                                     # From root, or: cd apps/restaurant && pnpm dev
+```
 
-## How it works
+---
 
-The Payload config is tailored specifically to the needs of most websites. It is pre-configured in the following ways:
+## Project Structure
 
-### Collections
+```
+apps/restaurant/src/
+├── app/
+│   ├── (frontend)/[locale]/        # Public-facing pages
+│   │   └── book/                   # Booking flow (experience → space → date/time → party size)
+│   ├── (payload)/                  # Payload admin panel + REST/GraphQL API routes
+│   └── api/stripe-webhook/         # Stripe checkout.session.completed handler
+├── collections/
+│   ├── Users.ts                    # Admin users
+│   ├── Media.ts                    # Image uploads
+│   ├── Menu.ts                     # Menu items (5 sections: starters, seafood, mains, cheese, desserts)
+│   ├── Team.ts                     # Chef & kitchen staff profiles
+│   ├── WineList.ts                 # Wine pairings by section
+│   ├── Spaces.ts                   # 5 dining areas (intimate, classic, family, private, terrace)
+│   ├── Announcements.ts            # Specials and seasonal events
+│   └── Testimonials.ts             # Guest reviews
+├── globals/                        # Homepage, SiteSettings
+├── seed/
+│   ├── index.ts                    # Main seed script
+│   ├── dining-experiences.ts       # 5 experiences ($55–$200, 90–180 min)
+│   ├── tables.ts                   # Tables per space with capacities
+│   ├── schedules.ts                # Table/space availability
+│   ├── menu.ts                     # Full 5-course French menu
+│   ├── wine-list.ts                # Wine pairings
+│   ├── team.ts                     # Chef Laurent, Sophie, Pierre
+│   ├── spaces.ts                   # 5 dining spaces
+│   ├── testimonials.ts             # Sample reviews
+│   └── images.ts                   # Restaurant interior, dishes, staff
+├── tasks/
+│   └── cancelStaleReservations.ts  # Auto-cancel unpaid bookings
+├── i18n/                           # next-intl routing config
+├── payload.config.ts               # Main config — plugin, collections, jobs
+└── payload-types.ts                # Auto-generated types
+```
 
-See the [Collections](https://payloadcms.com/docs/configuration/collections) docs for details on how to extend this functionality.
+---
 
-- #### Users (Authentication)
+## Plugin Configuration
 
-  Users are auth-enabled collections that have access to the admin panel.
+```ts
+payloadReserve({
+  slugs: {
+    services: 'dining-experiences',
+    resources: 'tables',
+    schedules: 'schedules',
+    reservations: 'reservations',
+  },
+  defaultBufferTime: 15, // minutes — table turnover
+  cancellationNoticePeriod: 4, // hours — same-day friendly
+  extraReservationFields: [
+    {
+      name: 'partySize',
+      type: 'number',
+      min: 1,
+      max: 20,
+      defaultValue: 2,
+    },
+  ],
+})
+```
 
-  For additional help, see the official [Auth Example](https://github.com/payloadcms/payload/tree/main/examples/auth) or the [Authentication](https://payloadcms.com/docs/authentication/overview#authentication-overview) docs.
+## `payload-reserve` Collections
 
-- #### Media
+| Slug | Description |
+|---|---|
+| `dining-experiences` | Dining options with price, duration, and description |
+| `tables` | Tables/spaces linked to dining experiences |
+| `schedules` | Availability per table/space |
+| `reservations` | Booking records with `partySize` custom field |
+| `customers` | Guest records (separate from admin users) |
 
-  This is the uploads enabled collection. It features pre-configured sizes, focal point and manual resizing to help you manage your pictures.
+---
 
-### Docker
+## Seed Data
 
-Alternatively, you can use [Docker](https://www.docker.com) to spin up this template locally. To do so, follow these steps:
+### Dining Experiences
 
-1. Follow [steps 1 and 2 from above](#development), the docker-compose file will automatically use the `.env` file in your project root
-1. Next run `docker-compose up`
-1. Follow [steps 4 and 5 from above](#development) to login and create your first admin user
+| Experience | Price | Duration |
+|---|---|---|
+| Classic Lunch | $55 | 90 min |
+| Tasting Menu | $120 | 150 min |
+| Chef's Table | $150 | 180 min |
+| Wine Pairing Dinner | $140 | 150 min |
+| Private Dining | $200 | 180 min |
 
-That's it! The Docker instance will help you get up and running quickly while also standardizing the development environment across your teams.
+### Dining Spaces
 
-## Questions
+| Space | Ambiance |
+|---|---|
+| Le Coin Intime | Intimate (2–4 guests) |
+| La Salle Classique | Classic fine dining |
+| Le Salon Familial | Family-friendly |
+| Le Salon Prive | Private dining room |
+| La Terrasse | Outdoor terrace |
 
-If you have any issues or questions, reach out to us on [Discord](https://discord.com/invite/payload) or start a [GitHub discussion](https://github.com/payloadcms/payload/discussions).
+### Team
+
+- **Chef Laurent Beaumont** — Head Chef
+- **Sophie Marchand** — Sous Chef
+- **Pierre Delacroix** — Pastry Chef
+
+---
+
+## Commands
+
+```bash
+# From monorepo root
+pnpm dev:restaurant          # Start dev server
+pnpm build:restaurant        # Production build
+
+# From apps/restaurant/
+pnpm dev                     # Start dev server
+pnpm devsafe                 # Wipe .next cache + dev
+pnpm seed                    # Seed database
+pnpm test                    # Run all tests
+pnpm test:int                # Vitest integration tests
+pnpm test:e2e                # Playwright e2e tests
+```
+
+---
+
+## URLs
+
+| URL | Description |
+|---|---|
+| `http://localhost:3003` | Frontend (defaults to `/en`) |
+| `http://localhost:3003/fr` | French locale |
+| `http://localhost:3003/admin` | Payload admin panel |
+| `http://localhost:3003/api` | Payload REST API |
