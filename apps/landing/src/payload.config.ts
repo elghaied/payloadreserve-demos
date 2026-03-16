@@ -6,6 +6,7 @@ import { fileURLToPath } from 'url'
 import sharp from 'sharp'
 import { s3Storage } from '@payloadcms/storage-s3'
 import { resendAdapter } from '@payloadcms/email-resend'
+import { createAdminUser } from '@payload-reserve-demos/seed-utils'
 import { Users } from './collections/Users'
 import { Media } from './collections/Media'
 import { Demos } from './collections/Demos'
@@ -111,6 +112,13 @@ export default buildConfig({
       },
     ],
     deleteJobOnComplete: true,
+  },
+  onInit: async (payload) => {
+    const adminEmail = process.env.ADMIN_EMAIL
+    const adminPassword = process.env.ADMIN_PASSWORD
+    if (adminEmail && adminPassword) {
+      await createAdminUser(payload, adminEmail, adminPassword)
+    }
   },
   plugins: [
     s3Storage({
