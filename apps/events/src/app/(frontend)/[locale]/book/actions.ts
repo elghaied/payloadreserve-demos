@@ -7,6 +7,12 @@ import { headers as getHeaders } from 'next/headers'
 import config from '@payload-config'
 import { getDemoSubdomain } from '@payload-reserve-demos/seed-utils'
 
+function requireSiteUrl(): string {
+  const url = process.env.NEXT_PUBLIC_SITE_URL
+  if (!url) throw new Error('NEXT_PUBLIC_SITE_URL is not set')
+  return url
+}
+
 export async function createBooking(data: {
   serviceId: string
   resourceId: string
@@ -77,8 +83,7 @@ export async function createBooking(data: {
     if (stripeKey && eventType?.price) {
       try {
         const stripeClient = new Stripe(stripeKey)
-        const siteUrl = process.env.NEXT_PUBLIC_SERVER_URL
-        if (!siteUrl) throw new Error('NEXT_PUBLIC_SERVER_URL is not set')
+        const siteUrl = requireSiteUrl()
 
         const session = await stripeClient.checkout.sessions.create({
           payment_method_types: ['card'],

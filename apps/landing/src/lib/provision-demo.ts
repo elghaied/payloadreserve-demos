@@ -116,6 +116,7 @@ export async function provisionAndDeploy(opts: {
           { key: 'ADMIN_PASSWORD', value: adminPassword, is_secret: true },
           { key: 'SEED_SECRET', value: demoSeedSecret, is_secret: true },
           { key: 'NEXT_PUBLIC_SERVER_URL', value: `${demoProtocol}://${subdomain}` },
+          { key: 'NEXT_PUBLIC_SITE_URL', value: `${demoProtocol}://${subdomain}` },
           { key: 'S3_PREFIX', value: s3Prefix },
           { key: 'S3_BUCKET', value: settings.s3Bucket || '' },
           { key: 'RESEND_FROM_NAME', value: DEMO_FROM_NAMES[demoType] },

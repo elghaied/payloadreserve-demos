@@ -10,9 +10,9 @@ import { getDemoSubdomain } from '@payload-reserve-demos/seed-utils'
 
 type Locale = 'en' | 'fr'
 
-function requireServerUrl(): string {
-  const url = process.env.NEXT_PUBLIC_SERVER_URL
-  if (!url) throw new Error('NEXT_PUBLIC_SERVER_URL is not set')
+function requireSiteUrl(): string {
+  const url = process.env.NEXT_PUBLIC_SITE_URL
+  if (!url) throw new Error('NEXT_PUBLIC_SITE_URL is not set')
   return url
 }
 
@@ -213,8 +213,8 @@ export async function createReservation(data: {
           },
         ],
         mode: 'payment',
-        success_url: `${requireServerUrl()}/${data.locale}/book/success?session_id={CHECKOUT_SESSION_ID}&reservation=${reservation.id}`,
-        cancel_url: `${requireServerUrl()}/${data.locale}/book/cancel?reservation=${reservation.id}`,
+        success_url: `${requireSiteUrl()}/${data.locale}/book/success?session_id={CHECKOUT_SESSION_ID}&reservation=${reservation.id}`,
+        cancel_url: `${requireSiteUrl()}/${data.locale}/book/cancel?reservation=${reservation.id}`,
         metadata: { reservationId: reservation.id, demo_subdomain: getDemoSubdomain() },
       })
 
