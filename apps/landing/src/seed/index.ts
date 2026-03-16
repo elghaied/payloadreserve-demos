@@ -235,6 +235,7 @@ async function seedDemos(payload: Payload, media: SeedMedia): Promise<void> {
         detailCtaTitle: demo.en.detailCtaTitle,
         detailCtaSubtitle: demo.en.detailCtaSubtitle,
         screenshots: enScreenshots,
+        meta: demo.en.meta,
       },
     })
 
@@ -256,6 +257,7 @@ async function seedDemos(payload: Payload, media: SeedMedia): Promise<void> {
         detailCtaTitle: demo.fr.detailCtaTitle,
         detailCtaSubtitle: demo.fr.detailCtaSubtitle,
         screenshots: frScreenshots,
+        meta: demo.fr.meta,
       },
     })
 

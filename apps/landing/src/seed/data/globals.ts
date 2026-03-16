@@ -135,6 +135,12 @@ export const footerData = {
 
 export const homePageData = {
   en: {
+    // SEO
+    meta: {
+      title: 'payload-reserve — Booking & Reservation Plugin for Payload CMS',
+      description:
+        'Drop-in booking, scheduling, and availability for Payload 3.x — salons, hotels, restaurants, events, and more.',
+    },
     // Hero
     heroSection: {
       heroBadge: 'Payload CMS Plugin · MIT License',
@@ -313,6 +319,12 @@ export const homePageData = {
   },
 
   fr: {
+    // SEO
+    meta: {
+      title: 'payload-reserve — Plugin de Réservation pour Payload CMS',
+      description:
+        'Réservation, planification et disponibilité clés-en-main pour Payload 3.x — salons, hôtels, restaurants, événements et plus encore.',
+    },
     // Hero
     heroSection: {
       heroBadge: 'Plugin Payload CMS · Licence MIT',

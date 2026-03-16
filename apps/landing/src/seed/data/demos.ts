@@ -26,6 +26,7 @@ export interface DemoLocale {
   detailCtaTitle: string
   detailCtaSubtitle: string
   screenshots: { alt: string }[]
+  meta: { title: string; description: string }
 }
 
 export const demosData: DemoData[] = [
@@ -108,6 +109,11 @@ export const demosData: DemoData[] = [
       detailCtaTitle: 'Ready to explore Lumière Salon?',
       detailCtaSubtitle: 'Try the live demo or request your own private environment.',
       screenshots: [{ alt: 'Salon demo screenshot' }],
+      meta: {
+        title: 'payload-reserve — Lumière Salon',
+        description:
+          'Per-stylist booking with service menus, buffer times between appointments, and optional Stripe deposit collection.',
+      },
     },
     fr: {
       name: 'Lumière Salon',
@@ -158,6 +164,11 @@ export const demosData: DemoData[] = [
       detailCtaTitle: 'Prêt à explorer Lumière Salon ?',
       detailCtaSubtitle: 'Essayez la démo en direct ou demandez votre propre environnement privé.',
       screenshots: [{ alt: "Capture d'écran de la démo salon" }],
+      meta: {
+        title: 'payload-reserve — Lumière Salon',
+        description:
+          "Réservation par styliste avec menus de services, temps tampon entre rendez-vous et collecte optionnelle d'acompte Stripe.",
+      },
     },
   },
 
@@ -232,6 +243,11 @@ export const demosData: DemoData[] = [
       detailCtaTitle: 'Ready to explore Grand Hotel?',
       detailCtaSubtitle: 'Try the live demo or request your own private environment.',
       screenshots: [],
+      meta: {
+        title: 'payload-reserve — Grand Hotel',
+        description:
+          'Full-day room reservations with quantity-based inventory pools, housekeeping buffers between guests, and email notifications via lifecycle hooks.',
+      },
     },
     fr: {
       name: 'Grand Hôtel',
@@ -274,6 +290,11 @@ export const demosData: DemoData[] = [
       detailCtaTitle: 'Prêt à explorer Grand Hôtel ?',
       detailCtaSubtitle: 'Essayez la démo en direct ou demandez votre propre environnement privé.',
       screenshots: [],
+      meta: {
+        title: 'payload-reserve — Grand Hôtel',
+        description:
+          "Réservations de chambres à la journée avec pools d'inventaire par quantité, temps de ménage entre les clients et notifications e-mail via les hooks du cycle de vie.",
+      },
     },
   },
 
@@ -350,6 +371,11 @@ export const demosData: DemoData[] = [
       detailCtaTitle: 'Ready to explore Le Jardin Doré?',
       detailCtaSubtitle: 'Try the live demo or request your own private environment.',
       screenshots: [],
+      meta: {
+        title: 'payload-reserve — Le Jardin Doré',
+        description:
+          'Curated dining experiences with a custom partySize field, 15-minute table turnover buffers, and a 4-hour cancellation window for same-day flexibility.',
+      },
     },
     fr: {
       name: 'Le Jardin Doré',
@@ -392,6 +418,11 @@ export const demosData: DemoData[] = [
       detailCtaTitle: 'Prêt à explorer Le Jardin Doré ?',
       detailCtaSubtitle: 'Essayez la démo en direct ou demandez votre propre environnement privé.',
       screenshots: [],
+      meta: {
+        title: 'payload-reserve — Le Jardin Doré',
+        description:
+          "Expériences gastronomiques avec un champ partySize personnalisé, rotation des tables de 15 minutes et fenêtre d'annulation de 4 heures pour plus de flexibilité.",
+      },
     },
   },
 
@@ -468,6 +499,11 @@ export const demosData: DemoData[] = [
       detailCtaTitle: 'Ready to explore Éclat Festival?',
       detailCtaSubtitle: 'Try the live demo or request your own private environment.',
       screenshots: [],
+      meta: {
+        title: 'payload-reserve — Éclat Festival',
+        description:
+          'Per-booking ticket quantities with venue seat tracking, 30-minute setup/cleanup buffers, and 48-hour cancellation policy — all managed from the admin panel.',
+      },
     },
     fr: {
       name: 'Éclat Festival',
@@ -510,6 +546,11 @@ export const demosData: DemoData[] = [
       detailCtaTitle: 'Prêt à explorer Éclat Festival ?',
       detailCtaSubtitle: 'Essayez la démo en direct ou demandez votre propre environnement privé.',
       screenshots: [],
+      meta: {
+        title: 'payload-reserve — Éclat Festival',
+        description:
+          "Quantité de billets par réservation avec suivi des places, temps de montage/démontage de 30 minutes et politique d'annulation de 48 heures — le tout géré depuis le panneau admin.",
+      },
     },
   },
 ]
