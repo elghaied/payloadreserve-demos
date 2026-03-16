@@ -125,13 +125,6 @@ export const HomePage: GlobalConfig = {
                   type: 'text',
                   localized: true,
                 },
-                {
-                  name: 'demos',
-                  label: 'Demos',
-                  type: 'relationship',
-                  relationTo: 'demos',
-                  hasMany: true,
-                },
               ],
             },
           ],

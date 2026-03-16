@@ -21,7 +21,6 @@ export function revalidateCollection(collection: string, slug?: string): void {
     if (slug) {
       revalidateTag(`${collection}_${slug}_${locale}`)
     }
+    revalidateTag(`${collection}_list_${locale}`)
   }
-  // Also revalidate any global that references this collection (e.g. home-page → demos)
-  revalidateGlobal('home-page')
 }

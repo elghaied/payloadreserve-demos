@@ -873,7 +873,6 @@ export interface HomePage {
     demosSubheading?: string | null;
     demosComingSoon?: string | null;
     demosExploreLabel?: string | null;
-    demos?: (string | Demo)[] | null;
   };
   adminUiSection?: {
     adminUiLabel?: string | null;
@@ -1181,7 +1180,6 @@ export interface HomePageSelect<T extends boolean = true> {
         demosSubheading?: T;
         demosComingSoon?: T;
         demosExploreLabel?: T;
-        demos?: T;
       };
   adminUiSection?:
     | T

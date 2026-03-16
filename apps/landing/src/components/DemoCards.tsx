@@ -2,10 +2,6 @@ import { Link } from '@/i18n/navigation'
 import Image from 'next/image'
 import type { Demo, HomePage, Media } from '@/payload-types'
 
-function isDemo(item: string | Demo): item is Demo {
-  return typeof item === 'object' && item !== null
-}
-
 function getCardImageSrc(demo: Demo): string {
   const img = demo.cardImage
   if (img && typeof img === 'object' && (img as Media).url) {
@@ -16,14 +12,13 @@ function getCardImageSrc(demo: Demo): string {
 
 type Props = {
   demosSection: HomePage['demosSection']
+  demos: Demo[]
 }
 
-export function DemoCards({ demosSection }: Props) {
+export function DemoCards({ demosSection, demos }: Props) {
   if (!demosSection) {
     return null
   }
-
-  const demos = (demosSection.demos ?? []).filter(isDemo)
 
   return (
     <section id="demos" className="py-24 lg:py-32 px-6 lg:px-8 bg-[#FAFAF8] dark:bg-stone-900">
