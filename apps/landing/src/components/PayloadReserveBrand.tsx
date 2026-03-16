@@ -36,10 +36,7 @@ export function PayloadReserveBrand({
         width={config.logo}
         height={config.logo}
       />
-      Payload
-      <span className="text-violet-700 dark:text-violet-400 -ml-1.5">
-        Reserve
-      </span>
+      Payload<span className="text-violet-700 dark:text-violet-400">Reserve</span>
     </Link>
   )
 }
