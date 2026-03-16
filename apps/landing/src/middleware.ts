@@ -19,7 +19,7 @@ const securityHeaders: Record<string, string> = {
     "style-src 'self' 'unsafe-inline'",
     "img-src 'self' data: blob: https://images.pexels.com https://*.payloadreserve.com",
     "font-src 'self' data:",
-    "connect-src 'self' https://*.payloadreserve.com",
+    "connect-src 'self' https://*.payloadreserve.com https://*.ingest.de.sentry.io",
     "frame-src https://challenges.cloudflare.com",
     "frame-ancestors 'none'",
   ].join('; '),
