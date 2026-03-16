@@ -8,5 +8,8 @@
   },
   "peerDependencies": {
     "payload": ">=3.0.0"
+  },
+  "devDependencies": {
+    "vitest": "4.0.18"
   }
 }

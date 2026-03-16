@@ -68,3 +68,17 @@ export async function createAdminUser(
     console.log(`  Admin already exists: ${email}`)
   }
 }
+
+/**
+ * Extracts the demo subdomain from the app's site URL env var.
+ * Used to populate Stripe metadata for Cloudflare Worker webhook routing.
+ */
+export function getDemoSubdomain(): string {
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXT_PUBLIC_SERVER_URL
+  if (!siteUrl) return 'unknown'
+  try {
+    return new URL(siteUrl).hostname.split('.')[0]
+  } catch {
+    return 'unknown'
+  }
+}
