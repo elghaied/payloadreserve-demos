@@ -6,6 +6,7 @@ import { getPayload, createLocalReq } from 'payload'
 import { checkAvailability } from 'payload-reserve'
 import config from '@/payload.config'
 import { headers as getHeaders } from 'next/headers'
+import { getDemoSubdomain } from '@payload-reserve-demos/seed-utils'
 
 type Locale = 'en' | 'fr'
 
@@ -214,7 +215,7 @@ export async function createReservation(data: {
         mode: 'payment',
         success_url: `${requireServerUrl()}/${data.locale}/book/success?session_id={CHECKOUT_SESSION_ID}&reservation=${reservation.id}`,
         cancel_url: `${requireServerUrl()}/${data.locale}/book/cancel?reservation=${reservation.id}`,
-        metadata: { reservationId: reservation.id },
+        metadata: { reservationId: reservation.id, demo_subdomain: getDemoSubdomain() },
       })
 
       return { reservationId: reservation.id, checkoutUrl: session.url }

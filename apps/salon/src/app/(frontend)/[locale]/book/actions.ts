@@ -6,6 +6,7 @@ import { getPayload, createLocalReq } from 'payload'
 import { getAvailableSlots as pluginGetAvailableSlots } from 'payload-reserve'
 import config from '@/payload.config'
 import { headers as getHeaders } from 'next/headers'
+import { getDemoSubdomain } from '@payload-reserve-demos/seed-utils'
 
 function requireSiteUrl(): string {
   const url = process.env.NEXT_PUBLIC_SITE_URL
@@ -154,7 +155,7 @@ export async function createReservation(data: {
         mode: 'payment',
         success_url: `${requireSiteUrl()}/${data.locale}/book/success?session_id={CHECKOUT_SESSION_ID}&reservation=${reservation.id}`,
         cancel_url: `${requireSiteUrl()}/${data.locale}/book/cancel?reservation=${reservation.id}`,
-        metadata: { reservationId: reservation.id },
+        metadata: { reservationId: reservation.id, demo_subdomain: getDemoSubdomain() },
       })
 
       return { reservationId: reservation.id, checkoutUrl: session.url }

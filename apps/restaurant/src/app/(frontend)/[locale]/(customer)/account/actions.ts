@@ -6,6 +6,7 @@ import { headers as getHeaders } from 'next/headers'
 import Stripe from 'stripe'
 import config from '@/payload.config'
 import type { DiningExperience } from '@/payload-types'
+import { getDemoSubdomain } from '@payload-reserve-demos/seed-utils'
 
 function requireSiteUrl(): string {
   const url = process.env.NEXT_PUBLIC_SITE_URL
@@ -117,7 +118,7 @@ export async function createPaymentSession(
     mode: 'payment',
     success_url: `${siteUrl}/${locale}/book/success?session_id={CHECKOUT_SESSION_ID}&reservation=${reservationId}`,
     cancel_url: `${siteUrl}/${locale}/account/reservations/${reservationId}`,
-    metadata: { reservationId },
+    metadata: { reservationId, demo_subdomain: getDemoSubdomain() },
   })
 
   if (!session.url) throw new Error('Failed to create Stripe session')

@@ -5,6 +5,7 @@ import Stripe from 'stripe'
 import { getPayload } from 'payload'
 import { headers as getHeaders } from 'next/headers'
 import config from '@payload-config'
+import { getDemoSubdomain } from '@payload-reserve-demos/seed-utils'
 
 export async function createBooking(data: {
   serviceId: string
@@ -94,7 +95,7 @@ export async function createBooking(data: {
           mode: 'payment',
           success_url: `${siteUrl}/${data.locale}/book/success?session_id={CHECKOUT_SESSION_ID}&reservation=${booking.id}`,
           cancel_url: `${siteUrl}/${data.locale}/book/cancel?reservation=${booking.id}`,
-          metadata: { reservationId: booking.id },
+          metadata: { reservationId: booking.id, demo_subdomain: getDemoSubdomain() },
         })
 
         return {
