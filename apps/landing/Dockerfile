@@ -34,8 +34,10 @@ COPY apps/landing/        ./apps/landing/
 
 ARG NEXT_PUBLIC_SERVER_URL
 ARG NEXT_PUBLIC_TURNSTILE_SITE_KEY
+ARG NEXT_PUBLIC_SENTRY_DSN
 ENV NEXT_PUBLIC_SERVER_URL="${NEXT_PUBLIC_SERVER_URL}"
 ENV NEXT_PUBLIC_TURNSTILE_SITE_KEY="${NEXT_PUBLIC_TURNSTILE_SITE_KEY}"
+ENV NEXT_PUBLIC_SENTRY_DSN="${NEXT_PUBLIC_SENTRY_DSN}"
 
 # Dummy values so Payload config can load during next build (no DB connection happens).
 # Real values are provided at runtime via the container's environment.

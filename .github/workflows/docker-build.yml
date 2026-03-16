@@ -74,3 +74,4 @@ jobs:
             NEXT_PUBLIC_SERVER_URL=${{ steps.config.outputs.server_url }}
             S3_ENDPOINT=${{ secrets.S3_ENDPOINT }}
             NEXT_PUBLIC_TURNSTILE_SITE_KEY=${{ vars.NEXT_PUBLIC_TURNSTILE_SITE_KEY }}
+            NEXT_PUBLIC_SENTRY_DSN=${{ vars.NEXT_PUBLIC_SENTRY_DSN }}
