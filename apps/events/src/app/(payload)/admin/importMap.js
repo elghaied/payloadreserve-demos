@@ -5,7 +5,6 @@ import { default as default_e34c28bdc97e3fecf976b23b26d64cc9 } from '@/component
 import { default as default_23655fee1d78202ed27de38b57bd38b8 } from '@/components/BeforeDashboard/index.js'
 import { default as default_dfbb95b7940d83c28b2beb58b499d265 } from '@/components/payload/ReturnToWebsite'
 import { S3ClientUploadHandler as S3ClientUploadHandler_f97aa6c64367fa259c5bc0567239ef24 } from '@payloadcms/storage-s3/client'
-import { AdminErrorBoundary as AdminErrorBoundary_e5a9e14bdbe97e70ba60697217fe7688 } from '@payloadcms/plugin-sentry/client'
 import { AvailabilityOverview as AvailabilityOverview_2383f7e0ea34913d1c55a06a593deb84 } from 'payload-reserve/client'
 import { DashboardWidgetServer as DashboardWidgetServer_a3268819f203bc0d60b3365fc0e43e66 } from 'payload-reserve/rsc'
 import { CollectionCards as CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1 } from '@payloadcms/next/rsc'
@@ -18,7 +17,6 @@ export const importMap = {
   "@/components/BeforeDashboard/index.js#default": default_23655fee1d78202ed27de38b57bd38b8,
   "@/components/payload/ReturnToWebsite#default": default_dfbb95b7940d83c28b2beb58b499d265,
   "@payloadcms/storage-s3/client#S3ClientUploadHandler": S3ClientUploadHandler_f97aa6c64367fa259c5bc0567239ef24,
-  "@payloadcms/plugin-sentry/client#AdminErrorBoundary": AdminErrorBoundary_e5a9e14bdbe97e70ba60697217fe7688,
   "payload-reserve/client#AvailabilityOverview": AvailabilityOverview_2383f7e0ea34913d1c55a06a593deb84,
   "payload-reserve/rsc#DashboardWidgetServer": DashboardWidgetServer_a3268819f203bc0d60b3365fc0e43e66,
   "@payloadcms/next/rsc#CollectionCards": CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1
