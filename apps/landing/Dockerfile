@@ -13,6 +13,7 @@ COPY packages/tsconfig/package.json       ./packages/tsconfig/
 COPY packages/types/package.json          ./packages/types/
 COPY packages/coolify-sdk/package.json    ./packages/coolify-sdk/
 COPY packages/email-templates/package.json ./packages/email-templates/
+COPY packages/seed-utils/package.json    ./packages/seed-utils/
 COPY apps/landing/package.json            ./apps/landing/
 
 RUN corepack enable pnpm && pnpm install --frozen-lockfile
@@ -28,6 +29,7 @@ COPY packages/tsconfig/   ./packages/tsconfig/
 COPY packages/types/      ./packages/types/
 COPY packages/coolify-sdk/ ./packages/coolify-sdk/
 COPY packages/email-templates/ ./packages/email-templates/
+COPY packages/seed-utils/     ./packages/seed-utils/
 COPY apps/landing/        ./apps/landing/
 
 ARG NEXT_PUBLIC_SERVER_URL
