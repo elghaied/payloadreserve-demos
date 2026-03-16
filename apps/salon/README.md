@@ -16,7 +16,7 @@ It is the reference implementation for the [`payload-reserve`](https://www.npmjs
 | Database | MongoDB (via `@payloadcms/db-mongodb`) |
 | Plugin | `payload-reserve` v1.1.0 |
 | Payments | Stripe Checkout |
-| Email | Nodemailer (SMTP) |
+| Email | Resend |
 | i18n | `next-intl` (English + French) |
 | Styling | Tailwind CSS v4 |
 | Testing | Vitest (integration) + Playwright (e2e) |
@@ -56,7 +56,6 @@ PAYLOAD_SECRET=any-random-secret-string
 
 # Stripe (test keys from dashboard.stripe.com)
 STRIPE_SECRET_KEY=sk_test_...
-NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_test_...
 STRIPE_WEBHOOK_SECRET=whsec_...   # ← filled automatically by stripe-listen.sh (see below)
 
 # Email (optional — leave blank to skip sending emails)
@@ -230,7 +229,7 @@ Emails are sent via Nodemailer. Hook callbacks in `src/hooks/reservationNotifica
 
 The abandoned payment reminder is handled separately by the `notifyAbandonedPayments` job (`src/tasks/notifyAbandonedPayments.ts`).
 
-Leave SMTP env vars blank in development to skip email sending silently.
+Leave `RESEND_API_KEY` blank in development to skip email sending silently.
 
 ---
 
