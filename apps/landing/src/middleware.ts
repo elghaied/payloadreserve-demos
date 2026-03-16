@@ -2,7 +2,7 @@ import createMiddleware from 'next-intl/middleware'
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 import { routing } from './i18n/routing'
-import { isCfAccessEnabled, verifyCfAccessToken } from './lib/cf-access'
+import { isCfAccessEnabled, isPublicApiRoute, verifyCfAccessToken } from './lib/cf-access'
 
 const intlMiddleware = createMiddleware(routing)
 
@@ -42,26 +42,33 @@ export default async function middleware(request: NextRequest) {
     cfAccessWarned = true
   }
 
-  // ─── /api routes ──────────────────────────────────────────────
-  // CF Access JWT verification is disabled — Cloudflare Access protects
-  // /admin and /api at the proxy level (cookie-scoped to the CF app).
-  // The Cf-Access-Jwt-Assertion header is not forwarded for /api
-  // requests from the admin panel, so app-level verification is not
-  // feasible. Security layers that remain:
-  //   1. Cloudflare Access at the edge (blocks unauthenticated users)
-  //   2. Payload auth (session-based access control per collection)
-  //   3. Security headers below (CSP, HSTS, etc.)
+  // ─── CF Access gate for /api routes ───────────────────────────
+  // Public routes pass through; all others require a valid CF Access JWT.
+  // When CF_ACCESS_TEAM_DOMAIN is not set, protection is disabled (dev mode).
   if (pathname.startsWith('/api/')) {
-    // Optional: verify JWT when header IS present (opportunistic)
     if (isCfAccessEnabled()) {
-      const cfToken = request.headers.get('Cf-Access-Jwt-Assertion')
-      if (cfToken && !(await verifyCfAccessToken(cfToken))) {
-        // Header present but invalid — reject (possible tampering)
-        return addSecurityHeaders(
-          NextResponse.json({ error: 'Unauthorized' }, { status: 403 }),
-        )
+      const method = request.method
+      if (!isPublicApiRoute(method, pathname)) {
+        const cfToken = request.headers.get('Cf-Access-Jwt-Assertion')
+        if (!cfToken) {
+          return addSecurityHeaders(
+            NextResponse.json(
+              { error: 'Unauthorized', debug: 'no_cf_jwt_header' },
+              { status: 403 },
+            ),
+          )
+        }
+        if (!(await verifyCfAccessToken(cfToken))) {
+          return addSecurityHeaders(
+            NextResponse.json(
+              { error: 'Unauthorized', debug: 'jwt_verification_failed' },
+              { status: 403 },
+            ),
+          )
+        }
       }
     }
+    // API routes don't need i18n — pass through with security headers
     const response = NextResponse.next()
     return addSecurityHeaders(response)
   }
