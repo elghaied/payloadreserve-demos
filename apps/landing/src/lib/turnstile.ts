@@ -1,10 +1,5 @@
-import type { InfrastructureSetting } from '@/payload-types'
-
-export async function verifyTurnstile(
-  token: string,
-  settings?: InfrastructureSetting | null,
-): Promise<boolean> {
-  const secret = settings?.turnstileSecretKey
+export async function verifyTurnstile(token: string): Promise<boolean> {
+  const secret = process.env.TURNSTILE_SECRET_KEY
   if (!secret) return false
 
   try {

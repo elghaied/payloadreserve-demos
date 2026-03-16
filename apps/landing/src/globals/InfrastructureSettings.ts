@@ -11,7 +11,6 @@ export const SECRET_FIELDS = [
   'stripeSecretKey',
   'stripeWebhookSecret',
   'cleanupSecret',
-  'turnstileSecretKey',
 ]
 
 function secretText(overrides: {
@@ -190,8 +189,6 @@ export const InfrastructureSettings: GlobalConfig = {
             { name: 'demoTtlHours', type: 'number', label: 'Demo TTL (hours)', defaultValue: 24 },
             { name: 'maxActiveDemos', type: 'number', label: 'Max Active Demos', defaultValue: 20 },
             secretText({ name: 'cleanupSecret', label: 'Cleanup Secret' }),
-            secretText({ name: 'turnstileSecretKey', label: 'Turnstile Secret Key' }),
-            { name: 'turnstileSiteKey', type: 'text', label: 'Turnstile Site Key' },
           ],
         },
       ],

@@ -156,7 +156,7 @@ All infrastructure config managed from the admin panel:
 | **S3 Storage** | Endpoint, bucket, credentials |
 | **Resend** | API key, from address |
 | **Stripe** | Secret key, webhook secret, publishable key |
-| **Demo Config** | Base domain, protocol, TTL hours, max active demos, cleanup secret, Turnstile keys |
+| **Demo Config** | Base domain, protocol, TTL hours, max active demos, cleanup secret |
 
 ---
 

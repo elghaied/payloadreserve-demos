@@ -47,7 +47,7 @@ export async function POST(req: NextRequest) {
   const settings = await getInfraSettings(payload)
 
   const token = turnstileToken ?? ''
-  const turnstileOk = await verifyTurnstile(token, settings)
+  const turnstileOk = await verifyTurnstile(token)
   if (!turnstileOk) {
     return NextResponse.json({ error: 'Turnstile verification failed' }, { status: 400 })
   }

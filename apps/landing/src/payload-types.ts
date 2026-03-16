@@ -1032,8 +1032,6 @@ export interface InfrastructureSetting {
   demoTtlHours?: number | null;
   maxActiveDemos?: number | null;
   cleanupSecret?: string | null;
-  turnstileSecretKey?: string | null;
-  turnstileSiteKey?: string | null;
   lastCleanupAt?: string | null;
   updatedAt?: string | null;
   createdAt?: string | null;
@@ -1353,8 +1351,6 @@ export interface InfrastructureSettingsSelect<T extends boolean = true> {
   demoTtlHours?: T;
   maxActiveDemos?: T;
   cleanupSecret?: T;
-  turnstileSecretKey?: T;
-  turnstileSiteKey?: T;
   lastCleanupAt?: T;
   updatedAt?: T;
   createdAt?: T;
