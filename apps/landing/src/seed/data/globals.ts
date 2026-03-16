@@ -189,7 +189,7 @@ export const homePageData = {
         {
           title: 'Three Booking Types',
           description:
-            'Fixed-duration (appointment), flexible end time, or full-day bookings — set per resource.',
+            'Fixed-duration (appointment), flexible end time, or full-day bookings — set per service.',
         },
         {
           title: 'Configurable Status Machine',
@@ -291,7 +291,7 @@ export const homePageData = {
           title: 'Configure your resources',
           description:
             'Define bookable resources — stylists, rooms, tables, or venues — with custom availability and rules.',
-          code: 'reservePlugin({ resources: [...] })',
+          code: 'payloadReserve({ resources: [...] })',
         },
         {
           title: 'Go live',
@@ -375,7 +375,7 @@ export const homePageData = {
         {
           title: 'Trois types de réservations',
           description:
-            'Durée fixe (rendez-vous), heure de fin flexible, ou réservations à la journée — défini par ressource.',
+            'Durée fixe (rendez-vous), heure de fin flexible, ou réservations à la journée — défini par service.',
         },
         {
           title: 'Machine à états configurable',
@@ -480,7 +480,7 @@ export const homePageData = {
           title: 'Configurer vos ressources',
           description:
             'Définissez des ressources réservables — stylistes, chambres, tables ou salles — avec disponibilités et règles personnalisées.',
-          code: 'reservePlugin({ resources: [...] })',
+          code: 'payloadReserve({ resources: [...] })',
         },
         {
           title: 'Mettre en ligne',
