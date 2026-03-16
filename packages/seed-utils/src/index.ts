@@ -28,7 +28,7 @@ export async function uploadImage(
       },
     })
     console.log(`  Uploaded: ${alt}`)
-    return media.id
+    return String(media.id)
   } catch {
     console.warn(`  Warning: Could not download image for "${alt}", using placeholder`)
     const media = await payload.create({
@@ -41,7 +41,7 @@ export async function uploadImage(
         size: 43,
       },
     })
-    return media.id
+    return String(media.id)
   }
 }
 
