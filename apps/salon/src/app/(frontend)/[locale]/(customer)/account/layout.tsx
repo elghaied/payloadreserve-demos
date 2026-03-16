@@ -20,7 +20,7 @@ export default async function AccountLayout({ children, params }: Props) {
   const headers = await getHeaders()
   const { user } = await payload.auth({ headers })
 
-  if (!user) {
+  if (!user || (user as { collection?: string }).collection !== 'customers') {
     redirect(`/${locale}/login`)
   }
 

@@ -17,7 +17,7 @@ export default async function AccountDashboard({ params }: Props) {
   const payload = await getPayload({ config })
   const headers = await getHeaders()
   const { user } = await payload.auth({ headers })
-  if (!user) return null
+  if (!user || (user as { collection?: string }).collection !== 'customers') return null
 
   const now = new Date().toISOString()
 
