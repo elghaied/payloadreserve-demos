@@ -9,6 +9,7 @@ const withNextIntl = createNextIntlPlugin('./src/i18n/request.ts')
 const nextConfig: NextConfig = {
   output: 'standalone',
   outputFileTracingRoot: '../../',
+  serverExternalPackages: ['require-in-the-middle'],
   experimental: {
     mdxRs: false,
   },
