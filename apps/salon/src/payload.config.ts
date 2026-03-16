@@ -22,8 +22,6 @@ import { Gallery } from './collections/Gallery'
 import { Homepage } from './globals/Homepage'
 import { SiteSettings } from './globals/SiteSettings'
 import { s3Storage } from '@payloadcms/storage-s3'
-import * as Sentry from '@sentry/nextjs'
-import { sentryPlugin } from '@payloadcms/plugin-sentry'
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
@@ -222,6 +220,5 @@ export default buildConfig({
         endpoint: process.env.S3_ENDPOINT,
       },
     }),
-    sentryPlugin({ Sentry }),
   ],
 })
