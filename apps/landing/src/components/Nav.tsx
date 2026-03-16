@@ -1,10 +1,10 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import Image from 'next/image'
 import { Link } from '@/i18n/navigation'
 import { ThemeToggle } from './ThemeToggle'
 import { LocaleSwitcher } from './LocaleSwitcher'
+import { PayloadReserveBrand } from './PayloadReserveBrand'
 import type { Navigation, SiteSetting } from '@/payload-types'
 
 type NavProps = {
@@ -41,20 +41,7 @@ export function Nav({ navigation, urls }: NavProps) {
     <header className="fixed top-0 inset-x-0 z-50 border-b border-gray-200/80 dark:border-stone-700/80 bg-white/90 dark:bg-stone-900/90 backdrop-blur-md shadow-sm">
       <div className="max-w-6xl mx-auto px-6 lg:px-8 h-16 flex items-center justify-between">
         {/* Logo */}
-        <Link
-          href="/"
-          aria-label="payload-reserve home"
-          className="font-mono text-sm font-semibold text-[#1C1917] dark:text-stone-100 tracking-tight select-none"
-        >
-          <Image
-            src="/reserve-logo.svg"
-            alt=""
-            width={24}
-            height={24}
-            className="mr-2 inline-block"
-          />{' '}
-          payload<span className="text-violet-700 dark:text-violet-400">-reserve</span>
-        </Link>
+        <PayloadReserveBrand size="md" className="text-[#1C1917] dark:text-stone-100" />
 
         {/* Desktop nav */}
         <nav className="hidden md:flex items-center gap-6" aria-label="Main navigation">
