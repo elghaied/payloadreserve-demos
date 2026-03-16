@@ -24,4 +24,7 @@ const nextConfig: NextConfig = {
 }
 
 const payloadConfig = withPayload(withNextIntl(nextConfig))
-export default withSentryConfig(payloadConfig, { silent: true, disableLogger: true })
+export default withSentryConfig(payloadConfig, {
+  silent: true,
+  webpack: { treeshake: { removeDebugLogging: true } },
+})
