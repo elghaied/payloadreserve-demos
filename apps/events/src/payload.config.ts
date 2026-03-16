@@ -9,8 +9,6 @@ import { fileURLToPath } from 'url'
 import sharp from 'sharp'
 import { payloadReserve } from 'payload-reserve'
 import { createAdminUser } from '@payload-reserve-demos/seed-utils'
-import * as Sentry from '@sentry/nextjs'
-import { sentryPlugin } from '@payloadcms/plugin-sentry'
 
 import { Users } from './collections/Users'
 import { Media } from './collections/Media'
@@ -230,6 +228,5 @@ export default buildConfig({
         endpoint: process.env.S3_ENDPOINT,
       },
     }),
-    sentryPlugin({ Sentry }),
   ],
 })
