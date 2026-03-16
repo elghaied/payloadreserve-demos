@@ -1,0 +1,21 @@
+{
+  "title": "Documentation",
+  "pages": [
+    "---Getting Started---",
+    "index",
+    "getting-started",
+    "configuration",
+    "---Core Concepts---",
+    "collections",
+    "status-machine",
+    "booking-features",
+    "---Integration---",
+    "hooks-api",
+    "rest-api",
+    "admin-ui",
+    "---Guides---",
+    "examples",
+    "advanced",
+    "development"
+  ]
+}

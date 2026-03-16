@@ -96,7 +96,7 @@ export async function Footer({ locale }: Props) {
         <div className="border-t border-background/10 mt-12 pt-8 text-center text-sm text-background/40">
           &copy; {new Date().getFullYear()} Lumière Salon. By Gshell{' '}
           <img
-            src="/images/gshell-logo.png"
+            src="/gshell-logo-mini.svg"
             alt="Gshell Logo"
             className="inline-block w-4 h-4 ml-1"
           />{' '}

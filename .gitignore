@@ -62,5 +62,5 @@ skills-lock.json
 # worktrees
 .worktrees/
 notes
-docs
+/docs
 .superpowers/

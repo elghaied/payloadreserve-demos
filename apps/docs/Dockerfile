@@ -35,6 +35,8 @@ ENV NODE_ENV=production
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser  --system --uid 1001 nextjs
 
+COPY --from=builder /app/apps/docs/public ./apps/docs/public
+
 RUN mkdir -p apps/docs/.next && chown nextjs:nodejs apps/docs/.next
 
 # standalone output mirrors monorepo root structure
