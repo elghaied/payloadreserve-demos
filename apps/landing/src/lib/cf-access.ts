@@ -55,13 +55,7 @@ export async function verifyCfAccessToken(token: string): Promise<boolean> {
       issuer: `https://${CF_TEAM_DOMAIN}.cloudflareaccess.com`,
     })
     return true
-  } catch (err) {
-    console.error('[cf-access] JWT verification failed:', {
-      error: err instanceof Error ? err.message : String(err),
-      issuer: `https://${CF_TEAM_DOMAIN}.cloudflareaccess.com`,
-      audience: CF_POLICY_AUD ? `${CF_POLICY_AUD.slice(0, 8)}...` : '(empty)',
-      jwksUrl: `https://${CF_TEAM_DOMAIN}.cloudflareaccess.com/cdn-cgi/access/certs`,
-    })
+  } catch {
     return false
   }
 }
