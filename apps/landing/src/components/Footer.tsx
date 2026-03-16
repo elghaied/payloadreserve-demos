@@ -1,5 +1,6 @@
 import { Link } from '@/i18n/navigation'
 import { GShellBrand } from './GShellBrand'
+import { PayloadReserveBrand } from './PayloadReserveBrand'
 import type { Footer as FooterType, SiteSetting } from '@/payload-types'
 
 type Props = {
@@ -18,9 +19,7 @@ export function Footer({ footerData, urls }: Props) {
         <div className="flex flex-col md:flex-row items-start justify-between gap-12 mb-12">
           {/* Brand */}
           <div className="max-w-[260px]">
-            <Link href="/" className="font-mono text-sm font-semibold">
-              payload<span className="text-amber-400">-reserve</span>
-            </Link>
+            <PayloadReserveBrand size="sm" />
             <p className="text-[#78716C] text-sm mt-3 leading-relaxed">{footerData.description}</p>
             <div className="flex items-center gap-2 mt-4">
               <span className="inline-flex items-center gap-1.5 text-[10px] font-mono text-[#78716C] border border-white/10 rounded-full px-3 py-1">
