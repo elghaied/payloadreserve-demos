@@ -50,9 +50,20 @@ export default async function middleware(request: NextRequest) {
       const method = request.method
       if (!isPublicApiRoute(method, pathname)) {
         const cfToken = request.headers.get('Cf-Access-Jwt-Assertion')
-        if (!cfToken || !(await verifyCfAccessToken(cfToken))) {
+        if (!cfToken) {
           return addSecurityHeaders(
-            NextResponse.json({ error: 'Unauthorized' }, { status: 403 }),
+            NextResponse.json(
+              { error: 'Unauthorized', debug: 'no_cf_jwt_header' },
+              { status: 403 },
+            ),
+          )
+        }
+        if (!(await verifyCfAccessToken(cfToken))) {
+          return addSecurityHeaders(
+            NextResponse.json(
+              { error: 'Unauthorized', debug: 'jwt_verification_failed' },
+              { status: 403 },
+            ),
           )
         }
       }
