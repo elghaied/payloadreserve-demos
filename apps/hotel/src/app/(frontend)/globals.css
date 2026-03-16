@@ -19,7 +19,7 @@
   --color-glass: rgba(30, 42, 53, 0.6);
   --color-glass-border: rgba(245, 240, 235, 0.08);
 
-  --font-heading: 'Libre Baskerville', Georgia, serif;
+  --font-heading: var(--font-libre-baskerville), Georgia, serif;
   --font-body: var(--font-geist-sans), system-ui, sans-serif;
 }
 
@@ -201,7 +201,7 @@
 /* ─── Testimonial large quote ─── */
 
 .quote-mark {
-  font-family: 'Libre Baskerville', Georgia, serif;
+  font-family: var(--font-heading);
   font-size: 8rem;
   line-height: 1;
   color: var(--color-primary);

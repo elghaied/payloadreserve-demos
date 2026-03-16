@@ -22,8 +22,8 @@
   --color-glass-border: rgba(240, 230, 234, 0.08);
   --color-burgundy-glow: rgba(196, 117, 138, 0.15);
 
-  --font-heading: 'Cormorant Garamond', Georgia, serif;
-  --font-body: 'Outfit', system-ui, sans-serif;
+  --font-heading: var(--font-cormorant), Georgia, serif;
+  --font-body: var(--font-outfit), system-ui, sans-serif;
 
   --radius: 0.625rem;
 
@@ -223,7 +223,7 @@
 /* ─── Quote mark for testimonials ─── */
 
 .quote-mark {
-  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-family: var(--font-heading);
   font-size: 8rem;
   line-height: 1;
   color: var(--color-primary);

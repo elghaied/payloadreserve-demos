@@ -7,6 +7,7 @@ import React from 'react'
 import { routing } from '@/i18n/routing'
 import { Header } from '@/components/Header'
 import { Footer } from '@/components/Footer'
+import { libreBaskerville } from '@/lib/fonts'
 
 type Props = {
   children: React.ReactNode
@@ -39,16 +40,7 @@ export default async function LocaleLayout({ children, params }: Props) {
   const messages = await getMessages()
 
   return (
-    <html lang={locale} className={GeistSans.variable}>
-      <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        {/* eslint-disable-next-line @next/next/no-page-custom-font */}
-        <link
-          href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap"
-          rel="stylesheet"
-        />
-      </head>
+    <html lang={locale} className={`${GeistSans.variable} ${libreBaskerville.variable}`}>
       <body className="bg-background text-foreground min-h-screen flex flex-col antialiased">
         <NextIntlClientProvider messages={messages}>
           <Header locale={locale} />
