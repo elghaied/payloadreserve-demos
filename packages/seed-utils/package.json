@@ -10,6 +10,7 @@
     "payload": ">=3.0.0"
   },
   "devDependencies": {
+    "@payload-reserve-demos/tsconfig": "workspace:*",
     "vitest": "4.0.18"
   }
 }
