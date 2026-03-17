@@ -12,11 +12,13 @@ const sizeConfig = {
 type PayloadReserveBrandProps = {
   size?: 'sm' | 'md'
   className?: string
+  forceDark?: boolean
 }
 
 export function PayloadReserveBrand({
   size = 'md',
   className,
+  forceDark = false,
 }: PayloadReserveBrandProps) {
   const config = sizeConfig[size]
 
@@ -36,7 +38,7 @@ export function PayloadReserveBrand({
         width={config.logo}
         height={config.logo}
       />
-      Payload<span className="text-violet-700 dark:text-violet-400">Reserve</span>
+      <span>Payload<span className={forceDark ? 'text-violet-400' : 'text-violet-700 dark:text-violet-400'}>Reserve</span></span>
     </Link>
   )
 }
