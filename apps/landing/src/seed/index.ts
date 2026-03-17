@@ -9,7 +9,6 @@ interface SeedMedia {
   cards: Record<string, string>   // demo slug → media id
   salonScreenshot: string
   adminSlides: string[]            // [month, week, day, pending, add, module]
-  privateDemo: string
 }
 
 export async function seed(payload: Payload): Promise<void> {
@@ -29,7 +28,6 @@ export async function seed(payload: Payload): Promise<void> {
     salonCard, hotelCard, restaurantCard, eventsCard,
     salonShot,
     slideMonth, slideWeek, slideDay, slidePending, slideAdd, slideModule,
-    privDemo,
   ] = await Promise.all([
     // Demo card images
     payload.create({ collection: 'media', data: { alt: 'Lumière Salon' },      file: fetchFile('salon.webp') }),
@@ -45,11 +43,9 @@ export async function seed(payload: Payload): Promise<void> {
     payload.create({ collection: 'media', data: { alt: 'Pending reservations' },   file: fetchFile('screenshot-pending.webp') }),
     payload.create({ collection: 'media', data: { alt: 'Add reservation' },        file: fetchFile('screenshot-add-reservation.webp') }),
     payload.create({ collection: 'media', data: { alt: 'Dashboard module' },       file: fetchFile('screenshot-module.webp') }),
-    // Private demo section image
-    payload.create({ collection: 'media', data: { alt: 'Private demo admin panel' }, file: fetchFile('private-demo.webp') }),
   ])
 
-  payload.logger.info('  ✓ 12 images uploaded')
+  payload.logger.info('  ✓ 11 images uploaded')
 
   const media: SeedMedia = {
     cards: {
@@ -63,7 +59,6 @@ export async function seed(payload: Payload): Promise<void> {
       slideMonth.id, slideWeek.id, slideDay.id,
       slidePending.id, slideAdd.id, slideModule.id,
     ],
-    privateDemo: privDemo.id,
   }
 
   // ── 3. Demos ──────────────────────────────────────────────────────────────
@@ -168,10 +163,7 @@ async function seedHomePage(payload: Payload, media: SeedMedia) {
         ...homePageData.en.adminUiSection,
         adminUiSlides: withSlides(homePageData.en.adminUiSection.adminUiSlides),
       },
-      privateDemoSection: {
-        ...homePageData.en.privateDemoSection,
-        privateDemoImage: media.privateDemo,
-      },
+      privateDemoSection: homePageData.en.privateDemoSection,
     },
   })
   await payload.updateGlobal({
@@ -183,10 +175,7 @@ async function seedHomePage(payload: Payload, media: SeedMedia) {
         ...homePageData.fr.adminUiSection,
         adminUiSlides: withSlides(homePageData.fr.adminUiSection.adminUiSlides),
       },
-      privateDemoSection: {
-        ...homePageData.fr.privateDemoSection,
-        privateDemoImage: media.privateDemo,
-      },
+      privateDemoSection: homePageData.fr.privateDemoSection,
     },
   })
 

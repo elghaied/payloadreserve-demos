@@ -1,6 +1,6 @@
-import Image from 'next/image'
 import { Link } from '@/i18n/navigation'
 import type { HomePage } from '@/payload-types'
+import AdminPanelMockup from './AdminPanelMockup'
 
 type Props = {
   privateDemoSection: HomePage['privateDemoSection']
@@ -84,27 +84,10 @@ export function PrivateDemoSection({ privateDemoSection }: Props) {
             </div>
           </div>
 
-          {/* Right: photo */}
+          {/* Right: animated admin mockup */}
           <div className="relative hidden md:block">
             <div className="absolute inset-0 -z-10 rounded-3xl bg-violet-100/40 dark:bg-violet-900/10 blur-3xl" />
-            <div className="relative rounded-2xl overflow-hidden shadow-2xl shadow-black/10 dark:shadow-black/40">
-              <Image
-                src={
-                  privateDemoSection.privateDemoImage &&
-                  typeof privateDemoSection.privateDemoImage === 'object' &&
-                  'url' in privateDemoSection.privateDemoImage &&
-                  typeof privateDemoSection.privateDemoImage.url === 'string'
-                    ? privateDemoSection.privateDemoImage.url
-                    : '/imgs/image-not-found.png'
-                }
-                alt="Team reviewing the admin panel"
-                width={720}
-                height={480}
-                className="w-full h-auto object-cover"
-                sizes="(max-width: 1024px) 100vw, 50vw"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
-            </div>
+            <AdminPanelMockup />
           </div>
         </div>
       </div>

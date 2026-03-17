@@ -180,7 +180,6 @@ export const HomePage: GlobalConfig = {
                   localized: true,
                   fields: [{ name: 'text', type: 'text', required: true }],
                 },
-                { name: 'privateDemoImage', label: 'Image', type: 'upload', relationTo: 'media' },
               ],
             },
           ],

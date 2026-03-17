@@ -902,7 +902,6 @@ export interface HomePage {
           id?: string | null;
         }[]
       | null;
-    privateDemoImage?: (string | null) | Media;
   };
   developerSection?: {
     devLabel?: string | null;
@@ -1208,7 +1207,6 @@ export interface HomePageSelect<T extends boolean = true> {
               text?: T;
               id?: T;
             };
-        privateDemoImage?: T;
       };
   developerSection?:
     | T
