@@ -37,21 +37,21 @@
 
 // ─── Dark Mode ────────────────────────────────────────────────
 [data-theme="dark"] {
-  --theme-elevation-0: #000000;       // Pure black background
-  --theme-elevation-50: #0a0a0a;      // Subtle bg variation
-  --theme-elevation-100: #141414;     // Cards, inputs
-  --theme-elevation-150: #1a1a1a;     // Hover states
-  --theme-elevation-200: #262626;     // Borders
-  --theme-elevation-250: #333333;     // Stronger borders
-  --theme-elevation-300: #404040;     // Disabled borders
-  --theme-elevation-350: #525252;     // Muted elements
-  --theme-elevation-400: #666666;     // Placeholder text
-  --theme-elevation-500: #737373;     // Secondary text
-  --theme-elevation-600: #a3a3a3;     // Body text
-  --theme-elevation-700: #d4d4d4;     // Strong text
-  --theme-elevation-800: #e5e5e5;     // Nav text, headings
-  --theme-elevation-900: #f5f5f5;     // Bright text
-  --theme-elevation-1000: #ffffff;    // Pure white
+  --theme-elevation-0:    #111111;    // Page bg (was #000000)
+  --theme-elevation-50:   #181818;    // Subtle variation (was #0a0a0a)
+  --theme-elevation-100:  #1e1e1e;    // Cards, inputs (was #141414)
+  --theme-elevation-150:  #2a2a2a;    // Hover / grid gaps (was #1a1a1a)
+  --theme-elevation-200:  #333333;    // Borders (was #262626)
+  --theme-elevation-250:  #404040;    // Strong borders (was #333333)
+  --theme-elevation-300:  #4d4d4d;    // Disabled borders (was #404040)
+  --theme-elevation-350:  #5c5c5c;    // Muted elements (was #525252)
+  --theme-elevation-400:  #6b6b6b;    // Placeholder text (was #666666)
+  --theme-elevation-500:  #7a7a7a;    // Secondary text (was #737373)
+  --theme-elevation-600:  #a3a3a3;    // Body text (unchanged)
+  --theme-elevation-700:  #d4d4d4;    // Strong text (unchanged)
+  --theme-elevation-800:  #e5e5e5;    // Nav/headings (unchanged)
+  --theme-elevation-900:  #f0f0f0;    // Bright text (was #f5f5f5)
+  --theme-elevation-1000: #ffffff;    // Pure white (unchanged)
 }
 
 // ─── Component Overrides ──────────────────────────────────────
