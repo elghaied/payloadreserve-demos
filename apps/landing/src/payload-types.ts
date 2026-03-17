@@ -907,12 +907,13 @@ export interface HomePage {
     devLabel?: string | null;
     devHeadline?: string | null;
     devSubtitle?: string | null;
-    devCta?: string | null;
     devNote?: string | null;
-    devSteps?:
+    devCards?:
       | {
           title: string;
-          code?: string | null;
+          description?: string | null;
+          url: string;
+          linkLabel?: string | null;
           id?: string | null;
         }[]
       | null;
@@ -1214,13 +1215,14 @@ export interface HomePageSelect<T extends boolean = true> {
         devLabel?: T;
         devHeadline?: T;
         devSubtitle?: T;
-        devCta?: T;
         devNote?: T;
-        devSteps?:
+        devCards?:
           | T
           | {
               title?: T;
-              code?: T;
+              description?: T;
+              url?: T;
+              linkLabel?: T;
               id?: T;
             };
       };

@@ -63,7 +63,7 @@ export default async function HomePage({ params }: Props) {
       <DemoCards demosSection={homepage.demosSection} demos={demos} />
       <AdminUISection adminUiSection={homepage.adminUiSection} />
       <PrivateDemoSection privateDemoSection={homepage.privateDemoSection} />
-      <DeveloperSection developerSection={homepage.developerSection} githubUrl={urls?.github ?? '#'} />
+      <DeveloperSection developerSection={homepage.developerSection} />
       <HowItWorks howItWorksSection={homepage.howItWorksSection} />
       <CTABanner ctaBannerSection={homepage.ctaBannerSection} urls={urls} />
     </main>
