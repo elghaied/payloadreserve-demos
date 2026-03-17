@@ -6,16 +6,18 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 export type CarouselSlide = {
   src: string
   alt: string
-  caption: string
+  caption?: string
 }
 
 type Props = {
   slides: CarouselSlide[]
   /** Auto-advance interval in ms (default: 5000) */
   interval?: number
+  /** Accessible label for the carousel region (default: "Image carousel") */
+  ariaLabel?: string
 }
 
-export function ImageCarousel({ slides, interval = 5000 }: Props) {
+export function ImageCarousel({ slides, interval = 5000, ariaLabel = 'Image carousel' }: Props) {
   const [currentIndex, setCurrentIndex] = useState(0)
   const [prevIndex, setPrevIndex] = useState<number | null>(null)
   const [isTransitioning, setIsTransitioning] = useState(false)
@@ -104,7 +106,7 @@ export function ImageCarousel({ slides, interval = 5000 }: Props) {
     <div
       role="region"
       aria-roledescription="carousel"
-      aria-label="Admin interface screenshots"
+      aria-label={ariaLabel}
       className="relative aspect-[16/9] w-full bg-gray-100 dark:bg-stone-800 overflow-hidden"
       onMouseEnter={() => {
         isPaused.current = true
@@ -157,12 +159,14 @@ export function ImageCarousel({ slides, interval = 5000 }: Props) {
       )}
 
       {/* Overlay badge with caption */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent flex items-end p-6 pointer-events-none">
-        <span className="inline-flex items-center gap-2 text-xs font-semibold text-white/90 bg-black/40 backdrop-blur-sm px-3 py-1.5 rounded-full border border-white/20">
-          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-          {slides[currentIndex].caption}
-        </span>
-      </div>
+      {slides[currentIndex].caption && (
+        <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent flex items-end p-6 pointer-events-none">
+          <span className="inline-flex items-center gap-2 text-xs font-semibold text-white/90 bg-black/40 backdrop-blur-sm px-3 py-1.5 rounded-full border border-white/20">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+            {slides[currentIndex].caption}
+          </span>
+        </div>
+      )}
 
       {/* Dot indicators */}
       {slides.length > 1 && (

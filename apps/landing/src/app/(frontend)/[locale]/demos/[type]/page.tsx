@@ -1,7 +1,8 @@
 import type { Metadata } from 'next'
 import { Link } from '@/i18n/navigation'
 import { notFound } from 'next/navigation'
-import Image from 'next/image'
+import { ImageCarousel } from '@/components/ImageCarousel'
+import type { CarouselSlide } from '@/components/ImageCarousel'
 import { getPayload, TypedLocale } from 'payload'
 import config from '@payload-config'
 import type { Config, Demo, Media } from '@/payload-types'
@@ -56,6 +57,16 @@ export default async function DemoDetailPage({ params }: Props) {
   }
   const urls = siteSettings.externalUrls
   const isLive = !!demo.liveUrl
+
+  const screenshotSlides: CarouselSlide[] = (demo.screenshots ?? [])
+    .filter((shot) => {
+      const img = shot.image
+      return img && typeof img === 'object' && (img as Media).url
+    })
+    .map((shot) => ({
+      src: ((shot.image as Media).url as string),
+      alt: shot.alt,
+    }))
 
   return (
     <main id="main-content" className="pt-16 bg-[#FAFAF8] dark:bg-stone-900 min-h-screen">
@@ -156,49 +167,35 @@ export default async function DemoDetailPage({ params }: Props) {
           <h2 className="font-display text-[clamp(1.8rem,3.5vw,2.5rem)] text-[#1C1917] dark:text-stone-50 leading-[1.1] mb-8">
             {ui.screenshotsHeading ?? 'Screenshots'}
           </h2>
-          <div className="relative rounded-2xl border border-gray-200 dark:border-stone-700 bg-gradient-to-br from-gray-100 dark:from-stone-800 to-gray-50 dark:to-stone-700 aspect-video flex flex-col items-center justify-center gap-3 shadow-sm overflow-hidden">
-            {(demo.screenshots ?? []).length > 0 ? (
-              (demo.screenshots ?? []).map((shot, i) => {
-                const img = shot.image
-                const src =
-                  img && typeof img === 'object'
-                    ? ((img as Media).url ?? '/imgs/image-not-found.png')
-                    : ''
-                if (!src) return null
-                return (
-                  <Image
-                    key={shot.id ?? i}
-                    src={src}
-                    alt={shot.alt}
-                    fill
-                    className="object-cover object-top"
-                    sizes="(max-width: 1024px) 100vw, 960px"
-                  />
-                )
-              })
-            ) : (
-              <>
-                <span className="text-4xl opacity-30">{demo.emoji}</span>
-                <p className="text-sm font-medium text-gray-400 dark:text-stone-500">
-                  {ui.screenshotsComingSoon ?? 'Screenshots coming soon'}
+          {screenshotSlides.length > 0 ? (
+            <div className="rounded-2xl border border-gray-200 dark:border-stone-700 shadow-sm overflow-hidden">
+              <ImageCarousel
+                slides={screenshotSlides}
+                ariaLabel={`${demo.name} screenshots`}
+              />
+            </div>
+          ) : (
+            <div className="relative rounded-2xl border border-gray-200 dark:border-stone-700 bg-gradient-to-br from-gray-100 dark:from-stone-800 to-gray-50 dark:to-stone-700 aspect-video flex flex-col items-center justify-center gap-3 shadow-sm overflow-hidden">
+              <span className="text-4xl opacity-30">{demo.emoji}</span>
+              <p className="text-sm font-medium text-gray-400 dark:text-stone-500">
+                {ui.screenshotsComingSoon ?? 'Screenshots coming soon'}
+              </p>
+              {isLive && (
+                <p className="text-xs text-gray-400 dark:text-stone-500">
+                  {ui.screenshotsLivePromptBefore ?? 'Visit the'}{' '}
+                  <a
+                    href={demo.liveUrl!}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="underline text-violet-700 dark:text-violet-400"
+                  >
+                    {ui.screenshotsLiveDemoLabel ?? 'live demo'}
+                  </a>{' '}
+                  {ui.screenshotsLivePromptAfter ?? 'to see it in action'}
                 </p>
-                {isLive && (
-                  <p className="text-xs text-gray-400 dark:text-stone-500">
-                    {ui.screenshotsLivePromptBefore ?? 'Visit the'}{' '}
-                    <a
-                      href={demo.liveUrl!}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="underline text-violet-700 dark:text-violet-400"
-                    >
-                      {ui.screenshotsLiveDemoLabel ?? 'live demo'}
-                    </a>{' '}
-                    {ui.screenshotsLivePromptAfter ?? 'to see it in action'}
-                  </p>
-                )}
-              </>
-            )}
-          </div>
+              )}
+            </div>
+          )}
         </div>
       </section>
 
