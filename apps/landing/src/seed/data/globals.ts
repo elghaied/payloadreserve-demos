@@ -267,20 +267,26 @@ export const homePageData = {
     },
     // Developer
     developerSection: {
-      devLabel: 'For Developers',
-      devHeadline: 'Run it on your machine',
+      devLabel: 'Open Source',
+      devHeadline: 'Build with us',
       devSubtitle:
-        'Clone the demo apps monorepo and run any template locally with a single command.',
-      devCta: 'View on GitHub',
-      devNote:
-        'Requires Node ≥18, pnpm, and MongoDB. Demo monorepo coming soon — star the repo to get notified.',
-      devSteps: [
+        'payload-reserve is open-source and community-driven. Whether you want to improve the plugin or build your own booking app, here\'s where to start.',
+      devNote: 'MIT licensed. PRs and feature requests welcome.',
+      devCards: [
         {
-          title: 'Clone the demos repo',
-          code: 'git clone https://github.com/elghaied/payload-reserve-demos',
+          title: 'Contribute to the Plugin',
+          description:
+            'The core reservation engine — report bugs, request features, or submit a pull request. Every contribution helps.',
+          url: 'https://github.com/elghaied/payload-reserve',
+          linkLabel: 'View on GitHub',
         },
-        { title: 'Install dependencies', code: 'pnpm install' },
-        { title: 'Start the salon demo', code: 'pnpm dev:salon' },
+        {
+          title: 'Use the Demo Templates',
+          description:
+            'Four ready-to-run demo apps — salon, hotel, restaurant, and events. Clone one as a starting point for your own project.',
+          url: 'https://github.com/elghaied/payloadreserve-demos',
+          linkLabel: 'Browse Templates',
+        },
       ],
     },
     // How It Works
@@ -462,20 +468,26 @@ export const homePageData = {
     },
     // Developer
     developerSection: {
-      devLabel: 'Pour les développeurs',
-      devHeadline: 'Lancez-le sur votre machine',
+      devLabel: 'Open Source',
+      devHeadline: 'Construisons ensemble',
       devSubtitle:
-        "Clonez le monorepo de démos et lancez n'importe quel template localement avec une seule commande.",
-      devCta: 'Voir sur GitHub',
-      devNote:
-        'Nécessite Node ≥18, pnpm et MongoDB. Monorepo de démos bientôt disponible — mettez une étoile au dépôt pour être notifié.',
-      devSteps: [
+        'payload-reserve est open-source et porté par sa communauté. Que vous souhaitiez améliorer le plugin ou créer votre propre application de réservation, voici par où commencer.',
+      devNote: 'Licence MIT. PRs et demandes de fonctionnalités bienvenues.',
+      devCards: [
         {
-          title: 'Cloner le dépôt des démos',
-          code: 'git clone https://github.com/elghaied/payload-reserve-demos',
+          title: 'Contribuer au plugin',
+          description:
+            'Le moteur de réservation principal — signalez des bugs, proposez des fonctionnalités ou soumettez une pull request. Chaque contribution compte.',
+          url: 'https://github.com/elghaied/payload-reserve',
+          linkLabel: 'Voir sur GitHub',
         },
-        { title: 'Installer les dépendances', code: 'pnpm install' },
-        { title: 'Démarrer la démo salon', code: 'pnpm dev:salon' },
+        {
+          title: 'Utiliser les templates de démo',
+          description:
+            'Quatre applications de démo prêtes à lancer — salon, hôtel, restaurant et événements. Clonez-en une comme point de départ pour votre projet.',
+          url: 'https://github.com/elghaied/payloadreserve-demos',
+          linkLabel: 'Parcourir les templates',
+        },
       ],
     },
     // How It Works
