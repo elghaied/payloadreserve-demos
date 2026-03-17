@@ -5,6 +5,7 @@ import type { EventType, Venue } from '@/payload-types'
 import { getEventTypeColor } from '@/lib/event-colors'
 import { toBcp47 } from '@/lib/utils'
 import type { CustomerInfo } from './TicketInfoStep'
+import { TestCardBanner } from './TestCardBanner'
 
 export function ReviewStep({
   eventType,
@@ -46,6 +47,7 @@ export function ReviewStep({
       <h2 className="mb-6 text-2xl font-black uppercase tracking-[-1px]">
         {t('review')}
       </h2>
+      <TestCardBanner />
       <div className="border-[3px] border-black">
         <table className="w-full">
           <tbody>

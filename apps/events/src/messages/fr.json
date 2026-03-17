@@ -120,7 +120,12 @@
     "backHome": "Retour à l'accueil",
     "next": "Suivant",
     "previous": "Précédent",
-    "perTicket": "par billet"
+    "perTicket": "par billet",
+    "testMode": "Environnement de démonstration",
+    "testCardCopy": "Copier",
+    "testCardCopied": "Copié !",
+    "testCardHint": "N'importe quel nom · Date future · 3 chiffres pour le CVV",
+    "testCardNoCharge": "Aucun frais réel — mode test Stripe"
   },
   "account": {
     "title": "Mon compte",

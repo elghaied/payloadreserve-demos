@@ -120,7 +120,12 @@
     "backHome": "Back to Homepage",
     "next": "Next",
     "previous": "Previous",
-    "perTicket": "per ticket"
+    "perTicket": "per ticket",
+    "testMode": "Demo Environment",
+    "testCardCopy": "Copy",
+    "testCardCopied": "Copied!",
+    "testCardHint": "Any name · Any future date · Any 3-digit CVV",
+    "testCardNoCharge": "No real charges — this is Stripe test mode"
   },
   "account": {
     "title": "My Account",
