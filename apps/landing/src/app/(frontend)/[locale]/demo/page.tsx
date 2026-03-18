@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import { getTranslations } from 'next-intl/server'
 import { DemoRequestForm } from '@/components/DemoRequestForm'
 import { Link } from '@/i18n/navigation'
-import { buildAlternates } from '@/utilities/seo'
+import { buildAlternates, mergeOpenGraph } from '@/utilities/seo'
 
 type Props = {
   params: Promise<{ locale: string }>
@@ -12,10 +12,19 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params
   const t = await getTranslations({ locale, namespace: 'demoRequestPage.meta' })
 
+  const title = t('title')
+  const description = t('description')
+
   return {
-    title: t('title'),
-    description: t('description'),
+    title,
+    description,
     alternates: buildAlternates(locale, '/demo'),
+    openGraph: mergeOpenGraph({
+      title,
+      description,
+      locale,
+      url: `/${locale}/demo`,
+    }),
   }
 }
 

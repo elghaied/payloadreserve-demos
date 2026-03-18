@@ -8,7 +8,7 @@ import config from '@payload-config'
 import type { Config, Demo, Media } from '@/payload-types'
 import { getCachedGlobal } from '@/utilities/getGlobals'
 import { getCachedDocument } from '@/utilities/getDocument'
-import { buildAlternates } from '@/utilities/seo'
+import { buildAlternates, mergeOpenGraph, getOgImageUrl } from '@/utilities/seo'
 
 type Props = {
   params: Promise<{ locale: string; type: string }>
@@ -30,10 +30,21 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const demo = result.docs[0]
   if (!demo) return {}
 
+  const title = demo.meta?.title ?? `${demo.name} Demo - payload-reserve`
+  const description = demo.meta?.description ?? demo.detailDescription ?? demo.description ?? ''
+  const ogImage = getOgImageUrl(demo.meta?.image)
+
   return {
-    title: `${demo.name} Demo - payload-reserve`,
-    description: demo.detailDescription ?? demo.description,
+    title,
+    description,
     alternates: buildAlternates(locale, `/demos/${type}`),
+    openGraph: mergeOpenGraph({
+      title,
+      description,
+      locale,
+      url: `/${locale}/demos/${type}`,
+      images: [{ url: ogImage, width: 1200, height: 630 }],
+    }),
   }
 }
 

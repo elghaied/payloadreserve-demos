@@ -13,7 +13,7 @@ import { DeveloperSection } from '@/components/DeveloperSection'
 import { HowItWorks } from '@/components/HowItWorks'
 import { CTABanner } from '@/components/CTABanner'
 import { getCachedGlobal } from '@/utilities/getGlobals'
-import { buildAlternates } from '@/utilities/seo'
+import { buildAlternates, mergeOpenGraph, getOgImageUrl } from '@/utilities/seo'
 
 type Props = {
   params: Promise<{ locale: string }>
@@ -38,8 +38,24 @@ const getCachedDemos = (locale: TypedLocale) =>
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params
+  const loc = locale as TypedLocale
+  const homepage = await getCachedGlobal('home-page', 1, loc)()
+
+  const title = homepage.meta?.title ?? 'payload-reserve — Booking & Reservation Plugin for Payload CMS'
+  const description = homepage.meta?.description ?? ''
+  const ogImage = getOgImageUrl(homepage.meta?.image)
+
   return {
+    title,
+    description,
     alternates: buildAlternates(locale, '/'),
+    openGraph: mergeOpenGraph({
+      title,
+      description,
+      locale,
+      url: `/${locale}`,
+      images: [{ url: ogImage, width: 1200, height: 630 }],
+    }),
   }
 }
 

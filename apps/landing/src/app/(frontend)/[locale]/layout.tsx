@@ -10,6 +10,7 @@ import { DM_Serif_Display, Outfit, DM_Mono } from 'next/font/google'
 import { Nav } from '@/components/Nav'
 import { Footer } from '@/components/Footer'
 import { getCachedGlobal } from '@/utilities/getGlobals'
+import { mergeOpenGraph, getOgImageUrl } from '@/utilities/seo'
 
 const outfit = Outfit({
   subsets: ['latin'],
@@ -40,10 +41,31 @@ export const dynamic = 'force-dynamic'
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params
   const loc = locale as TypedLocale
-  const siteSettings = await getCachedGlobal('site-settings', 0, loc)()
+  const [siteSettings, homepage] = await Promise.all([
+    getCachedGlobal('site-settings', 0, loc)(),
+    getCachedGlobal('home-page', 1, loc)(),
+  ])
+
+  const title = siteSettings.defaultMeta?.title ?? 'payload-reserve'
+  const description = siteSettings.defaultMeta?.description ?? ''
+  const ogImage = getOgImageUrl(homepage.meta?.image)
+
   return {
-    title: siteSettings.defaultMeta?.title ?? 'payload-reserve',
-    description: siteSettings.defaultMeta?.description ?? '',
+    title,
+    description,
+    metadataBase: new URL(process.env.NEXT_PUBLIC_SERVER_URL || 'https://payloadreserve.com'),
+    openGraph: mergeOpenGraph({
+      title,
+      description,
+      locale,
+      images: [{ url: ogImage, width: 1200, height: 630 }],
+    }),
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: [ogImage],
+    },
   }
 }
 

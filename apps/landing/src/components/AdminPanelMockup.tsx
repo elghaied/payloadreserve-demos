@@ -473,8 +473,8 @@ export default function AdminPanelMockup() {
                   <div style={{ fontSize: 10, fontWeight: 600, color: '#111' }}>
                     Sarah Martin
                   </div>
-                  <div style={{ fontSize: 8, color: '#999' }}>
-                    0605935574 {'\u00b7'} sarah.martin@email.com
+                  <div style={{ fontSize: 8, color: '#999' }} suppressHydrationWarning>
+                    {`0605935574 \u00b7 sarah.martin@email.com`}
                   </div>
                 </div>
               </div>
