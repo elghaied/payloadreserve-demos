@@ -2,7 +2,7 @@ import type { Payload } from 'payload'
 import { uploadImage } from './images.js'
 import { roomTypesData } from './data/roomTypes.js'
 import { amenitiesData } from './data/amenities.js'
-import { homepageData, siteSettingsData } from './data/homepage.js'
+import { homepageData, siteSettingsData, testimonialsCollectionData, galleryData } from './data/homepage.js'
 
 export async function runSeed(payload: Payload): Promise<void> {
   console.log('\n🏨 Starting Grand Hotel seed...\n')
@@ -49,7 +49,7 @@ export async function runSeed(payload: Payload): Promise<void> {
   const aboutImageId = await uploadImage(payload, 'aboutHotel', 'Hotel lobby')
   const roomImages: Record<string, string> = {}
   for (const rt of roomTypesData) {
-    roomImages[rt.imageKey] = await uploadImage(payload, rt.imageKey, rt.name)
+    roomImages[rt.imageKey] = await uploadImage(payload, rt.imageKey, rt.name.en)
   }
   const amenityImages: Record<string, string> = {}
   for (const key of ['pool', 'spa', 'restaurant', 'fitness'] as const) {
@@ -69,18 +69,24 @@ export async function runSeed(payload: Payload): Promise<void> {
       : a.icon === 'restaurant' ? amenityImages.restaurant
       : a.icon === 'fitness' ? amenityImages.fitness
       : undefined
-    await payload.create({
+    const amenity = await payload.create({
       collection: 'amenities',
       data: {
-        name: a.name,
-        description: a.description,
+        name: a.name.en,
+        description: a.description.en,
         icon: a.icon,
         featured: a.featured,
         order: i + 1,
         ...(imageId ? { image: imageId } : {}),
       },
     })
-    console.log(`  Created: ${a.name}`)
+    await payload.update({
+      collection: 'amenities',
+      id: amenity.id,
+      locale: 'fr',
+      data: { name: a.name.fr, description: a.description.fr },
+    })
+    console.log(`  Created: ${a.name.en}`)
   }
 
   // ---- ROOM TYPES (services) ----
@@ -91,8 +97,8 @@ export async function runSeed(payload: Payload): Promise<void> {
     const roomType = await (payload.create as any)({
       collection: 'room-types',
       data: {
-        name: rt.name,
-        description: rt.description,
+        name: rt.name.en,
+        description: rt.description.en,
         duration: rt.duration,
         durationType: rt.durationType,
         price: rt.price,
@@ -102,36 +108,50 @@ export async function runSeed(payload: Payload): Promise<void> {
         image: roomImages[rt.imageKey],
       },
     })
-    roomTypeMap[rt.name] = roomType.id
-    console.log(`  Created: ${rt.name} ($${rt.price}/night)`)
+    await payload.update({
+      collection: 'room-types',
+      id: roomType.id,
+      locale: 'fr',
+      data: { name: rt.name.fr, description: rt.description.fr },
+    })
+    roomTypeMap[rt.name.en] = roomType.id
+    console.log(`  Created: ${rt.name.en} ($${rt.price}/night)`)
   }
 
   // ---- ROOMS (resources with quantity) ----
   console.log('\n🚪 Creating room pools...')
   const roomIds: string[] = []
   for (const rt of roomTypesData) {
-    const roomTypeName = rt.name.replace(' Room', ' Rooms').replace(' Suite', ' Suites')
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const room = await (payload.create as any)({
       collection: 'rooms',
       data: {
-        name: roomTypeName,
-        services: [roomTypeMap[rt.name]],
+        name: rt.poolName.en,
+        services: [roomTypeMap[rt.name.en]],
         quantity: rt.quantity,
         capacityMode: 'per-reservation',
         active: true,
         image: roomImages[rt.imageKey],
-        description: `${rt.quantity} ${roomTypeName.toLowerCase()} available`,
+        description: `${rt.quantity} ${rt.poolName.en.toLowerCase()} available`,
+      },
+    })
+    await payload.update({
+      collection: 'rooms',
+      id: room.id,
+      locale: 'fr',
+      data: {
+        name: rt.poolName.fr,
+        description: `${rt.quantity} ${rt.poolName.fr.toLowerCase()} disponibles`,
       },
     })
     roomIds.push(room.id)
-    console.log(`  Created: ${roomTypeName} (qty: ${rt.quantity})`)
+    console.log(`  Created: ${rt.poolName.en} (qty: ${rt.quantity})`)
   }
 
   // ---- SCHEDULES ----
   console.log('\n📅 Creating schedules...')
   for (let i = 0; i < roomIds.length; i++) {
-    const roomTypeName = roomTypesData[i].name.replace(' Room', ' Rooms').replace(' Suite', ' Suites')
+    const roomTypeName = roomTypesData[i].poolName.en
     await payload.create({
       collection: 'schedules',
       data: {
@@ -226,28 +246,45 @@ export async function runSeed(payload: Payload): Promise<void> {
 
   // ---- TESTIMONIALS ----
   console.log('\n⭐ Creating testimonials...')
-  const testimonialsData = [
-    { quote: 'An extraordinary stay. The Deluxe Suite was impeccable, and the staff anticipated our every need.', author: 'Richard & Catherine M.', rating: 5, roomType: roomTypeMap['Deluxe Suite'], featured: true },
-    { quote: 'The rooftop pool at sunset is worth the trip alone. Combined with the incredible restaurant, this is the finest hotel we\'ve visited.', author: 'James W.', rating: 5, roomType: roomTypeMap['Superior Room'], featured: true },
-    { quote: 'We celebrated our anniversary in the Executive Suite. The private terrace and champagne upon arrival — simply perfect.', author: 'Elena & Marco R.', rating: 5, roomType: roomTypeMap['Executive Suite'], featured: true },
-    { quote: 'Even the Classic Room exceeded our expectations. Beautiful furnishings, impeccable service, and a view that made us never want to leave.', author: 'Sophie L.', rating: 5, roomType: roomTypeMap['Classic Room'], featured: false },
-  ]
-  for (const t of testimonialsData) {
-    await payload.create({ collection: 'testimonials', data: t })
-    console.log(`  Created: "${t.quote.substring(0, 40)}..."`)
+  for (const t of testimonialsCollectionData) {
+    const created = await payload.create({
+      collection: 'testimonials',
+      data: {
+        quote: t.quote.en,
+        author: t.author,
+        rating: t.rating,
+        roomType: roomTypeMap[t.roomTypeKey],
+        featured: t.featured,
+      },
+    })
+    await payload.update({
+      collection: 'testimonials',
+      id: created.id,
+      locale: 'fr',
+      data: { quote: t.quote.fr },
+    })
+    console.log(`  Created: "${t.quote.en.substring(0, 40)}..."`)
   }
 
   // ---- GALLERY ----
   console.log('\n🎨 Creating gallery items...')
-  const galleryItems = [
-    { image: galleryImageIds[0], caption: 'Our magnificent lobby', category: 'lobby' as const, featured: true },
-    { image: galleryImageIds[1], caption: 'Deluxe Suite bedroom', category: 'rooms' as const, featured: true },
-    { image: galleryImageIds[2], caption: 'Rooftop dining terrace', category: 'dining' as const, featured: false },
-    { image: galleryImageIds[3], caption: 'Grand entrance', category: 'exterior' as const, featured: false },
-  ]
-  for (const item of galleryItems) {
-    await payload.create({ collection: 'gallery', data: item })
-    console.log(`  Created: ${item.caption}`)
+  for (const item of galleryData) {
+    const created = await payload.create({
+      collection: 'gallery',
+      data: {
+        image: galleryImageIds[item.imageIndex],
+        caption: item.caption.en,
+        category: item.category,
+        featured: item.featured,
+      },
+    })
+    await payload.update({
+      collection: 'gallery',
+      id: created.id,
+      locale: 'fr',
+      data: { caption: item.caption.fr },
+    })
+    console.log(`  Created: ${item.caption.en}`)
   }
 
   // ---- HOMEPAGE GLOBAL ----
@@ -268,6 +305,12 @@ export async function runSeed(payload: Payload): Promise<void> {
     },
   })
 
+  // Read back to get testimonials array row IDs so Payload matches
+  // existing rows instead of replacing them (which would lose EN values)
+  const homepage = await payload.findGlobal({ slug: 'homepage' })
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const testimonialRowIds = (homepage.testimonials as any[])?.map((t) => t.id) || []
+
   await payload.updateGlobal({
     slug: 'homepage',
     locale: 'fr',
@@ -276,7 +319,7 @@ export async function runSeed(payload: Payload): Promise<void> {
       about: { heading: fr.about.heading, image: aboutImageId },
       roomsShowcase: fr.roomsShowcase,
       amenitiesSection: fr.amenitiesSection,
-      testimonials: fr.testimonials,
+      testimonials: fr.testimonials.map((t, idx) => ({ ...t, id: testimonialRowIds[idx] })),
       cta: fr.cta,
     },
   })

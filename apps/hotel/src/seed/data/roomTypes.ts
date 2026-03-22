@@ -1,19 +1,27 @@
 export const roomTypesData = [
   {
-    name: 'Classic Room',
-    description: 'A refined retreat featuring elegant furnishings, a king-size bed, marble bathroom, and views of the city skyline. 30 sqm of comfort.',
-    duration: 1440,       // 24 hours = 1 night minimum
+    name: { en: 'Classic Room', fr: 'Chambre Classique' },
+    poolName: { en: 'Classic Rooms', fr: 'Chambres Classiques' },
+    description: {
+      en: 'A refined retreat featuring elegant furnishings, a king-size bed, marble bathroom, and views of the city skyline. 30 sqm of comfort.',
+      fr: 'Un refuge raffiné avec un mobilier élégant, un lit king-size, une salle de bain en marbre et une vue sur les toits de la ville. 30 m² de confort.',
+    },
+    duration: 1440,
     durationType: 'flexible' as const,
     price: 189,
     bufferTimeBefore: 0,
-    bufferTimeAfter: 240,  // 4 hours housekeeping
+    bufferTimeAfter: 240,
     active: true,
     imageKey: 'classicRoom' as const,
     quantity: 40,
   },
   {
-    name: 'Superior Room',
-    description: 'Elevated luxury with park views, a sitting area, premium bedding, rain shower, and complimentary minibar. 35 sqm.',
+    name: { en: 'Superior Room', fr: 'Chambre Supérieure' },
+    poolName: { en: 'Superior Rooms', fr: 'Chambres Supérieures' },
+    description: {
+      en: 'Elevated luxury with park views, a sitting area, premium bedding, rain shower, and complimentary minibar. 35 sqm.',
+      fr: 'Un luxe rehaussé avec vue sur le parc, un coin salon, une literie haut de gamme, une douche à effet pluie et un minibar offert. 35 m².',
+    },
     duration: 1440,
     durationType: 'flexible' as const,
     price: 249,
@@ -24,8 +32,12 @@ export const roomTypesData = [
     quantity: 25,
   },
   {
-    name: 'Deluxe Suite',
-    description: 'A spacious suite with separate living area, panoramic windows, soaking tub, walk-in closet, and butler service. 55 sqm.',
+    name: { en: 'Deluxe Suite', fr: 'Suite Deluxe' },
+    poolName: { en: 'Deluxe Suites', fr: 'Suites Deluxe' },
+    description: {
+      en: 'A spacious suite with separate living area, panoramic windows, soaking tub, walk-in closet, and butler service. 55 sqm.',
+      fr: 'Une suite spacieuse avec salon séparé, fenêtres panoramiques, baignoire profonde, dressing et service de majordome. 55 m².',
+    },
     duration: 1440,
     durationType: 'flexible' as const,
     price: 399,
@@ -36,8 +48,12 @@ export const roomTypesData = [
     quantity: 12,
   },
   {
-    name: 'Executive Suite',
-    description: 'The pinnacle of sophistication — private terrace, dining room, study, two bathrooms, and personalized concierge. 80 sqm.',
+    name: { en: 'Executive Suite', fr: 'Suite Exécutive' },
+    poolName: { en: 'Executive Suites', fr: 'Suites Exécutives' },
+    description: {
+      en: 'The pinnacle of sophistication — private terrace, dining room, study, two bathrooms, and personalized concierge. 80 sqm.',
+      fr: 'Le summum du raffinement — terrasse privée, salle à manger, bureau, deux salles de bain et conciergerie personnalisée. 80 m².',
+    },
     duration: 1440,
     durationType: 'flexible' as const,
     price: 599,
@@ -48,13 +64,17 @@ export const roomTypesData = [
     quantity: 6,
   },
   {
-    name: 'Presidential Suite',
-    description: 'An unparalleled experience occupying the top floor — grand salon, private spa, chef\'s kitchen, wrap-around terrace, and 24-hour butler. 150 sqm.',
+    name: { en: 'Presidential Suite', fr: 'Suite Présidentielle' },
+    poolName: { en: 'Presidential Suites', fr: 'Suites Présidentielles' },
+    description: {
+      en: 'An unparalleled experience occupying the top floor — grand salon, private spa, chef\'s kitchen, wrap-around terrace, and 24-hour butler. 150 sqm.',
+      fr: 'Une expérience inégalée occupant le dernier étage — grand salon, spa privé, cuisine du chef, terrasse panoramique et majordome 24h/24. 150 m².',
+    },
     duration: 1440,
     durationType: 'flexible' as const,
     price: 1299,
     bufferTimeBefore: 0,
-    bufferTimeAfter: 360,  // 6 hours for deep cleaning
+    bufferTimeAfter: 360,
     active: true,
     imageKey: 'presidentialSuite' as const,
     quantity: 2,

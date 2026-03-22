@@ -76,3 +76,90 @@ export const siteSettingsData = {
     { platform: 'tripadvisor' as const, url: '#' },
   ],
 }
+
+// Testimonials collection data (separate from homepage global testimonials).
+// `quote` is localized; `author`, `rating`, `featured` are not.
+// `roomTypeKey` is the EN room type name for looking up IDs during seeding.
+export const testimonialsCollectionData = [
+  {
+    quote: {
+      en: 'An extraordinary stay. The Deluxe Suite was impeccable, and the staff anticipated our every need.',
+      fr: 'Un séjour extraordinaire. La Suite Deluxe était impeccable et le personnel a anticipé chacun de nos besoins.',
+    },
+    author: 'Richard & Catherine M.',
+    rating: 5,
+    roomTypeKey: 'Deluxe Suite',
+    featured: true,
+  },
+  {
+    quote: {
+      en: 'The rooftop pool at sunset is worth the trip alone. Combined with the incredible restaurant, this is the finest hotel we\'ve visited.',
+      fr: 'La piscine sur le toit au coucher du soleil vaut le déplacement à elle seule. Combiné au restaurant incroyable, c\'est le plus bel hôtel que nous ayons visité.',
+    },
+    author: 'James W.',
+    rating: 5,
+    roomTypeKey: 'Superior Room',
+    featured: true,
+  },
+  {
+    quote: {
+      en: 'We celebrated our anniversary in the Executive Suite. The private terrace and champagne upon arrival — simply perfect.',
+      fr: 'Nous avons célébré notre anniversaire dans la Suite Exécutive. La terrasse privée et le champagne à l\'arrivée — simplement parfait.',
+    },
+    author: 'Elena & Marco R.',
+    rating: 5,
+    roomTypeKey: 'Executive Suite',
+    featured: true,
+  },
+  {
+    quote: {
+      en: 'Even the Classic Room exceeded our expectations. Beautiful furnishings, impeccable service, and a view that made us never want to leave.',
+      fr: 'Même la Chambre Classique a dépassé nos attentes. Un mobilier magnifique, un service impeccable et une vue qui nous a donné envie de ne jamais partir.',
+    },
+    author: 'Sophie L.',
+    rating: 5,
+    roomTypeKey: 'Classic Room',
+    featured: false,
+  },
+]
+
+// Gallery data. `caption` is localized; `category`, `featured` are not.
+// `imageIndex` maps to the galleryImageIds array built during seeding.
+export const galleryData = [
+  {
+    caption: {
+      en: 'Our magnificent lobby',
+      fr: 'Notre magnifique hall d\'entrée',
+    },
+    category: 'lobby' as const,
+    featured: true,
+    imageIndex: 0,
+  },
+  {
+    caption: {
+      en: 'Deluxe Suite bedroom',
+      fr: 'Chambre de la Suite Deluxe',
+    },
+    category: 'rooms' as const,
+    featured: true,
+    imageIndex: 1,
+  },
+  {
+    caption: {
+      en: 'Rooftop dining terrace',
+      fr: 'Terrasse de restauration sur le toit',
+    },
+    category: 'dining' as const,
+    featured: false,
+    imageIndex: 2,
+  },
+  {
+    caption: {
+      en: 'Grand entrance',
+      fr: 'L\'entrée principale',
+    },
+    category: 'exterior' as const,
+    featured: false,
+    imageIndex: 3,
+  },
+]
