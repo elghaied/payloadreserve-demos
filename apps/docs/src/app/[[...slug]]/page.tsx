@@ -6,7 +6,8 @@ import {
   DocsBody,
   DocsTitle,
   DocsDescription,
-} from 'fumadocs-ui/page'
+  EditOnGitHub,
+} from 'fumadocs-ui/layouts/docs/page'
 import defaultMdxComponents from 'fumadocs-ui/mdx'
 import * as TabsComponents from 'fumadocs-ui/components/tabs'
 import { source } from '@/lib/source'
@@ -35,18 +36,15 @@ export default async function Page({ params }: PageProps) {
     <DocsPage
       toc={data.toc ?? []}
       full={data.full}
-      editOnGithub={{
-        owner: 'elghaied',
-        repo: 'payload-reserve',
-        sha: 'main',
-        path: `docs/${page.path}`,
-      }}
     >
       <DocsTitle>{data.title}</DocsTitle>
       <DocsDescription>{data.description}</DocsDescription>
       <DocsBody>
         <MDX components={mdxComponents} />
       </DocsBody>
+      <EditOnGitHub
+        href={`https://github.com/elghaied/payload-reserve/blob/main/docs/${page.path}`}
+      />
     </DocsPage>
   )
 }
