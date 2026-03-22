@@ -2,7 +2,7 @@ import { CustomerField as CustomerField_2383f7e0ea34913d1c55a06a593deb84 } from 
 import { CalendarView as CalendarView_2383f7e0ea34913d1c55a06a593deb84 } from 'payload-reserve/client'
 import { default as default_6f14b747d7d9d385f91171711bbf7132 } from '@/components/payload/Icon'
 import { default as default_e34c28bdc97e3fecf976b23b26d64cc9 } from '@/components/payload/Logo'
-import { default as default_23655fee1d78202ed27de38b57bd38b8 } from '@/components/BeforeDashboard/index.js'
+import { default as default_96854b5658d092241897e1c658c43d04 } from '@/components/BeforeDashboard/index'
 import { default as default_dfbb95b7940d83c28b2beb58b499d265 } from '@/components/payload/ReturnToWebsite'
 import { S3ClientUploadHandler as S3ClientUploadHandler_f97aa6c64367fa259c5bc0567239ef24 } from '@payloadcms/storage-s3/client'
 import { AvailabilityOverview as AvailabilityOverview_2383f7e0ea34913d1c55a06a593deb84 } from 'payload-reserve/client'
@@ -14,7 +14,7 @@ export const importMap = {
   "payload-reserve/client#CalendarView": CalendarView_2383f7e0ea34913d1c55a06a593deb84,
   "@/components/payload/Icon#default": default_6f14b747d7d9d385f91171711bbf7132,
   "@/components/payload/Logo#default": default_e34c28bdc97e3fecf976b23b26d64cc9,
-  "@/components/BeforeDashboard/index.js#default": default_23655fee1d78202ed27de38b57bd38b8,
+  "@/components/BeforeDashboard/index#default": default_96854b5658d092241897e1c658c43d04,
   "@/components/payload/ReturnToWebsite#default": default_dfbb95b7940d83c28b2beb58b499d265,
   "@payloadcms/storage-s3/client#S3ClientUploadHandler": S3ClientUploadHandler_f97aa6c64367fa259c5bc0567239ef24,
   "payload-reserve/client#AvailabilityOverview": AvailabilityOverview_2383f7e0ea34913d1c55a06a593deb84,

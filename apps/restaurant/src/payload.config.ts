@@ -50,7 +50,7 @@ export default buildConfig({
       icons: [{ rel: 'icon', url: '/favicon.svg' }],
     },
     components: {
-      beforeDashboard: ['@/components/BeforeDashboard/index.js'],
+      beforeDashboard: ['@/components/BeforeDashboard/index'],
       graphics: {
         Logo: '@/components/payload/Logo',
         Icon: '@/components/payload/Icon',

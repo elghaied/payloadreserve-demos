@@ -1,6 +1,6 @@
 import type { Endpoint } from 'payload'
 import { rateLimit } from '@/lib/rate-limit'
-import { runSeed } from '../seed/index.js'
+import { runSeed } from '../seed/index'
 
 export const seedEndpoint: Omit<Endpoint, 'root'> = {
   path: '/seed',

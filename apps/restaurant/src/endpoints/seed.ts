@@ -24,7 +24,7 @@ export const seedEndpoint: Omit<Endpoint, 'root'> = {
     }
 
     try {
-      await (await import('../seed/index.js')).runSeed(req.payload)
+      await (await import('../seed/index')).runSeed(req.payload)
       return Response.json({ success: true, message: 'Database seeded successfully' })
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : 'Unknown error'

@@ -1,9 +1,9 @@
 import type { Payload } from 'payload'
-import { uploadImage } from './images.js'
-import { categoriesData } from './data/categories.js'
-import { servicesData } from './data/services.js'
-import { specialistsData } from './data/specialists.js'
-import { homepageData, siteSettingsData, testimonialsCollectionData, galleryData } from './data/homepage.js'
+import { uploadImage } from './images'
+import { categoriesData } from './data/categories'
+import { servicesData } from './data/services'
+import { specialistsData } from './data/specialists'
+import { homepageData, siteSettingsData, testimonialsCollectionData, galleryData } from './data/homepage'
 
 export async function runSeed(payload: Payload): Promise<void> {
   console.log('\n🌱 Starting seed...\n')

@@ -8,7 +8,7 @@ const locales = ['en', 'fr', 'default'] as const
  */
 export function revalidateGlobal(slug: string): void {
   for (const locale of locales) {
-    revalidateTag(`global_${slug}_${locale}`)
+    revalidateTag(`global_${slug}_${locale}`, 'default')
   }
 }
 
@@ -19,8 +19,8 @@ export function revalidateGlobal(slug: string): void {
 export function revalidateCollection(collection: string, slug?: string): void {
   for (const locale of locales) {
     if (slug) {
-      revalidateTag(`${collection}_${slug}_${locale}`)
+      revalidateTag(`${collection}_${slug}_${locale}`, 'default')
     }
-    revalidateTag(`${collection}_list_${locale}`)
+    revalidateTag(`${collection}_list_${locale}`, 'default')
   }
 }

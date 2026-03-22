@@ -10,7 +10,7 @@ import sharp from 'sharp'
 import { createAdminUser } from '@payload-reserve-demos/seed-utils'
 import { resetPasswordEmail, resetPasswordSubject } from './email/templates/resetPassword'
 
-import { seedEndpoint } from './endpoints/seed.js'
+import { seedEndpoint } from './endpoints/seed'
 import { notifyAfterConfirm, notifyAfterCancel } from './hooks/reservationNotifications'
 import { cancelStaleReservationsTask } from './tasks/cancelStaleReservations'
 import { Users } from './collections/Users'
@@ -47,7 +47,7 @@ export default buildConfig({
       icons: [{ rel: 'icon', url: '/favicon.svg' }],
     },
     components: {
-      beforeDashboard: ['@/components/BeforeDashboard/index.js'],
+      beforeDashboard: ['@/components/BeforeDashboard/index'],
       graphics: {
         Logo: '@/components/payload/Logo',
         Icon: '@/components/payload/Icon',

@@ -1,7 +1,7 @@
 import 'dotenv/config'
 import { getPayload } from 'payload'
-import config from '../payload.config.js'
-import { runSeed } from './index.js'
+import config from '../payload.config'
+import { runSeed } from './index'
 
 async function main() {
   const payload = await getPayload({ config })

@@ -1,12 +1,12 @@
 import type { Payload } from 'payload'
-import { uploadImage, type ImageKey } from './images.js'
-import { eventTypesData } from './data/eventTypes.js'
-import { venuesData } from './data/venues.js'
-import { artistsData } from './data/artists.js'
-import { seasonsData } from './data/seasons.js'
-import { announcementsData } from './data/announcements.js'
-import { testimonialsData } from './data/testimonials.js'
-import { homepageData, siteSettingsData } from './data/homepage.js'
+import { uploadImage, type ImageKey } from './images'
+import { eventTypesData } from './data/eventTypes'
+import { venuesData } from './data/venues'
+import { artistsData } from './data/artists'
+import { seasonsData } from './data/seasons'
+import { announcementsData } from './data/announcements'
+import { testimonialsData } from './data/testimonials'
+import { homepageData, siteSettingsData } from './data/homepage'
 
 export async function runSeed(payload: Payload) {
   payload.logger.info('--- Seeding Events Database ---')

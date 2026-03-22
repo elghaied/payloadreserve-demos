@@ -39,7 +39,7 @@ export default async function Page({ params }: PageProps) {
         owner: 'elghaied',
         repo: 'payload-reserve',
         sha: 'main',
-        path: `docs/${page.file.path}`,
+        path: `docs/${page.path}`,
       }}
     >
       <DocsTitle>{data.title}</DocsTitle>

@@ -10,8 +10,8 @@
       "@/*": [
         "./src/*"
       ],
-      "@/.source": [
-        "./.source"
+      "@/.source/*": [
+        "./.source/*"
       ]
     },
     "incremental": true

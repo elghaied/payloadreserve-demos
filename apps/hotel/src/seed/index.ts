@@ -1,8 +1,8 @@
 import type { Payload } from 'payload'
-import { uploadImage } from './images.js'
-import { roomTypesData } from './data/roomTypes.js'
-import { amenitiesData } from './data/amenities.js'
-import { homepageData, siteSettingsData, testimonialsCollectionData, galleryData } from './data/homepage.js'
+import { uploadImage } from './images'
+import { roomTypesData } from './data/roomTypes'
+import { amenitiesData } from './data/amenities'
+import { homepageData, siteSettingsData, testimonialsCollectionData, galleryData } from './data/homepage'
 
 export async function runSeed(payload: Payload): Promise<void> {
   console.log('\n🏨 Starting Grand Hotel seed...\n')

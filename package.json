@@ -26,7 +26,7 @@
     "turbo": "^2.3.3"
   },
   "engines": {
-    "node": "^18.20.2 || >=20.9.0",
+    "node": ">=20.9.0",
     "pnpm": "^9 || ^10"
   },
   "pnpm": {
@@ -37,7 +37,7 @@
       "unrs-resolver"
     ],
     "overrides": {
-      "payload": "3.79.0"
+      "payload": "3.80.0"
     }
   }
 }

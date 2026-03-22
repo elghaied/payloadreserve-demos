@@ -24,7 +24,7 @@ export const seedEndpoint: Omit<Endpoint, 'root'> = {
     }
 
     try {
-      const { runSeed } = await import('../seed/index.js')
+      const { runSeed } = await import('../seed/index')
       await runSeed(payload)
       return Response.json({ success: true, message: 'Database seeded successfully' })
     } catch (error) {

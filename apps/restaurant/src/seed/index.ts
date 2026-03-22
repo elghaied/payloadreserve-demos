@@ -1,14 +1,14 @@
 import type { Payload } from 'payload'
 import type { SiteSetting, Space } from '@/payload-types'
-import { uploadImage, type ImageKey } from './images.js'
-import { diningExperiencesData } from './data/diningExperiences.js'
-import { tablesData } from './data/tables.js'
-import { menuData } from './data/menu.js'
-import { teamData } from './data/team.js'
-import { wineListData } from './data/wineList.js'
-import { spacesData } from './data/spaces.js'
-import { announcementsData } from './data/announcements.js'
-import { homepageData, siteSettingsData } from './data/homepage.js'
+import { uploadImage, type ImageKey } from './images'
+import { diningExperiencesData } from './data/diningExperiences'
+import { tablesData } from './data/tables'
+import { menuData } from './data/menu'
+import { teamData } from './data/team'
+import { wineListData } from './data/wineList'
+import { spacesData } from './data/spaces'
+import { announcementsData } from './data/announcements'
+import { homepageData, siteSettingsData } from './data/homepage'
 
 export async function runSeed(payload: Payload) {
   payload.logger.info('--- Seeding Restaurant Database ---')
