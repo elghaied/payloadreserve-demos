@@ -1,7 +1,10 @@
 export const specialistsData = [
   {
     name: 'Amélie Dubois',
-    description: 'Senior Esthetician — Facials, Lash & Brow',
+    description: {
+      en: 'Senior Esthetician — Facials, Lash & Brow',
+      fr: 'Esthéticienne Senior — Soins du Visage, Cils & Sourcils',
+    },
     serviceCategories: ['Facials', 'Lash & Brow'],
     imageKey: 'specialist1' as const,
     schedule: {
@@ -13,7 +16,10 @@ export const specialistsData = [
   },
   {
     name: 'Claire Fontaine',
-    description: 'Waxing Specialist — Waxing, Brow Shaping',
+    description: {
+      en: 'Waxing Specialist — Waxing, Brow Shaping',
+      fr: 'Spécialiste en Épilation — Épilation, Mise en Forme des Sourcils',
+    },
     serviceCategories: ['Waxing', 'Lash & Brow'],
     imageKey: 'specialist2' as const,
     schedule: {
@@ -26,7 +32,10 @@ export const specialistsData = [
   },
   {
     name: 'Nadia Khalil',
-    description: 'Massage Therapist — Massage, Classic Facial',
+    description: {
+      en: 'Massage Therapist — Massage, Classic Facial',
+      fr: 'Massothérapeute — Massage, Soin du Visage Classique',
+    },
     serviceCategories: ['Massage', 'Facials'],
     imageKey: 'specialist3' as const,
     schedule: {
@@ -39,7 +48,10 @@ export const specialistsData = [
   },
   {
     name: 'Isabelle Morel',
-    description: 'Nail Artist — Nails, Brow Shaping',
+    description: {
+      en: 'Nail Artist — Nails, Brow Shaping',
+      fr: 'Prothésiste Ongulaire — Ongles, Mise en Forme des Sourcils',
+    },
     serviceCategories: ['Nails', 'Lash & Brow'],
     imageKey: 'specialist4' as const,
     schedule: {

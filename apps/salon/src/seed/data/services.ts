@@ -1,7 +1,10 @@
 export const servicesData = [
   {
-    name: 'Classic Facial',
-    description: 'A rejuvenating facial treatment that cleanses, exfoliates, and hydrates for a radiant complexion.',
+    name: { en: 'Classic Facial', fr: 'Soin du Visage Classique' },
+    description: {
+      en: 'A rejuvenating facial treatment that cleanses, exfoliates, and hydrates for a radiant complexion.',
+      fr: 'Un soin du visage rajeunissant qui nettoie, exfolie et hydrate pour un teint radieux.',
+    },
     duration: 60,
     price: 85,
     bufferTimeBefore: 5,
@@ -10,8 +13,11 @@ export const servicesData = [
     active: true,
   },
   {
-    name: 'Deep Cleansing Facial',
-    description: 'An intensive deep-cleaning treatment targeting congestion, blackheads, and uneven texture for clear, smooth skin.',
+    name: { en: 'Deep Cleansing Facial', fr: 'Soin Nettoyant en Profondeur' },
+    description: {
+      en: 'An intensive deep-cleaning treatment targeting congestion, blackheads, and uneven texture for clear, smooth skin.',
+      fr: 'Un soin nettoyant intensif ciblant les impuretés, les points noirs et les irrégularités pour une peau claire et lisse.',
+    },
     duration: 90,
     price: 120,
     bufferTimeBefore: 5,
@@ -20,8 +26,11 @@ export const servicesData = [
     active: true,
   },
   {
-    name: 'Brazilian Wax',
-    description: 'Professional Brazilian waxing with premium soft wax for smooth, long-lasting results.',
+    name: { en: 'Brazilian Wax', fr: 'Épilation Brésilienne' },
+    description: {
+      en: 'Professional Brazilian waxing with premium soft wax for smooth, long-lasting results.',
+      fr: 'Épilation brésilienne professionnelle avec cire douce de qualité supérieure pour des résultats lisses et durables.',
+    },
     duration: 30,
     price: 55,
     bufferTimeBefore: 5,
@@ -30,8 +39,11 @@ export const servicesData = [
     active: true,
   },
   {
-    name: 'Full Leg Wax',
-    description: 'Complete leg waxing from ankle to hip for silky-smooth legs that last weeks.',
+    name: { en: 'Full Leg Wax', fr: 'Épilation Jambes Complètes' },
+    description: {
+      en: 'Complete leg waxing from ankle to hip for silky-smooth legs that last weeks.',
+      fr: 'Épilation complète des jambes de la cheville à la hanche pour des jambes soyeuses qui durent des semaines.',
+    },
     duration: 45,
     price: 75,
     bufferTimeBefore: 5,
@@ -40,8 +52,11 @@ export const servicesData = [
     active: true,
   },
   {
-    name: 'Lash Lift & Tint',
-    description: 'Semi-permanent lash lift with tint to enhance your natural lashes — wake up with beautiful, curled lashes every day.',
+    name: { en: 'Lash Lift & Tint', fr: 'Rehaussement et Teinture des Cils' },
+    description: {
+      en: 'Semi-permanent lash lift with tint to enhance your natural lashes — wake up with beautiful, curled lashes every day.',
+      fr: 'Rehaussement semi-permanent des cils avec teinture pour sublimer vos cils naturels — réveillez-vous chaque jour avec de beaux cils courbés.',
+    },
     duration: 60,
     price: 95,
     bufferTimeBefore: 5,
@@ -50,8 +65,11 @@ export const servicesData = [
     active: true,
   },
   {
-    name: 'Brow Shaping',
-    description: 'Precision brow shaping using wax and tweezers to frame your face perfectly.',
+    name: { en: 'Brow Shaping', fr: 'Mise en Forme des Sourcils' },
+    description: {
+      en: 'Precision brow shaping using wax and tweezers to frame your face perfectly.',
+      fr: 'Mise en forme précise des sourcils à la cire et à la pince pour encadrer parfaitement votre visage.',
+    },
     duration: 20,
     price: 35,
     bufferTimeBefore: 0,
@@ -60,8 +78,11 @@ export const servicesData = [
     active: true,
   },
   {
-    name: 'Swedish Massage',
-    description: 'A relaxing full-body massage using long, flowing strokes to ease tension and promote deep relaxation.',
+    name: { en: 'Swedish Massage', fr: 'Massage Suédois' },
+    description: {
+      en: 'A relaxing full-body massage using long, flowing strokes to ease tension and promote deep relaxation.',
+      fr: 'Un massage corporel relaxant utilisant de longs mouvements fluides pour soulager les tensions et favoriser une détente profonde.',
+    },
     duration: 60,
     price: 100,
     bufferTimeBefore: 10,
@@ -70,8 +91,11 @@ export const servicesData = [
     active: true,
   },
   {
-    name: 'Gel Manicure',
-    description: 'Long-lasting gel polish manicure with nail shaping, cuticle care, and a flawless finish.',
+    name: { en: 'Gel Manicure', fr: 'Manucure Gel' },
+    description: {
+      en: 'Long-lasting gel polish manicure with nail shaping, cuticle care, and a flawless finish.',
+      fr: 'Manucure gel longue tenue avec mise en forme des ongles, soin des cuticules et finition impeccable.',
+    },
     duration: 45,
     price: 50,
     bufferTimeBefore: 5,

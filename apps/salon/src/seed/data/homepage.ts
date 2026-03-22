@@ -82,3 +82,81 @@ export const siteSettingsData = {
     { day: 'sunday' as const, open: '', close: '', closed: true },
   ],
 }
+
+// Testimonials collection data (separate from homepage global testimonials).
+// `quote` is localized; `author`, `rating`, `featured` are not.
+// `serviceKey` is the EN service name for looking up IDs during seeding.
+export const testimonialsCollectionData = [
+  {
+    quote: {
+      en: 'Lumière transformed my skin! The deep cleansing facial was exactly what I needed.',
+      fr: 'Lumière a transformé ma peau ! Le soin nettoyant en profondeur était exactement ce dont j\'avais besoin.',
+    },
+    author: 'Marie-Claire L.',
+    rating: 5,
+    serviceKey: 'Deep Cleansing Facial',
+    featured: true,
+  },
+  {
+    quote: {
+      en: 'The best lash lift I\'ve ever had. Amélie is incredibly talented!',
+      fr: 'Le meilleur rehaussement des cils que j\'ai jamais eu. Amélie est incroyablement talentueuse !',
+    },
+    author: 'Jessica T.',
+    rating: 5,
+    serviceKey: 'Lash Lift & Tint',
+    featured: true,
+  },
+  {
+    quote: {
+      en: 'The Swedish massage with Nadia is pure bliss. I come here every month.',
+      fr: 'Le massage suédois avec Nadia est un pur bonheur. Je viens ici chaque mois.',
+    },
+    author: 'Dominique B.',
+    rating: 5,
+    serviceKey: 'Swedish Massage',
+    featured: true,
+  },
+  {
+    quote: {
+      en: 'My gel manicure lasted three weeks! Great quality and beautiful atmosphere.',
+      fr: 'Ma manucure gel a duré trois semaines ! Excellente qualité et une atmosphère magnifique.',
+    },
+    author: 'Camille R.',
+    rating: 4,
+    serviceKey: 'Gel Manicure',
+    featured: false,
+  },
+]
+
+// Gallery data. `caption` is localized; `category`, `featured` are not.
+// `imageIndex` maps to the galleryImageIds array built during seeding.
+export const galleryData = [
+  {
+    caption: {
+      en: 'Our serene treatment room',
+      fr: 'Notre salle de soins paisible',
+    },
+    category: 'salon' as const,
+    featured: true,
+    imageIndex: 0,
+  },
+  {
+    caption: {
+      en: 'Skincare treatment in progress',
+      fr: 'Soin de la peau en cours',
+    },
+    category: 'treatments' as const,
+    featured: true,
+    imageIndex: 1,
+  },
+  {
+    caption: {
+      en: 'Beautiful lash lift results',
+      fr: 'De beaux résultats de rehaussement des cils',
+    },
+    category: 'results' as const,
+    featured: false,
+    imageIndex: 2,
+  },
+]

@@ -1,8 +1,9 @@
 import type { Payload } from 'payload'
 import { uploadImage } from './images.js'
+import { categoriesData } from './data/categories.js'
 import { servicesData } from './data/services.js'
 import { specialistsData } from './data/specialists.js'
-import { homepageData, siteSettingsData } from './data/homepage.js'
+import { homepageData, siteSettingsData, testimonialsCollectionData, galleryData } from './data/homepage.js'
 
 export async function runSeed(payload: Payload): Promise<void> {
   console.log('\n🌱 Starting seed...\n')
@@ -66,28 +67,34 @@ export async function runSeed(payload: Payload): Promise<void> {
 
   // ---- SERVICE CATEGORIES ----
   console.log('\n📂 Creating service categories...')
-  const categoryNames = ['Facials', 'Waxing', 'Lash & Brow', 'Massage', 'Nails']
   const categoryMap: Record<string, string> = {}
-  for (let i = 0; i < categoryNames.length; i++) {
+  for (let i = 0; i < categoriesData.length; i++) {
+    const c = categoriesData[i]
     const cat = await payload.create({
       collection: 'service-categories',
-      data: { name: categoryNames[i], order: i + 1 },
+      data: { name: c.name.en, description: c.description.en, order: i + 1 },
     })
-    categoryMap[categoryNames[i]] = cat.id
-    console.log(`  Created: ${categoryNames[i]}`)
+    await payload.update({
+      collection: 'service-categories',
+      id: cat.id,
+      locale: 'fr',
+      data: { name: c.name.fr, description: c.description.fr },
+    })
+    categoryMap[c.name.en] = cat.id
+    console.log(`  Created: ${c.name.en}`)
   }
 
   // ---- SERVICES ----
   console.log('\n💅 Creating services...')
-  const serviceMap: Record<string, string> = {} // name -> id
+  const serviceMap: Record<string, string> = {} // EN name -> id
   const categoryServiceMap: Record<string, string[]> = {} // category -> service ids
   for (const s of servicesData) {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const service = await (payload.create as any)({
       collection: 'services',
       data: {
-        name: s.name,
-        description: s.description,
+        name: s.name.en,
+        description: s.description.en,
         duration: s.duration,
         price: s.price,
         bufferTimeBefore: s.bufferTimeBefore,
@@ -95,10 +102,16 @@ export async function runSeed(payload: Payload): Promise<void> {
         active: s.active,
       },
     })
-    serviceMap[s.name] = service.id
+    await payload.update({
+      collection: 'services',
+      id: service.id,
+      locale: 'fr',
+      data: { name: s.name.fr, description: s.description.fr },
+    })
+    serviceMap[s.name.en] = service.id
     if (!categoryServiceMap[s.category]) categoryServiceMap[s.category] = []
     categoryServiceMap[s.category].push(service.id)
-    console.log(`  Created: ${s.name} ($${s.price})`)
+    console.log(`  Created: ${s.name.en} ($${s.price})`)
   }
 
   // ---- SPECIALISTS ----
@@ -118,11 +131,17 @@ export async function runSeed(payload: Payload): Promise<void> {
       collection: 'specialists',
       data: {
         name: spec.name,
-        description: spec.description,
+        description: spec.description.en,
         image: specialistImages[i],
         services: serviceIds,
         active: true,
       },
+    })
+    await payload.update({
+      collection: 'specialists',
+      id: specialist.id,
+      locale: 'fr',
+      data: { name: spec.name, description: spec.description.fr },
     })
     specialistIds.push(specialist.id)
     console.log(`  Created: ${spec.name}`)
@@ -236,27 +255,45 @@ export async function runSeed(payload: Payload): Promise<void> {
 
   // ---- TESTIMONIALS ----
   console.log('\n⭐ Creating testimonials...')
-  const testimonialsData = [
-    { quote: 'Lumière transformed my skin! The deep cleansing facial was exactly what I needed.', author: 'Marie-Claire L.', rating: 5, service: serviceMap['Deep Cleansing Facial'], featured: true },
-    { quote: 'The best lash lift I\'ve ever had. Amélie is incredibly talented!', author: 'Jessica T.', rating: 5, service: serviceMap['Lash Lift & Tint'], featured: true },
-    { quote: 'The Swedish massage with Nadia is pure bliss. I come here every month.', author: 'Dominique B.', rating: 5, service: serviceMap['Swedish Massage'], featured: true },
-    { quote: 'My gel manicure lasted three weeks! Great quality and beautiful atmosphere.', author: 'Camille R.', rating: 4, service: serviceMap['Gel Manicure'], featured: false },
-  ]
-  for (const t of testimonialsData) {
-    await payload.create({ collection: 'testimonials', data: t })
-    console.log(`  Created: "${t.quote.substring(0, 40)}..."`)
+  for (const t of testimonialsCollectionData) {
+    const created = await payload.create({
+      collection: 'testimonials',
+      data: {
+        quote: t.quote.en,
+        author: t.author,
+        rating: t.rating,
+        service: serviceMap[t.serviceKey],
+        featured: t.featured,
+      },
+    })
+    await payload.update({
+      collection: 'testimonials',
+      id: created.id,
+      locale: 'fr',
+      data: { quote: t.quote.fr },
+    })
+    console.log(`  Created: "${t.quote.en.substring(0, 40)}..."`)
   }
 
   // ---- GALLERY ----
   console.log('\n🎨 Creating gallery items...')
-  const galleryItems = [
-    { image: galleryImageIds[0], caption: 'Our serene treatment room', category: 'salon' as const, featured: true },
-    { image: galleryImageIds[1], caption: 'Skincare treatment in progress', category: 'treatments' as const, featured: true },
-    { image: galleryImageIds[2], caption: 'Beautiful lash lift results', category: 'results' as const, featured: false },
-  ]
-  for (const item of galleryItems) {
-    await payload.create({ collection: 'gallery', data: item })
-    console.log(`  Created: ${item.caption}`)
+  for (const item of galleryData) {
+    const created = await payload.create({
+      collection: 'gallery',
+      data: {
+        image: galleryImageIds[item.imageIndex],
+        caption: item.caption.en,
+        category: item.category,
+        featured: item.featured,
+      },
+    })
+    await payload.update({
+      collection: 'gallery',
+      id: created.id,
+      locale: 'fr',
+      data: { caption: item.caption.fr },
+    })
+    console.log(`  Created: ${item.caption.en}`)
   }
 
   // ---- HOMEPAGE GLOBAL ----
@@ -280,6 +317,12 @@ export async function runSeed(payload: Payload): Promise<void> {
     },
   })
 
+  // Read back to get testimonials array row IDs so Payload matches
+  // existing rows instead of replacing them (which would lose EN values)
+  const homepage = await payload.findGlobal({ slug: 'homepage' })
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const testimonialRowIds = (homepage.testimonials as any[])?.map((t) => t.id) || []
+
   await payload.updateGlobal({
     slug: 'homepage',
     locale: 'fr',
@@ -291,7 +334,7 @@ export async function runSeed(payload: Payload): Promise<void> {
       },
       servicesShowcase: fr.servicesShowcase,
       specialistsSection: fr.specialistsSection,
-      testimonials: fr.testimonials,
+      testimonials: fr.testimonials.map((t, idx) => ({ ...t, id: testimonialRowIds[idx] })),
       cta: fr.cta,
     },
   })
