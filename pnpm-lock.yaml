@@ -51,6 +51,12 @@ importers:
       '@types/react-dom':
         specifier: 19.2.3
         version: 19.2.3(@types/react@19.2.14)
+      eslint:
+        specifier: ^9.39.3
+        version: 9.39.3(jiti@2.6.1)
+      eslint-config-next:
+        specifier: 16.2.0
+        version: 16.2.0(eslint@9.39.3(jiti@2.6.1))(typescript@5.7.3)
       tailwindcss:
         specifier: ^4
         version: 4.2.0
@@ -290,9 +296,6 @@ importers:
         specifier: ^1.4.0
         version: 1.4.0
     devDependencies:
-      '@eslint/eslintrc':
-        specifier: ^3.2.0
-        version: 3.3.3
       '@payload-reserve-demos/tsconfig':
         specifier: workspace:*
         version: link:../../packages/tsconfig
@@ -441,6 +444,12 @@ importers:
       cross-env:
         specifier: ^7.0.3
         version: 7.0.3
+      eslint:
+        specifier: ^9.39.3
+        version: 9.39.3(jiti@2.6.1)
+      eslint-config-next:
+        specifier: 16.2.0
+        version: 16.2.0(eslint@9.39.3(jiti@2.6.1))(typescript@5.7.3)
       tailwindcss:
         specifier: ^4
         version: 4.2.0
@@ -653,9 +662,6 @@ importers:
         specifier: ^17
         version: 17.7.0
     devDependencies:
-      '@eslint/eslintrc':
-        specifier: ^3.2.0
-        version: 3.3.3
       '@payload-reserve-demos/tsconfig':
         specifier: workspace:*
         version: link:../../packages/tsconfig

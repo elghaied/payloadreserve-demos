@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useTransition, useCallback, useEffect } from 'react'
+import { useState, useTransition, useCallback, useEffect, useMemo } from 'react'
 import { useTranslations } from 'next-intl'
 import type { EventType, Venue } from '@/payload-types'
 import { StepIndicator } from './StepIndicator'
@@ -31,9 +31,24 @@ export function BookingWizard({
   const t = useTranslations('booking')
   const [isPending, startTransition] = useTransition()
 
-  const [currentStep, setCurrentStep] = useState(1)
-  const [selectedEventType, setSelectedEventType] = useState<EventType | null>(null)
-  const [selectedVenue, setSelectedVenue] = useState<Venue | null>(null)
+  const preselectedEventType = useMemo(
+    () =>
+      preselectedEventTypeId
+        ? eventTypes.find((et) => et.id === preselectedEventTypeId) ?? null
+        : null,
+    [preselectedEventTypeId, eventTypes],
+  )
+  const preselectedVenue = useMemo(
+    () =>
+      preselectedVenueId ? venues.find((v) => v.id === preselectedVenueId) ?? null : null,
+    [preselectedVenueId, venues],
+  )
+
+  const [currentStep, setCurrentStep] = useState(() => (preselectedEventType ? 2 : 1))
+  const [selectedEventType, setSelectedEventType] = useState<EventType | null>(
+    () => preselectedEventType,
+  )
+  const [selectedVenue, setSelectedVenue] = useState<Venue | null>(() => preselectedVenue)
   const [selectedDate, setSelectedDate] = useState<Date | null>(null)
   const [selectedTime, setSelectedTime] = useState<string | null>(null)
   const [ticketQuantity, setTicketQuantity] = useState(1)
@@ -71,20 +86,6 @@ export function BookingWizard({
       .catch(() => {})
   }, [])
 
-  // Pre-selection
-  useEffect(() => {
-    if (preselectedEventTypeId) {
-      const found = eventTypes.find((et) => et.id === preselectedEventTypeId)
-      if (found) {
-        setSelectedEventType(found)
-        setCurrentStep(2)
-      }
-    }
-    if (preselectedVenueId) {
-      const found = venues.find((v) => v.id === preselectedVenueId)
-      if (found) setSelectedVenue(found)
-    }
-  }, [preselectedEventTypeId, preselectedVenueId, eventTypes, venues])
 
   const handleSelectEventType = useCallback((et: EventType) => {
     setSelectedEventType(et)

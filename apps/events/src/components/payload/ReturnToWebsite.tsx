@@ -1,5 +1,5 @@
 'use client'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 
 const EVENT_COLORS = ['#e53e3e', '#d69e2e', '#3182ce', '#805ad5', '#38a169', '#dd6b20']
 
@@ -20,11 +20,9 @@ const baseBarStyle: React.CSSProperties = {
 
 export default function ReturnToWebsite({ children }: { children: React.ReactNode }) {
   const serverUrl = process.env.NEXT_PUBLIC_SERVER_URL || '/'
-  const [hostname, setHostname] = useState('')
-
-  useEffect(() => {
-    setHostname(window.location.hostname)
-  }, [])
+  const [hostname] = useState(() =>
+    typeof window !== 'undefined' ? window.location.hostname : '',
+  )
 
   return (
     <div>

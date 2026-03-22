@@ -1,5 +1,5 @@
 'use client'
-import React, { useEffect, useState } from 'react'
+import React, { useSyncExternalStore } from 'react'
 
 const BAR_HEIGHT = '36px'
 
@@ -16,13 +16,13 @@ const baseBarStyle: React.CSSProperties = {
   top: 0,
 }
 
+const emptySubscribe = () => () => {}
+const getHostname = () => window.location.hostname
+const getServerHostname = () => ''
+
 export default function ReturnToWebsite({ children }: { children: React.ReactNode }) {
   const serverUrl = process.env.NEXT_PUBLIC_SERVER_URL || '/'
-  const [hostname, setHostname] = useState('')
-
-  useEffect(() => {
-    setHostname(window.location.hostname)
-  }, [])
+  const hostname = useSyncExternalStore(emptySubscribe, getHostname, getServerHostname)
 
   return (
     <div>

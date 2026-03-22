@@ -72,9 +72,10 @@ export function BookingWizard() {
   // Load slots when specialist and date selected
   useEffect(() => {
     if (selectedSpecialist && selectedDate) {
-      setSlots([])
-      setSelectedTime('')
-      getAvailableSlots(selectedService, selectedSpecialist, selectedDate).then(setSlots)
+      getAvailableSlots(selectedService, selectedSpecialist, selectedDate).then((newSlots) => {
+        setSlots(newSlots)
+        setSelectedTime('')
+      })
     }
   }, [selectedService, selectedSpecialist, selectedDate])
 

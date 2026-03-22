@@ -84,12 +84,11 @@ export function BookingWizard() {
   // Load slots when experience and date selected
   useEffect(() => {
     if (selectedExperience && selectedDate) {
-      setSlots([])
-      setSelectedTime('')
-      setSelectedTableId('')
-      getAvailableSlots(selectedExperience, selectedDate).then(
-        (s) => setSlots(s as Slot[]),
-      )
+      getAvailableSlots(selectedExperience, selectedDate).then((s) => {
+        setSlots(s as Slot[])
+        setSelectedTime('')
+        setSelectedTableId('')
+      })
     }
   }, [selectedExperience, selectedDate])
 

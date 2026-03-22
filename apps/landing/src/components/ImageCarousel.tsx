@@ -35,7 +35,6 @@ export function ImageCarousel({ slides, interval = 5000, ariaLabel = 'Image caro
   useEffect(() => {
     if (prevIndex === null) return
 
-    setFadeOutPrev(false)
     const rafIds = { outer: 0, inner: 0 }
     rafIds.outer = requestAnimationFrame(() => {
       rafIds.inner = requestAnimationFrame(() => {
@@ -61,6 +60,7 @@ export function ImageCarousel({ slides, interval = 5000, ariaLabel = 'Image caro
   const goTo = useCallback(
     (next: number) => {
       if (isTransitioningRef.current || next === currentIndexRef.current) return
+      setFadeOutPrev(false)
       setPrevIndex(currentIndexRef.current)
       setCurrentIndex(next)
       setIsTransitioning(true)

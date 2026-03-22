@@ -37,9 +37,11 @@ export default async function ReservationDetailPage({ params }: Props) {
   const service = typeof reservation.service === 'object' ? reservation.service : null
   const specialist = typeof reservation.resource === 'object' ? reservation.resource : null
   const status = reservation.status || 'pending'
+  // eslint-disable-next-line react-hooks/purity -- Date.now() is safe in a Server Component (no re-renders)
+  const now = Date.now()
   const canCancel =
     ['pending', 'confirmed'].includes(status) &&
-    new Date(reservation.startTime).getTime() - Date.now() > 24 * 60 * 60 * 1000
+    new Date(reservation.startTime).getTime() - now > 24 * 60 * 60 * 1000
 
   return (
     <div className="max-w-lg">

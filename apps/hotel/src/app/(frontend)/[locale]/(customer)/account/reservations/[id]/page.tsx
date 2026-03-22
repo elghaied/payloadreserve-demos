@@ -9,6 +9,13 @@ import config from '@/payload.config'
 import { Card } from '@/components/ui/card'
 import { Ornament } from '@/components/Ornament'
 
+function isCancellable(status: string, startTime: string): boolean {
+  return (
+    ['pending', 'confirmed'].includes(status) &&
+    new Date(startTime).getTime() - Date.now() > 48 * 60 * 60 * 1000
+  )
+}
+
 type Props = {
   params: Promise<{ locale: string; id: string }>
 }
@@ -38,9 +45,7 @@ export default async function ReservationDetailPage({ params }: Props) {
 
   const roomType = typeof reservation.service === 'object' ? reservation.service : null
   const status = reservation.status || 'pending'
-  const canCancel =
-    ['pending', 'confirmed'].includes(status) &&
-    new Date(reservation.startTime).getTime() - Date.now() > 48 * 60 * 60 * 1000
+  const canCancel = isCancellable(status, reservation.startTime)
 
   const nights = reservation.endTime
     ? Math.ceil(
