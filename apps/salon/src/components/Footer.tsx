@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { getTranslations } from 'next-intl/server'
 
 import { Container } from './Container'
+import { GShellBrand } from './GShellBrand'
 
 type Props = {
   locale: string
@@ -93,14 +94,9 @@ export async function Footer({ locale }: Props) {
           </div>
         </div>
 
-        <div className="border-t border-background/10 mt-12 pt-8 text-center text-sm text-background/40">
-          &copy; {new Date().getFullYear()} Lumière Salon. By Gshell{' '}
-          <img
-            src="/gshell-logo-mini.svg"
-            alt="Gshell Logo"
-            className="inline-block w-4 h-4 ml-1"
-          />{' '}
-          {t('rights')}
+        <div className="border-t border-background/10 mt-12 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-background/40">
+          <p>&copy; {new Date().getFullYear()} Lumière Salon. {t('rights')}</p>
+          <GShellBrand size="sm" prefix={locale === 'fr' ? 'Créé par' : 'Made by'} />
         </div>
       </Container>
     </footer>
