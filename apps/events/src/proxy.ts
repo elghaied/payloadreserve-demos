@@ -22,7 +22,7 @@ const securityHeaders: Record<string, string> = {
   ].join('; '),
 }
 
-export default function middleware(request: NextRequest) {
+export default function proxy(request: NextRequest) {
   const response = intlMiddleware(request)
 
   for (const [key, value] of Object.entries(securityHeaders)) {

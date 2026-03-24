@@ -34,7 +34,7 @@ function addSecurityHeaders(response: NextResponse) {
   return response
 }
 
-export default async function middleware(request: NextRequest) {
+export default async function proxy(request: NextRequest) {
   const pathname = request.nextUrl.pathname
 
   if (process.env.NODE_ENV === 'production' && !isCfAccessEnabled() && !cfAccessWarned) {
