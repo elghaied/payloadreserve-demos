@@ -31,7 +31,6 @@
     "@sentry/nextjs": "^10.43.0",
     "bcrypt": "^5.1.1",
     "graphql": "^16.12.0",
-    "jose": "^6.2.1",
     "mongodb": "^6",
     "nanoid": "^5",
     "next": "16.2.0",

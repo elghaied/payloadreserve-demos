@@ -2,7 +2,6 @@ import createMiddleware from 'next-intl/middleware'
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 import { routing } from './i18n/routing'
-import { isCfAccessEnabled, isPublicApiRoute, verifyCfAccessToken } from './lib/cf-access'
 
 const intlMiddleware = createMiddleware(routing)
 
@@ -25,8 +24,6 @@ const securityHeaders: Record<string, string> = {
   ].join('; '),
 }
 
-let cfAccessWarned = false
-
 function addSecurityHeaders(response: NextResponse) {
   for (const [key, value] of Object.entries(securityHeaders)) {
     response.headers.set(key, value)
@@ -37,32 +34,13 @@ function addSecurityHeaders(response: NextResponse) {
 export default async function proxy(request: NextRequest) {
   const pathname = request.nextUrl.pathname
 
-  if (process.env.NODE_ENV === 'production' && !isCfAccessEnabled() && !cfAccessWarned) {
-    console.warn('[security] CF Access is not configured — API routes are unprotected')
-    cfAccessWarned = true
-  }
-
-  // ─── CF Access gate for /api routes ───────────────────────────
-  // Public routes pass through; all others require a valid CF Access JWT.
-  // When CF_ACCESS_TEAM_DOMAIN is not set, protection is disabled (dev mode).
+  // ─── API routes: pass through with security headers ─────────
   if (pathname.startsWith('/api/')) {
-    if (isCfAccessEnabled()) {
-      const method = request.method
-      if (!isPublicApiRoute(method, pathname)) {
-        const cfToken = request.headers.get('Cf-Access-Jwt-Assertion')
-        if (!cfToken || !(await verifyCfAccessToken(cfToken))) {
-          return addSecurityHeaders(
-            NextResponse.json({ error: 'Unauthorized' }, { status: 403 }),
-          )
-        }
-      }
-    }
-    // API routes don't need i18n — pass through with security headers
     const response = NextResponse.next()
     return addSecurityHeaders(response)
   }
 
-  // ─── i18n middleware for frontend routes ───────────────────────
+  // ─── i18n middleware for frontend routes ─────────────────────
   const response = intlMiddleware(request)
 
   const firstSegment = pathname.split('/')[1]
@@ -75,8 +53,6 @@ export default async function proxy(request: NextRequest) {
 }
 
 export const config = {
-  // Expanded matcher: now includes /api paths for CF Access checking.
-  // /admin is still excluded — protected entirely at the Cloudflare proxy level.
   matcher: [
     '/((?!docs|admin|_next|_vercel|media|favicon\\.ico|.*\\..*).*)',
   ],
