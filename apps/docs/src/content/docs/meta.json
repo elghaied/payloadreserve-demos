@@ -13,6 +13,7 @@
     "hooks-api",
     "rest-api",
     "admin-ui",
+    "i18n",
     "---Guides---",
     "examples",
     "advanced",

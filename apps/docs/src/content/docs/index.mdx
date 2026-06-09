@@ -44,7 +44,15 @@ export default buildConfig({
 After installing, the plugin automatically adds:
 
 - **5 collections** — Services, Resources, Schedules, Customers, and Reservations
-- **Calendar view** replacing the default reservations list (month/week/day)
+- **Calendar view** replacing the default reservations list (month/week/day/lanes/pending, with availability shading and click-to-book)
 - **Dashboard widget** showing today's booking stats
 - **Availability overview** at `/admin/reservation-availability`
 - **Public REST API** — `/api/reserve/availability`, `/api/reserve/book`, and more
+
+## Highlights in 1.5
+
+- **Guest bookings** — account-less reservations with a self-service [cancellation token](/booking-features#guest-bookings)
+- **Resource-owner multi-tenancy** and **staff auto-provisioning** — see [Configuration](/configuration)
+- **Required resource pools** auto-expanded into multi-resource bookings — see [Booking Features](/booking-features#auto-expanded-required-resources)
+- **Configurable vocabularies** (`resourceTypes`, `leaveTypes`) and **time-off ranges** on schedules
+- **12-language admin UI** out of the box — see [Internationalization](/i18n)
