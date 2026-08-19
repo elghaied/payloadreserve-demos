@@ -1,4 +1,4 @@
-export { CoolifyClient } from './client'
+export { CoolifyClient, CoolifyApiError } from './client'
 export type {
   CoolifyEnvVar,
   CoolifyProject,

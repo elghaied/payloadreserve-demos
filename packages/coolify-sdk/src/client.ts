@@ -1,5 +1,17 @@
-import pRetry from 'p-retry'
+import pRetry, { AbortError } from 'p-retry'
 import type { CoolifyEnvVar, CoolifyProject, CoolifyServer, CoolifyService, CoolifyServiceStatus, CreateServiceOptions } from './types'
+
+export class CoolifyApiError extends Error {
+  readonly status: number
+  readonly body: string
+
+  constructor(method: string, path: string, status: number, body: string) {
+    super(`Coolify API ${method} ${path} failed with ${status}`)
+    this.name = 'CoolifyApiError'
+    this.status = status
+    this.body = body
+  }
+}
 
 export class CoolifyClient {
   private readonly baseUrl: string
@@ -34,7 +46,10 @@ export class CoolifyClient {
     if (!res.ok) {
       const text = await res.text().catch(() => '')
       console.error(`[coolify-sdk] ${method} ${path} → ${res.status}: ${text}`)
-      throw new Error(`Coolify API ${method} ${path} failed with ${res.status}`)
+      const error = new CoolifyApiError(method, path, res.status, text)
+      // 4xx means the request itself is wrong — retrying just multiplies the noise.
+      if (res.status >= 400 && res.status < 500) throw new AbortError(error)
+      throw error
     }
 
     const text = await res.text()
@@ -67,17 +82,26 @@ export class CoolifyClient {
   }
 
   async deleteService(serviceId: string): Promise<void> {
-    await this.request<void>('DELETE', `/applications/${serviceId}`)
+    try {
+      await this.request<void>('DELETE', `/applications/${serviceId}`)
+    } catch (err) {
+      // Already gone is the outcome we wanted — don't fail the cleanup over it.
+      if (err instanceof CoolifyApiError && err.status === 404) return
+      throw err
+    }
   }
 
   async getServiceStatus(serviceId: string): Promise<CoolifyServiceStatus> {
     const data = await this.request<{ status: string }>('GET', `/applications/${serviceId}`)
-    const s = data.status?.toLowerCase() ?? ''
-    if (s === 'running') return 'running'
-    if (s === 'stopped' || s === 'exited') return 'stopped'
-    if (s === 'starting') return 'starting'
-    if (s === 'stopping') return 'stopping'
-    if (s === 'error' || s === 'unhealthy') return 'error'
+    // Coolify reports a compound `<container-state>:<health>` string, e.g.
+    // "running:healthy", "running:unknown", "exited:unhealthy".
+    const [state = ''] = (data.status ?? '').toLowerCase().split(':')
+    if (state === 'running') return 'running'
+    if (state === 'stopped' || state === 'exited') return 'stopped'
+    if (state === 'starting') return 'starting'
+    if (state === 'restarting') return 'starting'
+    if (state === 'stopping') return 'stopping'
+    if (state === 'degraded' || state === 'error') return 'error'
     return 'unknown'
   }
 
@@ -96,8 +120,17 @@ export class CoolifyClient {
     })
   }
 
+  // Coolify 4.3.9 changed start/stop/restart from GET to POST.
   async startService(serviceId: string): Promise<void> {
-    await this.request<void>('GET', `/applications/${serviceId}/start`)
+    await this.request<void>('POST', `/applications/${serviceId}/start`)
+  }
+
+  async stopService(serviceId: string): Promise<void> {
+    await this.request<void>('POST', `/applications/${serviceId}/stop`)
+  }
+
+  async restartService(serviceId: string): Promise<void> {
+    await this.request<void>('POST', `/applications/${serviceId}/restart`)
   }
 
   async listProjects(): Promise<CoolifyProject[]> {
