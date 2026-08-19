@@ -28,6 +28,9 @@ jobs:
 
       - run: pnpm lint
 
+      - name: Unit tests
+        run: pnpm --filter=@payload-reserve-demos/coolify-sdk test
+
       - name: Type-check all apps
         run: |
           pnpm --filter=landing typecheck
