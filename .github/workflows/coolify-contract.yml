@@ -1,0 +1,44 @@
+name: Coolify API contract
+
+# Coolify 4.3.9 silently moved application start/stop/restart from GET to POST,
+# which broke demo provisioning with no error anywhere obvious — the app record
+# was still created, so demos just sat on "provisioning" until they timed out.
+#
+# This job re-probes the live Coolify API so the next such change shows up here
+# instead of in production. It needs the COOLIFY_API_URL and COOLIFY_API_KEY
+# repository secrets; without them the tests self-skip and the job passes.
+
+on:
+  schedule:
+    - cron: '0 6 * * 1' # Mondays, 06:00 UTC
+  workflow_dispatch:
+
+jobs:
+  contract:
+    name: Probe live Coolify endpoints
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4.2.2
+
+      - uses: pnpm/action-setup@v4.1.0
+        with:
+          version: 10.30.1
+
+      - uses: actions/setup-node@v4.4.0
+        with:
+          node-version: '22'
+          cache: 'pnpm'
+
+      - run: pnpm install --frozen-lockfile
+
+      # The `secrets` context is not available in step-level `if`, so surface
+      # the missing-credential case from inside the step instead.
+      - name: Live contract tests
+        env:
+          COOLIFY_API_URL: ${{ secrets.COOLIFY_API_URL }}
+          COOLIFY_API_KEY: ${{ secrets.COOLIFY_API_KEY }}
+        run: |
+          if [ -z "$COOLIFY_API_KEY" ]; then
+            echo "::warning::COOLIFY_API_KEY is not set — contract tests will skip."
+          fi
+          pnpm --filter=@payload-reserve-demos/coolify-sdk test:live
