@@ -32,6 +32,9 @@ const nextConfig: NextConfig = {
     return webpackConfig
   },
   images: {
+    // Payload >= 3.90 appends ?prefix=... to storage URLs; Next 16 rejects local images with a
+    // query string unless a pattern allows it. The prefix differs per demo instance, so any query.
+    localPatterns: [{ pathname: '/api/media/file/**' }, { pathname: '/**', search: '' }],
     remotePatterns: [
       {
         protocol: 'https',
